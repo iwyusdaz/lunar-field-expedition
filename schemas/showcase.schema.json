@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Showcase project manifest",
+  "description": "Per-project manifest at the build root of every immersive project (08-vercel-deployment.md section 5.2). Owned by immersive-learning-showcase; project repos copy it.",
+  "type": "object",
+  "required": ["slug", "version", "title", "format", "niche", "audience", "summary", "playTimeMinutes", "features", "contentNotes", "permissions", "poster", "repoUrl", "license"],
+  "properties": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "title": { "type": "string" },
+    "format": { "type": "string", "enum": ["Game", "Mini course", "Hybrid"] },
+    "niche": { "type": "string" },
+    "audience": { "type": "string" },
+    "summary": { "type": "string", "maxLength": 400 },
+    "playTimeMinutes": { "type": "number" },
+    "features": { "type": "array", "items": { "type": "string" } },
+    "contentNotes": { "type": "array", "items": { "type": "string" } },
+    "permissions": { "type": "array", "items": { "type": "string", "enum": ["microphone"] } },
+    "poster": {
+      "type": "object",
+      "required": ["webp", "jpg", "alt"],
+      "properties": {
+        "webp": { "type": "string" },
+        "jpg": { "type": "string" },
+        "alt": { "type": "string" }
+      }
+    },
+    "repoUrl": { "type": "string", "format": "uri" },
+    "license": {
+      "type": "object",
+      "required": ["content", "code"],
+      "properties": {
+        "content": { "type": "string" },
+        "code": { "type": "string" }
+      }
+    }
+  }
+}

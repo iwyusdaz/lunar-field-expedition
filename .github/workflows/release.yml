@@ -1,0 +1,53 @@
+name: Release
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Run the full CI checks
+        run: |
+          npx playwright install chromium --with-deps
+          npm test
+          npm run build
+          VITE_TEST_HOOKS=1 npm run build
+          npx playwright test tests/functional.spec.js tests/a11y.spec.js
+          npm run build
+          SLUG=${{ github.event.repository.name }} npx playwright test tests/sub-path.spec.js
+      - name: Validate showcase.json
+        run: node scripts/validate-showcase.mjs "${GITHUB_REF_NAME#v}"
+      - name: Verify version in package.json matches the tag
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "$TAG" != "$PKG" ]; then echo "tag $TAG != package.json $PKG"; exit 1; fi
+      - name: Pack release archive
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SLUG="${{ github.event.repository.name }}"
+          tar -czf "${SLUG}-${VERSION}.tar.gz" -C dist .
+          shasum -a 256 "${SLUG}-${VERSION}.tar.gz" > "${SLUG}-${VERSION}.tar.gz.sha256"
+          cat "${SLUG}-${VERSION}.tar.gz.sha256"
+      - name: Create GitHub release with assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SLUG="${{ github.event.repository.name }}"
+          gh release create "$GITHUB_REF_NAME" \
+            "${SLUG}-${VERSION}.tar.gz" \
+            "${SLUG}-${VERSION}.tar.gz.sha256" \
+            --title "$SLUG $VERSION" \
+            --notes "Release build $VERSION. See the README for what this includes and its evaluation status." \
+            --verify-tag

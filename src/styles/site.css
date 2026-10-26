@@ -1,0 +1,171 @@
+/* Shared overlay styles for all immersive learning projects.
+   Dark cinematic default; WCAG AA contrast in both themes; text-size and
+   contrast settings via data attributes on <html>. */
+
+:root {
+  --bg: #0e1116;
+  --surface: #171c24;
+  --text: #e8ecf1;
+  --muted: #aab4c0;
+  --accent: #7fb4ff;
+  --accent-strong: #2f6fd0;
+  --ok: #4fd08a;
+  --warn: #ffb454;
+  --err: #ff7d7d;
+  --focus: #ffd166;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --text: #1a2028;
+    --muted: #4c5666;
+    --accent: #1d4fa1;
+    --accent-strong: #1d4fa1;
+    color-scheme: light;
+  }
+}
+
+:root[data-contrast="high"] {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --text: #ffffff;
+  --muted: #e0e0e0;
+  --accent: #8ecbff;
+  --focus: #ffe08a;
+}
+
+:root[data-text-size="large"] { font-size: 112.5%; }
+:root[data-text-size="xlarge"] { font-size: 125%; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+  overflow: hidden; white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+#ui { position: fixed; inset: 0; display: flex; flex-direction: column; pointer-events: none; }
+#ui > * { pointer-events: auto; }
+
+.app-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.5rem 1rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--muted) 30%, transparent);
+}
+.app-title { margin: 0; font-size: 1rem; font-weight: 600; }
+.app-header nav { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+button, select {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--muted) 50%, transparent);
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+a { color: var(--accent); }
+
+.module-nav { display: flex; gap: 0.4rem; padding: 0.4rem 1rem; overflow-x: auto; background: color-mix(in srgb, var(--surface) 70%, transparent); }
+.module-nav button.active { border-color: var(--accent-strong); background: var(--accent-strong); color: #fff; }
+
+.hud {
+  position: absolute; top: 4.2rem; left: 1rem; right: 1rem;
+  margin: 0 auto; max-width: 60rem;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.95rem;
+  z-index: 5;
+}
+.hud:empty { display: none; }
+
+.stage { position: relative; flex: 1; min-height: 0; }
+#app { width: 100%; height: 100%; display: block; }
+.textmode { position: absolute; inset: 0; overflow-y: auto; padding: 1rem; background: var(--bg); }
+.textmode-body { max-width: 46rem; margin: 0 auto; }
+
+.cinematic-overlay {
+  position: absolute; inset: 0; z-index: 20;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: transparent;
+}
+.cinematic-caption {
+  margin: 0; padding: 0.6rem 1rem;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  text-align: center;
+  font-size: 1.05rem;
+}
+.cinematic-progress {
+  margin: 0; padding: 0.3rem 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: #cfd6de;
+  font-size: 0.8rem;
+}
+.cinematic-skip { position: absolute; top: 0.6rem; right: 0.6rem; }
+
+dialog {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent);
+  border-radius: 10px;
+  max-width: 34rem; width: calc(100% - 2rem);
+  padding: 1rem 1.2rem;
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+dialog menu { display: flex; gap: 0.5rem; justify-content: flex-end; padding: 0; margin: 0.8rem 0 0; }
+
+.menu-list { list-style: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.4rem; }
+.menu-list a { display: block; padding: 0.35rem 0.7rem; border: 1px solid color-mix(in srgb, var(--muted) 50%, transparent); border-radius: 6px; }
+
+.assessment-item { background: var(--surface); border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.8rem 0; }
+.choice-btn { display: block; width: 100%; text-align: left; margin: 0.3rem 0; }
+.choice-btn.correct { border-color: var(--ok); }
+.choice-btn.incorrect { border-color: var(--err); }
+.feedback { margin-top: 0.5rem; padding: 0.5rem 0.7rem; border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+.poi-list { list-style: none; margin: 0.3rem 0 0; padding: 0.3rem; display: flex; flex-wrap: wrap; gap: 0.35rem; max-height: 30vh; overflow-y: auto; }
+.poi-list button { font-size: 0.85rem; }
+
+fieldset { border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 8px; margin: 0.6rem 0; }
+legend { font-weight: 600; padding: 0 0.3rem; }
+label.choice, label > select, label > input[type="range"] { display: block; margin: 0.25rem 0; }
+
+table { border-collapse: collapse; width: 100%; margin: 0.6rem 0; font-variant-numeric: tabular-nums; }
+th, td { border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); padding: 0.3rem 0.5rem; text-align: left; }
+caption { text-align: left; font-weight: 600; padding: 0.2rem 0; }
+
+.progress-json { max-height: 40vh; overflow: auto; font-size: 0.8rem; background: var(--bg); padding: 0.5rem; border-radius: 6px; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--accent-strong); color: #fff; padding: 0.5rem 1rem;
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+@media (max-width: 700px) {
+  .hud { top: 5.6rem; }
+  .app-header { flex-wrap: wrap; gap: 0.4rem; }
+}
