@@ -5,6 +5,10 @@ node_modules/
 dist/
 tmp/
 
+# Decoder files are regenerated from the pinned three package at postinstall
+# (scripts/setup-decoders.mjs) — vendored-but-regenerable, kept out of git.
+public/decoders/
+
 # Raw source data (never committed; scripts download it)
 data/raw/
 
