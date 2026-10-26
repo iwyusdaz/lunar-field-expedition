@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- License-clean original icon (CC BY 4.0, like the rest of the content). -->
+  <circle cx="32" cy="32" r="28" fill="#1a1a1e" stroke="#b9b9c0" stroke-width="2"/>
+  <circle cx="24" cy="26" r="7" fill="#4a4a52"/>
+  <circle cx="40" cy="38" r="5" fill="#4a4a52"/>
+  <circle cx="33" cy="18" r="3" fill="#4a4a52"/>
+  <path d="M 14 44 A 26 26 0 0 0 50 44" fill="none" stroke="#8f8f98" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
