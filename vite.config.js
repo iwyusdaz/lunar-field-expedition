@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
+import { selfHostedDecoders } from './vite-plugin-decoders.js';
 
 // base './' so the build works at any sub-path (build contract, 08 section 5.1).
 export default defineConfig({
   base: './',
+  plugins: [selfHostedDecoders()],
   build: {
     target: 'es2022',
     chunkSizeWarningLimit: 1200,

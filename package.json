@@ -14,8 +14,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:subpath": "playwright test tests/sub-path.spec.js",
-    "check:a11y": "playwright test tests/a11y.spec.js",
-    "postinstall": "node scripts/setup-decoders.mjs"
+    "check:a11y": "playwright test tests/a11y.spec.js"
   },
   "dependencies": {
     "n8ao": "2.0.1",

@@ -148,8 +148,17 @@ for (const i of [0, 1, 2]) {
   const grid = readHeights(`${WORK}/height-l${i}.png`, `${WORK}/height-l${i}.meta.json`);
   copyFileSync(`${WORK}/height-l${i}.png`, `${OUT}/height-l${i}.png`);
   writeFileSync(`${OUT}/normal-l${i}.png`, encodeRGBPNG(grid.width, grid.height, computeNormals(grid)));
-  lods.push({ level: i, width: grid.width, height: grid.height, mPerPx: grid.mPerPx, elevMin: grid.elevMin, elevMax: grid.elevMax });
-  console.log(`LOD${i}: ${grid.width}x${grid.height} @ ${grid.mPerPx} m/px, elev ${grid.elevMin}..${grid.elevMax} m`);
+  // Valid-footprint bounding box: the NAC DTM does not cover the full crop on the
+  // west/east edges (0 encodes nodata). The renderer edge-fills for display; the
+  // tools use raw values and treat nodata as untraversable/unsampleable.
+  let minX = Infinity, maxX = -Infinity;
+  for (let x = 0; x < grid.width; x++) {
+    let any = false;
+    for (let y = 0; y < grid.height; y++) if (!Number.isNaN(grid.data[y * grid.width + x])) { any = true; break; }
+    if (any) { if (x < minX) minX = x; if (x > maxX) maxX = x; }
+  }
+  lods.push({ level: i, width: grid.width, height: grid.height, mPerPx: grid.mPerPx, elevMin: grid.elevMin, elevMax: grid.elevMax, validPx: { xMin: minX, xMax: maxX } });
+  console.log(`LOD${i}: ${grid.width}x${grid.height} @ ${grid.mPerPx} m/px, elev ${grid.elevMin}..${grid.elevMax} m, valid cols ${minX}..${maxX}`);
 }
 copyFileSync(`${WORK}/albedo-wac.png`, `${OUT}/albedo-wac.png`);
 

@@ -23,7 +23,11 @@
       "height": 394,
       "mPerPx": 30,
       "elevMin": -2242,
-      "elevMax": -1251
+      "elevMax": -1251,
+      "validPx": {
+        "xMin": 15,
+        "xMax": 161
+      }
     },
     {
       "level": 1,
@@ -31,7 +35,11 @@
       "height": 1183,
       "mPerPx": 10,
       "elevMin": -2243,
-      "elevMax": -1248
+      "elevMax": -1248,
+      "validPx": {
+        "xMin": 45,
+        "xMax": 485
+      }
     },
     {
       "level": 2,
@@ -39,7 +47,11 @@
       "height": 2366,
       "mPerPx": 5,
       "elevMin": -2243,
-      "elevMax": -1247
+      "elevMax": -1247,
+      "validPx": {
+        "xMin": 89,
+        "xMax": 972
+      }
     }
   ],
   "validation": [
