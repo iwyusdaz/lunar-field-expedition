@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "description": "CER field report configuration: rubric (4 criteria x 4 levels), exemplar, and the STRUCTURED evidence-citation check. The app verifies which evidence types were cited via tags and shows the rubric; it NEVER auto-grades the written text.",
+    "honesty": "No automated scoring of learner prose. The self-check is explicitly labeled as not a grade."
+  },
+  "report": {
+    "title": "Field report — Hadley–Apennine",
+    "sections": [
+      { "id": "claim", "label": "Claim", "prompt": "State your answer to the question you chose. One or two sentences, no hedging.", "minChars": 40 },
+      { "id": "evidence", "label": "Evidence", "prompt": "Cite specific observations and measurements from your evidence board. Name the place and the number (e.g., 'the profile across the rille at Station 9a showing ~370 m depth').", "minChars": 120 },
+      { "id": "reasoning", "label": "Reasoning", "prompt": "Connect the evidence to the claim: WHY does this evidence support this answer? Name the principle (superposition, crater density and its limits, cross-cutting relations).", "minChars": 120 },
+      { "id": "uncertainty", "label": "Uncertainty", "prompt": "What could be wrong, and what would you check next? Every real field report has this section.", "minChars": 60 }
+    ],
+    "requiredEvidenceTags": {
+      "h-front": ["front-material", "mare-material", "superposition-or-count"],
+      "h-rille": ["rille-structure", "mare-material", "crosscutting"]
+    },
+    "rubric": [
+      {
+        "id": "claim",
+        "name": "Claim",
+        "levels": [
+          "Missing or unrelated to the question.",
+          "States an answer but it is vague or does not answer the chosen question.",
+          "States a clear answer to the chosen question.",
+          "States a clear, specific answer that matches the evidence actually collected."
+        ]
+      },
+      {
+        "id": "evidence",
+        "name": "Evidence quality",
+        "levels": [
+          "No specific evidence cited.",
+          "Evidence cited by type only ('I took samples'), no places or numbers.",
+          "Cites specific observations with places or numbers.",
+          "Cites multiple independent lines (observation + measurement + sample) with places and numbers."
+        ]
+      },
+      {
+        "id": "reasoning",
+        "name": "Reasoning link",
+        "levels": [
+          "No connection between evidence and claim.",
+          "Asserts that evidence supports the claim without saying why.",
+          "Links evidence to claim with a named principle (superposition, crater density...).",
+          "Reasoning addresses alternative explanations and why they are rejected."
+        ]
+      },
+      {
+        "id": "uncertainty",
+        "name": "Uncertainty acknowledged",
+        "levels": [
+          "No uncertainty mentioned.",
+          "Generic hedge ('more data needed') with nothing specific.",
+          "Names one specific limitation of the evidence or method.",
+          "Names specific limitations AND proposes a concrete next check."
+        ]
+      }
+    ],
+    "exemplar": {
+      "note": "A constructed exemplar written to the rubric's top band, based on the real Apollo 15 findings. Constructed for teaching purposes — not a learner artifact.",
+      "claim": "The Apennine Front is older than the mare plain: the Front's rocks are about 3.9 billion years old, and the plain's basalts (about 3.3 billion years) visibly lap up against it.",
+      "evidence": "At the Front slope station, samples of fragmental breccia date to about 3.85-3.9 Ga (Imbrium-event material), while mare basalts from the plain date to about 3.3 Ga. The profile at the Front's base shows the plains surface continuing until it meets the mountain's apron, and the low-sun panorama shows the lavas embaying the Front rather than being cut by it.",
+      "reasoning": "Superposition gives the direct field order: the lavas lie against and on the Front's lower slopes, so they are younger. The sample ages independently agree — an older rock (3.9 Ga) cannot have been deposited by a younger lava (3.3 Ga). Crater density supports the plain's youth relative to older terrains but cannot be used ON the Front itself, because its steep slopes erode and bury craters (our count there was lower than the plain's for exactly that reason).",
+      "uncertainty": "The sample ages are quoted from the literature, not measured in this exercise, and the Front patch's crater count is a computer count that real counters would dispute. Next check: sample the contact zone directly to confirm the embayment relationship in outcrop."
+    }
+  }
+}

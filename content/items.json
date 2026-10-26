@@ -1,0 +1,112 @@
+{
+  "_meta": {
+    "description": "Pre-check and post-check items (5 + 5, parallel concepts — not recall). Feedback explains why. Scored by learning/assess.js scoreAnswers; no automated grading of free text anywhere in the app.",
+    "note": "Options are concept distractors drawn from documented misconceptions (see design/teacher-guide.md)."
+  },
+  "sets": {
+    "pre": [
+      {
+        "id": "pre-1",
+        "prompt": "Hadley Rille is a long, winding channel cut into the mare plain. What most likely formed it?",
+        "options": [
+          { "id": "a", "text": "Flowing water erosion, like a river canyon", "why": "The Moon has no liquid water or atmosphere; the winding shape does look river-like, which is exactly why the lava explanation took evidence to establish." },
+          { "id": "b", "text": "Turbulent lava flows or a collapsed lava tube", "why": "Correct. The literature presents both lava-carving and lava-tube-collapse as the two live hypotheses — the crew saw layered outcrops in its walls, consistent with stacked lava flows." },
+          { "id": "c", "text": "A giant impact that gouged a groove", "why": "Impacts make circular basins and craters with raised rims; Hadley Rille is a winding channel that follows the plain — a volcanic signature." }
+        ],
+        "correct": "b"
+      },
+      {
+        "id": "pre-2",
+        "prompt": "Why does the same ground look flatter when the Sun is high overhead than when it is near the horizon?",
+        "options": [
+          { "id": "a", "text": "Low Sun makes every slope cast a long shadow, so relief stands out", "why": "Correct — shadow length relative to object height scales with 1/tan(sun elevation). This is why the crew landed just after local sunrise." },
+          { "id": "b", "text": "The high Sun heats the ground and makes it expand", "why": "There is no atmosphere and this is not a thermal effect; the difference is purely in the lighting geometry." },
+          { "id": "c", "text": "It doesn't — the terrain looks the same at any Sun angle", "why": "Try the sun-angle tool: at low Sun the rille and crater rims pop out; at high Sun the plain nearly erases them." }
+        ],
+        "correct": "a"
+      },
+      {
+        "id": "pre-3",
+        "prompt": "Two lava plains formed at different times and have been cratered ever since. Which plain is older?",
+        "options": [
+          { "id": "a", "text": "The one with more craters per square kilometre", "why": "Correct — for flat, stable surfaces, more accumulated time means more craters. This is the basis of crater-count dating." },
+          { "id": "b", "text": "The one with fewer craters — they were erased over time", "why": "On a stable flat surface craters accumulate rather than vanish (small ones erode slowly). Fewer craters usually means a younger surface." },
+          { "id": "c", "text": "You cannot tell age from craters at all", "why": "Crater density is one of planetary science's standard clocks — with the caveat you'll test in Module 3: it works on flat, stable surfaces." }
+        ],
+        "correct": "a"
+      },
+      {
+        "id": "pre-4",
+        "prompt": "Lava flows spread across a plain and lap up against the edge of an older mountain range. Which is younger?",
+        "options": [
+          { "id": "a", "text": "The mountain range — it must have been there first to be buried", "why": "Reversed: whatever is ON TOP of, or lapping against, another unit is the younger one. The lavas embaying the mountains are younger than the mountains." },
+          { "id": "b", "text": "The lava flows — they lie on top of and against the mountains", "why": "Correct — this is superposition: in an undisturbed stack, the younger unit sits on top. At Hadley you can see the plains lavas lapping against the Apennine Front." },
+          { "id": "c", "text": "They are the same age because they touch", "why": "Contact alone doesn't mean same age — the direction of the relationship (what laps onto what) tells you the order." }
+        ],
+        "correct": "b"
+      },
+      {
+        "id": "pre-5",
+        "prompt": "You want to sample a rock that came from deep inside the Moon's early crust. What would you look for?",
+        "options": [
+          { "id": "a", "text": "A light-coloured rock of ancient crystals, thrown out by an impact onto a younger surface", "why": "Correct — impacts excavate deep material and drop it where later crews can reach it. Apollo 15's 'Genesis Rock' (sample 15415), an anorthosite, is exactly this." },
+          { "id": "b", "text": "A dark, round rock on the youngest plain", "why": "Dark mare basalts are the youngest local materials; they formed the plains, not the early crust." },
+          { "id": "c", "text": "Any rock — all Moon rocks formed at the same time", "why": "Moon rocks span more than a billion years in age; picking the right rock is the whole game of field geology." }
+        ],
+        "correct": "a"
+      }
+    ],
+    "post": [
+      {
+        "id": "post-1",
+        "prompt": "A sinuous rille and a 40 km impact basin sit side by side. Which observation best separates a volcanic channel from an impact scar?",
+        "options": [
+          { "id": "a", "text": "The channel winds and follows the plain; the basin is circular with a raised rim", "why": "Correct — form follows process: winding channels follow lava-flow topography, impacts make circular holes with rims and ejecta." },
+          { "id": "b", "text": "The channel is longer than the basin", "why": "Length alone doesn't identify the process; shape and context do." },
+          { "id": "c", "text": "The channel is on the mare, so it must be an impact", "why": "Location doesn't decide process — the winding form and layered wall outcrops are the volcanic evidence." }
+        ],
+        "correct": "a"
+      },
+      {
+        "id": "post-2",
+        "prompt": "A mission needs to photograph fresh craters and steep rock walls. When should it plan to land?",
+        "options": [
+          { "id": "a", "text": "At local noon, when everything is evenly lit", "why": "Even lighting hides relief — the exact opposite of what the task needs." },
+          { "id": "b", "text": "Just after local sunrise, when low Sun casts long shadows across the relief", "why": "Correct — Apollo 15 landed under exactly these conditions so the crew could read the rille and mountain front during descent." },
+          { "id": "c", "text": "Sun angle doesn't matter from orbit", "why": "It matters everywhere: without an atmosphere, shadow is the only depth cue." }
+        ],
+        "correct": "b"
+      },
+      {
+        "id": "post-3",
+        "prompt": "You count craters on a flat mare plain and on a steep mountain front. The mountain front shows FEWER craters per area. What is the soundest conclusion?",
+        "options": [
+          { "id": "a", "text": "The mountain front is younger than the plain", "why": "Tempting, but the Front's age comes from samples (~3.9 Ga vs ~3.3 Ga basalts) — the crater deficit on slopes comes from degradation, not youth." },
+          { "id": "b", "text": "The crater clock is unreliable here — steep slopes erode and bury craters, so the count can't date a slope; use samples and superposition instead", "why": "Correct — knowing WHEN a method applies is part of the method. This disagreement between crater counts and sample ages is a real feature of the site." },
+          { "id": "c", "text": "The crater count on the plain must be wrong", "why": "The plain count is the well-behaved one — flat, stable surfaces are exactly where crater counting works." }
+        ],
+        "correct": "b"
+      },
+      {
+        "id": "post-4",
+        "prompt": "At Hadley, the mare lavas visibly lap up against the Apennine Front, and Front samples date to about 3.9 billion years while the mare basalts are about 3.3 billion. Which argument combines both lines of evidence correctly?",
+        "options": [
+          { "id": "a", "text": "The Front is older: the younger lavas flow against it, and its samples are older than the basalts", "why": "Correct — superposition gives the order directly in the field; the sample ages agree with it." },
+          { "id": "b", "text": "The mare is older because it has more craters than the Front's slopes", "why": "This is the trap from Module 3: slope degradation breaks the crater clock on the Front; the two valid lines both say the Front is older." },
+          { "id": "c", "text": "Ages can't be compared without watching the rocks form", "why": "Relative order (superposition) plus radiometric ages of samples is precisely how planetary surfaces are dated." }
+        ],
+        "correct": "a"
+      },
+      {
+        "id": "post-5",
+        "prompt": "Your traverse has 3 hours left. Which station best serves a claim about the composition of the early lunar crust?",
+        "options": [
+          { "id": "a", "text": "A fresh mare crater to sample the youngest basalts", "why": "Youngest basalts say the most about the plains' history — not about the early crust." },
+          { "id": "b", "text": "The mountain-front slope where impact-thrown older material is exposed", "why": "Correct — the Front exposes ancient crustal material (which is why Spur crater yielded the anorthosite 'Genesis Rock')." },
+          { "id": "c", "text": "The rille rim, to photograph the channel again", "why": "The rille speaks to volcanic history, not crustal composition — and you already have photography." }
+        ],
+        "correct": "b"
+      }
+    ]
+  }
+}

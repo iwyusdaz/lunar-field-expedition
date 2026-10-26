@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "generatedBy": "scripts/analyze-craters.mjs from LROC NAC_DTM_APOLLO15 (data/work, gitignored)",
+    "method": "automated rim-minus-floor detection (plane fit removes slope), diameters >= 20 m; counts are approximate — the app labels them as a computer count, and real counters disagree",
+    "accessDate": "2026-10-27"
+  },
+  "patches": [
+    {
+      "id": "mare",
+      "center": {
+        "xM": 4108,
+        "yM": 5338
+      },
+      "radiusM": 150,
+      "centerLonLat": {
+        "lon": 3.6533644650489236,
+        "lat": 26.14402197802198
+      },
+      "areaKm2": 0.071,
+      "craters": [
+        {
+          "diameterM": 190,
+          "depthM": 2.3,
+          "offsetM": 71,
+          "lonLat": {
+            "lon": 3.6538047600782777,
+            "lat": 26.146263736263737
+          }
+        },
+        {
+          "diameterM": 170,
+          "depthM": 2.8,
+          "offsetM": 108,
+          "lonLat": {
+            "lon": 3.651970197455969,
+            "lat": 26.14065934065934
+          }
+        },
+        {
+          "diameterM": 150,
+          "depthM": 3.4,
+          "offsetM": 130,
+          "lonLat": {
+            "lon": 3.65820771037182,
+            "lat": 26.143956043956045
+          }
+        },
+        {
+          "diameterM": 140,
+          "depthM": 3.8,
+          "offsetM": 122,
+          "lonLat": {
+            "lon": 3.656006235225049,
+            "lat": 26.14065934065934
+          }
+        },
+        {
+          "diameterM": 120,
+          "depthM": 3.4,
+          "offsetM": 136,
+          "lonLat": {
+            "lon": 3.649401809784736,
+            "lat": 26.146593406593407
+          }
+        },
+        {
+          "diameterM": 90,
+          "depthM": 2,
+          "offsetM": 128,
+          "lonLat": {
+            "lon": 3.6563731477495107,
+            "lat": 26.147252747252747
+          }
+        }
+      ],
+      "densityPerKm2": 85,
+      "medianSlopePct": 6.1
+    },
+    {
+      "id": "front",
+      "center": {
+        "xM": 2760,
+        "yM": 11401
+      },
+      "radiusM": 150,
+      "centerLonLat": {
+        "lon": 3.603904656751468,
+        "lat": 25.944142857142857
+      },
+      "areaKm2": 0.071,
+      "craters": [
+        {
+          "diameterM": 150,
+          "depthM": 3.2,
+          "offsetM": 64,
+          "lonLat": {
+            "lon": 3.6024370066536204,
+            "lat": 25.942527472527473
+          }
+        }
+      ],
+      "densityPerKm2": 14,
+      "medianSlopePct": 29.9
+    }
+  ]
+}

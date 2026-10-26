@@ -75,6 +75,13 @@ Access date for all entries below: 2026-10-27.
 | NASA SVS CGI Moon Kit | Global LROC WAC color map (Hapke-normalized WAC mosaic, bands 643/566/415 nm; "optimized for aesthetics, not science"); credit NASA's Scientific Visualization Studio; page requested credit, NASA content public domain | https://svs.gsfc.nasa.gov/4720 | VERIFIED (page read; file downloaded) |
 | LROC data license | NASA/LROC data are public domain with credit (checked on the LROC product page and SVS page) | http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15 · https://svs.gsfc.nasa.gov/4720 | VERIFIED |
 
+## Sky facts used by the renderer
+
+| Fact | Value used | Source | Status |
+|---|---|---|---|
+| Earth's position in the sky at the site | about 64° above the horizon, toward the south (Earth hangs nearly stationary over the near side; its subpoint stays near the lunar equator, so elevation ≈ 90° − site latitude 26.1° ≈ 64°). The app labels this "approximate" and never quotes it as a measured number. | DERIVED from the verified site latitude (research log, this file) + the known geometry of the Moon's tidal locking (Earth's subpoint near 0° latitude). No numeric source was openable; treated as approximate. | DERIVED (approximate, labeled) |
+| Sun elevation at landing | Low sun angle at landing made Hadley Rille clearly visible during descent. The app does not quote a numeric sun elevation as a mission fact; its sun presets ("near sunrise", "mid-morning", "high noon") are teaching controls. | https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine (re-read 2026-10-27) | VERIFIED (qualitative only; numbers withheld) |
+
 ## Items checked and adjusted (honesty log)
 
 - The full Davies & Colvin (2000) PDF returned HTTP 403; coordinates taken from

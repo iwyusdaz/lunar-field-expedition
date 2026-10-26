@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "description": "Module 2 content: the four tagged landforms (positions verified against the DTM / research log) and elevation-profile preset transects. Formation options' feedback teaches why.",
+    "positions": "lon/lat; converted to scene metres at runtime via the terrain grid."
+  },
+  "features": [
+    {
+      "id": "rille",
+      "name": "Winding channel (west of the landing site)",
+      "lon": 3.537, "lat": 26.1295,
+      "verify": "profile across this point measures ~284 m depth in our DTM crop; published: ~370 m near the site, 180-270 m typical (research log)",
+      "options": [
+        { "id": "rille-lava", "text": "Sinuous rille — carved by turbulent lava flows or a collapsed lava tube", "correct": true, "why": "Correct. A long, winding channel that follows the plain is the volcanic signature; layered outcrops in its walls (seen by the crew) show stacked lava flows." },
+        { "id": "rille-water", "text": "River valley — carved by flowing water", "why": "The shape IS river-like, but the Moon has never had liquid water at its surface; lava can carve the same winding form." },
+        { "id": "rille-impact", "text": "Impact groove — gouged by a grazing body", "why": "Impacts make circular holes with rims; this channel winds and branches like a flow feature." }
+      ]
+    },
+    {
+      "id": "crater",
+      "name": "Bowl depression with raised rim (near the plain)",
+      "lon": 3.6538, "lat": 26.14626,
+      "verify": "detected in the DTM (190 m diameter, see content/craters.json)",
+      "options": [
+        { "id": "crater-impact", "text": "Impact crater — dug out by a meteoroid strike", "correct": true, "why": "Correct. A circular bowl with a raised rim and ejecta is the classic impact signature." },
+        { "id": "crater-volcano", "text": "Volcanic vent — a collapsed pit over a magma chamber", "why": "Volcanic pits cluster along fissures and lack raised rims and ejecta blankets; this one has both." },
+        { "id": "crater-sink", "text": "Sinkhole — ground collapsed into a hollow", "why": "Collapse pits are rimless and irregular; this is a clean circle with a rim." }
+      ]
+    },
+    {
+      "id": "front",
+      "name": "Mountain front (south of the plain)",
+      "lon": 3.6039, "lat": 25.94414,
+      "verify": "our DTM crop contains the Front's lower ~1 km of its ~4.6 km total rise (research log)",
+      "options": [
+        { "id": "front-imbrium", "text": "Mountain massif — uplifted/excavated crust of the Imbrium impact, about 3.9 Ga", "correct": true, "why": "Correct. The Apennines are the rim of the Imbrium basin: ancient crustal material thrust up by the basin-forming impact about 3.8-3.9 billion years ago." },
+        { "id": "front-volcano", "text": "Volcano — built up by repeated lava eruptions", "why": "These mountains are fault-block-like remnants of basin rim material, not volcanic cones; the local volcanism made the flat plains instead." },
+        { "id": "front-dust", "text": "Dust drift — piled up by wind over time", "why": "The Moon has no atmosphere and no wind; nothing piles dust into 4.6 km mountains." }
+      ]
+    },
+    {
+      "id": "mare",
+      "name": "Dark smooth plain (the landing area)",
+      "lon": 3.6534, "lat": 26.144,
+      "verify": "LM elevation -1924 m in our DTM; mare basalts ~3.3 Ga (research log)",
+      "options": [
+        { "id": "mare-lava", "text": "Mare plain — flooded by basalt lava flows, about 3.3 Ga", "correct": true, "why": "Correct. The plain is frozen basaltic lava that flooded the basin interior long after the mountains formed." },
+        { "id": "mare-ash", "text": "Ash plain — fine pyroclastic fallout", "why": "Local dark-mantle deposits exist elsewhere, but this surface's cross-section (layered flows seen in Dune's ejecta and the rille walls) shows lava flows." },
+        { "id": "mare-sediment", "text": "Sediment basin — settling of eroded mountain material", "why": "With no water or wind, there is no sediment transport on the Moon; the plain is lava." }
+      ]
+    }
+  ],
+  "profilePresets": [
+    { "id": "rille-crossing", "label": "Rille crossing (LM latitude)", "from": { "lon": 3.6100, "lat": 26.1330 }, "to": { "lon": 3.5260, "lat": 26.1275 }, "teaches": "The channel is about 1 km wide and up to ~370 m deep near the site (our crop measures ~284 m at this latitude)." },
+    { "id": "front-rise", "label": "Front rise (plain to mountain)", "from": { "lon": 3.6400, "lat": 26.0600 }, "to": { "lon": 3.6060, "lat": 25.9460 }, "teaches": "The plain sits near -1900 m; the Front climbs hundreds of metres above it in our play area (the full escarpment rises ~4,600 m)." },
+    { "id": "crater-bowl", "label": "Crater bowl (a 190 m crater on the plain)", "from": { "lon": 3.6538, "lat": 26.1510 }, "to": { "lon": 3.6538, "lat": 26.1415 }, "teaches": "A clean bowl with a raised rim — the impact signature at 5 m/px resolution." }
+  ],
+  "sunPresets": [
+    { "id": "high", "label": "High noon", "elevationDeg": 55, "azimuthDeg": 100 },
+    { "id": "mid", "label": "Mid-morning", "elevationDeg": 28, "azimuthDeg": 95 },
+    { "id": "low", "label": "Near sunrise", "elevationDeg": 12, "azimuthDeg": 90 },
+    { "id": "grazing", "label": "First light", "elevationDeg": 6, "azimuthDeg": 88 }
+  ],
+  "textMode": {
+    "orthoImages": [
+      { "id": "low", "src": "assets/textmode/ortho-low-sun.jpg", "label": "Orthoimage (derived hillshade of the LROC DTM), Sun 12° — relief emphasized", "alt": "Greyscale hillshade of the Hadley-Apennine area rendered from NASA LROC terrain data with a low 12-degree sun, showing the rille, craters and the mountain front with strong shadows." },
+      { "id": "high", "src": "assets/textmode/ortho-high-sun.jpg", "label": "Orthoimage (derived hillshade of the LROC DTM), Sun 55° — relief muted", "alt": "The same area rendered with a high 55-degree sun: shadows shrink and the terrain looks flatter." }
+    ],
+    "annotations": [
+      { "feature": "rille", "onLow": { "xPct": 18.3, "yPct": 48.8 }, "onHigh": { "xPct": 18.3, "yPct": 48.8 }, "text": "Hadley Rille — a winding channel; at 12° sun its walls cast long shadows and the channel is obvious; at 55° sun it nearly disappears." },
+      { "feature": "crater", "onLow": { "xPct": 80.6, "yPct": 44.5 }, "onHigh": { "xPct": 80.6, "yPct": 44.5 }, "text": "A 190 m impact crater on the plain — a sharp rim ring at low sun, a faint dimple at high sun." },
+      { "feature": "front", "onLow": { "xPct": 54.0, "yPct": 96.3 }, "onHigh": { "xPct": 54.0, "yPct": 96.3 }, "text": "Apennine Front lower slopes — the bright rugged region at the south edge in both images; its relief never fully hides because it is kilometres tall." },
+      { "feature": "mare", "onLow": { "xPct": 69.7, "yPct": 48.1 }, "onHigh": { "xPct": 69.7, "yPct": 48.1 }, "text": "The mare plain at the landing site — smooth in both images; small craters are the only relief." }
+    ],
+    "note": "Percent coordinates refer to the orthoimage (AOI: 26.32N-25.93S top-to-bottom, 3.5026E-3.6901E left-to-right)."
+  }
+}

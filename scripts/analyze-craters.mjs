@@ -67,7 +67,7 @@ function decodePNG(buf) {
 
 const meta = JSON.parse(readFileSync(`${WORK}/height-l2.meta.json`, 'utf8'));
 const png = decodePNG(readFileSync(`${WORK}/height-l2.png`));
-const { w, h } = meta;
+const { width: w, height: h } = meta;
 if (png.w !== w || png.h !== h) throw new Error('size mismatch');
 const span = meta.elevMax - meta.elevMin;
 const elev = new Float32Array(w * h);
@@ -97,46 +97,62 @@ function toLonLat(xM, yM) { // metres east from west edge, metres south from nor
 function detectCraters(x0, y0, radiusPx, minDiameterPx, maxDiameterPx) {
   const out = [];
   const scales = [];
-  for (let d = minDiameterPx; d <= maxDiameterPx; d += Math.max(2, Math.round(minDiameterPx / 2))) scales.push(Math.round(d / 2));
-  for (let cy = y0; cy < y0 + 2 * radiusPx; cy++) {
-    for (let cx = x0; cx < x0 + 2 * radiusPx; cx++) {
+  const maxR = Math.round(maxDiameterPx / 2);
+  for (let r = Math.max(2, Math.round(minDiameterPx / 2)); r <= maxR; r++) scales.push(r);
+
+  /** Least-squares plane fit; returns plane value at (0,0) plus slope, or null. */
+  function planeAt(pts) {
+    let s1 = pts.length, sx = 0, sy = 0, sz = 0, sxx = 0, sxy = 0, syy = 0, sxz = 0, syz = 0;
+    for (const [dx, dy, v] of pts) { sx += dx; sy += dy; sz += v; sxx += dx * dx; sxy += dx * dy; syy += dy * dy; sxz += dx * v; syz += dy * v; }
+    const xb = sx / s1, yb = sy / s1, zb = sz / s1;
+    const Sxx = sxx - s1 * xb * xb, Syy = syy - s1 * yb * yb, Sxy = sxy - s1 * xb * yb;
+    const Sxz = sxz - s1 * xb * zb, Syz = syz - s1 * yb * zb;
+    const den = Sxx * Syy - Sxy * Sxy;
+    if (Math.abs(den) < 1e-6) return null;
+    const b = (Sxz * Syy - Syz * Sxy) / den, c = (Syz * Sxx - Sxz * Sxy) / den;
+    return { a: zb - b * xb - c * yb, b, c };
+  }
+
+  /** Ring sample values around (cx, cy) at radius r; null if any nodata. */
+  function ring(cx, cy, r) {
+    const n = Math.max(12, Math.round(2 * Math.PI * r / 2));
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * 2 * Math.PI;
+      const v = at(cx + Math.round(r * Math.cos(a)), cy + Math.round(r * Math.sin(a)));
+      if (Number.isNaN(v)) return null;
+      pts.push([Math.round(r * Math.cos(a)), Math.round(r * Math.sin(a)), v]);
+    }
+    return pts;
+  }
+
+  for (let cy = y0; cy < y0 + 2 * radiusPx; cy += 2) {
+    for (let cx = x0; cx < x0 + 2 * radiusPx; cx += 2) {
       if (Number.isNaN(at(cx, cy))) continue;
       let best = null;
       for (const r of scales) {
-        // ring samples
-        const n = Math.max(12, Math.round(2 * Math.PI * r / 2));
-        const pts = [];
-        let ok = true;
-        for (let i = 0; i < n; i++) {
-          const a = (i / n) * 2 * Math.PI;
-          const x = cx + Math.round(r * Math.cos(a)), y = cy + Math.round(r * Math.sin(a));
-          const v = at(x, y);
-          if (Number.isNaN(v)) { ok = false; break; }
-          pts.push([x - cx, y - cy, v]);
-        }
-        if (!ok) continue;
-        // plane fit: v ~ a + b*dx + c*dy  (least squares, normal equations)
-        let s1 = pts.length, sx = 0, sy = 0, sz = 0, sxx = 0, sxy = 0, syy = 0, sxz = 0, syz = 0;
-        for (const [dx, dy, v] of pts) { sx += dx; sy += dy; sz += v; sxx += dx * dx; sxy += dx * dy; syy += dy * dy; sxz += dx * v; syz += dy * v; }
-        const det = s1 * sxx * syy + 2 * sx * sy * sxy - sxx * sy * sy - syy * sx * sx - sxy * sxy * s1;
-        if (Math.abs(det) < 1e-6) continue;
-        const a = (sz * sxx * syy + sx * syz * sxy + sy * sxy * sxz - sxx * sy * syz - syy * sxy * sz - sxy * sx * sxz) / det;
-        const b = (s1 * sxz * syy + sy * sy * sz + sy * sxy * sxz - sxx * sy * syz - syy * sxz * s1 - sxy * sx * sz) / det;
-        const c = (s1 * sxx * syz + sx * sy * sz + sxx * sxz * s1 - sxx * s1 * syz - syy * sx * sxz - sxy * sy * sz) / det;
-        // refit b,c properly (a solved above is approximate for the constant only)
-        const b2 = (syz * sxx - sxz * sxy) / (sxx * syy - sxy * sxy);
-        const c2 = (sxz * syy - syz * sxy) / (sxx * syy - sxy * sxy);
-        void b; void c;
-        const planeAt = a + b2 * 0 + c2 * 0; // a is the plane value at the centre
-        // interior check: centre must be below the fitted plane (a bowl)
-        const depth = planeAt - at(cx, cy);
-        // rim prominence: ring mean above the fitted plane
-        let ringSum = 0;
-        for (const [, , v] of pts) ringSum += v;
-        const rim = ringSum / pts.length - a;
-        if (depth > 1.2 && rim > 0.6 && (!best || r > best.r)) best = { r, depth, rim };
+        // Local terrain plane from an OUTER annulus (1.3r), so the crater's own
+        // rim/floor cannot leak into the reference level.
+        const outer = ring(cx, cy, Math.round(r * 1.3));
+        if (!outer) continue;
+        const pl = planeAt(outer);
+        if (!pl) continue;
+        const floor = at(cx, cy);
+        const depth = pl.a - floor;                     // floor below local terrain
+        if (depth < 2.0) continue;
+        const rimPts = ring(cx, cy, r);
+        if (!rimPts) continue;
+        let rimSum = 0; for (const [, , v] of rimPts) rimSum += v;
+        const rim = rimSum / rimPts.length - pl.a;      // rim crest above local terrain
+        if (rim < 0.4) continue;
+        if (!best || depth > best.depth) best = { r, depth, rim };
       }
-      if (best) out.push({ x: cx, y: cy, rPx: best.r, depthM: best.depth, rimM: best.rim, diameterM: best.r * 2 * mPerPx });
+      // diameter = 2 * argmax_r(depth) (ring on the rim crest there). Reject
+      // candidates at the largest scale: on open slopes "depth" grows
+      // monotonically with radius, so the peak at the cap is not a bowl.
+      if (best && best.r < maxR) {
+        out.push({ x: cx, y: cy, rPx: best.r, depthM: best.depth, rimM: best.rim, diameterM: best.r * 2 * mPerPx });
+      }
     }
   }
   // non-maximum suppression: keep the deepest candidate within 0.7*diameter
@@ -161,17 +177,17 @@ const MARE = { id: 'mare', center: { xM: Math.round(lmPx.x * mPerPx + 550), yM: 
 // Front patch: lower slopes of the Apennine Front, southeast of the LM (higher ground).
 // Search for the highest-elevation flat-ish area in the valid region to place it.
 let bestFront = null;
-for (let lat = 26.02; lat <= 26.10; lat += 0.004) {
-  for (let lon = 3.60; lon <= 3.66; lon += 0.004) {
+for (let lat = 25.932; lat <= 26.00; lat += 0.003) {
+  for (let lon = 3.55; lon <= 3.68; lon += 0.003) {
     const p = toPx(lat, lon);
     const v = at(Math.round(p.x), Math.round(p.y));
-    if (Number.isNaN(v) || v < -1750) continue; // front materials start above the plain
+    if (Number.isNaN(v) || v < -1750 || v > -1400) continue; // on the Front, below the ragged crests
     const slope = Math.abs(at(Math.round(p.x) + 10, Math.round(p.y)) - at(Math.round(p.x) - 10, Math.round(p.y))) / 100;
-    if (slope < 0.18 && slope > 0.03) { // on the slope but not a cliff
-      if (!bestFront || v > bestFront.elev) bestFront = { elev: v, xM: p.x * mPerPx, yM: p.y * mPerPx, lat, lon, slope };
-    }
+    if (slope < 0.10 || slope > 0.75) continue; // on the slope band (6..37 deg), not a cliff, not the plain
+    if (!bestFront || v > bestFront.elev) bestFront = { elev: v, xM: p.x * mPerPx, yM: p.y * mPerPx, lat, lon, slope };
   }
 }
+if (!bestFront) throw new Error('no Apennine Front patch found in the search band');
 const FRONT = { id: 'front', center: { xM: Math.round(bestFront.xM), yM: Math.round(bestFront.yM) }, radiusM: 150 };
 
 const det = [];
@@ -183,6 +199,7 @@ for (const patch of [MARE, FRONT]) {
     diameterM: Math.round(c.diameterM),
     depthM: Math.round(c.depthM * 10) / 10,
     offsetM: Math.round(Math.hypot(c.x - cx, c.y - cy) * mPerPx),
+    lonLat: toLonLat(c.x * mPerPx, c.y * mPerPx),
   })).sort((a, b) => b.diameterM - a.diameterM);
   const areaKm2 = (Math.PI * patch.radiusM * patch.radiusM) / 1e6;
   det.push({

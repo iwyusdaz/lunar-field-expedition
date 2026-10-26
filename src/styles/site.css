@@ -169,3 +169,81 @@ caption { text-align: left; font-weight: 600; padding: 0.2rem 0; }
   .hud { top: 5.6rem; }
   .app-header { flex-wrap: wrap; gap: 0.4rem; }
 }
+
+/* ---- Lunar Field Expedition app styles ---- */
+
+#task-panel {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  max-height: 62vh; overflow-y: auto;
+  margin: 0 auto; max-width: 62rem;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 0.9rem 1.2rem 1.1rem;
+  z-index: 6;
+}
+#task-panel h2 { margin: 0 0 0.2rem; font-size: 1.15rem; }
+#task-panel .module-intro { margin: 0 0 0.7rem; color: var(--muted); font-weight: 600; }
+#task-panel .textmode-title { margin-top: 0; }
+
+.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.btn.primary:hover { filter: brightness(1.1); }
+.continue-btn { margin-top: 0.8rem; }
+.feedback-step { border-left: 3px solid var(--ok); padding: 0.4rem 0.7rem; background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.module-complete { margin-top: 0.8rem; }
+
+.tool { border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent); border-radius: 8px; padding: 0.7rem 0.9rem; margin: 0.6rem 0; background: color-mix(in srgb, var(--bg) 55%, transparent); }
+.tool h3 { margin-top: 0; }
+.tool-hint { color: var(--muted); font-size: 0.92rem; margin-top: 0.2rem; }
+.preset-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.preset-btn[aria-pressed="true"] { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus) inset; }
+
+.profile-chart svg { display: block; }
+.profile-controls { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+
+.patch-tabs { display: flex; gap: 0.4rem; }
+.patch-tabs [role=tab][aria-selected="true"] { background: var(--accent-strong); color: #fff; }
+.counter-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0; }
+.cc-results table { max-width: 100%; display: block; overflow-x: auto; }
+.cc-reference-panel { border-top: 1px dashed var(--muted); margin-top: 0.6rem; padding-top: 0.4rem; }
+
+.traverse-planner .tp-columns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.tp-map-col { flex: 0 0 262px; }
+.tp-map { width: 260px; height: 600px; border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 6px; }
+.tp-plan-col { flex: 1 1 22rem; min-width: 18rem; }
+.tp-stations { display: flex; flex-direction: column; gap: 0.35rem; }
+.tp-route { margin: 0.3rem 0; padding-left: 1.3rem; }
+.tp-route li { margin: 0.25rem 0; }
+.tp-seg-cost { color: var(--muted); font-size: 0.88rem; }
+.tp-route select { margin: 0 0.3rem; }
+.meter { display: grid; grid-template-columns: auto 1fr auto; gap: 0.5rem; align-items: center; margin: 0.35rem 0; }
+.meter progress { width: 100%; height: 0.9rem; accent-color: var(--accent-strong); }
+.tp-budget-note { font-weight: 600; }
+.tp-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+.station-card { border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 8px; padding: 0.6rem 0.8rem; margin: 0.5rem 0; }
+.tp-score ul { margin: 0.3rem 0; }
+.found-cards { display: grid; gap: 0.5rem; }
+.found-card { border-left: 3px solid var(--accent); padding: 0.4rem 0.7rem; background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+#poi-wrap { position: absolute; top: 7.6rem; right: 0.8rem; max-width: 20rem; z-index: 6; background: color-mix(in srgb, var(--surface) 88%, transparent); border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent); border-radius: 8px; padding: 0.4rem; }
+#poi-wrap h3 { margin: 0 0 0.2rem; font-size: 0.9rem; }
+.cam-buttons { display: flex; gap: 0.3rem; margin-bottom: 0.2rem; }
+.cam-buttons button { min-width: 2.2rem; }
+.evidence-list { padding-left: 1.2rem; }
+.evidence-kind { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); }
+.evidence-source { color: var(--muted); font-size: 0.9rem; }
+.exemplar .note { color: var(--muted); font-style: italic; }
+.ortho { width: 100%; max-width: 30rem; display: block; border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); }
+.ortho-marker { position: absolute; transform: translate(-50%, -50%); color: var(--focus); font-size: 1.2rem; text-shadow: 0 0 3px #000; }
+figure { margin: 0.6rem 0; }
+.apollo-photo { max-width: 24rem; width: 100%; border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 6px; display: block; }
+.photo-caption { color: var(--muted); font-size: 0.88rem; }
+.rubric h4 { margin-bottom: 0.1rem; }
+.rubric ol { margin-top: 0.1rem; }
+textarea { width: 100%; font: inherit; background: var(--bg); color: var(--text); border: 1px solid color-mix(in srgb, var(--muted) 50%, transparent); border-radius: 6px; padding: 0.4rem; }
+@media (max-width: 700px) {
+  #task-panel { max-height: 58vh; }
+  #poi-wrap { top: auto; bottom: 60vh; max-width: 14rem; }
+  .tp-map { height: 420px; }
+}

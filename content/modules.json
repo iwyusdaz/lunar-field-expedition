@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "description": "Module definitions for Lunar Field Expedition. Learning content, separate from code. Every factual statement here is backed by research/apollo15-facts.md (sources + access dates). Fictional framing is marked; geology and Apollo 15 history are verified facts.",
+    "fictionFraming": "The learner plays a member of a FUTURE field team revisiting Hadley. That mission frame is fictional; all geology and Apollo 15 history in-app is real and cited.",
+    "simplifiedLabels": "Sample results and the traverse cost model are simplified for teaching; the app labels them as simplified wherever they appear."
+  },
+  "objectives": [
+    "Identify sinuous rilles, impact craters and mountain massifs in real terrain, and describe how each likely formed.",
+    "Explain how sun angle changes the visibility of relief, using the sun-angle tool.",
+    "Use superposition and crater density to compare the relative ages of the mare surface and the Apennine Front.",
+    "Plan a sampling traverse that answers a stated question within resource limits, and justify the station choices.",
+    "Write a claim-evidence-reasoning field report that cites specific observations and measurements."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "1. Arrival",
+      "coreQuestion": "Where are we, and what's the question?",
+      "objectiveFocus": [1],
+      "steps": [
+        { "id": "m1-globe", "kind": "globe", "text": "You are looking at the Moon. The pin marks the Hadley–Apennine region on its near side: the eastern edge of the mare plains of Mare Imbrium, at the foot of the Apennine mountains. In July 1971 the Apollo 15 crew landed here — the first mission with a rover, and still the only landing next to a deep mountain front and a sinuous rille. Today YOU are part of a future field team sent back to finish their work." },
+        { "id": "m1-cinematic", "kind": "cinematic", "cinematic": "approach", "text": "Fly down over the Apennine Front to the landing area (you can skip at any time)." },
+        { "id": "m1-brief", "kind": "brief", "text": "Mission brief: Your team must answer ONE question with field evidence: how do the ages of the mare plain and the Apennine Front compare — and what does that tell us about this part of the Moon? You will read the landforms, compare crater records, plan a sampling traverse, and defend your conclusion in a field report, exactly as the Apollo crews did." },
+        { "id": "m1-precheck", "kind": "check", "itemSet": "pre" }
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "2. Reading the landscape",
+      "coreQuestion": "What landforms are here, and why does the light change what you can see?",
+      "objectiveFocus": [1, 2],
+      "steps": [
+        { "id": "m2-sun", "kind": "sun-tool", "text": "The Sun-angle tool moves the sunlight. Try the presets and watch the slopes: at a low Sun, every small bump casts a long shadow; at a high Sun, the same ground looks flat. The Apollo 15 crew landed just after local sunrise on purpose — low light made the rille and the mountains easy to see during the descent." },
+        { "id": "m2-tag", "kind": "feature-tag", "text": "Four landforms are marked with pins. For each one, choose what it is and how it most likely formed. Switch the Sun low if you need the relief to stand out." },
+        { "id": "m2-profile", "kind": "profile-tool", "text": "Now measure: use the elevation-profile tool across the rille (or pick your own two points). The profile is real data from NASA's LROC terrain model." }
+      ]
+    },
+    {
+      "id": "m3",
+      "title": "3. Which is older?",
+      "coreQuestion": "How can we tell the relative age of two surfaces?",
+      "objectiveFocus": [3],
+      "steps": [
+        { "id": "m3-count", "kind": "crater-counter", "text": "Two equal-area patches are marked: one on the mare plain, one on the Apennine Front. Count every crater about 80 m across or larger (about the length of a football field) in each patch. Your count becomes a crater density — the standard clock for planetary surfaces." },
+        { "id": "m3-superposition", "kind": "superposition", "text": "Crater density is one clock. Superposition is the other. Look at the boundary where the plains meet the Front (use the sun tool at a low angle), then answer the superposition question." },
+        { "id": "m3-debrief", "kind": "debrief", "text": "Compare your densities — but be careful. Your two counts may DISAGREE with the sample ages. That disagreement is real science: crater counting works on flat, stable surfaces; steep slopes destroy the crater record. The Front's age comes from rock samples, not from counting on its slopes." }
+      ]
+    },
+    {
+      "id": "m4",
+      "title": "4. Field traverse",
+      "coreQuestion": "Where should we sample, and what will each stop tell us?",
+      "objectiveFocus": [4],
+      "steps": [
+        { "id": "m4-hypothesis", "kind": "hypothesis", "text": "Choose the question your traverse must answer. Your route, stations and tools should all serve it." },
+        { "id": "m4-plan", "kind": "traverse-plan", "text": "Plan your route on the map: pick up to 4 stations and the tool to use at each. Time and consumables are limited — slopes cost more. This is a simplified model of EVA planning; the real crew worked under far tighter rules." },
+        { "id": "m4-run", "kind": "traverse-run", "text": "Drive the plan. At each station you use the tool you chose; the results go to your evidence board." },
+        { "id": "m4-debrief", "kind": "traverse-debrief", "text": "Debrief: your traverse beside the real Apollo 15 routes, and what the crew actually found at each stop." }
+      ]
+    },
+    {
+      "id": "m5",
+      "title": "5. Field report",
+      "coreQuestion": "What do we conclude, and what is the evidence?",
+      "objectiveFocus": [5],
+      "steps": [
+        { "id": "m5-board", "kind": "evidence-board", "text": "Review your evidence board: every observation, measurement and sample your traverse collected." },
+        { "id": "m5-cer", "kind": "cer-builder", "text": "Build your field report: claim, evidence, reasoning, uncertainty. The app checks that you CITED specific evidence types; it never grades your writing." },
+        { "id": "m5-selfcheck", "kind": "rubric-selfcheck", "text": "Compare your draft with the exemplar and rate yourself against the rubric. This is a self-check, not a grade." },
+        { "id": "m5-comparison", "kind": "apollo-comparison", "text": "Compare with history: what the Apollo 15 crew actually did here, and the Genesis Rock story." },
+        { "id": "m5-postcheck", "kind": "check", "itemSet": "post" }
+      ]
+    }
+  ]
+}

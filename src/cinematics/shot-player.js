@@ -84,11 +84,31 @@ export class ShotPlayer {
     this.caption.textContent = shot.captions?.join(' ') || '';
     this.desc.textContent = shot.description || '';
     this._t = 0;
-    if (this.motion.reduced) {
-      // Reduced-motion version: still frame at the end of the path + captions.
-      this._placeAt(shot, 1);
-      this._stillTimer = setTimeout(() => this._nextShot(), Math.max(2500, (shot.duration || 10) * 700));
+    const rm = shot.reducedMotion;
+    if (this.motion.reduced && rm?.kind === 'stills') {
+      // Reduced-motion version: still frames along the path + per-still captions.
+      const stills = rm.stills?.length ? rm.stills : [1];
+      const caps = rm.captionsPerStill || [];
+      let i = 0;
+      const showStill = () => {
+        if (!this.playing) return;
+        const frac = stills[Math.min(i, stills.length - 1)];
+        if (caps[i]) this.caption.textContent = caps[i];
+        this._placeAt(shot, frac);
+        this.onProgress?.(shot, frac);
+        i++;
+        if (i < stills.length) this._stillTimer = setTimeout(showStill, 4200);
+        else this._stillTimer = setTimeout(() => this._nextShot(), 4200);
+      };
+      showStill();
     } else {
+      if (this.motion.reduced) {
+        // no reducedMotion data: still at the end of the path
+        this._placeAt(shot, 1);
+        this.onProgress?.(shot, 1);
+        this._stillTimer = setTimeout(() => this._nextShot(), Math.max(2500, (shot.duration || 10) * 700));
+        return;
+      }
       this._start = performance.now();
       cancelAnimationFrame(this._raf);
       const step = () => {
@@ -97,6 +117,7 @@ export class ShotPlayer {
         const dur = shot.duration || 10;
         const t = Math.min(1, elapsed / dur);
         this._placeAt(shot, t);
+        this.onProgress?.(shot, t);
         if (t >= 1) { this._nextShot(); return; }
         this._raf = requestAnimationFrame(step);
       };
