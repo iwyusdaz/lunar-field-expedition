@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-26T18:54:28.906Z",
+  "source": "LROC NAC_DTM_APOLLO15 (2 m/px), NASA PDS",
+  "checks": [
+    {
+      "name": "Hadley Rille depth near the landing site",
+      "measured": "284 m (rim -1895 m, floor -2180 m)",
+      "published": "about 370 m deep at the Apollo 15 site (typical 180-270 m elsewhere)",
+      "source": "research/apollo15-facts.md — Hadley Rille (en.wikipedia.org/wiki/Hadley_Rille)",
+      "tolerance": "±25%",
+      "pass": true
+    },
+    {
+      "name": "Mare plain elevation near the LM",
+      "measured": "-1924 m (median over a 200 m box; min -1929, max -1919)",
+      "published": "the mare surface sits about 1.7-1.9 km below the 1737.4 km reference sphere at this site",
+      "source": "DTM datum; consistent with published site elevation maps (UNVERIFIED precise number — informational check)",
+      "tolerance": "informational",
+      "pass": true
+    },
+    {
+      "name": "Relief inside the play area",
+      "measured": "932 m (Apennine Front lower slopes -1248 m down to the rille floor -2180 m)",
+      "published": "the full Apennine escarpment rises about 4,600 m above the Hadley plain; the play area contains its lower ~1 km (upper slopes are outside the cropped area, documented in DECISIONS.md)",
+      "source": "https://en.wikipedia.org/wiki/Hadley%E2%80%93Apennine",
+      "tolerance": "informational (documented crop)",
+      "pass": true
+    }
+  ]
+}

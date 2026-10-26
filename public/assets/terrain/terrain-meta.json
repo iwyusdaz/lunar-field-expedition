@@ -1,0 +1,62 @@
+{
+  "slug": "lunar-field-expedition",
+  "generatedBy": "scripts/build-tiles.mjs (from scripts/fetch-lroc-dtm.sh + scripts/process-terrain.sh)",
+  "dataSources": {
+    "dtm": "NASA/LRO LROC NAC_DTM_APOLLO15, 2 m/px, public domain, credit NASA/GSFC/ASU",
+    "albedo": "NASA SVS CGI Moon Kit color map (LROC WAC Hapke-normalized mosaic), global resolution (~44x31 px over this area), credit NASA/SVS",
+    "normalMaps": "derived in-repo from the DTM (no vertical exaggeration)"
+  },
+  "aoi": {
+    "lonWest": 3.5026368,
+    "lonEast": 3.6901291,
+    "latSouth": 25.93,
+    "latNorth": 26.32,
+    "crs": "equirectangular, Moon sphere R=1737400 m, standard parallel 26N (planetocentric)",
+    "elevationsRelativeTo": "1737400 m lunar reference sphere (LROC NAC DTM datum)",
+    "verticalExaggeration": 1,
+    "units": "1 scene unit = 1 metre"
+  },
+  "lods": [
+    {
+      "level": 0,
+      "width": 170,
+      "height": 394,
+      "mPerPx": 30,
+      "elevMin": -2242,
+      "elevMax": -1251
+    },
+    {
+      "level": 1,
+      "width": 511,
+      "height": 1183,
+      "mPerPx": 10,
+      "elevMin": -2243,
+      "elevMax": -1248
+    },
+    {
+      "level": 2,
+      "width": 1022,
+      "height": 2366,
+      "mPerPx": 5,
+      "elevMin": -2243,
+      "elevMax": -1247
+    }
+  ],
+  "validation": [
+    {
+      "name": "Hadley Rille depth near the landing site",
+      "measured": "284 m (rim -1895 m, floor -2180 m)",
+      "pass": true
+    },
+    {
+      "name": "Mare plain elevation near the LM",
+      "measured": "-1924 m (median over a 200 m box; min -1929, max -1919)",
+      "pass": true
+    },
+    {
+      "name": "Relief inside the play area",
+      "measured": "932 m (Apennine Front lower slopes -1248 m down to the rille floor -2180 m)",
+      "pass": true
+    }
+  ]
+}

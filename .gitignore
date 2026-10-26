@@ -28,3 +28,6 @@ playwright-report/
 *.swp
 .idea/
 .vscode/
+
+# Terrain pipeline intermediates
+data/work/
