@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+tmp/
+
+# Raw source data (never committed; scripts download it)
+data/raw/
+
+# Test output, screenshots, recordings
+test-results/
+playwright-report/
+*.webm
+!docs/trailer.webm
+
+# Environment and secrets — never commit
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Vercel (showcase repo) — never commit
+.vercel/
+
+# Editor
+*.swp
+.idea/
+.vscode/
