@@ -40,7 +40,7 @@ Run 2026-10-27 with `../_tools/perf-sample.mjs` on an Apple M1 (ANGLE Metal), he
 | High | 60.1 | 17.5 ms | 2 | 304,790 |
 | Ultra | 60.1 | 17.5 ms | 2 | 1,212,404 |
 
-Against the budgets (standards 4.5): ≥ 55 fps on Medium (pass), ≤ 300 draw calls (pass), ≤ 1.5 M triangles (pass, Ultra included), menu interactive in 1.84 s (< 3 s, pass), 5.63 MB before first interaction (≤ 15 MB desktop and ≤ 8 MB mobile, pass). Frame rate is capped by the 60 Hz display. Mobile performance is inferred from the Low preset; no phone or emulation run.
+Against the budgets (standards 4.5): ≥ 55 fps on Medium (pass), ≤ 300 draw calls (pass), ≤ 1.5 M triangles (pass, Ultra included), menu interactive in 0.21 s (< 3 s, pass; measured in the page from navigation start until the Menu button is visible and no long task is running, on a local server), 5.63 MB before first interaction (≤ 15 MB desktop and ≤ 8 MB mobile, pass). Frame rate is capped by the 60 Hz display. Mobile performance is inferred from the Low preset; no phone or emulation run.
 
 ## Not yet run (tracked in STATUS.md)
 - Agent-based design reviews (incl. "high-school earth science teacher" and "planetary geologist" persona reviews) and the revisions they lead to.

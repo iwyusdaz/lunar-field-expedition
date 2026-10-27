@@ -58,7 +58,7 @@ Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-
 - **47 unit tests:** the browser PNG heightmap decoder against the real terrain assets; sun and traverse cost models; learning record, evidence board and state; content integrity, including the cinematic budget.
 - **Browser tests:** a scripted playthrough of all five modules to the post-check; text-mode parity across all five modules; reduced-motion stills; header controls; an axe scan with zero critical or serious issues; the sub-path test at `/play/lunar-field-expedition/`.
 - **Fact check:** every Apollo 15 claim is traced in the research log, with a verification status (VERIFIED, VERIFIED-SNIPPET or DERIVED).
-- **Performance (headed, Apple M1):** 60 fps on every preset; 305k triangles and 2 draw calls on Medium; menu interactive in 1.8 s; 5.6 MB downloaded before the first interaction.
+- **Performance (headed, Apple M1):** 60 fps on every preset; 305k triangles and 2 draw calls on Medium; menu interactive in 0.2 s; 5.6 MB downloaded before the first interaction.
 - **Pending:** agent-based design reviews (including "high-school earth science teacher" and "planetary geologist" persona reviews) and the trailer.
 
 **What it can show:** the course works end to end in 3D and in text mode, by keyboard; the terrain's relief matches published values; the facts trace to sources.
