@@ -1,4 +1,4 @@
-> **Evaluation status:** Automated functional, accessibility and performance testing is complete. Agent-based design reviews are in progress (see `STATUS.md`). No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`.
+> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. (The headed performance numbers were measured before the agent-review revisions; the orchestrator will re-run them.)
 
 # Lunar Field Expedition
 
