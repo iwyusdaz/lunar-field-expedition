@@ -47,6 +47,12 @@ export class EvidenceBoard {
     return [...out];
   }
 
+  /** Remove the evidence one module added (used when that module is redone). */
+  removeModule(moduleId) {
+    this.items = this.items.filter(e => e.moduleId !== moduleId);
+    this._save();
+  }
+
   hasAllTags(tags) { return tags.every(t => this.tags().includes(t)); }
 
   clear() { this.items = []; this._save(); }

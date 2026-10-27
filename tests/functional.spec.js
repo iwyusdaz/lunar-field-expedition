@@ -151,6 +151,58 @@ test('scripted playthrough: all five modules to the post-check', async ({ page }
   expect(record.statements.some(s => s.verb.display['en-US'] === 'answered')).toBe(true);
 });
 
+test('Module 4 cannot be skipped before driving, and a finished module can be redone', async ({ page }) => {
+  test.setTimeout(120000);
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#task-panel h2', { timeout: 30000 });
+  await page.evaluate(() => window.__TEST__.hooks.showModule('m4'));
+  await next(page, 'Open the planner');
+  await expect(page.locator('.traverse-planner')).toBeVisible();
+  // no way on to the report until the plan has been driven
+  await expect(page.locator('#task-panel button', { hasText: 'Continue to the field report' })).toHaveCount(0);
+  await page.locator('.tp-stations button', { hasText: 'Elbow crater' }).click();
+  await page.getByLabel('Tool to use at Elbow crater').selectOption('sample');
+  await page.locator('.tp-drive').click();
+  for (let i = 0; i < 3; i++) {
+    const c = page.locator('.tp-run .station-card button').last();
+    if ((await c.count()) === 0) break;
+    await c.click();
+    await page.waitForTimeout(250);
+  }
+  await next(page, 'Continue to the field report');
+  await expect(page.locator('#task-panel .module-complete')).toBeVisible();
+  const before = await page.evaluate(() => window.__TEST__.board.items.filter(e => e.moduleId === 'm4').length);
+  expect(before).toBeGreaterThan(0);
+  // redo: the planner comes back and the module's evidence is cleared
+  await page.locator('#task-panel button', { hasText: 'Redo this module' }).click();
+  await next(page, 'Open the planner');
+  await expect(page.locator('.traverse-planner')).toBeVisible();
+  const after = await page.evaluate(() => ({
+    m4: window.__TEST__.board.items.filter(e => e.moduleId === 'm4').length,
+    done: window.__TEST__.state.isComplete('m4-plan'),
+  }));
+  expect(after).toEqual({ m4: 0, done: false });
+});
+
+test('POI jumps to the crater patches keep the camera finite', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#task-panel h2', { timeout: 30000 });
+  await page.evaluate(() => window.__TEST__.hooks.showModule('m3'));
+  for (const poi of ['patch-mare', 'patch-front']) {
+    await page.locator(`#poi-wrap [data-poi="${poi}"]`).click();
+    const cam = await page.evaluate(() => {
+      const c = window.__engine.camera.position;
+      const t = window.__TEST__.app.orbit.target;
+      return [c.x, c.y, c.z, t.x, t.y, t.z];
+    });
+    for (const v of cam) expect(Number.isFinite(v)).toBe(true);
+  }
+});
+
 test('text mode covers all five modules with parity content', async ({ page }) => {
   await page.goto('/');
   await page.waitForSelector('#task-panel h2', { timeout: 30000 });

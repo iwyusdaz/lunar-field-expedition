@@ -56,6 +56,18 @@ export class AppState {
 
   isComplete(stepId) { return this.state.completed.includes(stepId); }
 
+  /**
+   * Reopen one module: forget its completed steps (and sub-steps such as
+   * `m2-tag-rille`) and their decisions. Other modules are untouched.
+   * @param {string[]} stepIds the module's step ids
+   */
+  resetModule(stepIds) {
+    const owned = (id) => stepIds.some(s => id === s || id.startsWith(`${s}-`));
+    this.state.completed = this.state.completed.filter(id => !owned(id));
+    for (const id of Object.keys(this.state.decisions)) if (owned(id)) delete this.state.decisions[id];
+    this.save();
+  }
+
   reset() {
     this.state = this._fresh();
     this.save();

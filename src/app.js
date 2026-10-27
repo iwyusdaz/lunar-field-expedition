@@ -38,6 +38,7 @@ import { TraversePlanner } from './systems/traverse.js';
 import { EvidenceBoard } from './systems/evidence.js';
 import { AppState } from './systems/state.js';
 import { planAccounting } from './systems/traverse-model.js';
+import { patchTarget, resolveTarget } from './systems/poi-targets.js';
 
 const SLUG = window.__SLUG__ || 'lunar-field-expedition';
 window.__SLUG__ = SLUG;
@@ -285,7 +286,30 @@ export class App {
       btn.addEventListener('click', () => this.showModule(this.moduleDefs[this.moduleIndex + 1].id));
       wrap.appendChild(btn);
     }
+    const redo = document.createElement('button');
+    redo.type = 'button';
+    redo.className = 'btn redo-module';
+    redo.textContent = 'Redo this module';
+    redo.addEventListener('click', () => this.redoModule(this.currentModuleId()));
+    wrap.appendChild(redo);
     this.stepContainer.appendChild(wrap);
+  }
+
+  /**
+   * Reopen a finished module: clear only its steps and the evidence it added,
+   * then start it again. Other modules keep their progress.
+   */
+  redoModule(moduleId) {
+    const def = this.moduleDefs.find(m => m.id === moduleId);
+    if (!def) return;
+    this.state.resetModule(def.steps.filter(s => s.kind !== 'cinematic').map(s => s.id));
+    this.board.removeModule(moduleId);
+    if (moduleId === 'm4') { this.plan = null; this.state.state.traverse = null; this.state.save(); }
+    if (moduleId === 'm5') { this.state.state.report = null; this.state.state.postCheck = null; this.state.save(); }
+    if (moduleId === 'm1') { this.state.state.preCheck = null; this.state.save(); }
+    this.record.log('experienced', { id: `module-${moduleId}-redo`, name: `Redo: ${def.title}` });
+    this.showModule(moduleId, { resume: true });
+    announce(`${def.title} reopened.`);
   }
 
   currentModuleId() { return this.moduleDefs[this.moduleIndex].id; }
@@ -376,8 +400,9 @@ export class App {
             cont.disabled = false;
           },
         });
-        this.poi.set('patch-mare', { label: 'Mare patch (crater counting)', onSelect: () => this._flyTo('patch-mare', patches[0]) });
-        this.poi.set('patch-front', { label: 'Front patch (crater counting)', onSelect: () => this._flyTo('patch-front', patches[1]) });
+        // Patch centres are stored in site metres (center.xM/yM), not lon/lat.
+        this.poi.set('patch-mare', { label: 'Mare patch (crater counting)', onSelect: () => this._flyTo('patch-mare', patchTarget(patches[0])) });
+        this.poi.set('patch-front', { label: 'Front patch (crater counting)', onSelect: () => this._flyTo('patch-front', patchTarget(patches[1])) });
         const cont = document.createElement('button');
         cont.type = 'button';
         cont.className = 'btn primary continue-btn';
@@ -410,6 +435,9 @@ export class App {
           resultFor: (stationId) => this._stationResults(stationId),
           onPlanned: (plan) => { this.plan = plan; },
           onDebrief: ({ score }) => {
+            // keep the driven plan so the report (also after a reload or in text mode) uses its hypothesis
+            this.state.state.traverse = { hypothesis: this.plan.hypothesis, route: this.plan.route, evidenceTags: this.plan.evidenceTags };
+            this.state.save();
             this.state.completeStep(step.id, { route: this.plan.route, score: score.metCount });
             this.record.log('completed', { id: step.id, name: 'Traverse planned and run' }, { response: { stations: this.plan.route.length - 1 } });
             const btn = document.createElement('button');
@@ -424,7 +452,8 @@ export class App {
         for (const s of this.traverse.points.values()) {
           this.poi.set(`st-${s.id}`, { label: s.name, onSelect: () => this._flyTo(`st-${s.id}`, s) });
         }
-        this._continueBtn(el, 'Continue to the field report');
+        // No Continue here: the only way on is to drive the plan (onDebrief adds the button),
+        // so Module 4 can't be marked complete without traverse evidence.
       },
       'traverse-run': () => { /* integrated into planner run phase */ this._stepDone(this.currentStep); },
       'traverse-debrief': () => { this._stepDone(this.currentStep); },
@@ -616,7 +645,8 @@ export class App {
     el.appendChild(p);
 
     // evidence tag picker (structured check — not text grading)
-    const hypDef = this.content.stations.hypotheses.find(h => h.id === (this.plan?.hypothesis || 'h-front'));
+    const hypId = this.state.state.traverse?.hypothesis || this.plan?.hypothesis || 'h-front';
+    const hypDef = this.content.stations.hypotheses.find(h => h.id === hypId) || this.content.stations.hypotheses[0];
     const required = rep.requiredEvidenceTags[hypDef.id] || [];
     const tagZone = document.createElement('fieldset');
     tagZone.innerHTML = `<legend>Cite evidence from your board (structured tags)</legend>
@@ -831,7 +861,8 @@ export class App {
 
   _flyTo(_id, pos) {
     if (!this.orbit) return;
-    const P = pos.xM !== undefined ? pos : this.site.terrain.fromLonLat(pos.lon, pos.lat);
+    const P = resolveTarget(pos, (lon, lat) => this.site.terrain.fromLonLat(lon, lat));
+    if (!P) return; // never send the camera to NaN
     const e = this.site.terrain.elevationAt(P.xM, P.yM);
     this.orbit.target.set(P.xM, (Number.isNaN(e) ? -1900 : e), P.yM);
     this.orbit.spherical.radius = Math.max(this.orbit.minRadius, pos.radiusM ? pos.radiusM * 2.6 : 600);
