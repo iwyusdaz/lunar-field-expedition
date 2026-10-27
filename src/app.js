@@ -765,6 +765,8 @@ export class App {
       this.orbit.spherical = { radius: 2600, theta: Math.PI * 0.72, phi: Math.PI / 3.4 };
       this.orbit.update();
     }
+    // The task panel would cover the cinematic captions; it returns when the shot ends or is skipped.
+    if (this.stepEl) this.stepEl.hidden = true;
     this.player.play();
     // wire shot effects (sun sweep, overlays) to the scene
     this.player.onProgress = (shot, t) => {
@@ -778,6 +780,7 @@ export class App {
     };
     const origDone = onDone;
     this.player.onDone = () => {
+      if (this.stepEl) this.stepEl.hidden = false;
       this._showTraverseOverlay(false);
       this.player.onProgress = null;
       this.player.onDone = () => {};

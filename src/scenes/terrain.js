@@ -105,31 +105,30 @@ export class TerrainField {
         indices.push(a, c, b, b, c, d);
       }
     }
-    // skirts: drop each boundary vertex 80 m so LOD/frame edges never show gaps
+    // Skirts: each edge (corners included) gets its own strip of copies dropped
+    // 80 m, so LOD/frame edges never show gaps. Every index stays inside the
+    // vertex buffer: an out-of-range index makes the whole drawElements call fail
+    // with INVALID_OPERATION on GPU drivers (the terrain then renders black).
     const skirtDepth = 80;
-    const edges = [];
-    for (let ix = 0; ix < cols; ix++) edges.push([ix, 0]);
-    for (let ix = 0; ix < cols; ix++) edges.push([ix, rows - 1]);
-    for (let iy = 1; iy < rows - 1; iy++) edges.push([0, iy]);
-    for (let iy = 1; iy < rows - 1; iy++) edges.push([cols - 1, iy]);
-    const skirtStart = positions.length / 3;
-    for (const [ix, iy] of edges) {
-      const i3 = idx(ix, iy) * 3;
-      positions.push(positions[i3], positions[i3 + 1] - skirtDepth, positions[i3 + 2]);
-      normals.push(normals[i3], normals[i3 + 1], normals[i3 + 2]);
-      uvs.push(uvs[idx(ix, iy) * 2], uvs[idx(ix, iy) * 2 + 1]);
-    }
-    // connect each surface boundary vertex to its skirt twin; the skirt strip is
-    // stitched to the boundary row by re-triangulating with the skirt copy
-    const boundaryQuads = [];
-    for (let ix = 0; ix < cols - 1; ix++) { boundaryQuads.push([idx(ix, 0), idx(ix + 1, 0), skirtStart + ix, skirtStart + ix + 1]); }
-    for (let ix = 0; ix < cols - 1; ix++) { const base = cols; boundaryQuads.push([idx(ix, rows - 1), skirtStart + base + ix, idx(ix + 1, rows - 1), skirtStart + base + ix + 1]); }
-    for (let iy = 1; iy < rows - 1; iy++) {
-      const baseW = 2 * cols; boundaryQuads.push([idx(0, iy), skirtStart + baseW + (iy - 1), idx(0, iy + 1), skirtStart + baseW + iy]);
-      const baseE = 2 * cols + (rows - 2); boundaryQuads.push([idx(cols - 1, iy), skirtStart + baseE + iy, idx(cols - 1, iy + 1), skirtStart + baseE + iy + 1]);
-    }
-    for (const [a, b, c, d] of boundaryQuads) {
-      indices.push(a, c, d, a, d, b);
+    const edgeRuns = [
+      Array.from({ length: cols }, (_, ix) => idx(ix, 0)),
+      Array.from({ length: cols }, (_, ix) => idx(ix, rows - 1)),
+      Array.from({ length: rows }, (_, iy) => idx(0, iy)),
+      Array.from({ length: rows }, (_, iy) => idx(cols - 1, iy)),
+    ];
+    for (const run of edgeRuns) {
+      const first = positions.length / 3;
+      for (const v of run) {
+        positions.push(positions[v * 3], positions[v * 3 + 1] - skirtDepth, positions[v * 3 + 2]);
+        normals.push(normals[v * 3], normals[v * 3 + 1], normals[v * 3 + 2]);
+        uvs.push(uvs[v * 2], uvs[v * 2 + 1]);
+      }
+      for (let i = 0; i < run.length - 1; i++) {
+        const a = run[i], b = run[i + 1], sa = first + i, sb = first + i + 1;
+        // both windings: skirts are seen from outside on every edge, and the
+        // material is single-sided
+        indices.push(a, sa, b, b, sa, sb, a, b, sa, b, sb, sa);
+      }
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));

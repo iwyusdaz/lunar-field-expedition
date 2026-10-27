@@ -71,7 +71,7 @@ export class CraterCounter {
   _drawPatches() {
     // circle outlines on the terrain (visible rings)
     for (const p of this.patches) {
-      const A = this.site.terrain.fromLonLat(p.center.lon, p.center.lat);
+      const A = p.center; // content/craters.json stores patch centres in site metres ({ xM, yM })
       const pts = [];
       for (let i = 0; i <= 96; i++) {
         const a = (i / 96) * Math.PI * 2;
@@ -92,7 +92,7 @@ export class CraterCounter {
     const hit = this.site.pickTerrain(ndcX, ndcY);
     if (!hit) return false;
     const patch = this.patches.find(p => p.id === this.active);
-    const A = this.site.terrain.fromLonLat(patch.center.lon, patch.center.lat);
+    const A = patch.center;
     const d = Math.hypot(hit.xM - A.xM, hit.yM - A.yM);
     if (d > patch.radiusM) {
       announce(`Outside the ${patch.name} patch. Click inside the marked circle.`);
