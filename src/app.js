@@ -542,7 +542,9 @@ export class App {
     el.appendChild(list);
     let done = 0;
     for (const f of this.content.features.features) {
-      this.site.addMarker(f.id, this.site.terrain.fromLonLat(f.lon, f.lat).xM, this.site.terrain.fromLonLat(f.lon, f.lat).yM);
+      // screen-size lettered pin; names stay neutral ("Feature A") so the list doesn't give the answer away
+      const FP = this.site.terrain.fromLonLat(f.lon, f.lat);
+      if (this.engine) this.site.addMarker(f.id, FP.xM, FP.yM, f.label || '');
       this.poi.set(`feat-${f.id}`, {
         label: f.name,
         onSelect: () => {
@@ -638,7 +640,7 @@ export class App {
   }
 
   // ---------- CER report --------------------------------------------------------
-  _renderCerBuilder(step, el) {
+  _renderCerBuilder(step, el, { onSaved } = {}) {
     const rep = this.content.report.report;
     const p = document.createElement('p');
     p.textContent = step.text;
@@ -717,13 +719,15 @@ export class App {
       this.state.state.report = { ...(this.state.state.report || {}), ...reportState };
       this.state.save();
       this.record.log('completed', { id: step.id, name: 'Field report saved' }, { response: { cited: checked.size, missing } });
-      if (!missing.length) this._stepDone(step, { saved: true }, 'Report saved. Next: the self-check.');
+      if (missing.length) return;
+      if (onSaved) onSaved({ saved: true });
+      else this._stepDone(step, { saved: true }, 'Report saved. Next: the self-check.');
     });
     el.appendChild(submit);
   }
 
   // ---------- comparison ---------------------------------------------------------
-  _renderComparison(step, el) {
+  _renderComparison(step, el, { textMode = false } = {}) {
     const p = document.createElement('p');
     p.textContent = step.text;
     el.appendChild(p);
@@ -733,7 +737,7 @@ export class App {
       real.evas.filter(e => e.route).map(e => [
         e.label.split('(')[0].trim(),
         e.label.match(/\(([^)]+)\)/)?.[1] || '',
-        e.route.map(id => this.traverse?.points.get(id)?.name || id).join(' → '),
+        e.route.map(id => this.content.stations.stations.find(s => s.id === id)?.name || id).join(' → '),
         e.found,
       ]),
       'The real Apollo 15 surface operations (source: research/apollo15-facts.md)',
@@ -753,7 +757,7 @@ export class App {
     genesis.innerHTML = `<h4>The 'Genesis Rock' story (sample 15415)</h4>
       <p>At Spur crater on EVA 2, Scott and Irwin spotted a glinting rock partly buried in the regolith and pulled it free: a 270-gram anorthosite — almost pure plagioclase feldspar from the Moon's early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 Ga. The crew believed they had a piece of the primordial crust; it turned out younger than the very first crust — but still exceptionally ancient, and exactly the kind of deep-crust material your traverse targeted. (Sources: research/apollo15-facts.md.)</p>`;
     el.appendChild(genesis);
-    this._continueBtn(el, 'Finish with the post-check');
+    if (!textMode) this._continueBtn(el, 'Finish with the post-check');
   }
 
   // ---------- cinematics ----------------------------------------------------------
@@ -880,14 +884,34 @@ export class App {
     this.shell.on('textmode', () => {
       if (!document.getElementById('textmode').hidden) {
         this.textMode.show(this.currentModuleId());
+      } else if (this._textDirty) {
+        // text-mode work changed step state: rebuild the 3D panel once, on the way out
+        this._textDirty = false;
+        this.showModule(this.currentModuleId(), { resume: true });
       }
     });
     // module renderers (parity per plan section 11)
-    this.textMode.register('m1', (body, api) => this._textM1(body, api));
-    this.textMode.register('m2', (body, api) => this._textM2(body, api));
-    this.textMode.register('m3', (body, api) => this._textM3(body, api));
-    this.textMode.register('m4', (body, api) => this._textM4(body, api));
-    this.textMode.register('m5', (body, api) => this._textM5(body, api));
+    const title = (i) => this.moduleDefs[i].title;
+    this.textMode.register('m1', (body, api) => this._textM1(body, api), title(0));
+    this.textMode.register('m2', (body, api) => this._textM2(body, api), title(1));
+    this.textMode.register('m3', (body, api) => this._textM3(body, api), title(2));
+    this.textMode.register('m4', (body, api) => this._textM4(body, api), title(3));
+    this.textMode.register('m5', (body, api) => this._textM5(body, api), title(4));
+  }
+
+  /**
+   * Record text-mode completion with the same state keys the 3D flow writes
+   * (step ids, decisions, module-complete statement), without touching the
+   * hidden 3D step queue.
+   */
+  _textComplete(moduleId, stepIds, payload) {
+    for (const id of stepIds) this.state.completeStep(id, payload?.[id]);
+    const def = this.moduleDefs.find(m => m.id === moduleId);
+    const all = def.steps.filter(s => s.kind !== 'cinematic').every(s => this.state.isComplete(s.id));
+    if (all) this.record.log('completed', { id: `module-${moduleId}`, name: `${def.title} (text mode)` });
+    // the 3D panel is rebuilt from this state when text mode closes
+    this._textDirty = true;
+    return all;
   }
 
   _textM1(body) {
@@ -903,24 +927,45 @@ export class App {
     const h = document.createElement('h3');
     h.textContent = 'Pre-check';
     body.appendChild(h);
-    this._textCheck('pre', body);
+    // the globe and brief are read above; answering every pre-check item completes the module
+    this.state.completeStep('m1-globe');
+    this.state.completeStep('m1-brief');
+    this._textCheck('pre', body, { stepId: 'm1-precheck', moduleId: 'm1' });
   }
 
-  _textCheck(setName, body) {
+  _textCheck(setName, body, { stepId, moduleId } = {}) {
     const set = this.content.items.sets[setName];
+    const answers = new Map();
     for (const item of set) {
-      body.appendChild(choiceItem({
+      const fs = choiceItem({
         prompt: item.prompt,
         options: item.options,
         onAnswer: (opt) => {
+          if (answers.has(item.id)) return; // first answer counts, as in the 3D check
           const correct = opt.id === item.correct;
+          answers.set(item.id, { itemId: item.id, chosen: opt.id, correct });
           const fb = document.createElement('p');
           fb.className = 'feedback';
           fb.textContent = `${correct ? 'Correct.' : 'Not quite.'} ${opt.why || item.why || ''}`;
-          body.appendChild(fb);
+          fs.appendChild(fb); // feedback next to the answered item
           this.record.log('answered', { id: item.id, name: item.prompt.slice(0, 60) }, { response: opt.id, success: correct });
+          if (answers.size === set.length && stepId) {
+            const score = scoreAnswers([...answers.values()]);
+            if (setName === 'pre') this.state.state.preCheck = score;
+            else this.state.state.postCheck = score;
+            this.state.save();
+            this.record.log('completed', { id: stepId, name: `${setName}-check (text mode)` }, {
+              response: { correct: score.correct, total: score.total }, success: score.ratio,
+            });
+            const out = document.createElement('p');
+            out.className = 'feedback-step textmode-done';
+            out.textContent = `You answered ${score.correct} of ${score.total}.`;
+            body.appendChild(out);
+            this._textComplete(moduleId, [stepId], { [stepId]: { correct: score.correct, total: score.total } });
+          }
         },
-      }));
+      });
+      body.appendChild(fs);
     }
   }
 
@@ -945,7 +990,8 @@ export class App {
         marker.className = 'ortho-marker';
         marker.style.left = `${pos.xPct}%`;
         marker.style.top = `${pos.yPct}%`;
-        marker.textContent = '◈';
+        // same letter as the 3D pin, so "marker A" in the question matches the image
+        marker.textContent = this.content.features.features.find(f => f.id === a.feature)?.label || '◈';
         marker.title = a.text;
         fig.style.position = 'relative';
         fig.appendChild(marker);
@@ -963,18 +1009,29 @@ export class App {
     const h2 = document.createElement('h3');
     h2.textContent = 'Feature tagging (same choices as the 3D task)';
     body.appendChild(h2);
+    const tagged = new Set();
     for (const f of this.content.features.features) {
-      body.appendChild(choiceItem({
-        prompt: `${f.name}: what is it and how did it form?`,
+      const ann = tm.annotations.find(a => a.feature === f.id);
+      const fs = choiceItem({
+        prompt: `${f.name}${ann ? ` (marker ${f.label || ''} on the images)` : ''}: what is it and how did it form?`,
         options: f.options,
         onAnswer: (opt) => {
           const fb = document.createElement('p');
           fb.className = 'feedback';
-          fb.textContent = `${opt.correct ? 'Correct.' : 'Not quite.'} ${opt.why}`;
-          body.appendChild(fb);
-          this.record.log('answered', { id: `tag-${f.id}`, name: `Feature tag: ${f.name}` }, { response: opt.id, success: opt.correct });
+          fb.textContent = `${opt.correct ? 'Correct.' : 'Not quite. Try another option.'} ${opt.why}`;
+          fs.querySelectorAll('.feedback').forEach(x => x.remove());
+          fs.appendChild(fb);
+          this.record.log('answered', { id: `tag-${f.id}`, name: `Feature tag: ${f.name}` }, { response: opt.id, success: !!opt.correct });
+          if (opt.correct) {
+            tagged.add(f.id);
+            this.state.completeStep(`m2-tag-${f.id}`, opt.id);
+            if (tagged.size === this.content.features.features.length) {
+              this._textComplete('m2', ['m2-sun', 'm2-tag', 'm2-profile'], { 'm2-tag': { allTagged: true } });
+            }
+          }
         },
-      }));
+      });
+      body.appendChild(fs);
     }
 
     const h3 = document.createElement('h3');
@@ -1028,17 +1085,26 @@ export class App {
       ],
       onAnswer: () => {},
     };
-    body.appendChild(choiceItem({
+    const fs = choiceItem({
       prompt: item.prompt, options: item.options,
       onAnswer: (opt) => {
         const fb = document.createElement('p');
         fb.className = 'feedback';
         const correct = opt.id === 'a';
         fb.textContent = `${correct ? 'Correct.' : 'Not quite.'} ${opt.why}`;
-        body.appendChild(fb);
+        fs.querySelectorAll('.feedback').forEach(x => x.remove());
+        fs.appendChild(fb);
         this.record.log('answered', { id: 'superposition-1-text', name: 'Superposition (text mode)' }, { response: opt.id, success: correct });
+        // same evidence and step state as the 3D superposition step
+        this.board.add({
+          kind: 'observation', title: 'Superposition at the Front',
+          text: 'The mare lavas lap against the Apennine Front: the plain is younger than the mountains.',
+          evidenceTags: ['superposition', 'superposition-or-count'], source: 'Module 3 observation', moduleId: 'm3',
+        });
+        this._textComplete('m3', ['m3-count', 'm3-superposition', 'm3-debrief'], { 'm3-superposition': opt.id });
       },
-    }));
+    });
+    body.appendChild(fs);
   }
 
   _textM4(body) {
@@ -1050,8 +1116,21 @@ export class App {
       stationsContent: this.content.stations,
       board: this.board,
       resultFor: (id) => this._stationResults(id),
+      onPlanned: (plan) => { this.plan = plan; },
+      onDebrief: ({ score, plan }) => {
+        // same state as the 3D planner: the report then uses THIS hypothesis
+        this.plan = plan;
+        this.state.state.traverse = { hypothesis: plan.hypothesis, route: plan.route, evidenceTags: plan.evidenceTags };
+        this.state.save();
+        this.record.log('completed', { id: 'm4-plan', name: 'Traverse planned and run (text mode)' }, { response: { stations: plan.route.length - 1 } });
+        this._textComplete('m4', ['m4-hypothesis', 'm4-plan', 'm4-run', 'm4-debrief'], { 'm4-plan': { route: plan.route, score: score.metCount } });
+        const done = document.createElement('p');
+        done.className = 'feedback-step textmode-done';
+        done.textContent = 'Traverse recorded. Module 4 is complete; the field report (Module 5) uses this hypothesis and evidence.';
+        body.appendChild(done);
+      },
     });
-    void planner;
+    this.textTraverse = planner;
     const note = document.createElement('p');
     note.textContent = 'The planner above is the full keyboard-operable planner (map + station buttons + numeric meters) — the same cost model as the 3D module.';
     body.appendChild(note);
@@ -1074,11 +1153,42 @@ export class App {
     body.appendChild(h2);
     const cerEl = document.createElement('div');
     body.appendChild(cerEl);
-    this._renderCerBuilder({ id: 'm5-cer-text', text: '' }, cerEl);
+    // same builder, but saving records text-mode completion instead of advancing the hidden 3D flow
+    this._renderCerBuilder({ id: 'm5-cer', text: '' }, cerEl, {
+      onSaved: (payload) => {
+        this.state.completeStep('m5-board');
+        this._textComplete('m5', ['m5-cer'], { 'm5-cer': payload });
+        announce('Report saved.');
+      },
+    });
+    // rubric self-check (same component as the 3D step)
+    const hs = document.createElement('h3');
+    hs.textContent = 'Rubric self-check';
+    body.appendChild(hs);
+    const selfEl = document.createElement('div');
+    body.appendChild(selfEl);
+    rubricSelfCheck({
+      criteria: this.content.report.report.rubric, container: selfEl,
+      onComplete: (ratings) => {
+        this.state.state.report = { ...(this.state.state.report || {}), selfCheck: ratings };
+        this.state.save();
+        this.record.log('completed', { id: 'm5-selfcheck', name: 'Rubric self-check (text mode)' }, { response: ratings });
+        this._textComplete('m5', ['m5-selfcheck'], { 'm5-selfcheck': ratings });
+      },
+    });
+    // the real Apollo 15 comparison (same table, photo and story)
+    const hc = document.createElement('h3');
+    hc.textContent = 'Your traverse beside the real Apollo 15 one';
+    body.appendChild(hc);
+    const cmpEl = document.createElement('div');
+    body.appendChild(cmpEl);
+    const cmpDef = def.steps.find(s => s.kind === 'apollo-comparison');
+    this._renderComparison(cmpDef, cmpEl, { textMode: true });
+    this.state.completeStep('m5-comparison');
     const h3 = document.createElement('h3');
     h3.textContent = 'Post-check';
     body.appendChild(h3);
-    this._textCheck('post', body);
+    this._textCheck('post', body, { stepId: 'm5-postcheck', moduleId: 'm5' });
   }
 
   // ---------- settings/persist -----------------------------------------------------

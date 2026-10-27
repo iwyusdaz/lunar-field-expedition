@@ -31,7 +31,7 @@
       "objectiveFocus": [1, 2],
       "steps": [
         { "id": "m2-sun", "kind": "sun-tool", "text": "The Sun-angle tool moves the sunlight. Try the presets and watch the slopes: at a low Sun, every small bump casts a long shadow; at a high Sun, the same ground looks flat. The Apollo 15 crew landed just after local sunrise on purpose — low light made the rille and the mountains easy to see during the descent." },
-        { "id": "m2-tag", "kind": "feature-tag", "text": "Four landforms are marked with pins. For each one, choose what it is and how it most likely formed. Switch the Sun low if you need the relief to stand out." },
+        { "id": "m2-tag", "kind": "feature-tag", "text": "Four landforms are marked with lettered yellow pins (A to D). Use the points-of-interest list to fly to each one. For each one, choose what it is and how it most likely formed. Switch the Sun low if you need the relief to stand out." },
         { "id": "m2-profile", "kind": "profile-tool", "text": "Now measure: use the elevation-profile tool across the rille (or pick your own two points). The profile is real data from NASA's LROC terrain model." }
       ]
     },

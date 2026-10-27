@@ -230,6 +230,73 @@ test('text mode covers all five modules with parity content', async ({ page }) =
   expect(await page.locator('#textmode table').count()).toBeGreaterThan(0);
 });
 
+test('text mode: Module 4 and Module 5 can be completed, using the hypothesis chosen in text mode', async ({ page }) => {
+  test.setTimeout(150000);
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#task-panel h2', { timeout: 30000 });
+  await page.evaluate(() => window.__TEST__.hooks.showModule('m4'));
+  await page.getByRole('button', { name: 'Text mode' }).first().click();
+  const tm = page.locator('#textmode');
+  await expect(tm.locator('h2.textmode-title')).toHaveText(/4\. Field traverse/);
+  // the 3D overlays are hidden and inert while text mode is open
+  await expect(page.locator('#task-panel')).toBeHidden();
+  await expect(page.locator('#poi-wrap')).toBeHidden();
+  expect(await page.evaluate(() => document.getElementById('task-panel').inert)).toBe(true);
+
+  // choose the rille hypothesis and plan a route that answers it
+  await tm.getByLabel(/The rille is/).check();
+  await tm.locator('.tp-stations button', { hasText: 'Elbow crater' }).click();
+  await tm.getByLabel('Tool to use at Elbow crater').selectOption('profile');
+  await tm.locator('.tp-stations button', { hasText: 'Hadley Rille rim' }).click();
+  await tm.getByLabel('Tool to use at Hadley Rille rim').selectOption('sample');
+  await tm.locator('.tp-drive').click();
+  for (let i = 0; i < 3; i++) {
+    const c = tm.locator('.tp-run .station-card button').last();
+    if ((await c.count()) === 0) break;
+    await c.click();
+    await page.waitForTimeout(200);
+  }
+  await expect(tm.locator('.textmode-done')).toContainText('Module 4 is complete');
+  expect(await page.evaluate(() => window.__TEST__.state.isComplete('m4-plan'))).toBe(true);
+
+  // Module 5 in text mode
+  await page.locator('.module-nav button').nth(4).click();
+  await page.waitForTimeout(500);
+  await expect(tm.locator('h2.textmode-title')).toHaveText(/5\. Field report/);
+  await tm.locator('#cer-claim').fill('The rille was cut by lava into the mare plain after its first lava flows had formed and cooled.');
+  await tm.locator('#cer-evidence').fill('At the rille rim the basalt is the same plain material, and the Elbow profile shows a steep channel cut down into it, about 280 m deep in our model.');
+  await tm.locator('#cer-reasoning').fill('Cross-cutting relations: a feature that cuts a unit is younger than that unit. The channel cuts the plain lavas, so it formed after them.');
+  await tm.locator('#cer-uncertainty').fill('Whether it was an open channel or a collapsed lava tube is still debated; samples from the floor would help.');
+  await page.evaluate(() => document.querySelectorAll('#textmode input[type=checkbox]').forEach((cb) => { cb.checked = true; cb.dispatchEvent(new Event('change')); }));
+  const stepPtrBefore = await page.evaluate(() => window.__TEST__.app.stepPtr);
+  await tm.locator('button', { hasText: 'Save report' }).click();
+  await expect(tm.locator('.cer-msg')).toContainText('All required evidence types cited');
+  // the hidden 3D flow did not advance
+  expect(await page.evaluate(() => window.__TEST__.app.stepPtr)).toBe(stepPtrBefore);
+  for (const fs of await tm.locator('.rubric-selfcheck fieldset').all()) {
+    await fs.locator('input[type=radio]').last().check();
+  }
+  await tm.locator('.rubric-selfcheck button', { hasText: 'Finish self-check' }).click();
+  // post-check: answer each item with its correct option
+  const post = await page.evaluate(() => window.__TEST__.app.content.items.sets.post);
+  for (const item of post) {
+    const fs = tm.locator('fieldset', { has: page.locator('legend', { hasText: item.prompt.slice(0, 50) }) }).first();
+    const correct = item.options.find(o => o.id === item.correct);
+    await fs.getByLabel(correct.text.slice(0, 40)).check();
+    await fs.getByRole('button', { name: 'Submit answer' }).click();
+  }
+  await expect(tm.locator('.textmode-done').last()).toContainText(`You answered ${post.length} of ${post.length}`);
+  const st = await page.evaluate(() => window.__TEST__.state.state);
+  expect(st.report.hypothesis).toBe('h-rille');
+  expect(st.postCheck.correct).toBe(post.length);
+  for (const id of ['m5-cer', 'm5-selfcheck', 'm5-postcheck']) expect(st.completed).toContain(id);
+  // leaving text mode brings the 3D panel back
+  await page.getByRole('button', { name: 'Text mode' }).first().click();
+  await expect(page.locator('#task-panel')).toBeVisible();
+});
+
 test('reduced motion: cinematic renders as stills with captions', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

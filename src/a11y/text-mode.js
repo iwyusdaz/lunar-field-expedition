@@ -20,8 +20,10 @@ export class TextMode {
   }
 
   /** Register a module renderer: fn(container, api). api.answer(id, payload) routes decisions. */
-  register(moduleId, renderFn) {
+  register(moduleId, renderFn, title) {
     this.sections.set(moduleId, renderFn);
+    if (!this.titles) this.titles = new Map();
+    if (title) this.titles.set(moduleId, title);
   }
 
   show(moduleId) {
@@ -35,6 +37,11 @@ export class TextMode {
     }
     const h = document.createElement('h2');
     h.className = 'textmode-title';
+    h.id = 'textmode-title';
+    // never leave the heading empty: default to the module title, renderers may refine it
+    h.textContent = `Text mode: ${this.titles?.get(moduleId) || moduleId}`;
+    this.root.setAttribute('role', 'region');
+    this.root.setAttribute('aria-labelledby', 'textmode-title');
     this.root.appendChild(h);
     const body = document.createElement('div');
     body.className = 'textmode-body';

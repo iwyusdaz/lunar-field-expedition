@@ -109,6 +109,15 @@ export class Shell {
     const showing = tm.hidden;
     tm.hidden = !showing;
     canvas.style.visibility = showing ? 'hidden' : 'visible';
+    // The 3D task panel, POI list and cinematic host would sit on top of text
+    // mode and stay in the Tab order: hide them and make them inert while it is open.
+    for (const id of ['task-panel', 'poi-wrap', 'cinematic-host']) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.inert = showing;
+      el.classList.toggle('under-textmode', showing);
+    }
+    document.body.classList.toggle('textmode-on', showing);
     announce(showing ? 'Text mode on' : 'Text mode off');
     return showing;
   }

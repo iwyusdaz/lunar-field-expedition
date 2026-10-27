@@ -174,26 +174,47 @@ export class HadleySite {
     return { xM: p.x, yM: p.z, elev: p.y, world: p.clone() };
   }
 
-  /** Station/marker pins (cones) added by the app; label via HTML overlay. */
-  addMarker(id, xM, yM, color = 0xffd24a, size = 6) {
+  /**
+   * Labelled feature marker: a screen-size pin sprite (sizeAttenuation off), so it
+   * stays the same size on screen at any camera distance (a 6 m cone was
+   * sub-pixel at 1400 m). `label` is a short neutral tag such as "A"; the POI
+   * list is the keyboard equivalent.
+   */
+  addMarker(id, xM, yM, label = '', color = '#ffd24a') {
+    this.removeMarker(id);
     const e = this.terrain.elevationAt(xM, yM);
-    const g = new THREE.ConeGeometry(size, size * 3, 4);
-    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color, depthTest: false, transparent: true }));
-    m.position.set(xM, (Number.isNaN(e) ? -1900 : e) + size * 2.2, yM);
-    m.rotation.x = Math.PI;
-    m.renderOrder = 10;
-    m.name = `marker-${id}`;
-    this.group.add(m);
-    return m;
+    const mat = new THREE.SpriteMaterial({ map: makeLabelTexture(label, color, 'pin'), depthTest: false, transparent: true, sizeAttenuation: false });
+    const s = new THREE.Sprite(mat);
+    s.center.set(0.5, 0); // pin tip sits on the ground point
+    s.scale.set(0.045, 0.06, 1); // fraction of the viewport height
+    s.position.set(xM, (Number.isNaN(e) ? -1900 : e) + 2, yM);
+    s.renderOrder = 10;
+    s.name = `marker-${id}`;
+    this.group.add(s);
+    return s;
+  }
+
+  /** Screen-size text tag (e.g. the "80 m" scale label); caller positions it. */
+  makeLabel(text, color = '#ffffff') {
+    const mat = new THREE.SpriteMaterial({ map: makeLabelTexture(text, color, 'tag'), depthTest: false, transparent: true, sizeAttenuation: false });
+    const s = new THREE.Sprite(mat);
+    s.center.set(0.5, 0);
+    s.scale.set(0.09, 0.03, 1);
+    s.renderOrder = 11;
+    return s;
+  }
+
+  removeMarker(id) {
+    const old = this.group.getObjectByName(`marker-${id}`);
+    if (!old) return;
+    this.group.remove(old);
+    old.material.map?.dispose();
+    old.material.dispose();
   }
 
   clearMarkers() {
     for (const child of [...this.group.children]) {
-      if (child.name?.startsWith('marker-')) {
-        this.group.remove(child);
-        child.geometry.dispose();
-        child.material.dispose();
-      }
+      if (child.name?.startsWith('marker-')) this.removeMarker(child.name.slice(7));
     }
   }
 
@@ -210,6 +231,45 @@ function _discTexture(color, intensity) {
   grad.addColorStop(1, 'rgba(255,245,220,0)');
   g.fillStyle = grad;
   g.fillRect(0, 0, 128, 128);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+/**
+ * Canvas texture for screen-size labels. shape 'pin' draws a map pin with the
+ * label inside; 'tag' draws a rounded label box. Dark outline on a bright fill
+ * keeps contrast on both the dark mare and the bright Front.
+ */
+export function makeLabelTexture(label, color = '#ffd24a', shape = 'pin') {
+  const c = document.createElement('canvas');
+  const g = c.getContext('2d');
+  if (shape === 'pin') {
+    c.width = 96; c.height = 128;
+    g.lineWidth = 6;
+    g.strokeStyle = '#111';
+    g.fillStyle = color;
+    g.beginPath();
+    g.arc(48, 44, 38, Math.PI * 0.8, Math.PI * 2.2);
+    g.lineTo(48, 124);
+    g.closePath();
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#111';
+    g.font = 'bold 50px system-ui, sans-serif';
+  } else {
+    c.width = 192; c.height = 64;
+    g.fillStyle = 'rgba(17,17,17,0.85)';
+    g.fillRect(0, 0, 192, 64);
+    g.strokeStyle = color;
+    g.lineWidth = 4;
+    g.strokeRect(2, 2, 188, 60);
+    g.fillStyle = color;
+    g.font = 'bold 36px system-ui, sans-serif';
+  }
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(label, c.width / 2, shape === 'pin' ? 46 : 33);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;

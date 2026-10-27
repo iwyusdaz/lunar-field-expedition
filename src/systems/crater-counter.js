@@ -9,6 +9,30 @@
 import * as THREE from 'three';
 import { announce } from '../a11y/announcer.js';
 
+/**
+ * Points of a reference ring `diameterM` across, centred just outside a patch's
+ * east rim. Pure (elevation passed in) so it can be unit-tested.
+ */
+export function scaleRingPoints(patch, diameterM, elevationAt, segments = 64) {
+  const r = diameterM / 2;
+  const cx = patch.center.xM + patch.radiusM + r + 20;
+  const cy = patch.center.yM;
+  const lift = (x, y) => { const e = elevationAt(x, y); return (Number.isNaN(e) ? -1900 : e) + 3; };
+  const points = [];
+  for (let i = 0; i <= segments; i++) {
+    const a = (i / segments) * Math.PI * 2;
+    const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+    points.push({ x, y: lift(x, y), z: y });
+  }
+  return { center: { x: cx, y: lift(cx, cy), z: cy }, radiusM: r, points };
+}
+
+/** Plain-language comparison of two densities (a tie is reported as a tie). */
+export function densityComparison(names, d0, d1) {
+  if (d0 === d1) return `Your counts give the two patches the same density${d0 === 0 ? ' (no craters marked)' : ''}.`;
+  return `Your counts say the ${(d0 > d1 ? names[0] : names[1]).toLowerCase()} carries more craters per area.`;
+}
+
 export class CraterCounter {
   /**
    * @param {object} opts
@@ -37,6 +61,7 @@ export class CraterCounter {
     root.innerHTML = `
       <h3>Crater counter</h3>
       <p class="tool-hint">Count every crater about ${this.thresholdM} m across or larger inside the marked patch.
+        The white ring labelled "${this.thresholdM} m" beside each patch is a size reference: count craters at least that wide.
         Click a crater to mark it; click a mark to remove it. You can switch between the two patches.</p>
       <div class="patch-tabs" role="tablist" aria-label="Counting patches">
         ${this.patches.map(p => `<button type="button" role="tab" data-patch="${p.id}" aria-selected="${p.id === this.active}">${p.name}</button>`).join('')}
@@ -83,6 +108,29 @@ export class CraterCounter {
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
       const color = p.id === 'mare' ? 0x66d9e8 : 0xffb347;
       this.site.group.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color, depthTest: false, transparent: true, opacity: 0.9 })));
+      this._drawScaleRing(p);
+    }
+  }
+
+  /**
+   * Scale reference: a white ring exactly `thresholdM` across, just outside the
+   * patch's east rim, with a screen-size label, so learners can judge which
+   * craters are "about 80 m or larger".
+   */
+  _drawScaleRing(p) {
+    const ref = scaleRingPoints(p, this.thresholdM, (x, y) => this.site.terrain.elevationAt(x, y));
+    const ring = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(ref.points.map(q => new THREE.Vector3(q.x, q.y, q.z))),
+      new THREE.LineBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true, opacity: 0.95 }),
+    );
+    ring.renderOrder = 9;
+    ring.name = `scale-ring-${p.id}`;
+    this.site.group.add(ring);
+    if (this.site.makeLabel) {
+      const label = this.site.makeLabel(`${this.thresholdM} m`);
+      label.position.set(ref.center.x, ref.center.y + 4, ref.center.z);
+      label.name = `scale-label-${p.id}`;
+      this.site.group.add(label);
     }
   }
 
@@ -158,9 +206,7 @@ export class CraterCounter {
       <table><caption>Crater density: count ÷ area (patches are equal-area, so comparing counts directly is fair)</caption>
       <thead><tr><th scope="col">Patch</th><th scope="col">Your count</th><th scope="col">Area</th><th scope="col">Density</th></tr></thead>
       <tbody>${rows}</tbody></table>
-      <p>${densities[this.patches[0].id] > densities[this.patches[1].id]
-        ? `Your counts say the ${this.patches[0].name.toLowerCase()} carries more craters per area.`
-        : `Your counts say the ${this.patches[1].name.toLowerCase()} carries more craters per area.`}
+      <p>${densityComparison(this.patches.map(p => p.name), densities[this.patches[0].id], densities[this.patches[1].id])}
         Before you conclude anything about age, reveal the computer's reference count and read the method notes.</p>`;
     this.root.querySelector('.cc-reference').hidden = false;
     this.root.querySelector('.cc-submit').disabled = true;
