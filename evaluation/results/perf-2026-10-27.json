@@ -1,0 +1,85 @@
+{
+  "repo": "lunar-field-expedition",
+  "version": "1.0.0",
+  "measuredAt": "2026-10-27T12:32:33.926Z",
+  "method": "Headed Chromium (Playwright) on the local Mac GPU; test-hooks build served locally; 3 s warm-up then 8 s of requestAnimationFrame frame times per preset; renderer.info read at the end of each sample.",
+  "machine": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "viewport": "1440x900 CSS px at deviceScaleFactor 2"
+  },
+  "menuInteractiveMs": 1844,
+  "network": {
+    "requests": 12,
+    "bytes": 5900627
+  },
+  "budgets": {
+    "fpsMediumMin": 55,
+    "fpsLowTarget": 30,
+    "drawCallsMediumMax": 300,
+    "trianglesMediumMax": 1500000,
+    "downloadBeforeInteractionDesktopMaxMB": 15
+  },
+  "presets": [
+    {
+      "preset": "low",
+      "frames": 481,
+      "fpsMean": 60,
+      "frameMsP50": 16.7,
+      "frameMsP95": 17.2,
+      "drawCalls": 2,
+      "triangles": 76614,
+      "textures": 8,
+      "geometries": 5,
+      "resolutionScale": 0.75,
+      "pixelRatio": 1.5,
+      "canvas": "2160x1194"
+    },
+    {
+      "preset": "medium",
+      "frames": 481,
+      "fpsMean": 60,
+      "frameMsP50": 16.7,
+      "frameMsP95": 17.4,
+      "drawCalls": 2,
+      "triangles": 304790,
+      "textures": 8,
+      "geometries": 5,
+      "resolutionScale": 1,
+      "pixelRatio": 2,
+      "canvas": "2880x1592"
+    },
+    {
+      "preset": "high",
+      "frames": 481,
+      "fpsMean": 60.1,
+      "frameMsP50": 16.7,
+      "frameMsP95": 17.5,
+      "drawCalls": 2,
+      "triangles": 304790,
+      "textures": 8,
+      "geometries": 5,
+      "resolutionScale": 1,
+      "pixelRatio": 2,
+      "canvas": "2880x1592"
+    },
+    {
+      "preset": "ultra",
+      "frames": 481,
+      "fpsMean": 60.1,
+      "frameMsP50": 16.7,
+      "frameMsP95": 17.5,
+      "drawCalls": 2,
+      "triangles": 1212404,
+      "textures": 8,
+      "geometries": 5,
+      "resolutionScale": 1,
+      "pixelRatio": 2,
+      "canvas": "2880x1592"
+    }
+  ],
+  "limitations": [
+    "One machine only; no physical phones (mobile performance is inferred from the Low preset).",
+    "Texture memory is reported as a texture count from renderer.info, not bytes.",
+    "Frame rate is capped by the display refresh rate."
+  ]
+}
