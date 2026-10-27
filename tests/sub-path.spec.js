@@ -36,7 +36,7 @@ const MIME = {
 };
 
 let server;
-let port = 4180;
+let port = 4185;
 
 test.beforeAll(async () => {
   expect(existsSync(DIST), 'dist/ must exist — run `npm run build` first').toBe(true);

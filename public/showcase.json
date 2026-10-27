@@ -7,10 +7,10 @@
   "audience": "Grades 9-12 earth/space science; intro undergraduate geology; EdTech learning designers; museums",
   "summary": "Land at the real Apollo 15 Hadley-Apennine site, rebuilt from NASA's LROC terrain data. Read the landscape under changing sunlight, compare surface ages with crater counts, plan a sampling traverse within EVA limits, and defend your findings in a claim-evidence-reasoning field report compared with the real Apollo 15 traverse.",
   "playTimeMinutes": 50,
-  "features": ["text-mode", "keyboard", "reduced-motion", "captions", "mobile-supported", "real-NASA-terrain-data", "progress-saved-locally"],
-  "contentNotes": ["All geology and Apollo 15 history are verified facts; the learner's mission framing (a future field team) is fictional and labeled as such in-app. Sample results and the EVA cost model are simplified for teaching and labeled as simplified."],
+  "features": ["text-mode", "keyboard", "reduced-motion", "captions", "mobile-supported"],
+  "contentNotes": [],
   "permissions": [],
-  "poster": { "webp": "poster-1.0.0.webp", "jpg": "poster-1.0.0.jpg", "alt": "Long shadows stretch across the cratered mare plain at the Apollo 15 landing site, with Hadley Rille winding toward the raised rim of a fresh crater under a low black sky with stars and a small blue Earth." },
+  "poster": { "webp": "poster-1.0.0.webp", "jpg": "poster-1.0.0.jpg", "alt": "Low sun over the cratered lunar plain at the Apollo 15 site, rebuilt from NASA terrain data: rounded hills on the left, a long dark shadow across the ground on the right, and a black, star-dotted sky." },
   "repoUrl": "https://github.com/iwyusdaz/lunar-field-expedition",
   "license": { "content": "CC BY 4.0", "code": "MIT" }
 }

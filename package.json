@@ -9,12 +9,15 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/build-attribution.mjs && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:subpath": "playwright test tests/sub-path.spec.js",
-    "check:a11y": "playwright test tests/a11y.spec.js"
+    "check:a11y": "playwright test tests/a11y.spec.js",
+    "build:poster": "node scripts/render-poster.mjs",
+    "build:attribution": "node scripts/build-attribution.mjs",
+    "validate:showcase": "node scripts/validate-showcase.mjs 1.0.0"
   },
   "dependencies": {
     "n8ao": "2.0.1",

@@ -25,26 +25,26 @@
   },
   {
     "asset": "4",
-    "author": "Apollo 15 photograph AS15-89-12100",
+    "author": "Apollo 15 photograph AS15-89-12100, \"Telephoto view across Hadley Rille photographed during Apollo 15 EVA\" (2 Aug. 1971)",
     "source": "NASA (Johnson Space Center)",
-    "license": "https://www.hq.nasa.gov/alsj/a15/images15.html (Apollo 15 Image Library)",
-    "retrieved": "Public domain (NASA)",
+    "license": "https://images.nasa.gov/details/as15-89-12100",
+    "retrieved": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
     "changes": "2026-10-27"
   },
   {
     "asset": "5",
-    "author": "Earth day map texture (\"2k_earth_daymap.jpg\")",
-    "source": "Solar System Scope",
-    "license": "https://www.solarsystemscope.com/textures/download/2k_earth_daymap.jpg",
-    "retrieved": "CC BY 4.0",
+    "author": "Blue Marble: land surface, shallow water and shaded topography (\"land_shallow_topo_2048.jpg\")",
+    "source": "NASA Goddard Space Flight Center (Visible Earth)",
+    "license": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg",
+    "retrieved": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
     "changes": "2026-10-27"
   },
   {
     "asset": "6",
-    "author": "Draco + Basis/KTX2 decoder files",
-    "source": "Draco: Google, authors of the Draco project; Basis: Binomial LLC (served via the three.js package)",
-    "license": "Regenerated at build time from the pinned `three@0.186.1` package by `vite-plugin-decoders.js` (not vendored in git)",
-    "retrieved": "Apache-2.0 (Draco) / own Basis license (references permitted via three.js distribution); three.js is MIT",
+    "author": "three.js 0.186.1",
+    "source": "three.js authors",
+    "license": "https://github.com/mrdoob/three.js",
+    "retrieved": "MIT",
     "changes": "2026-10-27"
   },
   {

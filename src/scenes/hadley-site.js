@@ -113,7 +113,7 @@ export class HadleySite {
     // size (~1.9°). Radius/distance ratio preserves the angular diameter.
     this.earth = new THREE.Mesh(
       new THREE.SphereGeometry(260, 48, 32),
-      new THREE.MeshStandardMaterial({ map: loadTexture('assets/sky/earth-daymap-2k.jpg'), roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ map: loadTexture('assets/sky/earth-bluemarble-1k.jpg'), roughness: 0.9 }),
     );
     const dir = sunDirection(EARTH_ELEV_DEG, EARTH_AZ_DEG);
     this.earthDir = new THREE.Vector3(dir.x, dir.y, dir.z);

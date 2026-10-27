@@ -31,3 +31,6 @@ playwright-report/
 
 # Terrain pipeline intermediates
 data/work/
+
+# Security-hook state (local only)
+.mimosa/
