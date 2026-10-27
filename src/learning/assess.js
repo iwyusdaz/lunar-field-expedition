@@ -30,9 +30,11 @@ export function mcItem({ item, container, onAnswered, showFeedback = true }) {
       if (showFeedback) {
         for (const x of buttons) x.disabled = true;
         b.classList.add(correct ? 'correct' : 'incorrect');
+        const why = opt.why || item.why || '';
+        const prefix = correct && /^correct/i.test(why) ? '' : (correct ? 'Correct.' : 'Not quite.');
         const fb = document.createElement('div');
         fb.className = 'feedback';
-        fb.innerHTML = `<p><strong>${correct ? 'Correct.' : 'Not quite.'}</strong> ${opt.why || item.why || ''}</p>`;
+        fb.innerHTML = `<p><strong>${prefix}</strong> ${why}</p>`;
         wrap.appendChild(fb);
       }
       announce(correct ? 'Correct' : 'Answer recorded');

@@ -63,6 +63,7 @@ export class CraterCounter {
     });
     root.querySelector('.cc-submit').addEventListener('click', () => this._submit());
     root.querySelector('.cc-reference').addEventListener('click', () => this._revealReference());
+    this.root = root; // available to _updateStatus during construction
     this._updateStatus();
     return root;
   }

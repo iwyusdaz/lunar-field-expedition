@@ -4,6 +4,7 @@
  */
 import { hasWebGL2 } from './core/assets.js';
 import { boot } from './app.js';
+import './styles/site.css';
 
 export const SLUG = window.__SLUG__ || 'lunar-field-expedition';
 window.__SLUG__ = SLUG;

@@ -80,6 +80,7 @@ export class TraversePlanner {
       <div class="tp-run" hidden></div>
       <div class="tp-debrief" hidden></div>`;
     container.appendChild(root);
+    this.root = root; // available to helpers during construction
 
     const map = root.querySelector('.tp-map');
     this._paintMap(map);

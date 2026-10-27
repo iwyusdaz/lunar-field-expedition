@@ -9,6 +9,15 @@
 import * as THREE from 'three';
 import { Engine } from './core/engine.js';
 import { loadJSON, hasWebGL2 } from './core/assets.js';
+// Learning content is authored in content/*.json and bundled at build time
+// (single source of truth, separate from code).
+import modulesContent from '../content/modules.json';
+import itemsContent from '../content/items.json';
+import stationsContent from '../content/stations.json';
+import cinematicsContent from '../content/cinematics.json';
+import reportContent from '../content/report.json';
+import featuresContent from '../content/features.json';
+import cratersContent from '../content/craters.json';
 import { Shell } from './ui/shell.js';
 import { Settings } from './ui/settings.js';
 import { ProgressPage } from './ui/progress.js';
@@ -41,13 +50,14 @@ export class App {
   }
 
   async init() {
-    // content
-    [this.content.modules, this.content.items, this.content.stations, this.content.cinematics,
-      this.content.report, this.content.features, this.content.craters] = await Promise.all([
-      loadJSON('content/modules.json'), loadJSON('content/items.json'), loadJSON('content/stations.json'),
-      loadJSON('content/cinematics.json'), loadJSON('content/report.json'), loadJSON('content/features.json'),
-      loadJSON('content/craters.json'),
-    ]);
+    // content (bundled from content/*.json)
+    this.content.modules = modulesContent;
+    this.content.items = itemsContent;
+    this.content.stations = stationsContent;
+    this.content.cinematics = cinematicsContent;
+    this.content.report = reportContent;
+    this.content.features = featuresContent;
+    this.content.craters = cratersContent;
     this.moduleDefs = this.content.modules.modules;
     this.allSteps = this.moduleDefs.flatMap(m => m.steps.map(s => ({ ...s, moduleId: m.id })));
 
@@ -57,6 +67,7 @@ export class App {
     this.board = new EvidenceBoard(`${SLUG}:evidence`);
 
     const webgl = hasWebGL2();
+    this._buildShellBase(); // creates #app canvas + task panel + POI (before Engine)
     if (webgl) {
       this.canvas = document.getElementById('app');
       this.engine = new Engine(this.canvas);
@@ -97,7 +108,7 @@ export class App {
       });
     }
 
-    this._buildShell();
+    this._buildShellWiring();
     this._buildTextMode();
     this._buildCinematics();
     this._applySavedSettings();
@@ -106,31 +117,15 @@ export class App {
   }
 
   // ---------- shell -----------------------------------------------------------
-  _buildShell() {
+  _buildShellBase() {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<dialog id="settings-dialog" aria-labelledby="settings-h"></dialog><dialog id="progress-dialog" aria-labelledby="progress-h"></dialog>');
     this.shell = new Shell({
       slug: SLUG,
       title: 'Lunar Field Expedition',
       moduleLabels: this.moduleDefs.map(m => m.title),
       onModuleChange: (i) => this.showModule(this.moduleDefs[i].id),
     });
-    this.settingsDialog = document.getElementById('settings-dialog');
-    this.progressDialog = document.getElementById('progress-dialog');
-    this.settings = new Settings({
-      slug: SLUG, dialog: this.settingsDialog,
-      quality: this.engine?.quality, motion: this.motion,
-      onFov: (fov) => { if (this.engine) { this.engine.camera.fov = fov; this.engine.camera.updateProjectionMatrix(); } },
-    });
-    this.shell.on('settings', (btn) => this.settings.open(btn));
-    this.progress = new ProgressPage({ slug: SLUG, dialog: this.progressDialog, record: this.record });
-    this.shell.on('progress', (btn) => this.progress.open(btn));
-    this.shell.on('menu', () => {});
-    this.shell.on('restart', () => {
-      this.state.reset();
-      this.board.clear();
-      this.showModule(this.moduleDefs[0].id);
-      announce('Progress cleared for this module run.');
-    });
-    this.shell.on('textmode', () => this.shell.toggleTextMode());
 
     // task panel: the HTML overlay where each step renders
     const panel = document.createElement('div');
@@ -163,6 +158,26 @@ export class App {
     this.poi = new PoiList(poiWrap, { label: 'Points of interest' });
   }
 
+  _buildShellWiring() {
+    this.settingsDialog = document.getElementById('settings-dialog');
+    this.progressDialog = document.getElementById('progress-dialog');
+    this.settings = new Settings({
+      slug: SLUG, dialog: this.settingsDialog,
+      quality: this.engine?.quality, motion: this.motion,
+      onFov: (fov) => { if (this.engine) { this.engine.camera.fov = fov; this.engine.camera.updateProjectionMatrix(); } },
+    });
+    this.shell.on('settings', (btn) => this.settings.open(btn));
+    this.progress = new ProgressPage({ slug: SLUG, dialog: this.progressDialog, record: this.record });
+    this.shell.on('progress', (btn) => this.progress.open(btn));
+    this.shell.on('restart', () => {
+      this.state.reset();
+      this.board.clear();
+      this.showModule(this.moduleDefs[0].id);
+      announce('Progress cleared for this module run.');
+    });
+    this.shell.on('textmode', () => this.shell.toggleTextMode());
+  }
+
   // ---------- module flow -----------------------------------------------------
   showModule(moduleId, { resume = false } = {}) {
     this.moduleIndex = this.moduleDefs.findIndex(m => m.id === moduleId);
@@ -182,9 +197,10 @@ export class App {
         this.globeScene.placeCamera();
       }
     }
-    if (this.motion.reduced || resume) {
-      // no auto cinematic on resume or reduced motion; show a replay affordance instead
-      this._renderModuleSteps(def, { skipCinematic: resume });
+    if (resume) {
+      // no auto cinematic on resume if it was already seen; show a replay affordance instead
+      const seen = this.state.state.cinematicSeen;
+      this._renderModuleSteps(def, { skipCinematic: def.steps.some(s => s.kind === 'cinematic' && seen[s.cinematic]) });
     } else {
       this._renderModuleSteps(def, {});
     }
@@ -203,7 +219,9 @@ export class App {
     this.stepContainer = document.createElement('div');
     this.stepEl.appendChild(this.stepContainer);
     this.stepQueue = def.steps.filter(s => !(skipCinematic && s.kind === 'cinematic'));
-    this.stepPtr = 0;
+    // Resume at the first incomplete step.
+    this.stepPtr = this.stepQueue.findIndex(s => !this.state.isComplete(s.id));
+    if (this.stepPtr < 0) this.stepPtr = this.stepQueue.length; // all done
     this._nextStep();
   }
 
@@ -505,9 +523,11 @@ export class App {
           b.className = 'choice-btn';
           b.textContent = opt.text;
           b.addEventListener('click', () => {
+            const why = opt.why || '';
+            const prefix = opt.correct && /^correct/i.test(why) ? '' : (opt.correct ? 'Correct.' : 'Not quite.');
             const fb = document.createElement('div');
             fb.className = 'feedback';
-            fb.innerHTML = `<p><strong>${opt.correct ? 'Correct.' : 'Not quite.'}</strong> ${opt.why}</p>`;
+            fb.innerHTML = `<p><strong>${prefix}</strong> ${why}</p>`;
             answerZone.appendChild(fb);
             for (const x of answerZone.querySelectorAll('.choice-btn')) x.disabled = true;
             if (opt.correct) {
@@ -716,7 +736,17 @@ export class App {
     const def = this.content.cinematics.cinematics.find(c => c.id === id);
     if (!def) { onDone?.(); return; }
     this.player.load(def);
-    if (this.activeScene !== 'site') { this.showModule('m1'); }
+    // The approach plays over the site scene; switch the scene WITHOUT
+    // re-rendering the module flow.
+    if (this.engine && this.activeScene !== 'site') {
+      this.activeScene = 'site';
+      this.globeScene.group.visible = false;
+      this.site.group.visible = true;
+      const t = this.site._target;
+      this.orbit.target.copy(t);
+      this.orbit.spherical = { radius: 2600, theta: Math.PI * 0.72, phi: Math.PI / 3.4 };
+      this.orbit.update();
+    }
     this.player.play();
     // wire shot effects (sun sweep, overlays) to the scene
     this.player.onProgress = (shot, t) => {

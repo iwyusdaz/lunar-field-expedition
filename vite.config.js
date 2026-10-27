@@ -11,6 +11,7 @@ export default defineConfig({
     assetsInlineLimit: 4096,
   },
   server: { port: 5173 },
+  preview: { port: 4173, strictPort: true, host: '127.0.0.1' },
   define: {
     // Test hooks exposed only when building with VITE_TEST_HOOKS=1 (release builds omit them).
     '__TEST_HOOKS__': JSON.stringify(process.env.VITE_TEST_HOOKS === '1'),

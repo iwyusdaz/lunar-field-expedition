@@ -90,7 +90,7 @@ a { color: var(--accent); }
 .module-nav button.active { border-color: var(--accent-strong); background: var(--accent-strong); color: #fff; }
 
 .hud {
-  position: absolute; top: 4.2rem; left: 1rem; right: 1rem;
+  position: absolute; top: 6.6rem; left: 1rem; right: 1rem;
   margin: 0 auto; max-width: 60rem;
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent);
@@ -111,6 +111,8 @@ a { color: var(--accent); }
   display: flex; flex-direction: column; justify-content: flex-end;
   background: transparent;
 }
+.cinematic-overlay[hidden] { display: none; }
+.textmode[hidden] { display: none; }
 .cinematic-caption {
   margin: 0; padding: 0.6rem 1rem;
   background: rgba(0, 0, 0, 0.72);
@@ -247,3 +249,4 @@ textarea { width: 100%; font: inherit; background: var(--bg); color: var(--text)
   #poi-wrap { top: auto; bottom: 60vh; max-width: 14rem; }
   .tp-map { height: 420px; }
 }
+label > output { display: block; font-size: 0.85rem; color: var(--muted); }

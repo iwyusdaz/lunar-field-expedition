@@ -19,8 +19,11 @@ export class SunTool {
     this.presets = presets;
     this.onSun = onSun;
     this.onUse = onUse;
-    this.elevation = presets[0].elevationDeg;
-    this.azimuth = presets[0].azimuthDeg;
+    // Start at the low-sun preset: relief is visible and the scene matches the
+    // mission story (the crew landed just after local sunrise).
+    const start = presets.find(p => p.id === 'low') || presets[0];
+    this.elevation = start.elevationDeg;
+    this.azimuth = start.azimuthDeg;
     this.root = this._build(container);
     this.apply();
   }
