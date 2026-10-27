@@ -14,6 +14,23 @@ export const EASINGS = {
   easeOut: (t) => 1 - (1 - t) ** 3,
 };
 
+/** Caption text: captions are `{at, text}` (at = fraction of the shot) or plain strings. */
+export function captionText(c) { return typeof c === 'string' ? c : c?.text || ''; }
+
+/**
+ * Index of the caption showing at shot time t (0-1): the last caption whose
+ * `at` is <= t. Plain-string captions are spread evenly across the shot.
+ */
+export function captionIndexAt(captions, t) {
+  if (!captions?.length) return -1;
+  let idx = 0;
+  captions.forEach((c, i) => {
+    const at = typeof c === 'string' ? i / captions.length : (c.at ?? 0);
+    if (at <= t) idx = i;
+  });
+  return idx;
+}
+
 /**
  * @param {object} opts
  * @param {HTMLElement} opts.container   overlay that hosts captions/skip UI
@@ -81,7 +98,8 @@ export class ShotPlayer {
     if (this.index >= this.shots.length) return this._finish();
     const shot = this.shots[this.index];
     this.progress.textContent = `Shot ${this.index + 1} of ${this.shots.length} — purpose: ${shot.purpose}`;
-    this.caption.textContent = shot.captions?.join(' ') || '';
+    this._captionIdx = -1;
+    this._showCaptionAt(shot, 0);
     this.desc.textContent = shot.description || '';
     this._t = 0;
     const rm = shot.reducedMotion;
@@ -117,12 +135,21 @@ export class ShotPlayer {
         const dur = shot.duration || 10;
         const t = Math.min(1, elapsed / dur);
         this._placeAt(shot, t);
+        this._showCaptionAt(shot, t);
         this.onProgress?.(shot, t);
         if (t >= 1) { this._nextShot(); return; }
         this._raf = requestAnimationFrame(step);
       };
       this._raf = requestAnimationFrame(step);
     }
+  }
+
+  /** Swap to the caption due at shot time t (0-1); only touches the DOM on a change. */
+  _showCaptionAt(shot, t) {
+    const i = captionIndexAt(shot.captions, t);
+    if (i === this._captionIdx) return;
+    this._captionIdx = i;
+    this.caption.textContent = i >= 0 ? captionText(shot.captions[i]) : '';
   }
 
   _placeAt(shot, t) {

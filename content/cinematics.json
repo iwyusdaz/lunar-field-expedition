@@ -18,8 +18,8 @@
           "path": [[3300, 1600, 11200], [3500, 900, 8600], [3650, 300, 6900], [3620, 60, 6250]],
           "target": [3560, -1850, 5700],
           "captions": [
-            "Coming down over the Apennine Front — mountains thrust up when a giant impact reshaped the Moon 3.9 billion years ago.",
-            "Below, the mare plain. The winding line is Hadley Rille. The pin is your landing site, between the mountain and the channel — exactly where Apollo 15 landed in 1971."
+            { "at": 0, "text": "Coming down over the Apennine Front — mountains thrust up when a giant impact reshaped the Moon 3.9 billion years ago." },
+            { "at": 0.62, "text": "Below, the mare plain. The winding line is Hadley Rille. Ahead is your landing site, between the mountain and the channel — where Apollo 15 landed in 1971." }
           ],
           "description": "The camera starts high above the southern mountains at low sun and descends northward across the mountain front to the flat plain, ending above the landing-site marker.",
           "reducedMotion": { "kind": "stills", "stills": [0, 0.5, 1], "captionsPerStill": ["High over the Apennine Front at low Sun.", "Crossing the mountain front; the rille appears on the plain.", "The landing-site marker between the rille and the mountains."] }
@@ -33,8 +33,8 @@
           "target": [3050, -2050, 4600],
           "effect": { "type": "sun", "from": [58, 100], "to": [12, 100] },
           "captions": [
-            "The Sun sinks toward the horizon. Watch the rille and the crater rims appear from the shadows.",
-            "This is why the crew landed just after local sunrise: at a low Sun angle, relief is unmistakable."
+            { "at": 0, "text": "The Sun gets lower in the sky. Watch the rille and the crater rims appear from the shadows." },
+            { "at": 0.55, "text": "This is why the crew landed just after local sunrise: at a low Sun angle, relief is unmistakable." }
           ],
           "description": "A fixed view toward the rille while the sunlight sweeps from high noon to near sunrise; long shadows crawl across the plain and the channel deepens into contrast.",
           "reducedMotion": { "kind": "stills", "stills": [0, 1], "captionsPerStill": ["High Sun: the plain looks flat.", "Low Sun: the rille and crater rims stand out in shadow."] }
@@ -48,8 +48,8 @@
           "target": [3560, -1900, 5700],
           "effect": { "type": "overlay", "id": "traverse-map" },
           "captions": [
-            "Your job is to finish their survey: read the land, compare the crater records, plan a traverse.",
-            "In 1971 Scott and Irwin drove 27 kilometres in three days. Where will YOU go?"
+            { "at": 0, "text": "Your job, in this fictional future mission, is to finish their survey: read the land, compare the crater records, plan a traverse." },
+            { "at": 0.5, "text": "In 1971 Scott and Irwin drove about 28 kilometres in three days. Where will YOU go?" }
           ],
           "description": "The camera rises and pulls back as a map overlay fades in showing the real Apollo 15 traverse routes beside the landing site.",
           "reducedMotion": { "kind": "stills", "stills": [1], "captionsPerStill": ["The site from above, with the real Apollo 15 traverse marked."] }

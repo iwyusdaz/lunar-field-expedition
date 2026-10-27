@@ -44,8 +44,8 @@
       "verify": "LM elevation -1924 m in our DTM; mare basalts ~3.3 Ga (research log)",
       "options": [
         { "id": "mare-lava", "text": "Mare plain — flooded by basalt lava flows, about 3.3 Ga", "correct": true, "why": "Correct. The plain is frozen basaltic lava that flooded the basin interior long after the mountains formed." },
-        { "id": "mare-ash", "text": "Ash plain — fine pyroclastic fallout", "why": "Local dark-mantle deposits exist elsewhere, but this surface's cross-section (layered flows seen in Dune's ejecta and the rille walls) shows lava flows." },
-        { "id": "mare-sediment", "text": "Sediment basin — settling of eroded mountain material", "why": "With no water or wind, there is no sediment transport on the Moon; the plain is lava." }
+        { "id": "mare-ash", "text": "Ash plain — fine pyroclastic fallout", "why": "Local dark-mantle deposits exist elsewhere, but this surface's cross-section (the layered flows the crew photographed in the rille walls) shows lava flows." },
+        { "id": "mare-sediment", "text": "Sediment basin — settling of eroded mountain material", "why": "With no water or wind to carry sediment, the plain is not eroded mountain material; it is lava. (Slow downhill creep of loose regolith does happen, but it does not build a plain.)" }
       ]
     }
   ],

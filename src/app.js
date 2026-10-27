@@ -157,6 +157,11 @@ export class App {
       });
     }
     this.poi = new PoiList(poiWrap, { label: 'Points of interest' });
+    // honesty labels that belong to the 3D view itself
+    const note = document.createElement('p');
+    note.className = 'scene-note';
+    note.textContent = 'Terrain: real NASA LROC elevation model, no exaggeration. Earth\'s position in the sky is approximate. The field-team mission is fictional.';
+    poiWrap.appendChild(note);
   }
 
   _buildShellWiring() {
@@ -613,7 +618,7 @@ export class App {
       prompt: 'At the boundary between the mare plain and the Apennine Front, the flat lavas run up TO the mountain and thin out against its slopes. Which unit is younger?',
       options: [
         { id: 'a', text: 'The mare lavas — they lie against the Front, so they arrived after the Front existed', why: 'Correct: superposition. The lavas embay the Front; younger material is the one lying on/against the older.' },
-        { id: 'b', text: 'The Apennine Front — it is taller', 'why': 'Height says nothing about age here; the contact direction does.', why: 'Height says nothing about age here; the contact direction does.' },
+        { id: 'b', text: 'The Apennine Front — it is taller', why: 'Height says nothing about age here; the contact direction does.' },
         { id: 'c', text: 'You cannot tell without samples', why: 'You CAN read the order in the field — superposition is the direct evidence. Samples then give the ages in years.' },
       ],
       correct: 'a',
@@ -745,17 +750,18 @@ export class App {
     el.appendChild(table);
     const img = document.createElement('img');
     img.src = `${import.meta.env.BASE_URL || './'}assets/photos/as15-89-12100.jpg`;
-    img.alt = 'NASA Apollo 15 photograph AS15-89-12100: the mountain-front station area where the crew sampled and photographed during EVA 2.';
+    // alt text follows NASA's own caption for this frame (images.nasa.gov, as15-89-12100)
+    img.alt = 'NASA Apollo 15 photograph AS15-89-12100: telephoto view looking across Hadley Rille during the third EVA. The blocky outcrop at the top of the debris-covered west wall is about 1.9 km from the camera.';
     img.className = 'apollo-photo';
     el.appendChild(img);
     const cap = document.createElement('p');
     cap.className = 'photo-caption';
-    cap.textContent = 'NASA photo AS15-89-12100 (public domain). The nearby frames of the same magazine include the "Genesis Rock" find at Spur crater.';
+    cap.textContent = 'NASA photo AS15-89-12100, "Telephoto view across Hadley Rille photographed during Apollo 15 EVA" (2 Aug. 1971, EVA 3; public domain). The layered outcrops in the rille wall are the ones the crew photographed from Stations 9a and 10.';
     el.appendChild(cap);
     const genesis = document.createElement('div');
     genesis.className = 'found-card';
     genesis.innerHTML = `<h4>The 'Genesis Rock' story (sample 15415)</h4>
-      <p>At Spur crater on EVA 2, Scott and Irwin spotted a glinting rock partly buried in the regolith and pulled it free: a 270-gram anorthosite — almost pure plagioclase feldspar from the Moon's early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 Ga. The crew believed they had a piece of the primordial crust; it turned out younger than the very first crust — but still exceptionally ancient, and exactly the kind of deep-crust material your traverse targeted. (Sources: research/apollo15-facts.md.)</p>`;
+      <p>At Spur crater (Station 7) on EVA 2, Scott and Irwin found, among many other samples, a white crystalline rock later called the Genesis Rock: a 270-gram anorthosite — almost pure plagioclase feldspar from the Moon's early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 Ga. The crew believed they had a piece of the primordial crust; it turned out younger than the very first crust — but still exceptionally ancient, and exactly the kind of deep-crust material your traverse targeted. (Sources: research/apollo15-facts.md.)</p>`;
     el.appendChild(genesis);
     if (!textMode) this._continueBtn(el, 'Finish with the post-check');
   }
@@ -780,7 +786,19 @@ export class App {
     menuList.insertBefore(li, menuList.children[1]);
     this.shell.on('replay-cinematic', () => {
       closeDialog(document.getElementById('menu-dialog'));
-      if (this.engine) this._playCinematic('approach');
+      if (!this.engine) return;
+      // cinematics never play during assessment (pre/post-check) steps
+      if (this.currentStep?.kind === 'check') return;
+      // if replay was started while the Moon globe was up, put the globe back afterwards
+      const wasGlobe = this.activeScene === 'globe';
+      this._playCinematic('approach', () => {
+        if (wasGlobe) {
+          this.activeScene = 'globe';
+          this.site.group.visible = false;
+          this.globeScene.group.visible = true;
+          this.globeScene.placeCamera();
+        }
+      });
     });
   }
 

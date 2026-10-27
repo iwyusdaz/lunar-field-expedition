@@ -114,6 +114,8 @@ a { color: var(--accent); }
 .cinematic-overlay[hidden] { display: none; }
 .textmode[hidden] { display: none; }
 #task-panel[hidden] { display: none; }
+[data-captions="off"] .cinematic-caption { display: none; }
+.scene-note { margin: 0.3rem 0 0; font-size: 0.78rem; color: var(--muted); }
 /* while text mode is open the 3D overlays are hidden (and inert, set in shell.js) */
 .under-textmode { display: none !important; }
 .cinematic-caption {

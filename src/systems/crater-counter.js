@@ -224,7 +224,7 @@ export class CraterCounter {
       <table><caption>A computer count of the same patches from the NASA terrain model. Real counters disagree — that uncertainty is part of the method.</caption>
       <thead><tr><th scope="col">Patch</th><th scope="col">Computer count</th><th scope="col">Density</th><th scope="col">Diameters (m)</th></tr></thead>
       <tbody>${rows}</tbody></table>
-      <p><strong>Method note — read before concluding.</strong> The Front's patch shows <em>fewer</em> craters, yet the Front's rocks are the OLDER material (about 3.9 Ga vs. the plain's about 3.3 Ga basalts). Why? Crater counting is a clock only on flat, stable surfaces: the Front's roughly 25° slopes erode, bury and destroy the crater record. Its age comes from rock samples, not from counting on its slopes. The plain's density is the meaningful clock reading.</p>`;
+      <p><strong>Method note — read before concluding.</strong> The Front's patch shows <em>fewer</em> craters, yet the Front's rocks are the OLDER material (about 3.9 Ga vs. the plain's about 3.3 Ga basalts). Why? Crater counting is a clock only on flat, stable surfaces: on the Front's steep slopes (median about 30 % grade, roughly 17°, in this patch of our terrain model) material creeps downhill and erases the crater record. Its age comes from rock samples, not from counting on its slopes. The plain's density is the meaningful clock reading.</p>`;
     res.appendChild(div);
     div.open = true;
     announce('Reference count revealed. Note the method caveat: slopes destroy the crater record.');

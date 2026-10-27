@@ -100,14 +100,14 @@
       "sample": { "title": "Front breccia", "tag": "front-material", "text": "Fragmental breccia — shocked, jumbled rock. SIMPLIFIED result: Apollo 15's Station 2 boulders were Front material, broken and mixed by the event that raised the mountains about 3.8-3.9 billion years ago.", "evidenceTags": ["front-material", "age-contrast"] }
     },
     "dune": {
-      "photograph": { "title": "Ejecta photos", "tag": "craters", "text": "A young crater's ejecta blanket: sharp rim, bright rays. Fresh craters like this one are the standard surface clocks.", "evidenceTags": ["craters"] },
+      "photograph": { "title": "Ejecta photos", "tag": "craters", "text": "A crater in the South Cluster on the mare plain, with blocks thrown out around its rim (the crew sampled a large vesicular boulder here). One crater is not a clock: surfaces are dated by the density of a whole crater population.", "evidenceTags": ["craters"] },
       "sample": { "title": "Ejecta sample", "tag": "mare-material", "text": "Basalt dug from below the plain by the impact — SIMPLIFIED result: confirms the plain is built of layered lava flows.", "evidenceTags": ["mare-material"] },
       "profile": { "title": "Crater profile", "tag": "craters", "text": "Bowl shape with a raised rim — the cross-section that distinguishes impact craters from volcanic pits.", "evidenceTags": ["craters"] }
     },
     "front6": {
       "photograph": { "title": "Front slope photos", "tag": "superposition-or-count", "text": "The Front rises about 4,600 m above the plain — taller relative to its plain than the Himalayas. Note the smooth apron of debris at its base.", "evidenceTags": ["superposition-or-count"] },
       "sample": { "title": "Front breccia", "tag": "front-material", "text": "Crystalline breccia from the Front. SIMPLIFIED result: material associated with the Imbrium event, about 3.85-3.9 billion years old — older than the mare basalts.", "evidenceTags": ["front-material", "age-contrast"] },
-      "profile": { "title": "Slope profile", "tag": "front-slope", "text": "The Front's lower slope is steep (about 25°) — which is why its crater record is destroyed and crater counting fails here.", "evidenceTags": ["front-slope", "method-limit"] }
+      "profile": { "title": "Slope profile", "tag": "front-slope", "text": "The Front's lower slope is steep: our terrain model gives a median grade of about 30 % (about 17°) in the counting patch, and the crew parked the Rover on 11° and 15° slopes at Stations 6 and 6a. Steady downslope creep on slopes like these erases craters, which is why crater counting fails here.", "evidenceTags": ["front-slope", "method-limit"] }
     },
     "spur": {
       "photograph": { "title": "Spur crater photos", "tag": "front-material", "text": "A small crater on the Front slope, excavating light-toned material from beneath the surface.", "evidenceTags": ["front-material"] },
@@ -120,10 +120,10 @@
     }
   },
   "apollo15Real": {
-    "note": "The real crew's routes for comparison (Module 4 debrief and Module 5). Facts from the NASA history article (VERIFIED); station order is real, positions of Dune/6/9a approximate.",
+    "note": "The real crew's routes for comparison (Module 4 debrief and Module 5). Facts from the NASA history article (VERIFIED, re-read 2026-10-27 for the EVA 2 order: 6, 6a, 7 Spur, then Dune on the return); positions of Dune/6/9a approximate.",
     "evas": [
       { "id": "e1", "label": "EVA 1 (6 h 34 m)", "route": ["lm", "elbow", "stgeorge"], "found": "First drive: out to Elbow crater (~3.2 km), then to Station 2 at St. George for boulder samples and a double core." },
-      { "id": "e2", "label": "EVA 2 (7 h 12 m)", "route": ["lm", "dune", "front6", "spur"], "found": "The mountain drive: Dune crater, then up the Front slope to Station 6, the boulder at 6a, and Station 7 at Spur — where the crew found the 'Genesis Rock' anorthosite. On the return they set a lunar land-speed record of about 12 km/h." },
+      { "id": "e2", "label": "EVA 2 (7 h 12 m)", "route": ["lm", "front6", "spur", "dune"], "found": "The mountain drive: south along the Front to Station 6 (about 5 km from the LM, the Rover parked on an 11° slope), the greenish boulder at 6a, and Station 7 at Spur — where the crew found the 'Genesis Rock' anorthosite. On the way back they stopped briefly at Dune crater (Station 4) to sample a vesicular boulder, then drove the last 3.4 km at a record 12 km/h." },
       { "id": "e3", "label": "EVA 3 (4 h 50 m)", "route": ["lm", "rille9a"], "found": "To the rille: Station 9 near a 15 m crater, then 9a and 10 on the rim — photographing and sampling the layered west wall. The planned North Complex visit was cancelled for time." },
       { "id": "totals", "label": "Totals", "found": "About 18.5 hours of EVA over three days, ~77 kg of samples returned, and the first wheeled driving on the Moon." }
     ]

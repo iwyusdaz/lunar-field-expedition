@@ -93,7 +93,7 @@ test('scripted playthrough: all five modules to the post-check', async ({ page }
   await page.evaluate(() => window.__TEST__.hooks.submitCounts(4));
   await expect(page.locator('.cc-results')).toContainText('craters/km');
   await page.locator('.cc-reference').click();
-  await expect(page.locator('.cc-reference-panel')).toContainText('slopes erode, bury and destroy');
+  await expect(page.locator('.cc-reference-panel')).toContainText('erases the crater record');
   await page.locator('#task-panel button', { hasText: 'Continue to superposition' }).click();
   await page.locator('.assessment-item .choice-btn', { hasText: 'The mare lavas' }).click();
   await next(page, 'Continue to the debrief');

@@ -1,6 +1,38 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { scaleRingPoints, densityComparison } from '../../src/systems/crater-counter.js';
+import { captionIndexAt, captionText } from '../../src/cinematics/shot-player.js';
+
+describe('timed cinematic captions', () => {
+  const cin = JSON.parse(readFileSync(new URL('../../content/cinematics.json', import.meta.url), 'utf8'));
+  it('every caption has an "at" time in [0,1), the first at 0, in increasing order', () => {
+    for (const c of cin.cinematics) for (const s of c.shots) {
+      const ats = s.captions.map(x => x.at);
+      expect(ats[0], s.id).toBe(0);
+      for (let i = 0; i < ats.length; i++) {
+        expect(ats[i]).toBeGreaterThanOrEqual(0);
+        expect(ats[i]).toBeLessThan(1);
+        if (i) expect(ats[i]).toBeGreaterThan(ats[i - 1]);
+      }
+    }
+  });
+  it('shows one caption at a time, switching at its "at" time', () => {
+    const caps = [{ at: 0, text: 'one' }, { at: 0.62, text: 'two' }];
+    expect(captionText(caps[captionIndexAt(caps, 0)])).toBe('one');
+    expect(captionText(caps[captionIndexAt(caps, 0.61)])).toBe('one');
+    expect(captionText(caps[captionIndexAt(caps, 0.62)])).toBe('two');
+    expect(captionText(caps[captionIndexAt(caps, 1)])).toBe('two');
+    expect(captionIndexAt([], 0.5)).toBe(-1);
+    // plain strings are spread evenly
+    expect(captionIndexAt(['a', 'b'], 0.49)).toBe(0);
+    expect(captionIndexAt(['a', 'b'], 0.5)).toBe(1);
+  });
+  it('the landing-site caption of s1 does not show while the camera is still over the Front', () => {
+    const s1 = cin.cinematics[0].shots[0];
+    const i = s1.captions.findIndex(c => /landing site/.test(c.text));
+    expect(s1.captions[i].at).toBeGreaterThan(0.5);
+  });
+});
 
 const json = (p) => JSON.parse(readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8'));
 const craters = json('content/craters.json');
