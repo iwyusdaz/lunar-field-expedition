@@ -138,12 +138,9 @@ export class CraterCounter {
 
   _updateStatus() {
     const status = this.root.querySelector('.count-status');
-    const parts = this.patches.map(p => {
-      const patch = this.patches.find(x => x.id === p.id);
-      return `${p.name}: ${this.marks[p.id].length} marked${p.id === this.active ? ' (active)' : ''}`;
-    });
+    const parts = this.patches.map(p =>
+      `${p.name}: ${this.marks[p.id].length} marked${p.id === this.active ? ' (active)' : ''}`);
     status.textContent = parts.join(' · ');
-    void patch;
   }
 
   _submit() {

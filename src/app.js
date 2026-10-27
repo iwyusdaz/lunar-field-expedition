@@ -204,6 +204,10 @@ export class App {
     } else {
       this._renderModuleSteps(def, {});
     }
+    // keep text mode in sync when the learner switches modules while it is open
+    if (this.textMode && !document.getElementById('textmode').hidden) {
+      this.textMode.show(moduleId);
+    }
     this.shell.setStatus(`Module ${this.moduleIndex + 1}: ${def.coreQuestion}`);
   }
 
@@ -369,11 +373,18 @@ export class App {
           onSubmit: ({ counts }) => {
             this.state.completeStep(step.id, counts);
             this.record.log('completed', { id: step.id, name: 'Crater counts submitted' }, { response: counts });
+            cont.disabled = false;
           },
         });
         this.poi.set('patch-mare', { label: 'Mare patch (crater counting)', onSelect: () => this._flyTo('patch-mare', patches[0]) });
         this.poi.set('patch-front', { label: 'Front patch (crater counting)', onSelect: () => this._flyTo('patch-front', patches[1]) });
-        this._continueBtn(el, 'Continue to superposition');
+        const cont = document.createElement('button');
+        cont.type = 'button';
+        cont.className = 'btn primary continue-btn';
+        cont.textContent = 'Continue to superposition';
+        cont.disabled = true;
+        cont.addEventListener('click', () => this._stepDone(step));
+        el.appendChild(cont);
       },
       superposition: (step, el) => this._renderSuperposition(step, el),
       debrief: (step, el) => {
@@ -401,6 +412,13 @@ export class App {
           onDebrief: ({ score }) => {
             this.state.completeStep(step.id, { route: this.plan.route, score: score.metCount });
             this.record.log('completed', { id: step.id, name: 'Traverse planned and run' }, { response: { stations: this.plan.route.length - 1 } });
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn primary continue-btn';
+            btn.textContent = 'Continue to the field report';
+            btn.addEventListener('click', () => this._stepDone(step));
+            el.appendChild(btn);
+            btn.focus();
           },
         });
         for (const s of this.traverse.points.values()) {

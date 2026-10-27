@@ -16,7 +16,7 @@ export function sunDirection(elevationDeg, azimuthDeg) {
   return {
     x: Math.cos(elev) * Math.sin(az),
     y: Math.sin(elev),
-    z: Math.cos(elev) * Math.cos(az),
+    z: -Math.cos(elev) * Math.cos(az), // az 0 -> -z (north), az 180 -> +z (south)
   };
 }
 

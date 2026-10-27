@@ -9,6 +9,7 @@
 import * as THREE from 'three';
 import { TerrainField } from './terrain.js';
 import { loadTexture } from '../core/assets.js';
+import { sunDirection } from '../systems/sun-model.js';
 
 const BASE = import.meta.env.BASE_URL || './';
 
@@ -114,12 +115,9 @@ export class HadleySite {
       new THREE.SphereGeometry(260, 48, 32),
       new THREE.MeshStandardMaterial({ map: loadTexture('assets/sky/earth-daymap-2k.jpg'), roughness: 0.9 }),
     );
-    const elev = THREE.MathUtils.degToRad(EARTH_ELEV_DEG);
-    const az = THREE.MathUtils.degToRad(EARTH_AZ_DEG);
-    // azimuth 0 = north = -z; 180 = south = +z
-    const dir = new THREE.Vector3(Math.sin(elev) * Math.sin(az), Math.cos(elev), Math.sin(elev) * Math.cos(az));
-    this.earthDir = dir.clone();
-    this.earth.position.copy(dir.multiplyScalar(13500)); // angular size ≈ atan(260/13500) ≈ 1.1°*2 ≈ 2°
+    const dir = sunDirection(EARTH_ELEV_DEG, EARTH_AZ_DEG);
+    this.earthDir = new THREE.Vector3(dir.x, dir.y, dir.z);
+    this.earth.position.copy(this.earthDir).multiplyScalar(13500); // angular size ≈ 2°
     this.earth.rotation.y = -Math.PI / 2; // face the site with the near side
     this.group.add(this.earth);
   }
@@ -127,18 +125,12 @@ export class HadleySite {
   /** Sun elevation (deg above horizon) and azimuth (0 = north, clockwise). */
   setSun(elevationDeg, azimuthDeg) {
     this._sun = { elevationDeg, azimuthDeg };
-    const elev = THREE.MathUtils.degToRad(Math.min(89, Math.max(1, elevationDeg)));
-    const az = THREE.MathUtils.degToRad(azimuthDeg);
-    const dir = new THREE.Vector3(
-      Math.cos(elev) * Math.sin(az),  // east
-      Math.sin(elev),                 // up
-      Math.cos(elev) * Math.cos(az),  // south for az=180
-    );
-    this.sunDir = dir;
+    const d = sunDirection(elevationDeg, azimuthDeg);
+    this.sunDir = new THREE.Vector3(d.x, d.y, d.z);
     const t = this._target;
-    this.sun.position.copy(t).addScaledVector(dir, 3500);
+    this.sun.position.copy(t).addScaledVector(this.sunDir, 3500);
     this.sun.target.position.copy(t);
-    this.sunSprite.position.copy(t).addScaledVector(dir, 14000);
+    this.sunSprite.position.copy(t).addScaledVector(this.sunDir, 14000);
     this.sunSprite.visible = elevationDeg > 2;
     this.stars.material.uniforms.uDim.value = elevationDeg > 25 ? 0.35 : 0.6;
   }
