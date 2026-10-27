@@ -7,7 +7,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { createServer } from 'node:http';
-import { cpSync, mkdirSync, existsSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, existsSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
 const SLUG = process.env.SLUG || 'app';
@@ -47,8 +47,12 @@ test.beforeAll(async () => {
     const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     const rel = urlPath.replace(/^\/+/, '') || 'index.html';
     let file = join(ROOT, rel);
-    if (!existsSync(file) && existsSync(join(file, 'index.html'))) file = join(file, 'index.html');
-    if (!existsSync(file)) {
+    if (!existsSync(file) || statSync(file).isDirectory()) {
+      // directory-style URL: try its index.html (e.g. /play/<slug>/)
+      const withIndex = join(file, 'index.html');
+      if (existsSync(withIndex)) file = withIndex;
+    }
+    if (!existsSync(file) || statSync(file).isDirectory()) {
       res.writeHead(404, { 'content-type': 'text/plain' });
       res.end('not found');
       return;

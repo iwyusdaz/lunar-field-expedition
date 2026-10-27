@@ -1,0 +1,58 @@
+[
+  {
+    "asset": "1",
+    "author": "LROC NAC DTM \"NAC_DTM_APOLLO15\" (2 m/px digital terrain model of the Apollo 15 site)",
+    "source": "NASA / GSFC / Arizona State University",
+    "license": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/DATA/SDP/NAC_DTM/APOLLO15/NAC_DTM_APOLLO15.TIF (product page: http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15)",
+    "retrieved": "Public domain (NASA data; credit requested)",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "2",
+    "author": "NASA SVS CGI Moon Kit — LROC WAC Hapke-normalized color mosaic (\"lroc_color_2k.jpg\")",
+    "source": "NASA's Scientific Visualization Studio (LROC WAC data)",
+    "license": "https://svs.gsfc.nasa.gov/4720",
+    "retrieved": "Public domain (NASA; credit requested)",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "3",
+    "author": "NASA SVS CGI Moon Kit — LOLA elevation map (\"ldem_16_uint.tif\")",
+    "source": "NASA's Scientific Visualization Studio (LOLA data)",
+    "license": "https://svs.gsfc.nasa.gov/4720",
+    "retrieved": "Public domain (NASA; credit requested)",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "4",
+    "author": "Apollo 15 photograph AS15-89-12100",
+    "source": "NASA (Johnson Space Center)",
+    "license": "https://www.hq.nasa.gov/alsj/a15/images15.html (Apollo 15 Image Library)",
+    "retrieved": "Public domain (NASA)",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "5",
+    "author": "Earth day map texture (\"2k_earth_daymap.jpg\")",
+    "source": "Solar System Scope",
+    "license": "https://www.solarsystemscope.com/textures/download/2k_earth_daymap.jpg",
+    "retrieved": "CC BY 4.0",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "6",
+    "author": "Draco + Basis/KTX2 decoder files",
+    "source": "Draco: Google, authors of the Draco project; Basis: Binomial LLC (served via the three.js package)",
+    "license": "Regenerated at build time from the pinned `three@0.186.1` package by `vite-plugin-decoders.js` (not vendored in git)",
+    "retrieved": "Apache-2.0 (Draco) / own Basis license (references permitted via three.js distribution); three.js is MIT",
+    "changes": "2026-10-27"
+  },
+  {
+    "asset": "7",
+    "author": "Favicon (`public/favicon.svg`)",
+    "source": "This project (original work)",
+    "license": "—",
+    "retrieved": "CC BY 4.0 (with the rest of the content)",
+    "changes": "—"
+  }
+]
