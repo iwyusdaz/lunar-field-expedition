@@ -1,0 +1,29 @@
+{
+  "moon_rock_01": {
+    "id": "moon_rock_01",
+    "file": "assets/models/moon_rock_01-cb2290c4.glb",
+    "name": "Moon Rock 01",
+    "authors": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+    "source": "https://polyhaven.com/a/moon_rock_01",
+    "license": "CC0 1.0",
+    "sizeKB": 503
+  },
+  "moon_rock_02": {
+    "id": "moon_rock_02",
+    "file": "assets/models/moon_rock_02-72b3b793.glb",
+    "name": "Moon Rock 02",
+    "authors": "Rico Cilliers, Greg Zaal, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_02",
+    "license": "CC0 1.0",
+    "sizeKB": 149
+  },
+  "moon_rock_03": {
+    "id": "moon_rock_03",
+    "file": "assets/models/moon_rock_03-9d1ae442.glb",
+    "name": "Moon Rock 03",
+    "authors": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_03",
+    "license": "CC0 1.0",
+    "sizeKB": 195
+  }
+}

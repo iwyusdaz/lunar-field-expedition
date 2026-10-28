@@ -54,5 +54,61 @@
     "license": "—",
     "retrieved": "CC BY 4.0 (with the rest of the content)",
     "changes": "—"
+  },
+  {
+    "asset": "8",
+    "author": "Moon Rock 01 (`public/assets/models/moon_rock_01-cb2290c4.glb`)",
+    "source": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+    "license": "https://polyhaven.com/a/moon_rock_01",
+    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "9",
+    "author": "Moon Rock 02 (`public/assets/models/moon_rock_02-72b3b793.glb`)",
+    "source": "Rico Cilliers, Greg Zaal, Jenelle van Heerden",
+    "license": "https://polyhaven.com/a/moon_rock_02",
+    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "10",
+    "author": "Moon Rock 03 (`public/assets/models/moon_rock_03-9d1ae442.glb`)",
+    "source": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "license": "https://polyhaven.com/a/moon_rock_03",
+    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "11",
+    "author": "Michroma (Latin 400 WOFF2, via `@fontsource/michroma`)",
+    "source": "Vernon Adams",
+    "license": "https://fonts.google.com/specimen/Michroma",
+    "retrieved": "SIL OFL 1.1",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "12",
+    "author": "IBM Plex Sans (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-sans`)",
+    "source": "IBM Corp. (Mike Abbink, Bold Monday)",
+    "license": "https://github.com/IBM/plex",
+    "retrieved": "SIL OFL 1.1",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "13",
+    "author": "IBM Plex Mono (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-mono`)",
+    "source": "IBM Corp. (Mike Abbink, Bold Monday)",
+    "license": "https://github.com/IBM/plex",
+    "retrieved": "SIL OFL 1.1",
+    "changes": "2026-10-28"
+  },
+  {
+    "asset": "14",
+    "author": "Lunar Module descent stage, Lunar Roving Vehicle, flag and suited crew figures (v2.0.0 scene props)",
+    "source": "This project (original work)",
+    "license": "—",
+    "retrieved": "MIT (code) / CC BY 4.0 (content)",
+    "changes": "—"
   }
 ]

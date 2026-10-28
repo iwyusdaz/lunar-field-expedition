@@ -14,6 +14,13 @@ by editing this file only.
 | 5 | Blue Marble: land surface, shallow water and shaded topography ("land_shallow_topo_2048.jpg") | NASA Goddard Space Flight Center (Visible Earth) | https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg | Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested) | 2026-10-27 | Downscaled from 2048x1024 to 1024x512 (`earth-bluemarble-1k.jpg`) and applied to the Earth disc in the site sky. |
 | 6 | three.js 0.186.1 | three.js authors | https://github.com/mrdoob/three.js | MIT | 2026-10-27 | None; bundled by Vite. No Draco/Basis decoders are shipped, because the project loads no compressed models or textures. |
 | 7 | Favicon (`public/favicon.svg`) | This project (original work) | — | CC BY 4.0 (with the rest of the content) | — | Original icon: cratered Moon disc. |
+| 8 | Moon Rock 01 (`public/assets/models/moon_rock_01-cb2290c4.glb`) | Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi | https://polyhaven.com/a/moon_rock_01 | CC0 1.0 (Poly Haven, https://polyhaven.com/license) | 2026-10-28 | Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range boulders on the real terrain (v2.0.0). |
+| 9 | Moon Rock 02 (`public/assets/models/moon_rock_02-72b3b793.glb`) | Rico Cilliers, Greg Zaal, Jenelle van Heerden | https://polyhaven.com/a/moon_rock_02 | CC0 1.0 (Poly Haven, https://polyhaven.com/license) | 2026-10-28 | Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range rocks (v2.0.0). |
+| 10 | Moon Rock 03 (`public/assets/models/moon_rock_03-9d1ae442.glb`) | Greg Zaal, Rico Cilliers, Jenelle van Heerden | https://polyhaven.com/a/moon_rock_03 | CC0 1.0 (Poly Haven, https://polyhaven.com/license) | 2026-10-28 | Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range rocks (v2.0.0). |
+| 11 | Michroma (Latin 400 WOFF2, via `@fontsource/michroma`) | Vernon Adams | https://fonts.google.com/specimen/Michroma | SIL OFL 1.1 | 2026-10-28 | Self-hosted Latin WOFF2 subset for display headings. |
+| 12 | IBM Plex Sans (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-sans`) | IBM Corp. (Mike Abbink, Bold Monday) | https://github.com/IBM/plex | SIL OFL 1.1 | 2026-10-28 | Self-hosted Latin WOFF2 subsets for body copy, instructions and controls. |
+| 13 | IBM Plex Mono (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-mono`) | IBM Corp. (Mike Abbink, Bold Monday) | https://github.com/IBM/plex | SIL OFL 1.1 | 2026-10-28 | Self-hosted Latin WOFF2 subsets for in-world tooltips, sample tags and telemetry. |
+| 14 | Lunar Module descent stage, Lunar Roving Vehicle, flag and suited crew figures (v2.0.0 scene props) | This project (original work) | — | MIT (code) / CC BY 4.0 (content) | — | Built procedurally in three.js from public-domain NASA Apollo 15 surface photographs (Apollo Lunar Surface Journal image library, https://www.hq.nasa.gov/alsj/a15/images15.html); no third-party model files are used. Simplified, approximate geometry. |
 
 Notes:
 - NASA imagery and data are generally not copyrighted (public domain) but NASA
@@ -27,5 +34,8 @@ Notes:
   including "computer graphical simulations and Internet Web pages".
 - The terrain albedo composite combines asset #2 with a procedural tiling
   regolith-noise texture generated in-repo (constructed, labeled as such).
+- Poly Haven assets are CC0 (no attribution required); they are credited anyway.
+- Fonts are under the SIL Open Font License 1.1 (https://openfontlicense.org); the
+  WOFF2 files are unmodified Latin subsets as published by Fontsource.
 - Everything else in the repository (code, learning content, documents) is MIT /
   CC BY 4.0 as stated in LICENSE and LICENSE-CONTENT.

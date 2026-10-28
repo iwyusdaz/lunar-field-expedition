@@ -1,0 +1,113 @@
+/**
+ * hud-shell.css — Full-Bleed 3D Viewport + Case-Themed Floating HUD,
+ * Collapsible Task Drawer, and In-World Callout / Speech Bubble Styles (v2.0.0).
+ *
+ * Preserves each repo's WCAG AA verified surface/button contrast tokens while
+ * applying the case's custom font trio (--font-display, --font-body, --font-accent),
+ * accent borders, collapsible floating drawer, and in-world 3D callouts.
+ */
+
+:root {
+  /* lunar-field-expedition: NASA-orange accent on shadow-black surfaces */
+  --v2-surface-solid: #07080a;
+  --v2-text: #f2ede4;
+  --v2-accent: #e87722;
+  --v2-border: rgba(232, 119, 34, 0.55);
+}
+
+body {
+  font-family: var(--font-body, system-ui, sans-serif);
+}
+
+h1, h2, h3, .app-title, .app-header h1 {
+  font-family: var(--font-display, system-ui, sans-serif);
+  letter-spacing: 0.015em;
+}
+
+code, pre, .tag, .badge, .v2-world-tooltip, .v2-bubble-speaker {
+  font-family: var(--font-accent, ui-monospace, monospace);
+}
+
+.app-header {
+  border-bottom: 2px solid var(--v2-border);
+}
+
+.app-header nav button,
+.app-header nav a,
+.module-nav button {
+  font-family: var(--font-body, system-ui, sans-serif);
+}
+
+/* Floating HUD drawer behavior: when collapsed, slide the task panel aside
+   so 100% of the 3D scene is open for direct exploration. */
+html[data-drawer-collapsed="true"] #task-panel,
+html[data-drawer-collapsed="true"] #panel,
+html[data-drawer-collapsed="true"] #session-panel,
+html[data-drawer-collapsed="true"] #overlays > section,
+html[data-drawer-collapsed="true"] #overlays > .panel,
+html[data-drawer-collapsed="true"] .course-panel,
+html[data-drawer-collapsed="true"] .dlg-panel {
+  transform: translateY(calc(100% - 2.4rem));
+  opacity: 0.18;
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+}
+
+#task-panel,
+#panel,
+#session-panel,
+.course-panel,
+.dlg-panel {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.36);
+}
+
+/* Projected 3D Hover Tooltip (always dark slate with white text -> 14.8:1 contrast) */
+.v2-world-tooltip {
+  position: fixed;
+  z-index: 45;
+  pointer-events: none;
+  background: #11161d;
+  color: #f8fafc;
+  border: 1.5px solid var(--v2-accent);
+  border-radius: 999px;
+  padding: 0.32rem 0.78rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+
+/* Projected 3D Speech Bubbles & Diegetic Callouts */
+.v2-world-bubbles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+}
+
+.v2-speech-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: 260px;
+  background: #11161d;
+  color: #f8fafc;
+  border: 1.5px solid var(--v2-border);
+  border-radius: 12px;
+  padding: 0.45rem 0.72rem;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+  pointer-events: none;
+}
+
+.v2-bubble-speaker {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f2a65a;
+  margin-bottom: 0.12rem;
+}
