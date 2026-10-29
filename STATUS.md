@@ -11,11 +11,12 @@ Last updated: 2026-10-29
 | Ambient life (5 systems), calm mode during tasks, reduced motion stops it | done |
 | In-world interaction (viewpoint rings + glide, hover tooltips, WASD pan) with crater marking / sun slider / traverse parity | done |
 | Version bump, posters 2.0.0 from the real scene, showcase.json validates 2.0.0 | done |
-| Unit + browser + sub-path tests | done 2026-10-29 — 72/72 unit (vitest), 8/8 functional + a11y (Playwright, test build), sub-path 1/1 (release build); gitleaks clean |
-| Draw calls (Module 2 site view, Medium, headless software WebGL) | 196 (budget ≤ 300) |
-| Headed GPU fps on Medium | pending |
-| Agent reviews of v2 + ≥ 5 revisions, trailer re-record | pending |
-| Tag v2.0.0 + showcase pin | pending (not tagged in this run) |
+| Unit + browser + sub-path tests | done 2026-10-29 — 76/76 unit (vitest), 12/12 functional + a11y (Playwright, test build), sub-path 1/1 (release build); gitleaks clean |
+| Headed GPU performance (Apple M1, Module 2 site view) | done 2026-10-29 — Medium 60.1 fps, 186 draw calls (budget ≤ 300), 575k triangles; menu interactive 0.35 s; 6.7 MB before first interaction (`evaluation/results/perf-2026-10-29.json`) |
+| "Is it alive" capture (two headed frames 5 s apart, LM viewpoint) | done — 3,836 pixels differ (fuzz 2 %) |
+| Agent reviews of v2 + ≥ 5 revisions | done — four reports in `evaluation/reviews/agent-review-v2-*.md`; revisions R-11 to R-19 in DECISIONS.md (R-19: terrain streak fixed and checked headed on the GPU) |
+| Trailer re-record and posters from the revised scene | done — `docs/trailer.webm` 57.5 s, 11.2 MB, captioned + VTT; `poster-2.0.0.webp/.jpg` re-rendered after R-15 (13.4 KB / 37.6 KB) |
+| Tag v2.0.0 + showcase pin | done by the orchestrator (see CHANGELOG) |
 
 ## v1.0.0 status (kept for the record)
 

@@ -1,12 +1,12 @@
-> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. v2.0.0 (the living-site revamp) has passed the automated tests below; its headed GPU performance and a fresh round of agent reviews are still pending.
+> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. v2.0.0 (the living-site revamp) has its own four agent reviews (revisions R-11 to R-19 in DECISIONS.md) and a headed GPU measurement: 60 fps on Medium, 186 draw calls, 6.7 MB before the first interaction (`evaluation/results/perf-2026-10-29.json`).
 
 # Lunar Field Expedition
 
 A 50-minute hybrid course and field game for grade 9–12 earth and space science (and intro undergraduate geology). Land at the real Apollo 15 Hadley–Apennine site, rebuilt from NASA's LROC terrain data. Read the landscape under changing sunlight, compare the ages of surfaces, plan a sampling traverse, and defend your findings in a claim-evidence-reasoning field report that you then compare with what the Apollo 15 crew actually did.
 
-**[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** (live once v2.0.0 is pinned in the showcase) · **[Design documents](design/)** · Role: Sole designer
+**[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** · **[Design documents](design/)** · Role: Sole designer
 
-![A suited crew member and a gold-foil Lunar Module descent stage on the grey plain at the Apollo 15 site, rebuilt from NASA terrain data, with a lunar rover nearby](public/poster-2.0.0.webp)
+![Two suited crew members beside a simplified Lunar Module descent stage in black and amber foil on the real NASA terrain of the Apollo 15 Hadley site, with a flag, a boulder and a lunar rover with orange fenders](public/poster-2.0.0.webp)
 
 The mission framing (you're part of a future field team revisiting Hadley) is **fictional**. All geology and Apollo 15 history are real and cited in [research/apollo15-facts.md](research/apollo15-facts.md). The EVA cost model and the sample cards are **simplified for teaching** and labeled that way in the app.
 
@@ -99,7 +99,4 @@ Code: MIT ([LICENSE](LICENSE)). Learning content: CC BY 4.0 ([LICENSE-CONTENT](L
 
 ## Trailer
 
-The trailer below was recorded from v1.0.0 and does not yet show the v2 living site.
-
-
-**Trailer:** [docs/trailer.webm](docs/trailer.webm) (55 s, captioned; WebVTT sidecar at [docs/trailer.vtt](docs/trailer.vtt)). Recorded from the real app on the Mac GPU; the caption text is also in the sidecar file.
+**Trailer:** [docs/trailer.webm](docs/trailer.webm) (57 s, recorded from v2.0.0 including the living site, captioned; WebVTT sidecar at [docs/trailer.vtt](docs/trailer.vtt)). Recorded from the real app on the Mac GPU; the caption text is also in the sidecar file.

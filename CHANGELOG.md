@@ -1,6 +1,16 @@
 # Changelog — lunar-field-expedition
 
 ## 2.0.0 — 2026-10-29 ("Hasselblad at Hadley")
+- v2 agent-review revisions (R-11 to R-19 in DECISIONS.md):
+  - faceted black-and-amber LM with splayed legs and footpads; orange LRV fenders and wire-mesh wheels
+  - reduced-motion ring jumps no longer snap the camera back
+  - corrected licence column in attribution.json
+  - hover tooltips are off while the crater counter or profile tool owns the pointer; the collapsed drawer is unreachable by Tab
+  - dust dims in calm mode and hides under reduced motion
+  - honesty labels on the sped-up Earth and the illustrative crew and rover motion
+  - dark halo on the orange rings (about 6:1)
+  - anisotropic filtering removes the close-range terrain streaks
+- Posters and trailer re-recorded from the revised scene. Headed Apple M1: Medium 60 fps, 186 draw calls, 6.7 MB before first interaction.
 - Living Hadley site layered on the unchanged LROC terrain: 12 Poly Haven CC0 boulders (moon_rock_01–03) grounded on the rendered mesh; procedural Lunar Module descent stage at the real landing site, Lunar Roving Vehicle with turning wheels, and flag, each merged per material.
 - Two suited crew (future-mission field team, fictional): one idles at the LM, one walks a short path to a viewpoint, points at the Apennine Front and walks back.
 - Ambient life: Earth turns slowly, the rover drives a loop throwing ballistic dust (lunar gravity, no drift), crew breathe and shift. No star twinkle, no flag flutter, no audio. Calm mode (~30 % speed) during module tasks; reduced motion stops all of it.
