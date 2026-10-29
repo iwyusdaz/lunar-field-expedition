@@ -311,3 +311,115 @@ test('reduced motion: cinematic renders as stills with captions', async ({ page 
   await expect(page.locator('.cinematic-caption')).toBeVisible();
   await page.locator('.cinematic-skip').click();
 });
+
+// ---- v2 in-world interaction (review I-4) -------------------------------------------
+async function openSite(page, moduleId) {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#task-panel h2', { timeout: 30000 });
+  await page.evaluate((id) => {
+    const s = window.__TEST__.state.state;
+    if (id === 'm3') s.completed.push('m2-sun');
+    window.__TEST__.state.save();
+    window.__TEST__.hooks.showModule(id);
+  }, moduleId);
+  await page.waitForTimeout(900);
+  // at 1280x720 the task panel covers the lower-centre of the view: hide it the way
+  // a learner would, so the pointer reaches the canvas
+  await page.locator('[data-action="toggle-drawer"]').click();
+  await page.waitForTimeout(400);
+}
+
+/** Look straight down on a viewpoint ring and return its on-screen position. */
+async function aimAtRing(page, id = 'vp-lm') {
+  return page.evaluate((ringId) => {
+    const app = window.__TEST__.app;
+    const entry = app.world.items.get(ringId);
+    const p = entry.object3d.position;
+    app.orbit.target.set(p.x, p.y, p.z);
+    app.orbit.spherical = { radius: 40, theta: 0, phi: app.orbit.minPhi };
+    app.orbit.update();
+    const cam = app.engine.camera;
+    cam.updateMatrixWorld();
+    const ndc = p.clone().project(cam);
+    const rect = app.canvas.getBoundingClientRect();
+    const x = rect.left + (ndc.x + 1) / 2 * rect.width;
+    const y = rect.top + (1 - ndc.y) / 2 * rect.height;
+    return {
+      x, y,
+      picked: app.world._pickAtClient(x, y)?.entry.id ?? null,
+      onCanvas: document.elementFromPoint(x, y) === app.canvas,
+      dest: entry.cameraPos.toArray(),
+      destTarget: entry.cameraTarget.toArray(),
+      start: cam.position.toArray(),
+    };
+  }, id);
+}
+
+const camState = (page) => page.evaluate(() => {
+  const app = window.__TEST__.app;
+  return { cam: app.engine.camera.position.toArray(), target: app.orbit.target.toArray() };
+});
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+test('v2: clicking a viewpoint ring glides the camera there and hands it back to the orbit', async ({ page }) => {
+  await openSite(page, 'm2');
+  const r = await aimAtRing(page);
+  expect(r.picked).toBe('vp-lm');
+  expect(r.onCanvas).toBe(true);
+  await page.mouse.move(r.x, r.y);
+  await expect(page.locator('.v2-world-tooltip')).toBeVisible();
+  await expect(page.locator('.v2-world-tooltip')).toContainText('Viewpoint: landing site');
+  await page.mouse.click(r.x, r.y);
+  // mid-glide: moving, not there yet
+  await page.waitForTimeout(250);
+  const mid = await camState(page);
+  expect(dist(mid.cam, r.start)).toBeGreaterThan(0.5);
+  await page.waitForTimeout(1500);
+  const end = await camState(page);
+  expect(dist(end.cam, r.dest)).toBeLessThan(1);
+  expect(dist(end.target, r.destTarget)).toBeLessThan(1);
+});
+
+test('v2: hover tooltips and in-world clicks are off while the crater counter owns the pointer', async ({ page }) => {
+  await openSite(page, 'm3');
+  expect(await page.evaluate(() => window.__TEST__.app.currentStep.kind)).toBe('crater-counter');
+  expect(await page.evaluate(() => window.__TEST__.app.world.enabled)).toBe(false);
+  const r = await aimAtRing(page);
+  expect(r.onCanvas).toBe(true);
+  await page.mouse.move(r.x - 3, r.y - 3);
+  await page.mouse.move(r.x, r.y);
+  await page.waitForTimeout(200);
+  await expect(page.locator('.v2-world-tooltip')).toBeHidden();
+  expect(await page.evaluate(() => window.__TEST__.app.canvas.style.cursor)).not.toBe('pointer');
+  await page.mouse.click(r.x, r.y);
+  await page.waitForTimeout(1400);
+  const after = await camState(page);
+  expect(dist(after.cam, r.start)).toBeLessThan(0.01);
+  expect(await page.evaluate(() => window.__TEST__.app.world.glide)).toBeNull();
+});
+
+test('v2 reduced motion: a ring jump is instant and the next arrow key keeps the new viewpoint', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openSite(page, 'm2');
+  expect(await page.evaluate(() => window.__TEST__.app.motion.reduced)).toBe(true);
+  const r = await aimAtRing(page);
+  expect(r.picked).toBe('vp-lm');
+  await page.mouse.click(r.x, r.y);
+  await page.waitForTimeout(100);
+  const jumped = await camState(page);
+  expect(dist(jumped.cam, r.dest)).toBeLessThan(0.5);
+  // orbit re-synced: its target is the ring's look-at point, not the old one
+  expect(dist(jumped.target, r.destTarget)).toBeLessThan(0.5);
+  await page.keyboard.press('ArrowLeft');
+  await page.waitForTimeout(150);
+  const after = await camState(page);
+  expect(dist(after.target, r.destTarget)).toBeLessThan(0.5);
+  // a small orbit step around the NEW target at the same radius; before the I-3 fix
+  // the camera snapped back onto the old orbit (target unchanged, ~18.8 m jump)
+  const radius = dist(r.dest, r.destTarget);
+  expect(Math.abs(dist(after.cam, r.destTarget) - radius)).toBeLessThan(0.5);
+  expect(dist(after.cam, r.dest)).toBeLessThan(radius * 0.5);
+  expect(dist(after.cam, r.start)).toBeGreaterThan(dist(r.dest, r.start) * 0.5);
+});

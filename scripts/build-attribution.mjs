@@ -13,7 +13,9 @@ for (const line of md.split('\n')) {
   if (!/^\| \d+ \|/.test(line)) continue;
   const cells = line.split('|').slice(1, -1).map(c => c.trim());
   if (cells.length < 7) continue;
-  const [asset, author, source, license, date, changes] = cells;
+  // columns: # | Asset | Author | Source | License | Date retrieved | Changes made
+  // (H-2: the leading # column used to shift every key by one)
+  const [, asset, author, source, license, date, changes] = cells;
   rows.push({
     asset: asset.replace(/\s+/g, ' '),
     author: author.replace(/\s+/g, ' '),

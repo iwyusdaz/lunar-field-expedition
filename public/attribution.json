@@ -1,114 +1,114 @@
 [
   {
-    "asset": "1",
-    "author": "LROC NAC DTM \"NAC_DTM_APOLLO15\" (2 m/px digital terrain model of the Apollo 15 site)",
-    "source": "NASA / GSFC / Arizona State University",
-    "license": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/DATA/SDP/NAC_DTM/APOLLO15/NAC_DTM_APOLLO15.TIF (product page: http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15)",
-    "retrieved": "Public domain (NASA data; credit requested)",
-    "changes": "2026-10-27"
+    "asset": "LROC NAC DTM \"NAC_DTM_APOLLO15\" (2 m/px digital terrain model of the Apollo 15 site)",
+    "author": "NASA / GSFC / Arizona State University",
+    "source": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/DATA/SDP/NAC_DTM/APOLLO15/NAC_DTM_APOLLO15.TIF (product page: http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15)",
+    "license": "Public domain (NASA data; credit requested)",
+    "retrieved": "2026-10-27",
+    "changes": "Cropped to the play area, resampled and exported as three 16-bit heightmap LODs (30/10/5 m per px) plus derived normal maps by `scripts/process-terrain.sh` + `scripts/build-tiles.mjs`. No vertical exaggeration. Raw DTM not committed."
   },
   {
-    "asset": "2",
-    "author": "NASA SVS CGI Moon Kit — LROC WAC Hapke-normalized color mosaic (\"lroc_color_2k.jpg\")",
-    "source": "NASA's Scientific Visualization Studio (LROC WAC data)",
-    "license": "https://svs.gsfc.nasa.gov/4720",
-    "retrieved": "Public domain (NASA; credit requested)",
-    "changes": "2026-10-27"
+    "asset": "NASA SVS CGI Moon Kit — LROC WAC Hapke-normalized color mosaic (\"lroc_color_2k.jpg\")",
+    "author": "NASA's Scientific Visualization Studio (LROC WAC data)",
+    "source": "https://svs.gsfc.nasa.gov/4720",
+    "license": "Public domain (NASA; credit requested)",
+    "retrieved": "2026-10-27",
+    "changes": "Used whole as the global Moon color map (Module 1); cropped to the play area for the local terrain albedo (`albedo-wac.png`)."
   },
   {
-    "asset": "3",
-    "author": "NASA SVS CGI Moon Kit — LOLA elevation map (\"ldem_16_uint.tif\")",
-    "source": "NASA's Scientific Visualization Studio (LOLA data)",
-    "license": "https://svs.gsfc.nasa.gov/4720",
-    "retrieved": "Public domain (NASA; credit requested)",
-    "changes": "2026-10-27"
+    "asset": "NASA SVS CGI Moon Kit — LOLA elevation map (\"ldem_16_uint.tif\")",
+    "author": "NASA's Scientific Visualization Studio (LOLA data)",
+    "source": "https://svs.gsfc.nasa.gov/4720",
+    "license": "Public domain (NASA; credit requested)",
+    "retrieved": "2026-10-27",
+    "changes": "Downsampled to a 1024x512 16-bit PNG displacement map (`public/assets/globe/displacement-1k.png`, half-metres vs 1727400 m, encoded in the sidecar meta)."
   },
   {
-    "asset": "4",
-    "author": "Apollo 15 photograph AS15-89-12100, \"Telephoto view across Hadley Rille photographed during Apollo 15 EVA\" (2 Aug. 1971)",
-    "source": "NASA (Johnson Space Center)",
-    "license": "https://images.nasa.gov/details/as15-89-12100",
-    "retrieved": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
-    "changes": "2026-10-27"
+    "asset": "Apollo 15 photograph AS15-89-12100, \"Telephoto view across Hadley Rille photographed during Apollo 15 EVA\" (2 Aug. 1971)",
+    "author": "NASA (Johnson Space Center)",
+    "source": "https://images.nasa.gov/details/as15-89-12100",
+    "license": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
+    "retrieved": "2026-10-27",
+    "changes": "None (displayed as-is in the Apollo 15 comparison view)."
   },
   {
-    "asset": "5",
-    "author": "Blue Marble: land surface, shallow water and shaded topography (\"land_shallow_topo_2048.jpg\")",
-    "source": "NASA Goddard Space Flight Center (Visible Earth)",
-    "license": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg",
-    "retrieved": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
-    "changes": "2026-10-27"
+    "asset": "Blue Marble: land surface, shallow water and shaded topography (\"land_shallow_topo_2048.jpg\")",
+    "author": "NASA Goddard Space Flight Center (Visible Earth)",
+    "source": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg",
+    "license": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
+    "retrieved": "2026-10-27",
+    "changes": "Downscaled from 2048x1024 to 1024x512 (`earth-bluemarble-1k.jpg`) and applied to the Earth disc in the site sky."
   },
   {
-    "asset": "6",
-    "author": "three.js 0.186.1",
-    "source": "three.js authors",
-    "license": "https://github.com/mrdoob/three.js",
-    "retrieved": "MIT",
-    "changes": "2026-10-27"
+    "asset": "three.js 0.186.1",
+    "author": "three.js authors",
+    "source": "https://github.com/mrdoob/three.js",
+    "license": "MIT",
+    "retrieved": "2026-10-27",
+    "changes": "None; bundled by Vite. No Draco/Basis decoders are shipped, because the project loads no compressed models or textures."
   },
   {
-    "asset": "7",
-    "author": "Favicon (`public/favicon.svg`)",
-    "source": "This project (original work)",
-    "license": "—",
-    "retrieved": "CC BY 4.0 (with the rest of the content)",
-    "changes": "—"
+    "asset": "Favicon (`public/favicon.svg`)",
+    "author": "This project (original work)",
+    "source": "—",
+    "license": "CC BY 4.0 (with the rest of the content)",
+    "retrieved": "—",
+    "changes": "Original icon: cratered Moon disc."
   },
   {
-    "asset": "8",
-    "author": "Moon Rock 01 (`public/assets/models/moon_rock_01-cb2290c4.glb`)",
-    "source": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
-    "license": "https://polyhaven.com/a/moon_rock_01",
-    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
-    "changes": "2026-10-28"
+    "asset": "Moon Rock 01 (`public/assets/models/moon_rock_01-cb2290c4.glb`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+    "source": "https://polyhaven.com/a/moon_rock_01",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-28",
+    "changes": "Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range boulders on the real terrain (v2.0.0)."
   },
   {
-    "asset": "9",
-    "author": "Moon Rock 02 (`public/assets/models/moon_rock_02-72b3b793.glb`)",
-    "source": "Rico Cilliers, Greg Zaal, Jenelle van Heerden",
-    "license": "https://polyhaven.com/a/moon_rock_02",
-    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
-    "changes": "2026-10-28"
+    "asset": "Moon Rock 02 (`public/assets/models/moon_rock_02-72b3b793.glb`)",
+    "author": "Rico Cilliers, Greg Zaal, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_02",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-28",
+    "changes": "Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range rocks (v2.0.0)."
   },
   {
-    "asset": "10",
-    "author": "Moon Rock 03 (`public/assets/models/moon_rock_03-9d1ae442.glb`)",
-    "source": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
-    "license": "https://polyhaven.com/a/moon_rock_03",
-    "retrieved": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
-    "changes": "2026-10-28"
+    "asset": "Moon Rock 03 (`public/assets/models/moon_rock_03-9d1ae442.glb`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_03",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-28",
+    "changes": "Converted to a self-contained GLB with resized JPEG textures; file renamed with a content hash. Scattered as close-range rocks (v2.0.0)."
   },
   {
-    "asset": "11",
-    "author": "Michroma (Latin 400 WOFF2, via `@fontsource/michroma`)",
-    "source": "Vernon Adams",
-    "license": "https://fonts.google.com/specimen/Michroma",
-    "retrieved": "SIL OFL 1.1",
-    "changes": "2026-10-28"
+    "asset": "Michroma (Latin 400 WOFF2, via `@fontsource/michroma`)",
+    "author": "Vernon Adams",
+    "source": "https://fonts.google.com/specimen/Michroma",
+    "license": "SIL OFL 1.1",
+    "retrieved": "2026-10-28",
+    "changes": "Self-hosted Latin WOFF2 subset for display headings."
   },
   {
-    "asset": "12",
-    "author": "IBM Plex Sans (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-sans`)",
-    "source": "IBM Corp. (Mike Abbink, Bold Monday)",
-    "license": "https://github.com/IBM/plex",
-    "retrieved": "SIL OFL 1.1",
-    "changes": "2026-10-28"
+    "asset": "IBM Plex Sans (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-sans`)",
+    "author": "IBM Corp. (Mike Abbink, Bold Monday)",
+    "source": "https://github.com/IBM/plex",
+    "license": "SIL OFL 1.1",
+    "retrieved": "2026-10-28",
+    "changes": "Self-hosted Latin WOFF2 subsets for body copy, instructions and controls."
   },
   {
-    "asset": "13",
-    "author": "IBM Plex Mono (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-mono`)",
-    "source": "IBM Corp. (Mike Abbink, Bold Monday)",
-    "license": "https://github.com/IBM/plex",
-    "retrieved": "SIL OFL 1.1",
-    "changes": "2026-10-28"
+    "asset": "IBM Plex Mono (Latin 400/600 WOFF2, via `@fontsource/ibm-plex-mono`)",
+    "author": "IBM Corp. (Mike Abbink, Bold Monday)",
+    "source": "https://github.com/IBM/plex",
+    "license": "SIL OFL 1.1",
+    "retrieved": "2026-10-28",
+    "changes": "Self-hosted Latin WOFF2 subsets for in-world tooltips, sample tags and telemetry."
   },
   {
-    "asset": "14",
-    "author": "Lunar Module descent stage, Lunar Roving Vehicle, flag and suited crew figures (v2.0.0 scene props)",
-    "source": "This project (original work)",
-    "license": "—",
-    "retrieved": "MIT (code) / CC BY 4.0 (content)",
-    "changes": "—"
+    "asset": "Lunar Module descent stage, Lunar Roving Vehicle, flag and suited crew figures (v2.0.0 scene props)",
+    "author": "This project (original work)",
+    "source": "—",
+    "license": "MIT (code) / CC BY 4.0 (content)",
+    "retrieved": "—",
+    "changes": "Built procedurally in three.js from public-domain NASA Apollo 15 surface photographs (Apollo Lunar Surface Journal image library, https://www.hq.nasa.gov/alsj/a15/images15.html); no third-party model files are used. Simplified, approximate geometry."
   }
 ]

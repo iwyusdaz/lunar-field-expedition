@@ -71,3 +71,52 @@ test('overlay UI has no critical or serious axe issues', async ({ page }) => {
     await scan('text mode (module 4 planner)');
   }
 });
+
+test('collapsed HUD drawer: no serious axe issues and nothing focusable left inside it', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#task-panel h2', { timeout: 30000 });
+  await page.waitForTimeout(1200);
+  // Module 2 puts real controls (sun sliders, presets) in the panel
+  if (await page.evaluate(() => Boolean(window.__TEST__))) {
+    await page.evaluate(() => window.__TEST__.hooks.showModule('m2'));
+    await page.waitForTimeout(900);
+  }
+  expect(await page.locator('#task-panel button, #task-panel input').count()).toBeGreaterThan(0);
+
+  const toggle = page.locator('[data-action="toggle-drawer"]');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('html')).toHaveAttribute('data-drawer-collapsed', 'true');
+
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .exclude('canvas')
+    .analyze();
+  const bad = results.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
+  if (bad.length) console.log('axe violations (collapsed drawer):', JSON.stringify(bad, null, 2));
+  expect(bad, 'collapsed drawer').toEqual([]);
+
+  // Tab through the whole page: focus never lands inside the collapsed panel
+  await toggle.focus();
+  const total = await page.evaluate(() => document.querySelectorAll('button, a[href], input, select, textarea, [tabindex]').length);
+  const landed = [];
+  for (let i = 0; i < total + 5; i++) {
+    await page.keyboard.press('Tab');
+    const inPanel = await page.evaluate(() => {
+      const a = document.activeElement;
+      return a && a.closest('#task-panel') ? (a.id || a.textContent.trim().slice(0, 30)) : null;
+    });
+    if (inPanel) landed.push(inPanel);
+  }
+  expect(landed).toEqual([]);
+
+  // expanding restores the panel to the tab order and the a11y tree
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  expect(await page.evaluate(() => {
+    const p = document.getElementById('task-panel');
+    return { inert: p.inert, hidden: p.getAttribute('aria-hidden') };
+  })).toEqual({ inert: false, hidden: null });
+});

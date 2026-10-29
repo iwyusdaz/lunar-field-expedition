@@ -153,6 +153,14 @@ export class App {
     world.keys = new Set();
     world.keys.add = function add() { return this; };
     this.world = world;
+    // Reduced motion makes glideTo jump instantly and clear `glide` in the same call,
+    // so the update loop never sees a glide end. Re-sync the orbit right away, or the
+    // next arrow/WASD input snaps the camera back onto the old orbit (review I-3).
+    const glideTo = world.glideTo.bind(world);
+    world.glideTo = (...args) => {
+      glideTo(...args);
+      if (!world.glide) this._syncOrbitToCamera();
+    };
     const L = site.lmPos;
     const g = (dx, dz) => site.meshHeightAt(L.x + dx, L.z + dz);
     const view = (dx, dz, ux, uz, h, dist) => {
