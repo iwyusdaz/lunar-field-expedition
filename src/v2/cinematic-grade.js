@@ -401,6 +401,9 @@ export function groundProp(object3d, opts = {}) {
   return object3d;
 }
 
+/** Task panels the HUD drawer collapses (matches the selectors in hud-shell.css). */
+const DRAWER_SELECTORS = '#task-panel, #panel, #session-panel, .course-panel, .dlg-panel, #overlays > section, #overlays > .panel';
+
 /**
  * Wire the v2 Full-Bleed Collapsible HUD Drawer and Plain-Font Accessibility Toggle.
  */
@@ -428,6 +431,15 @@ export function initFloatingHud(opts = {}) {
       document.documentElement.dataset.drawerCollapsed = collapsed ? 'false' : 'true';
       drawerBtn.setAttribute('aria-expanded', collapsed ? 'true' : 'false');
       drawerBtn.textContent = collapsed ? 'Hide panel' : 'Show panel';
+      // A collapsed drawer is visually gone, so its controls must leave the tab
+      // order and the accessibility tree too (WCAG 2.4.3 / 1.3.1).
+      const targets = new Set(document.querySelectorAll(DRAWER_SELECTORS));
+      if (opts.panel) targets.add(opts.panel);
+      for (const el of targets) {
+        el.toggleAttribute('inert', !collapsed);
+        if (!collapsed) el.setAttribute('aria-hidden', 'true');
+        else el.removeAttribute('aria-hidden');
+      }
       opts.onDrawerChange?.(!collapsed);
     });
     nav.insertBefore(drawerBtn, nav.firstChild);

@@ -131,15 +131,16 @@ export function createAnimatedCharacter(opts = {}) {
     roughness: 0.48,
     metalness: 0.1,
   });
-  const scleraMat = new THREE.MeshStandardMaterial({ color: 0xfaf8f5, roughness: 0.2 });
   const lipMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(opts.skinColor ?? 0xd99b78).lerp(new THREE.Color(0xa24848), 0.38),
     roughness: 0.45,
   });
 
   /**
-   * One draw call per eye: iris + pupil + catchlight merged into a single
-   * vertex-coloured geometry (they only ever move together inside the iris pivot).
+   * Whole-eye geometry: eyeball sphere + iris + pupil + catchlight merged into
+   * a single vertex-coloured mesh (1 draw call per eye, was 2 — sclera material
+   * plus decal — plus a shared material program). The sclera colour is baked
+   * per vertex so one MeshBasicMaterial({vertexColors}) covers the whole eye.
    */
   function coloredCircleGeometry(radius, segments, color, z, offsetX = 0, offsetY = 0) {
     const g = new THREE.CircleGeometry(radius, segments).toNonIndexed();
@@ -155,12 +156,29 @@ export function createAnimatedCharacter(opts = {}) {
     g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     return g;
   }
+  const SCLERA_COLOR = 0xfaf8f5;
   const eyeDecalMat = new THREE.MeshBasicMaterial({ vertexColors: true });
-  const buildEyeDecal = (side) => BufferGeometryUtils.mergeGeometries([
-    coloredCircleGeometry(0.0125, 20, opts.eyeColor ?? 0x3b2618, 0.0148),
-    coloredCircleGeometry(0.0068, 16, 0x09090b, 0.0152),
-    coloredCircleGeometry(0.0032, 12, 0xffffff, 0.0156, side * 0.0038, 0.0042),
-  ], false);
+  const buildEyeDecal = (side) => {
+    // Eyeball sphere with the z-flattened shape previously applied via mesh.scale,
+    // now baked into the geometry so it can merge with the decals.
+    const sphere = new THREE.SphereGeometry(0.022, 18, 14).toNonIndexed();
+    sphere.scale(1.0, 1.08, 0.65);
+    const count = sphere.attributes.position.count;
+    const colors = new Float32Array(count * 3);
+    const c = new THREE.Color(SCLERA_COLOR);
+    for (let i = 0; i < count; i++) {
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
+    }
+    sphere.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    return BufferGeometryUtils.mergeGeometries([
+      sphere,
+      coloredCircleGeometry(0.0125, 20, opts.eyeColor ?? 0x3b2618, 0.0148),
+      coloredCircleGeometry(0.0068, 16, 0x09090b, 0.0152),
+      coloredCircleGeometry(0.0032, 12, 0xffffff, 0.0156, side * 0.0038, 0.0042),
+    ], false);
+  };
 
   // Ground contact shadow
   const shadowTex = getContactShadowTexture();
@@ -301,41 +319,53 @@ export function createAnimatedCharacter(opts = {}) {
   // Layered Eyes + Eyelids + Eyebrows
   const eyes = [];
   const eyelids = [];
+  // Both eyes: ONE vertex-coloured mesh (2 → 1 draw calls). The eye pair shares
+  // y/z, so the pitch rotation axis passes through both centres; yaw gazes by
+  // translating the pair (the original model's iris translation, now moving the
+  // whole eye). Gaze still turns eyeball + decal together as one unit.
+  {
+    const eyePivot = new THREE.Group();
+    eyePivot.position.set(0, 0.018, 0.106); // shared eye line (y/z of both eyes)
+    head.add(eyePivot);
+    const eyeGeos = [-1, 1].map((side) => {
+      const g = buildEyeDecal(side);
+      g.translate(side * 0.044, 0, 0); // eye offset relative to the pivot
+      return g;
+    });
+    const eyeMesh = new THREE.Mesh(BufferGeometryUtils.mergeGeometries(eyeGeos, false), eyeDecalMat);
+    eyePivot.add(eyeMesh);
+    eyes.push(eyePivot);
+  }
+
+  // Eyebrows (per side — they move asymmetrically in expressions).
   const brows = [];
   for (const side of [-1, 1]) {
-    const eyeGroup = new THREE.Group();
-    eyeGroup.position.set(side * 0.044, 0.018, 0.106);
-    head.add(eyeGroup);
-
-    const eyeball = new THREE.Mesh(new THREE.SphereGeometry(0.022, 18, 14), scleraMat);
-    eyeball.scale.set(1.0, 1.08, 0.65);
-    eyeGroup.add(eyeball);
-
-    const irisPivot = new THREE.Group();
-    eyeGroup.add(irisPivot);
-
-    // Iris + pupil + catchlight as ONE vertex-coloured mesh (1 draw call, was 3)
-    const decal = new THREE.Mesh(buildEyeDecal(side), eyeDecalMat);
-    irisPivot.add(decal);
-
-    // Upper eyelid for blinking & expressions
-    const lid = new THREE.Mesh(
-      new THREE.SphereGeometry(0.0235, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.55),
-      skinMat,
-    );
-    lid.scale.set(1.02, 1.08, 0.70);
-    lid.rotation.x = -0.95; // open by default
-    eyeGroup.add(lid);
-
-    // Eyebrow
     const brow = new THREE.Mesh(new THREE.BoxGeometry(0.036, 0.0075, 0.012), hairMat);
     brow.position.set(side * 0.044, 0.050, 0.112);
     brow.rotation.z = side * -0.06;
     head.add(brow);
-
-    eyes.push(irisPivot);
-    eyelids.push(lid);
     brows.push({ mesh: brow, side });
+  }
+
+  // Eyelids (upper, blinking & squinting): both lids always blink in unison and
+  // rotate only around x, whose axis passes through BOTH eye centres (the eyes
+  // share y/z and differ only in x). So the pair merges into ONE mesh pivoted
+  // on that shared axis (2 → 1 draw calls); the lid scale is baked into the
+  // geometry. Blink/squint animate the mesh rotation like before.
+  {
+    const lidPivot = new THREE.Group();
+    lidPivot.position.set(0, 0.018, 0.106);
+    head.add(lidPivot);
+    const lidGeos = [-1, 1].map((side) => {
+      const g = new THREE.SphereGeometry(0.0235, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.55).toNonIndexed();
+      g.scale(1.02, 1.08, 0.70); // was mesh.scale
+      g.translate(side * 0.044, 0, 0); // eye offset relative to the pivot
+      return g;
+    });
+    const lidMesh = new THREE.Mesh(BufferGeometryUtils.mergeGeometries(lidGeos, false), skinMat);
+    lidMesh.rotation.x = -0.95; // open by default
+    lidPivot.add(lidMesh);
+    eyelids.push(lidMesh);
   }
 
   // Optional glasses
@@ -471,6 +501,40 @@ export function createAnimatedCharacter(opts = {}) {
     thumb.rotation.z = side * 0.5;
     wrist.add(thumb);
 
+    // Forearm + palm + thumb merge (perf revision: 3 → 1 draw calls per arm).
+    // The wrist joint never animates — every pose rotates shoulder/elbow only —
+    // so the hand parts are static relative to the elbow and bake into one
+    // elbow-frame mesh. The wrist group stays (it carries the optional prop).
+    if (opts.mergeHands !== false) {
+      forearm.updateMatrix();
+      palm.updateMatrix();
+      thumb.updateMatrix();
+      wrist.updateMatrix();
+      const bakeElbow = (mesh, parentM) => {
+        const g = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+        g.applyMatrix4(parentM
+          ? new THREE.Matrix4().multiplyMatrices(parentM, mesh.matrix)
+          : mesh.matrix);
+        for (const name of Object.keys(g.attributes)) {
+          if (!['position', 'normal', 'uv'].includes(name)) g.deleteAttribute(name);
+        }
+        return g;
+      };
+      const armMerged = BufferGeometryUtils.mergeGeometries(
+        [bakeElbow(forearm, null), bakeElbow(palm, wrist.matrix), bakeElbow(thumb, wrist.matrix)],
+        false,
+      );
+      if (armMerged) {
+        const armMesh = new THREE.Mesh(armMerged, skinMat);
+        // The forearm cast before; the hand parts rode along (they are small).
+        armMesh.castShadow = true;
+        elbow.add(armMesh);
+        elbow.remove(forearm);
+        wrist.remove(palm);
+        wrist.remove(thumb);
+      }
+    }
+
     arms[key] = { shoulder, elbow, wrist };
   }
 
@@ -498,6 +562,7 @@ export function createAnimatedCharacter(opts = {}) {
 
   // Legs (Hip -> Thigh -> Knee -> Shin -> Foot)
   const legs = {};
+  const seatedLegGeos = []; // per-leg merged geometries (pelvis frame) — fused below
   for (const [key, side] of [['left', -1], ['right', 1]]) {
     const hip = new THREE.Group();
     hip.position.set(side * 0.085, -0.04, 0);
@@ -531,7 +596,81 @@ export function createAnimatedCharacter(opts = {}) {
       knee.rotation.x = Math.PI * 0.47;
     }
 
+    // Seated characters' legs never move (only the walking classmate's do), so
+    // for seated builds bake thigh + shin into ONE geometry in the hip's frame
+    // with the bent-knee pose applied at build time. The geometry is collected
+    // in the PELVIS frame (see below) so both legs + the hip mesh fuse into a
+    // single mesh; the shoe stays separate on the ankle joint.
+    // opts.mergeLegs = false opts out for testing/tooling.
+    if (opts.seated && opts.mergeLegs !== false) {
+      thigh.updateMatrix();
+      shin.updateMatrix();
+      hip.updateMatrix();
+      const kneeQ = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI * 0.47, 0, 0));
+      const kneeM = new THREE.Matrix4().compose(
+        new THREE.Vector3(0, -0.37, 0), // knee joint position in the hip frame
+        kneeQ,
+        new THREE.Vector3(1, 1, 1),
+      );
+      const bake = (mesh, parentM) => {
+        const g = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+        g.applyMatrix4(parentM ? new THREE.Matrix4().multiplyMatrices(parentM, mesh.matrix) : mesh.matrix);
+        for (const name of Object.keys(g.attributes)) {
+          if (!['position', 'normal', 'uv'].includes(name)) g.deleteAttribute(name);
+        }
+        return g;
+      };
+      let mergedLeg = null;
+      try {
+        mergedLeg = BufferGeometryUtils.mergeGeometries(
+          [bake(thigh, null), bake(shin, kneeM)],
+          false,
+        );
+      } catch {
+        mergedLeg = null;
+      }
+      if (mergedLeg) {
+        mergedLeg.applyMatrix4(hip.matrix); // hip frame → pelvis frame
+        seatedLegGeos.push(mergedLeg);
+        hip.remove(thigh);
+        knee.remove(shin);
+        // knee/ankle keep the shoe; they are static now (pose baked above).
+      }
+    }
+
     legs[key] = { hip, knee, ankle };
+  }
+
+  // Fuse the collected seated-leg geometries with the hip/pelvis mesh into ONE
+  // bottomMat mesh (perf revision: hip + 2 legs = 3 → 1 draw calls, main and
+  // shadow pass). Both hip joints are static in the seated pose, so nothing
+  // that moves is baked. On any merge failure the collected legs fall back to
+  // individual meshes — same visuals, one draw call more each.
+  if (seatedLegGeos.length) {
+    hipMesh.updateMatrix();
+    const hipGeo = hipMesh.geometry.index ? hipMesh.geometry.toNonIndexed() : hipMesh.geometry.clone();
+    hipGeo.applyMatrix4(hipMesh.matrix);
+    for (const name of Object.keys(hipGeo.attributes)) {
+      if (!['position', 'normal', 'uv'].includes(name)) hipGeo.deleteAttribute(name);
+    }
+    let mergedBottom = null;
+    try {
+      mergedBottom = BufferGeometryUtils.mergeGeometries([...seatedLegGeos, hipGeo], false);
+    } catch {
+      mergedBottom = null;
+    }
+    if (mergedBottom) {
+      const bottomMesh = new THREE.Mesh(mergedBottom, bottomMat);
+      bottomMesh.castShadow = true;
+      pelvis.add(bottomMesh);
+      pelvis.remove(hipMesh);
+    } else {
+      for (const g of seatedLegGeos) {
+        const m = new THREE.Mesh(g, bottomMat);
+        m.castShadow = true;
+        pelvis.add(m);
+      }
+    }
   }
 
   // Animation state
@@ -750,11 +889,18 @@ export function createAnimatedCharacter(opts = {}) {
       arms.right.elbow.rotation.x = opts.seated ? -0.72 : -0.22;
     }
 
-    head.rotation.y = THREE.MathUtils.lerp(head.rotation.y, targetYaw, 0.15);
-    head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, targetPitch, 0.15);
-    for (const irisPivot of eyes) {
-      irisPivot.position.x = THREE.MathUtils.clamp(targetYaw * 0.008, -0.004, 0.004);
-      irisPivot.position.y = THREE.MathUtils.clamp(-targetPitch * 0.006, -0.003, 0.003);
+    // Gaze lerp must respect the freeze: an unconditional 0.15-per-frame lerp
+    // kept drifting the head for dozens of frames after reduced motion froze
+    // everything else (arrival-english M-1 residual). Frozen = snap to the pose.
+    const gazeLerp = frozen ? 1 : 0.15;
+    head.rotation.y = THREE.MathUtils.lerp(head.rotation.y, targetYaw, gazeLerp);
+    head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, targetPitch, gazeLerp);
+    // Whole-eye gaze on the merged eye pair: pitch rotates around the x axis
+    // through both eye centres; yaw translates the pair along x (clamped small,
+    // as the original iris gaze was). The head takes the bulk of the target.
+    for (const eyePivot of eyes) {
+      eyePivot.rotation.x = THREE.MathUtils.clamp(targetPitch * 0.35, -0.14, 0.14);
+      eyePivot.position.x = THREE.MathUtils.clamp(targetYaw * 0.008, -0.004, 0.004);
     }
   }
 

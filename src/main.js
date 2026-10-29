@@ -7,6 +7,7 @@ import { boot } from './app.js';
 import './styles/site.css';
 import './styles/case-fonts.css';
 import './v2/hud-shell.css';
+import './styles/case-hud.css';
 
 export const SLUG = window.__SLUG__ || 'lunar-field-expedition';
 window.__SLUG__ = SLUG;

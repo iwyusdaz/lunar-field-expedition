@@ -8,11 +8,10 @@
  */
 
 :root {
-  /* lunar-field-expedition: NASA-orange accent on shadow-black surfaces */
-  --v2-surface-solid: #07080a;
-  --v2-text: #f2ede4;
-  --v2-accent: #e87722;
-  --v2-border: rgba(232, 119, 34, 0.55);
+  --v2-surface-solid: #12181f;
+  --v2-text: #f3f6f8;
+  --v2-accent: #ffd100;
+  --v2-border: rgba(255, 209, 0, 0.48);
 }
 
 body {
@@ -62,7 +61,8 @@ html[data-drawer-collapsed="true"] .dlg-panel {
   box-shadow: 0 14px 38px rgba(0, 0, 0, 0.36);
 }
 
-/* Projected 3D Hover Tooltip (always dark slate with white text -> 14.8:1 contrast) */
+/* Projected 3D Hover Tooltip (always dark slate with white text -> 14.8:1 contrast).
+   Body face per the plan's readability rule: tooltips carry instructions. */
 .v2-world-tooltip {
   position: fixed;
   z-index: 45;
@@ -72,6 +72,7 @@ html[data-drawer-collapsed="true"] .dlg-panel {
   border: 1.5px solid var(--v2-accent);
   border-radius: 999px;
   padding: 0.32rem 0.78rem;
+  font-family: var(--font-body, system-ui, sans-serif);
   font-size: 0.86rem;
   font-weight: 600;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
@@ -108,6 +109,6 @@ html[data-drawer-collapsed="true"] .dlg-panel {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #f2a65a;
+  color: #ffd166;
   margin-bottom: 0.12rem;
 }

@@ -18,6 +18,7 @@
  * @module v2/ambient-life
  */
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 function mulberry32(seed = 42) {
   let a = seed >>> 0;
@@ -179,11 +180,33 @@ export class AmbientLifeManager {
       blending: THREE.AdditiveBlending,
     });
 
-    for (const [x, y, z] of positions) {
-      const beam = new THREE.Mesh(geo, mat);
-      beam.position.set(x, y, z);
-      beam.rotation.set(rx, ry, rz);
-      group.add(beam);
+    // All beams share one geometry + material and never move individually (the
+    // shimmer pulse animates the material), so they bake into ONE mesh
+    // (perf revision: N → 1 draw calls per shaft group).
+    const beamM = new THREE.Matrix4().compose(
+      new THREE.Vector3(),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)),
+      new THREE.Vector3(1, 1, 1),
+    );
+    const beamGeos = positions.map(([x, y, z]) => {
+      const g = geo.clone();
+      g.applyMatrix4(beamM.clone().setPosition(x, y, z));
+      return g;
+    });
+    let mergedShaft = null;
+    if (beamGeos.length > 1) {
+      try { mergedShaft = BufferGeometryUtils.mergeGeometries(beamGeos, false); } catch { mergedShaft = null; }
+    }
+    if (mergedShaft) {
+      group.add(new THREE.Mesh(mergedShaft, mat));
+    } else {
+      // Fallback (merge unavailable): original per-beam meshes.
+      beamGeos.forEach((g, i) => {
+        const beam = new THREE.Mesh(g, mat);
+        beam.position.set(...positions[i]);
+        beam.rotation.set(rx, ry, rz);
+        group.add(beam);
+      });
     }
 
     this.host.add(group);

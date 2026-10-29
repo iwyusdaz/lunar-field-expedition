@@ -1,0 +1,17 @@
+/**
+ * case-hud.css — lunar-field-expedition's repo-specific HUD tokens, layered after
+ * the shared src/v2/hud-shell.css. Kept out of src/v2/ so a template sync can
+ * never erase them.
+ */
+
+/* NASA-orange accent on shadow-black surfaces (art bible palette). */
+:root {
+  --v2-surface-solid: #07080a;
+  --v2-text: #f2ede4;
+  --v2-accent: #e87722;
+  --v2-border: rgba(232, 119, 34, 0.55);
+}
+
+.v2-bubble-speaker {
+  color: #f2a65a;
+}
