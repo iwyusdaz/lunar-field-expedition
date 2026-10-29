@@ -33,34 +33,57 @@ await new Promise(r => server.listen(4199, '127.0.0.1', r));
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
 await page.goto('http://127.0.0.1:4199/', { waitUntil: 'networkidle' });
-// wait for the site scene + terrain
-await page.waitForFunction(() => window.__app?.site?.terrain?.ready === true, null, { timeout: 60000 });
+// wait for the site scene + terrain + the v2 living layer (boulders, LM, rover, crew)
+await page.waitForFunction(() => window.__app?.site?.terrain?.ready === true && window.__app.site.rocks?.length > 0, null, { timeout: 60000 });
 // switch from the Module-1 globe to the Hadley site scene
 await page.evaluate(() => window.__app.showModule('m2'));
 await page.waitForTimeout(1500);
-// stage the hero shot: low sun, camera low over the rille toward the mountain front
-await page.evaluate(() => {
+// v2 hero shot: low morning sun, camera at crew height near the LM, the rover
+// driving past and the Apennine Front on the horizon
+const stage = () => page.evaluate(() => {
   const app = window.__app;
   app.site.clearMarkers();
   app.site.ambient.intensity = 0.3;          // earthshine + interreflection, lifted for the still
-  app.engine.renderer.toneMappingExposure = 1.32;
-  app.site.setSun(11, 105);                  // first light from the east
-  const A = app.site.terrain.fromLonLat(3.560, 26.115); // over the rille, looking along the plain
-  app.orbit.target.set(A.xM, app.site.terrain.elevationAt(A.xM, A.yM) + 30, A.yM);
-  app.orbit.spherical = { radius: 3400, theta: Math.PI * 0.58, phi: 1.24 };
+  app.engine.renderer.toneMappingExposure = 1.25;
+  app.site.setSun(14, 100);                  // morning light from the east
+  const L = app.site.lmPos;
+  const tx = L.x + 6, tz = L.z + 3;
+  app.orbit.target.set(tx, app.site.meshHeightAt(tx, tz) + 2.2, tz);
+  app.orbit.spherical = { radius: 17, theta: 0.95, phi: 1.47 };
+  for (const r of app.world?.hotspotRings || []) r.group.visible = false; // interaction affordances off for the still
   app.orbit.update();
   // hide overlay UI for the clean scene shot
   for (const id of ['task-panel', 'poi-wrap']) {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   }
-  document.querySelector('.hud')?.style.setProperty('display', 'none');
-  document.querySelector('.app-header')?.style.setProperty('display', 'none');
-  document.querySelector('.module-nav')?.style.setProperty('display', 'none');
+  for (const sel of ['.hud', '.app-header', '.module-nav', '.v2-world-tooltip', '#status']) {
+    document.querySelector(sel)?.style.setProperty('display', 'none');
+  }
   document.body.style.background = '#000';
 });
+await stage();
 await page.waitForTimeout(2500); // let a few frames render at the staged pose
-const jpgB64 = await page.screenshot({ clip: { x: 0, y: 0, width: 1200, height: 630 }, type: 'jpeg', quality: 88 });
+// blank-frame guard: a frame captured before the GPU presents is near-uniform black
+let jpgB64;
+for (let attempt = 1; attempt <= 4; attempt++) {
+  jpgB64 = await page.screenshot({ clip: { x: 0, y: 0, width: 1200, height: 630 }, type: 'jpeg', quality: 84 });
+  const spread = await page.evaluate(async (b64) => {
+    const img = document.createElement('img');
+    await new Promise((r) => { img.onload = r; img.src = `data:image/jpeg;base64,${b64}`; });
+    const c = document.createElement('canvas'); c.width = 120; c.height = 63;
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0, 120, 63);
+    const d = g.getImageData(0, 0, 120, 63).data;
+    let mn = 255, mx = 0, sum = 0;
+    for (let i = 0; i < d.length; i += 4) { const v = d[i]; mn = Math.min(mn, v); mx = Math.max(mx, v); sum += v; }
+    return { range: mx - mn, mean: sum / (d.length / 4) };
+  }, jpgB64.toString('base64'));
+  console.log(`poster attempt ${attempt}: luminance range ${spread.range}, mean ${spread.mean.toFixed(1)}`);
+  if (spread.range > 60 && spread.mean > 12) break;
+  if (attempt === 4) { console.error('poster frame still blank after 4 attempts'); process.exit(1); }
+  await stage();
+  await page.waitForTimeout(2500);
+}
 // encode the webp variant in-page from the captured frame (Playwright cannot encode webp directly)
 const webpB64 = await page.evaluate(async (b64) => {
   const img = document.createElement('img');
@@ -68,7 +91,7 @@ const webpB64 = await page.evaluate(async (b64) => {
   const c = document.createElement('canvas');
   c.width = 1200; c.height = 630;
   c.getContext('2d').drawImage(img, 0, 0);
-  const blob = await new Promise(r => c.toBlob(r, 'image/webp', 82));
+  const blob = await new Promise(r => c.toBlob(r, 'image/webp', 80));
   const buf = new Uint8Array(await blob.arrayBuffer());
   let bin = '';
   for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
@@ -78,9 +101,9 @@ await browser.close();
 server.close();
 
 const { writeFileSync } = await import('node:fs');
-writeFileSync('public/poster-1.0.0.jpg', jpgB64);
-writeFileSync('public/poster-1.0.0.webp', Buffer.from(webpB64, 'base64'));
-for (const f of ['public/poster-1.0.0.webp', 'public/poster-1.0.0.jpg']) {
+writeFileSync('public/poster-2.0.0.jpg', jpgB64);
+writeFileSync('public/poster-2.0.0.webp', Buffer.from(webpB64, 'base64'));
+for (const f of ['public/poster-2.0.0.webp', 'public/poster-2.0.0.jpg']) {
   const kb = Math.round(statSync(f).size / 102.4) / 10;
   console.log(`${f}: ${kb} KB`);
   if (kb > 200) { console.error('poster over 200 KB budget'); process.exit(1); }

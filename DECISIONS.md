@@ -17,6 +17,13 @@
 | 13 | No Draco/Basis decoders; glTF loader removed | Ship them per template | Nothing in the project loads compressed models or textures; saves 1.7 MB per visit | 2026-10-27 |
 | 14 | Preview/test port 4175 (sub-path test 4185), no server reuse | Template default 4173 | Several repos' preview servers run on this machine; reuse let tests hit the wrong app | 2026-10-27 |
 | 15 | README evaluation notice says reviews and performance tests are "in progress" | Standard notice now | The standard notice states agent reviews are complete; switch to it once they have run | 2026-10-27 |
+| 16 | v2.0.0 adds a living layer ON TOP of the real terrain; the DTM, skirts and terrain tests are untouched | Re-sculpt or displace the terrain for close-range detail | The terrain is the evidence; close detail comes from separate props grounded on the mesh | 2026-10-29 |
+| 17 | Hero props (LM descent stage, LRV, flag) built procedurally from public-domain NASA Apollo 15 photographs | Download NASA 3D Resources models | No third-party model file was opened and licence-checked inside the time box; procedural props have no licence risk and merge to a few draw calls each | 2026-10-29 |
+| 18 | Two suited crew figures added (supersedes #11 for the scene; the learner view stays first-person) | Keep the site empty | Owner decision 5 (animated-movie characters) and §4.1 call for suited figures; they are labelled as the fictional future-mission crew, not the 1971 crew | 2026-10-29 |
+| 19 | No sky dome, no fog, no star twinkle, no flag flutter; dust falls ballistically | Use the shared v2 sky dome / fog defaults | No atmosphere on the Moon; the black sky is what the 1971 photographs show | 2026-10-29 |
+| 20 | Props grounded with the rendered mesh's own triangle heights (`meshHeightAt`), re-grounded on preset change | Bilinear DTM `elevationAt` | The mesh uses 20 m cells on Medium; bilinear heights left props floating or buried by up to a metre | 2026-10-29 |
+| 21 | Drag and arrow keys stay with the existing OrbitController; WASD pans the orbit target; the v2 manager only does hover, rings and glides | Hand the camera to the v2 walk controller | The site is kilometres wide (walk speed 3.8 m/s is useless) and every existing tool and test relies on the orbit camera | 2026-10-29 |
+| 22 | Shared v2 modules synced from object-detective (mergeStaticGroup, setEnabled) | Keep the older staged copies | The staged copies predated both functions the build needs | 2026-10-29 |
 
 ## Revision log (from Agent review, `evaluation/reviews/`)
 

@@ -1,16 +1,29 @@
 {
   "slug": "lunar-field-expedition",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "title": "Lunar Field Expedition",
   "format": "Hybrid",
   "niche": "Earth and space science, research skills",
   "audience": "Grades 9-12 earth/space science; intro undergraduate geology; EdTech learning designers; museums",
   "summary": "Land at the real Apollo 15 Hadley-Apennine site, rebuilt from NASA's LROC terrain data. Read the landscape under changing sunlight, compare surface ages with crater counts, plan a sampling traverse within EVA limits, and defend your findings in a claim-evidence-reasoning field report compared with the real Apollo 15 traverse.",
   "playTimeMinutes": 50,
-  "features": ["text-mode", "keyboard", "reduced-motion", "captions", "mobile-supported"],
+  "features": [
+    "text-mode",
+    "keyboard",
+    "reduced-motion",
+    "captions",
+    "mobile-supported"
+  ],
   "contentNotes": [],
   "permissions": [],
-  "poster": { "webp": "poster-1.0.0.webp", "jpg": "poster-1.0.0.jpg", "alt": "Low sun over the cratered lunar plain at the Apollo 15 site, rebuilt from NASA terrain data: rounded hills on the left, a long dark shadow across the ground on the right, and a black, star-dotted sky." },
+  "poster": {
+    "webp": "poster-2.0.0.webp",
+    "jpg": "poster-2.0.0.jpg",
+    "alt": "A suited crew member and a gold-foil Lunar Module descent stage on the grey plain at the Apollo 15 Hadley site, rebuilt from NASA terrain data, with a lunar rover nearby, boulders casting long morning shadows and a black, star-dotted sky."
+  },
   "repoUrl": "https://github.com/iwyusdaz/lunar-field-expedition",
-  "license": { "content": "CC BY 4.0", "code": "MIT" }
+  "license": {
+    "content": "CC BY 4.0",
+    "code": "MIT"
+  }
 }

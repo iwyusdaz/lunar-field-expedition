@@ -175,6 +175,8 @@ export class App {
     const ring = (id, label, x, z, scale, v) => {
       const r = world.addHotspotRing([x, site.meshHeightAt(x, z) + 0.05, z], { id, label, hint: 'Click to glide here', color: orange, ...v });
       r.scale.setScalar(scale);
+      // flat ring on sloped ground: draw the floor discs over the terrain, not through it
+      for (const m of r.children) if (m.geometry?.type !== 'OctahedronGeometry') { m.material.depthTest = false; m.renderOrder = 5; }
       return r;
     };
     ring('vp-lm', 'Viewpoint: landing site', L.x + 12, L.z + 10, 6, view(0, 3, 0.75, 0.66, 5, 26));

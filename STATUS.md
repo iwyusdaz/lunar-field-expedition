@@ -1,6 +1,23 @@
 # Status — lunar-field-expedition
 
-Last updated: 2026-10-27
+Last updated: 2026-10-29
+
+## v2.0.0 ("Hasselblad at Hadley") — status
+
+| Item | Status |
+|---|---|
+| Art bible, palette, three self-hosted fonts, Plain-font toggle | done — `design/art-bible.md`, `src/styles/case-fonts.css` |
+| Living site on the unchanged LROC terrain (boulders, LM, rover, flag, two crew) | done — `src/scenes/hadley-site.js`, `src/scenes/hadley-props.js` |
+| Ambient life (5 systems), calm mode during tasks, reduced motion stops it | done |
+| In-world interaction (viewpoint rings + glide, hover tooltips, WASD pan) with crater marking / sun slider / traverse parity | done |
+| Version bump, posters 2.0.0 from the real scene, showcase.json validates 2.0.0 | done |
+| Unit + browser + sub-path tests | see the latest commit message / CHANGELOG |
+| Draw calls (Module 2 site view, Medium, headless software WebGL) | 196 (budget ≤ 300) |
+| Headed GPU fps on Medium | pending |
+| Agent reviews of v2 + ≥ 5 revisions, trailer re-record | pending |
+| Tag v2.0.0 + showcase pin | pending (not tagged in this run) |
+
+## v1.0.0 status (kept for the record)
 
 ## Final Quality Checklist (plan 01 §14)
 

@@ -1,12 +1,12 @@
-> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. (The headed performance numbers were measured before the agent-review revisions; the orchestrator will re-run them.)
+> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. v2.0.0 (the living-site revamp) has passed the automated tests below; its headed GPU performance and a fresh round of agent reviews are still pending.
 
 # Lunar Field Expedition
 
 A 50-minute hybrid course and field game for grade 9–12 earth and space science (and intro undergraduate geology). Land at the real Apollo 15 Hadley–Apennine site, rebuilt from NASA's LROC terrain data. Read the landscape under changing sunlight, compare the ages of surfaces, plan a sampling traverse, and defend your findings in a claim-evidence-reasoning field report that you then compare with what the Apollo 15 crew actually did.
 
-**[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** (live once v1.0.0 is pinned in the showcase) · **[Design documents](design/)** · Role: Sole designer
+**[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** (live once v2.0.0 is pinned in the showcase) · **[Design documents](design/)** · Role: Sole designer
 
-![Low sun over the cratered lunar plain at the Apollo 15 site, rebuilt from NASA terrain data](public/poster-1.0.0.webp)
+![A suited crew member and a gold-foil Lunar Module descent stage on the grey plain at the Apollo 15 site, rebuilt from NASA terrain data, with a lunar rover nearby](public/poster-2.0.0.webp)
 
 The mission framing (you're part of a future field team revisiting Hadley) is **fictional**. All geology and Apollo 15 history are real and cited in [research/apollo15-facts.md](research/apollo15-facts.md). The EVA cost model and the sample cards are **simplified for teaching** and labeled that way in the app.
 
@@ -41,13 +41,14 @@ Arguing from evidence is a core science practice, but students rarely get to do 
 | Let the crater counts "disagree" with the sample ages | Pick patches that give the expected answer | The Front patch has far fewer craters than the mare (about 14 vs 85 per km² in the computer count) because steep slopes erase craters. Module 3 makes that disagreement the lesson: crater counting only works on flat, stable surfaces. |
 | Rubric self-check, no auto-grading of writing | Keyword scoring | Keyword scoring is unreliable and gives misleading feedback. The app checks that the required evidence *types* are cited and shows the rubric and an exemplar. |
 | Compare with the real Apollo 15 traverse | Fictional ending | Connects the learner's reasoning to what working scientists did |
-| No astronaut avatar; first-person view | Third-person avatar | Avoids extraneous detail and uncanny figures |
+| First-person view; two suited crew figures in the scene (v2.0.0) | Third-person avatar | The learner stays first-person. The crew are the fictional future-mission team, labelled as such, and calm down during tasks |
+| v2 living layer on top of the real terrain (boulders, LM, rover, flag, crew) | Re-sculpt the terrain | The DTM is the evidence and stays untouched; close-range detail is separate geometry grounded on it |
 
 Full list with dates: [DECISIONS.md](DECISIONS.md).
 
 ## Realism and cinematics: design rationale
 
-Realism is spent where it carries the content: terrain shape from the real DTM, real sun direction, and hard shadows, because low sun is what reveals relief. The regolith texture is medium detail; Earth and the stars are dimmed and only there for orientation; there are no avatars, dust particles or lens flares during tasks. This follows research showing realistic detail helps when it is task-relevant ([PMC study](https://pmc.ncbi.nlm.nih.gov/articles/PMC11269326/)) and that seductive details tend to hurt learning ([2025 meta-analysis](https://link.springer.com/content/pdf/10.1007/s10648-025-10099-z.pdf)).
+Realism is spent where it carries the content: terrain shape from the real DTM, real sun direction, and hard shadows, because low sun is what reveals relief. The regolith texture is medium detail; Earth and the stars are dimmed and only there for orientation; since v2.0.0 a living layer sits on top: Poly Haven CC0 boulders, a procedural Lunar Module descent stage, rover and flag, and two suited crew. Ambient motion (Earth turning, rover dust, crew walking) slows to about 30 % during module tasks and stops with reduced motion; there are no lens flares, no fog and no star twinkle (no atmosphere). Art direction: [design/art-bible.md](design/art-bible.md). This follows research showing realistic detail helps when it is task-relevant ([PMC study](https://pmc.ncbi.nlm.nih.gov/articles/PMC11269326/)) and that seductive details tend to hurt learning ([2025 meta-analysis](https://link.springer.com/content/pdf/10.1007/s10648-025-10099-z.pdf)).
 
 Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-second budget. Each is captioned, skippable from the first frame, and has a reduced-motion version (still frames with the same captions). None plays during an assessment. See [design/realism-matrix.md](design/realism-matrix.md) and [design/shot-list.md](design/shot-list.md).
 
@@ -55,10 +56,11 @@ Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-
 
 **What was measured** (details in [evaluation/METHODS.md](evaluation/METHODS.md)):
 - **Terrain accuracy:** rille depth at the site measured at 284 m from the DTM. Published values are about 370 m near the site and 180–270 m typical elsewhere, so that passes within the ±25% tolerance. Relief inside the play area is 932 m.
-- **47 unit tests:** the browser PNG heightmap decoder against the real terrain assets; sun and traverse cost models; learning record, evidence board and state; content integrity, including the cinematic budget.
+- **72 unit tests** (v2.0.0): the browser PNG heightmap decoder against the real terrain assets; sun and traverse cost models; learning record, evidence board and state; content integrity, including the cinematic budget.
 - **Browser tests:** a scripted playthrough of all five modules to the post-check; text-mode parity across all five modules; reduced-motion stills; header controls; an axe scan with zero critical or serious issues; the sub-path test at `/play/lunar-field-expedition/`.
 - **Fact check:** every Apollo 15 claim is traced in the research log, with a verification status (VERIFIED, VERIFIED-SNIPPET or DERIVED).
-- **Performance (headed, Apple M1):** 60 fps on every preset; 305k triangles and 2 draw calls on Medium; menu interactive in 0.2 s; 5.6 MB downloaded before the first interaction.
+- **Performance (headed, Apple M1, v1.0.0):** 60 fps on every preset; 305k triangles and 2 draw calls on Medium; menu interactive in 0.2 s; 5.6 MB downloaded before the first interaction.
+- **Performance (v2.0.0, headless software WebGL only):** 196 draw calls and about 570k triangles in the Module 2 site view on Medium (budget: ≤ 300 calls, ≤ 1.5 M triangles). Headed GPU frame rate not yet re-measured.
 - Agent-based design reviews are complete (see `evaluation/reviews/`); the revisions they produced are in `DECISIONS.md`.
 
 **What it can show:** the course works end to end in 3D and in text mode, by keyboard; the terrain's relief matches published values; the facts trace to sources.
@@ -96,5 +98,8 @@ three.js 0.186.1, Vite 8.3.5, GDAL 3.13.3 for the terrain pipeline, Vitest, Play
 Code: MIT ([LICENSE](LICENSE)). Learning content: CC BY 4.0 ([LICENSE-CONTENT](LICENSE-CONTENT)). NASA data and imagery and other third-party assets: [ATTRIBUTION.md](ATTRIBUTION.md).
 
 ## Trailer
+
+The trailer below was recorded from v1.0.0 and does not yet show the v2 living site.
+
 
 **Trailer:** [docs/trailer.webm](docs/trailer.webm) (55 s, captioned; WebVTT sidecar at [docs/trailer.vtt](docs/trailer.vtt)). Recorded from the real app on the Mac GPU; the caption text is also in the sidecar file.
