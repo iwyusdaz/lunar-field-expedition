@@ -30,6 +30,7 @@ function mulberry32(seed = 42) {
 }
 
 let _softParticleTex = null;
+const _sharedVec = new THREE.Vector3();
 function getSoftParticleTexture() {
   if (_softParticleTex) return _softParticleTex;
   if (typeof document === 'undefined') return null;
@@ -217,6 +218,10 @@ export class AmbientLifeManager {
       stopRadius: opts.stopRadius ?? 2.4,
       yOffset: opts.yOffset ?? 0,
     };
+    // Place the mover on its path immediately so reduced-motion (which pauses
+    // updates) never leaves it standing at the world origin.
+    mover.curve.getPointAt(mover.u, _sharedVec);
+    object3d.position.set(_sharedVec.x, _sharedVec.y + mover.yOffset, _sharedVec.z);
     this.splineMovers.push(mover);
     return mover;
   }
@@ -252,7 +257,8 @@ export class AmbientLifeManager {
    */
   update(dt = 0.016, camera = null) {
     const targetCalm = this.reducedMotion ? 0.0 : this.calm ? 0.30 : 1.0;
-    this.calmFactor = THREE.MathUtils.lerp(this.calmFactor, targetCalm, 0.08);
+    // Time-based convergence (frame-rate independent): settles in ~0.35 s.
+    this.calmFactor += (targetCalm - this.calmFactor) * (1 - Math.exp(-dt / 0.35));
     const effDt = dt * this.calmFactor;
     this.elapsed += effDt;
 
@@ -262,7 +268,7 @@ export class AmbientLifeManager {
       if (camera && c.state && !c.state.lookTarget && c.state.action === 'idle') {
         c.lookAtWorld(camera.position);
       }
-      c.update(dt, this.elapsed, Math.max(0.25, this.calmFactor));
+      c.update(dt, this.elapsed, this.calmFactor);
     }
 
     if (this.reducedMotion) return;

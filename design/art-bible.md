@@ -42,8 +42,8 @@ and outlines, not for body text.
 | Body | `--font-body` | IBM Plex Sans 400/600 | Instructions, tasks, controls |
 | Accent | `--font-accent` | IBM Plex Mono 400/600 | In-world tooltips, sample tags, telemetry |
 
-All self-hosted WOFF2 (SIL OFL 1.1, `font-display: swap`). Settings > Display >
-"Plain font" switches every role to the system sans-serif.
+All self-hosted WOFF2 (SIL OFL 1.1, `font-display: swap`). The header "Plain font"
+button (saved per browser) switches every role to the system sans-serif.
 
 ## 5. Models
 

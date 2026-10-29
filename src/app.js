@@ -39,6 +39,8 @@ import { EvidenceBoard } from './systems/evidence.js';
 import { AppState } from './systems/state.js';
 import { planAccounting } from './systems/traverse-model.js';
 import { patchTarget, resolveTarget } from './systems/poi-targets.js';
+import { applyCaseGrade, initFloatingHud } from './v2/cinematic-grade.js';
+import { InWorldInteractionManager } from './v2/in-world-interaction.js';
 
 const SLUG = window.__SLUG__ || 'lunar-field-expedition';
 window.__SLUG__ = SLUG;
@@ -69,10 +71,14 @@ export class App {
 
     const webgl = hasWebGL2();
     this._buildShellBase(); // creates #app canvas + task panel + POI (before Engine)
+    initFloatingHud({ slug: SLUG });
     if (webgl) {
       this.canvas = document.getElementById('app');
       this.engine = new Engine(this.canvas);
       window.__engine = this.engine;
+      // v2 grade: AgX + case exposure. Black sky: no dome, and no fog (no atmosphere).
+      applyCaseGrade(SLUG, { renderer: this.engine.renderer, scene: this.engine.scene, addSkyDome: false });
+      this.engine.scene.fog = null;
       this.input = new Input(this.canvas);
       this.orbit = new OrbitController(this.engine.camera, this.canvas);
       this.orbit.maxRadius = 12000; this.orbit.minRadius = 3;
@@ -103,9 +109,21 @@ export class App {
       this.globeScene.group.visible = false;
       this.site.group.visible = false;
       this.engine.quality.restore();
-      this.engine.onUpdate((dt) => {
-        if (this.activeScene === 'site') this.site.update();
-        else this.globeScene.update(dt, this.motion.reduced);
+      await this.site.buildLiving({ reducedMotion: this.motion.reduced });
+      this._buildInWorld();
+      this.motion.onChange((reduced) => {
+        this.site.setReducedMotion(reduced);
+        if (this.world) this.world.reducedMotion = reduced;
+      });
+      this.engine.onUpdate((dt, t) => {
+        if (this.activeScene === 'site') {
+          this.site.update(dt);
+          if (this.world) {
+            const gliding = Boolean(this.world.glide);
+            this.world.update(dt, t);
+            if (gliding && !this.world.glide) this._syncOrbitToCamera();
+          }
+        } else this.globeScene.update(dt, this.motion.reduced);
       });
     }
 
@@ -115,6 +133,103 @@ export class App {
     this._applySavedSettings();
     if (webgl) this.engine.start();
     this.showModule(this.state.state.module || this.moduleDefs[0].id, { resume: true });
+  }
+
+  // ---------- v2 in-world interaction ---------------------------------------------
+  /**
+   * Hover highlight + Plex Mono tooltip on the LM, rover, flag, crew and boulders;
+   * glowing viewpoint rings (landing-site close-ups and every station) that glide
+   * the camera. Drag-look and arrow keys stay with the OrbitController; WASD pans
+   * the orbit target. The crater-marking click handler is untouched.
+   */
+  _buildInWorld() {
+    const site = this.site;
+    const world = new InWorldInteractionManager({
+      canvas: this.canvas, camera: this.engine.camera, scene: site.v2,
+      bounds: [-1e7, 1e7, -1e7, 1e7], reducedMotion: this.motion.reduced,
+    });
+    // Orbit owns drag-look and arrow keys; the manager only does hover, rings and glides.
+    world._applyLookAngles = () => {};
+    world.keys = new Set();
+    world.keys.add = function add() { return this; };
+    this.world = world;
+    const L = site.lmPos;
+    const g = (dx, dz) => site.meshHeightAt(L.x + dx, L.z + dz);
+    const view = (dx, dz, ux, uz, h, dist) => {
+      // camera `dist` m from (dx,dz) along (ux,uz), `h` m above the ground there
+      const tx = L.x + dx, tz = L.z + dz, ty = g(dx, dz);
+      const cx = tx + ux * dist, cz = tz + uz * dist;
+      return { cameraPos: [cx, site.meshHeightAt(cx, cz) + h, cz], cameraTarget: [tx, ty + 1.6, tz] };
+    };
+    const orange = 0xe87722;
+    world.registerInteractive(site.lmProp, { id: 'lm', label: 'Lunar Module descent stage', hint: 'Click to glide closer', highlightColor: orange, ...view(0, 0, 0.8, 0.6, 3.5, 17) });
+    world.registerInteractive(site.rover, { id: 'rover', label: 'Lunar Roving Vehicle', hint: 'Click to watch it drive', highlightColor: orange, ...view(22, 0, -0.2, 1, 6, 24) });
+    world.registerInteractive(site.flag, { id: 'flag', label: 'Flag', hint: 'No air: it never flutters', highlightColor: orange, ...view(-9, 8, 0.7, 0.7, 1.8, 6) });
+    world.registerInteractive(site.crewA.root, { id: 'crew-a', label: 'Crew member A (fictional mission)', hint: 'Click to glide closer', highlightColor: orange, ...view(5.4, 3.2, 0.9, 0.4, 1.8, 6) });
+    world.registerInteractive(site.crewB.root, { id: 'crew-b', label: 'Crew member B (fictional mission)', hint: 'Walking to a viewpoint', highlightColor: orange, ...view(-11, 16, 0.6, -0.8, 2.2, 9) });
+    site.rocks.forEach((r, i) => {
+      const dx = r.position.x - L.x, dz = r.position.z - L.z;
+      world.registerInteractive(r, { id: `rock-${i}`, label: `Boulder ${i + 1} (${(r.userData.rockHeight || 0.5).toFixed(1)} m)`, hint: 'Click to inspect', highlightColor: orange, ...view(dx, dz, 0.6, 0.8, 1.6, 4) });
+    });
+    // Viewpoint rings: two landing-site close-ups (ring scaled x6) and one per station (x45)
+    const ring = (id, label, x, z, scale, v) => {
+      const r = world.addHotspotRing([x, site.meshHeightAt(x, z) + 0.05, z], { id, label, hint: 'Click to glide here', color: orange, ...v });
+      r.scale.setScalar(scale);
+      return r;
+    };
+    ring('vp-lm', 'Viewpoint: landing site', L.x + 12, L.z + 10, 6, view(0, 3, 0.75, 0.66, 5, 26));
+    ring('vp-front', 'Viewpoint: crew walk', L.x - 6, L.z + 20, 6, view(-8, 14, 0.2, 1, 4, 14));
+    for (const s of this.content.stations.stations.filter((x) => x.id !== 'lm')) {
+      const P = site.terrain.fromLonLat(s.lon, s.lat);
+      const y = site.meshHeightAt(P.xM, P.yM);
+      if (Number.isNaN(y)) continue;
+      const cx = P.xM + 160, cz = P.yM + 220;
+      ring(`vp-${s.id}`, `Station: ${s.name}`, P.xM, P.yM, 45, {
+        cameraPos: [cx, site.meshHeightAt(cx, cz) + 140, cz], cameraTarget: [P.xM, y, P.yM],
+      });
+    }
+    // WASD pans the orbit target across the ground (arrows keep rotating the view)
+    const pan = { KeyW: [0, -1], KeyS: [0, 1], KeyA: [-1, 0], KeyD: [1, 0] };
+    this.engine.onUpdate((dt) => {
+      if (this.activeScene !== 'site' || !this.world?.enabled || this.world.glide) return;
+      if (document.querySelector('dialog[open]') || !document.getElementById('textmode')?.hidden) return;
+      let fx = 0, fz = 0;
+      for (const [code, [px, pz]] of Object.entries(pan)) if (this.input.isDown(code)) { fx += px; fz += pz; }
+      if (!fx && !fz) return;
+      const th = this.orbit.spherical.theta;
+      const speed = Math.max(4, this.orbit.spherical.radius * 0.6) * dt;
+      // forward (W) = away from the camera, in the ground plane
+      const fwdX = -Math.sin(th), fwdZ = -Math.cos(th);
+      const rgtX = Math.cos(th), rgtZ = -Math.sin(th);
+      this.orbit.target.x += (fwdX * -fz + rgtX * fx) * speed;
+      this.orbit.target.z += (fwdZ * -fz + rgtZ * fx) * speed;
+      const y = this.site.meshHeightAt(this.orbit.target.x, this.orbit.target.z);
+      if (!Number.isNaN(y)) this.orbit.target.y = y;
+      this.orbit.update();
+    });
+  }
+
+  /** After a glide, hand the camera back to the OrbitController without a jump. */
+  _syncOrbitToCamera() {
+    const cam = this.engine.camera;
+    const t = this.world.target;
+    this.orbit.target.copy(t);
+    const off = cam.position.clone().sub(t);
+    const r = Math.max(this.orbit.minRadius, off.length());
+    this.orbit.spherical = {
+      radius: r,
+      theta: Math.atan2(off.x, off.z),
+      phi: THREE.MathUtils.clamp(Math.acos(THREE.MathUtils.clamp(off.y / r, -1, 1)), this.orbit.minPhi, this.orbit.maxPhi),
+    };
+    this.orbit.update();
+  }
+
+  /** Calm mode during focused module tasks; in-world clicks off while the canvas is a tool. */
+  _syncWorldForStep(step) {
+    const focused = step && !['brief', 'cinematic', 'debrief', 'globe'].includes(step.kind);
+    this.site?.setCalmMode(Boolean(focused));
+    this.world?.setCalmMode(Boolean(focused));
+    this.world?.setEnabled(!step || !['crater-counter', 'profile-tool'].includes(step.kind));
   }
 
   // ---------- shell -----------------------------------------------------------
@@ -242,6 +357,7 @@ export class App {
     }
     const step = this.stepQueue[this.stepPtr];
     this.currentStep = step;
+    this._syncWorldForStep(step);
     this.stepContainer.innerHTML = '';
     const renderer = this._renderers[step.kind];
     if (!renderer) {
@@ -275,6 +391,7 @@ export class App {
   }
 
   _moduleComplete() {
+    this._syncWorldForStep(null);
     this.record.log('completed', { id: `module-${this.currentModuleId()}`, name: this.moduleDefs[this.moduleIndex].title });
     const wrap = document.createElement('div');
     wrap.className = 'module-complete';

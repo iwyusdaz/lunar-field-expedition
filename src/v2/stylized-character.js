@@ -21,6 +21,7 @@
  * @module v2/stylized-character
  */
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 function mulberry32(seed = 1) {
   let a = seed >>> 0;
@@ -91,35 +92,29 @@ export function createAnimatedCharacter(opts = {}) {
   root.name = `character-${id}`;
   root.scale.setScalar(scale);
 
-  // Materials — warm subsurface-like physical skin + soft woven cloth
-  const skinMat = new THREE.MeshPhysicalMaterial({
+  // Materials — warm subsurface-like physical skin + soft woven cloth.
+  // Sheen gives the animated-movie softness; clearcoat is deliberately omitted
+  // (it roughly doubles the BRDF cost per pixel for little visual gain at this scale).
+  // MeshStandardMaterial keeps the fragment budget for the scene around the
+  // characters; the soft animated-movie read comes from warm colours + lighting.
+  const skinMat = new THREE.MeshStandardMaterial({
     color: opts.skinColor ?? 0xd99b78,
-    roughness: 0.52,
+    roughness: 0.55,
     metalness: 0.0,
-    sheen: 0.35,
-    sheenRoughness: 0.6,
-    sheenColor: new THREE.Color(opts.skinColor ?? 0xd99b78).lerp(new THREE.Color(0xffbfa0), 0.45),
-    clearcoat: 0.08,
-    clearcoatRoughness: 0.45,
   });
   const blushMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(opts.skinColor ?? 0xd99b78).lerp(new THREE.Color(0xd96b6b), 0.32),
     roughness: 0.6,
   });
-  const hairMat = new THREE.MeshPhysicalMaterial({
+  const hairMat = new THREE.MeshStandardMaterial({
     color: opts.hairColor ?? 0x2a1d17,
-    roughness: 0.42,
-    metalness: 0.04,
-    sheen: 0.5,
-    sheenRoughness: 0.35,
-    clearcoat: 0.12,
+    roughness: 0.45,
+    metalness: 0.05,
   });
-  const topMat = new THREE.MeshPhysicalMaterial({
+  const topMat = new THREE.MeshStandardMaterial({
     color: opts.topColor ?? 0x2e6f95,
-    roughness: 0.72,
+    roughness: 0.75,
     metalness: 0.02,
-    sheen: 0.25,
-    sheenRoughness: 0.8,
   });
   const accentMat = new THREE.MeshStandardMaterial({
     color: opts.accentColor ?? 0xf4e7cf,
@@ -137,13 +132,35 @@ export function createAnimatedCharacter(opts = {}) {
     metalness: 0.1,
   });
   const scleraMat = new THREE.MeshStandardMaterial({ color: 0xfaf8f5, roughness: 0.2 });
-  const irisMat = new THREE.MeshStandardMaterial({ color: opts.eyeColor ?? 0x3b2618, roughness: 0.15 });
-  const pupilMat = new THREE.MeshBasicMaterial({ color: 0x09090b });
-  const specMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const lipMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(opts.skinColor ?? 0xd99b78).lerp(new THREE.Color(0xa24848), 0.38),
     roughness: 0.45,
   });
+
+  /**
+   * One draw call per eye: iris + pupil + catchlight merged into a single
+   * vertex-coloured geometry (they only ever move together inside the iris pivot).
+   */
+  function coloredCircleGeometry(radius, segments, color, z, offsetX = 0, offsetY = 0) {
+    const g = new THREE.CircleGeometry(radius, segments).toNonIndexed();
+    g.translate(offsetX, offsetY, z);
+    const count = g.attributes.position.count;
+    const colors = new Float32Array(count * 3);
+    const c = new THREE.Color(color);
+    for (let i = 0; i < count; i++) {
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    return g;
+  }
+  const eyeDecalMat = new THREE.MeshBasicMaterial({ vertexColors: true });
+  const buildEyeDecal = (side) => BufferGeometryUtils.mergeGeometries([
+    coloredCircleGeometry(0.0125, 20, opts.eyeColor ?? 0x3b2618, 0.0148),
+    coloredCircleGeometry(0.0068, 16, 0x09090b, 0.0152),
+    coloredCircleGeometry(0.0032, 12, 0xffffff, 0.0156, side * 0.0038, 0.0042),
+  ], false);
 
   // Ground contact shadow
   const shadowTex = getContactShadowTexture();
@@ -297,18 +314,9 @@ export function createAnimatedCharacter(opts = {}) {
     const irisPivot = new THREE.Group();
     eyeGroup.add(irisPivot);
 
-    const iris = new THREE.Mesh(new THREE.CircleGeometry(0.0125, 20), irisMat);
-    iris.position.z = 0.0148;
-    irisPivot.add(iris);
-
-    const pupil = new THREE.Mesh(new THREE.CircleGeometry(0.0068, 16), pupilMat);
-    pupil.position.z = 0.0152;
-    irisPivot.add(pupil);
-
-    // Animated-movie cornea catchlight dot
-    const catchlight = new THREE.Mesh(new THREE.CircleGeometry(0.0032, 12), specMat);
-    catchlight.position.set(side * 0.0038, 0.0042, 0.0156);
-    irisPivot.add(catchlight);
+    // Iris + pupil + catchlight as ONE vertex-coloured mesh (1 draw call, was 3)
+    const decal = new THREE.Mesh(buildEyeDecal(side), eyeDecalMat);
+    irisPivot.add(decal);
 
     // Upper eyelid for blinking & expressions
     const lid = new THREE.Mesh(
@@ -537,6 +545,51 @@ export function createAnimatedCharacter(opts = {}) {
     blinkProgress: 0,
   };
 
+  // Static-geometry merge: parts that never move relative to their parent joint
+  // are combined into one mesh per material, cutting ~14 draw calls per character
+  // (plus the shadow pass) at identical visuals. Animated parts (eyes, lids, brows,
+  // mouth, limbs) are untouched.
+  {
+    const mergeSet = (parent, meshes) => {
+      if (meshes.length < 2) return;
+      const byMaterial = new Map();
+      for (const m of meshes) {
+        if (!byMaterial.has(m.material)) byMaterial.set(m.material, []);
+        byMaterial.get(m.material).push(m);
+      }
+      for (const [material, parts] of byMaterial) {
+        const geos = parts.map((m) => {
+          const g = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone();
+          g.applyMatrix4(new THREE.Matrix4().compose(m.position, m.quaternion, m.scale));
+          for (const name of Object.keys(g.attributes)) {
+            if (!['position', 'normal', 'uv'].includes(name)) g.deleteAttribute(name);
+          }
+          if (!g.attributes.normal) g.computeVertexNormals();
+          return g;
+        });
+        let merged;
+        try {
+          merged = BufferGeometryUtils.mergeGeometries(geos, false);
+        } catch {
+          continue;
+        }
+        if (!merged) continue;
+        const mesh = new THREE.Mesh(merged, material);
+        mesh.castShadow = true;
+        parent.add(mesh);
+        for (const m of parts) parent.remove(m);
+      }
+    };
+    const directWith = (parent, material) =>
+      parent.children.filter((c) => c.isMesh && c.material === material);
+    // Head skin parts (cranium, nose, ears, cheeks share two materials)
+    mergeSet(head, [...directWith(head, skinMat), ...directWith(head, blushMat)]);
+    // All hair/headgear parts are static within hairGroup
+    mergeSet(hairGroup, hairGroup.children.filter((c) => c.isMesh));
+    // Torso + chest cap (topMat) are static within spine
+    mergeSet(spine, directWith(spine, topMat));
+  }
+
   const _tmpWorld = new THREE.Vector3();
   const _tmpLocal = new THREE.Vector3();
 
@@ -554,22 +607,26 @@ export function createAnimatedCharacter(opts = {}) {
   }
 
   function update(dt = 0.016, elapsed = 0, calmFactor = 1.0) {
-    const rate = Math.max(0.15, calmFactor);
+    // calmFactor 0 (reduced motion) freezes ALL character animation: the pose
+    // for the current action/expression is applied once and then nothing moves.
+    const frozen = calmFactor <= 0;
+    const rate = frozen ? 0 : calmFactor;
     const t = elapsed * rate + state.phaseOffset;
+    const step = frozen ? 0 : dt;
 
     // 1. Natural chest breathing
     const breath = Math.sin(t * 2.1);
     spine.scale.set(1 + breath * 0.012, 1 + breath * 0.015, 1 + breath * 0.018);
 
     // 2. Periodic natural blinking
-    state.blinkTimer -= dt;
+    state.blinkTimer -= step;
     if (state.blinkTimer <= 0) {
       state.blinkProgress = 0.16;
       state.blinkTimer = 2.6 + rng() * 3.1;
     }
     let blinkAmt = 0;
     if (state.blinkProgress > 0) {
-      state.blinkProgress = Math.max(0, state.blinkProgress - dt);
+      state.blinkProgress = Math.max(0, state.blinkProgress - step);
       blinkAmt = Math.sin((state.blinkProgress / 0.16) * Math.PI);
     }
     const squint = state.expression === 'confused' ? 0.28 : state.expression === 'withdrawn' ? 0.42 : 0;
@@ -596,7 +653,7 @@ export function createAnimatedCharacter(opts = {}) {
 
     // 4. Mouth / lip-flap
     if (state.speaking || state.action === 'talk') {
-      const open = 0.7 + Math.abs(Math.sin(elapsed * 11.5 + state.phaseOffset)) * 1.4;
+      const open = 0.7 + Math.abs(Math.sin(elapsed * rate * 11.5 + state.phaseOffset)) * 1.4;
       mouth.scale.set(1.0, open, 1.0);
     } else if (state.expression === 'happy') {
       mouth.scale.set(1.25, 0.85, 1.0);

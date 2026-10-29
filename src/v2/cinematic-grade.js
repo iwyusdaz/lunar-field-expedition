@@ -14,7 +14,106 @@
  * @module v2/cinematic-grade
  */
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { getContactShadowTexture } from './stylized-character.js';
+
+/**
+ * Merge all descendant meshes of a STATIC scene group into one mesh per material.
+ * Use it on architecture and set dressing (walls, floors, furniture, props) that
+ * never moves — a room built from 100+ small meshes renders in ~10 draw calls
+ * after merging, which is what keeps Medium inside the 300-draw-call budget.
+ * Animated children (characters, particles, rings) must NOT live in this group.
+ * Returns the number of source meshes merged into the group; untouched children
+ * keep their transforms. Containers kept as-is (wrappers, empties, lights) lose
+ * the descendants that were merged — otherwise the merged geometry would draw twice.
+ */
+export function mergeStaticGroup(group) {
+  if (!group) return 0;
+  group.updateMatrixWorld(true);
+  const groupInverse = new THREE.Matrix4().copy(group.matrixWorld).invert();
+  const byMaterial = new Map();
+  const animated = [];
+  const mergedNodes = new Set();
+
+  // Manual walk (instead of traverse()) so whole subtrees can opt out with
+  // `userData.v2NoMerge` — animated wrappers like bobbing boats and swinging
+  // pendant lamps keep their meshes, otherwise they would be merged away and
+  // their oscillators would animate empty groups. Sign planes (canvas textures
+  // that act as raycast/hover targets) and InstancedMeshes are kept whole too.
+  const collect = (node) => {
+    for (const child of node.children) {
+      if (child.userData?.v2NoMerge) { animated.push(child); continue; }
+      if (!child.isMesh || child.isSkinnedMesh || child.isInstancedMesh
+          || child.userData?.sign || Array.isArray(child.material)) {
+        animated.push(child);
+      } else {
+        const geom = child.geometry;
+        if (!geom || (geom.morphAttributes && Object.keys(geom.morphAttributes).length)) {
+          animated.push(child);
+        } else {
+          if (!byMaterial.has(child.material)) byMaterial.set(child.material, []);
+          byMaterial.get(child.material).push(child);
+        }
+      }
+      collect(child);
+    }
+  };
+  collect(group);
+  if (byMaterial.size === 0) return 0;
+
+  const KEEP = ['position', 'normal', 'uv'];
+  let mergedCount = 0;
+  const mergedRoot = new THREE.Group();
+  mergedRoot.name = `${group.name || 'static'}-merged`;
+  for (const [material, nodes] of byMaterial) {
+    const geos = nodes.map((mesh) => {
+      const g = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+      g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(groupInverse, mesh.matrixWorld));
+      for (const name of Object.keys(g.attributes)) {
+        if (!KEEP.includes(name)) g.deleteAttribute(name);
+      }
+      if (!g.attributes.normal) g.computeVertexNormals();
+      return g;
+    });
+    for (const name of [...KEEP]) {
+      if (!geos.every((g) => g.attributes[name])) {
+        for (const g of geos) g.deleteAttribute(name);
+      }
+    }
+    let merged;
+    try {
+      merged = geos.length === 1 ? geos[0] : BufferGeometryUtils.mergeGeometries(geos, false);
+    } catch {
+      animated.push(...nodes);
+      continue;
+    }
+    if (!merged) { animated.push(...nodes); continue; }
+    const mesh = new THREE.Mesh(merged, material);
+    mesh.name = `merged-${material.uuid.slice(0, 8)}`;
+    mesh.castShadow = nodes.some((n) => n.castShadow);
+    mesh.receiveShadow = true;
+    mergedRoot.add(mesh);
+    for (const n of nodes) mergedNodes.add(n);
+    mergedCount += nodes.length;
+  }
+  for (const node of animated) {
+    // Containers kept as-is (prop wrappers, empties, lights) must NOT keep the
+    // descendants we just merged: their geometry already lives in the merged
+    // meshes, so leaving the originals attached would draw everything twice.
+    const drop = [];
+    node.traverse((d) => { if (d !== node && mergedNodes.has(d)) drop.push(d); });
+    for (const d of drop) d.removeFromParent();
+    node.updateMatrixWorld(true);
+    const relative = new THREE.Matrix4().multiplyMatrices(groupInverse, node.matrixWorld);
+    node.matrix.copy(relative);
+    node.matrix.decompose(node.position, node.quaternion, node.scale);
+    node.matrixWorldNeedsUpdate = true;
+    mergedRoot.add(node);
+  }
+  group.clear();
+  group.add(mergedRoot);
+  return mergedCount;
+}
 
 export const CASE_THEMES = {
   'lunar-field-expedition': {
@@ -261,9 +360,17 @@ export function createGradientSkyDome(opts = {}) {
  */
 export function groundProp(object3d, opts = {}) {
   if (!object3d) return object3d;
+  // Small props rely on their contact-shadow disc for grounding; reserving
+  // real shadow casting for large props keeps the shadow pass cheap.
+  let castsShadows = opts.castShadow !== false;
+  if (castsShadows && opts.minShadowSize) {
+    const size = new THREE.Vector3();
+    new THREE.Box3().setFromObject(object3d).getSize(size);
+    castsShadows = Math.max(size.x, size.y, size.z) >= opts.minShadowSize;
+  }
   object3d.traverse((c) => {
     if (c.isMesh) {
-      c.castShadow = opts.castShadow !== false;
+      c.castShadow = castsShadows;
       c.receiveShadow = opts.receiveShadow !== false;
       if (c.material && 'envMapIntensity' in c.material) {
         c.material.envMapIntensity = opts.envMapIntensity ?? 1.15;

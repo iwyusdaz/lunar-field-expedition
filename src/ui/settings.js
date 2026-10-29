@@ -32,7 +32,6 @@ export class Settings {
       contrast: 'normal',
       captions: true,
       fov: 60,
-      plainFont: false,
     };
     try { Object.assign(d, JSON.parse(localStorage.getItem(`${this.slug}:settings`) || '{}')); } catch { /* ignore */ }
     // older saves carried audio settings for audio that never existed
@@ -75,7 +74,6 @@ export class Settings {
               <option value="high">High contrast</option>
             </select>
           </label>
-          <label><input type="checkbox" id="set-plainfont" ${this.state.plainFont ? 'checked' : ''}> Plain font (system sans-serif everywhere)</label>
           <label>Field of view (comfort) <output id="set-fov-out">${this.state.fov}°</output>
             <input type="range" id="set-fov" min="40" max="90" step="5" value="${this.state.fov}">
           </label>
@@ -112,7 +110,6 @@ export class Settings {
       this.state.contrast = $('select#set-contrast').value;
       this.state.captions = $('input#set-captions').checked;
       this.state.fov = parseFloat($('input#set-fov').value);
-      this.state.plainFont = $('input#set-plainfont').checked;
       if (this.motion) this.motion.setToggle($('input#set-motion').checked);
       this.save();
       this._apply();
@@ -124,7 +121,6 @@ export class Settings {
     const root = document.documentElement;
     root.dataset.textSize = this.state.textSize;
     root.dataset.contrast = this.state.contrast;
-    root.dataset.plainFont = this.state.plainFont ? 'on' : 'off';
     // read by CSS: [data-captions="off"] .cinematic-caption { display: none }
     root.dataset.captions = this.state.captions ? 'on' : 'off';
     this.onFov?.(this.state.fov);

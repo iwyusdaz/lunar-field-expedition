@@ -10,6 +10,10 @@ import * as THREE from 'three';
 import { TerrainField } from './terrain.js';
 import { loadTexture } from '../core/assets.js';
 import { sunDirection } from '../systems/sun-model.js';
+import { AmbientLifeManager } from '../v2/ambient-life.js';
+import { createAnimatedCharacter } from '../v2/stylized-character.js';
+import { ModelLibrary } from '../v2/model-placer.js';
+import { buildLunarModule, buildRover, buildFlag, createDustBurst } from './hadley-props.js';
 
 const BASE = import.meta.env.BASE_URL || './';
 
@@ -142,6 +146,14 @@ export class HadleySite {
     const focus = cam.position.clone().addScaledVector(t, Math.min(1500, cam.position.distanceTo(this._target)));
     focus.y = this.terrain.ready ? this.terrain.elevationAt(focus.x, focus.z) || focus.y - 50 : focus.y - 50;
     this._target.copy(focus);
+    // Close to the ground (crew/LM views) the 2.6 km shadow frustum gives ~1.3 m
+    // texels; shrink it with camera distance so props cast crisp shadows.
+    const half = THREE.MathUtils.clamp(cam.position.distanceTo(focus) * 1.4, 60, 1300);
+    const sc = this.sun.shadow.camera;
+    if (Math.abs(sc.right - half) > half * 0.15) {
+      sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half;
+      sc.updateProjectionMatrix();
+    }
     this.setSun(this._sun.elevationDeg, this._sun.azimuthDeg);
   }
 
@@ -157,6 +169,7 @@ export class HadleySite {
     if (this.terrain.ready) {
       this.terrain.setQuality(this.quality.name);
       if (this.quality.name === 'low') this.terrain.useCoarseNormalMap();
+      this._groundAll?.();
     }
     this.stars.visible = true;
     this.engine.camera.far = 20000;
@@ -218,7 +231,206 @@ export class HadleySite {
     }
   }
 
-  update() { this.frame(); }
+  update(dt = 0.016) {
+    this.frame();
+    if (this.life) this.life.update(dt, this.engine.camera);
+  }
+
+  // ---------- v2.0.0 living site ---------------------------------------------------
+
+  /**
+   * Exact height of the rendered terrain mesh at (x, z): bilinear on the DTM is
+   * not the same surface as the triangulated mesh (20 m cells on Medium), so
+   * props grounded with elevationAt() would float or sink by up to a metre.
+   * This follows the mesh's own triangle split (a,c,b / b,c,d).
+   */
+  meshHeightAt(x, z) {
+    const g = this.terrain.grid;
+    const step = this.terrain._currentStep || 2;
+    if (!g) return NaN;
+    const cell = step * g.mPerPx;
+    const ix = Math.floor(x / cell), iy = Math.floor(z / cell);
+    const fx = x / cell - ix, fz = z / cell - iy;
+    const at = (cx, cy) => g.data[Math.min(g.height - 1, Math.max(0, cy * step)) * g.width + Math.min(g.width - 1, Math.max(0, cx * step))];
+    const a = at(ix, iy), b = at(ix + 1, iy), c = at(ix, iy + 1), d = at(ix + 1, iy + 1);
+    if (fx + fz <= 1) return a + (b - a) * fx + (c - a) * fz;
+    return d + (c - d) * (1 - fx) + (b - d) * (1 - fz);
+  }
+
+  /** Landing-site position in world metres (fixed; `_target` follows the camera). */
+  get lmPos() { return this._lm; }
+
+  /**
+   * Build the close-range living layer around the landing site: Poly Haven boulders,
+   * procedural LM descent stage / rover / flag, two suited crew and ambient life.
+   * Everything sits ON the real terrain (grounded to the mesh); the DTM is untouched.
+   * @param {{ reducedMotion?: boolean }} [opts]
+   */
+  async buildLiving({ reducedMotion = false } = {}) {
+    const lm = this.terrain.fromLonLat(3.6333, 26.13239);
+    this._lm = new THREE.Vector3(lm.xM, 0, lm.yM);
+    const v2 = new THREE.Group();
+    v2.name = 'v2-living-site';
+    this.v2 = v2;
+    this.group.add(v2);
+    this._grounded = [];
+    const L = this._lm;
+    const put = (obj, dx, dz, sink = 0) => {
+      obj.position.set(L.x + dx, 0, L.z + dz);
+      this._grounded.push({ obj, sink });
+      v2.add(obj);
+      return obj;
+    };
+
+    this.lmProp = put(buildLunarModule(), 0, 0, 0.05);
+    this.lmProp.rotation.y = 0.35;
+    this.flag = put(buildFlag(), -9, 8, 0.25);
+    this.flag.rotation.y = -0.6;
+    const rover = buildRover();
+    this.rover = put(rover.group, 30, 0, 0);
+    this.roverWheels = rover.wheels;
+
+    // Crew (future-mission field team, consistent with the fictional-mission label)
+    const suit = {
+      outfit: 'spacesuit', hairStyle: 'helmet', height: 1.86,
+      topColor: 0xeceae4, bottomColor: 0xe2dfd8, shoeColor: 0xc9c4ba,
+      skinColor: 0xe6e2da, accentColor: 0xd9d4ca,
+    };
+    this.crewA = createAnimatedCharacter({ ...suit, id: 'crew-a', name: 'Crew member A' });
+    put(this.crewA.root, 5.4, 3.2, 0.02);
+    this.crewA.root.rotation.y = 2.2;
+    this.crewB = createAnimatedCharacter({ ...suit, id: 'crew-b', name: 'Crew member B', accentColor: 0xb22234 });
+    put(this.crewB.root, 4, 5, 0.02);
+
+    this._groundAll();
+
+    // Ambient life
+    this.life = new AmbientLifeManager(v2, { reducedMotion, seed: 1971 });
+    this.life.addCharacter(this.crewA);
+    this.life.addCharacter(this.crewB);
+    this.life.addOscillator(this.earth, { mode: 'spin', axis: 'y', amplitude: 0.025 });
+    this.life.addSplineMover(this.rover, _loop(L.x + 22, L.z, 9, 10), {
+      closed: true, speed: 2.2, wheels: this.roverWheels, stopRadius: 0, startU: 0.5,
+    });
+    this.dust = createDustBurst(180);
+    v2.add(this.dust.points);
+    const ground = (x, z) => this.meshHeightAt(x, z);
+    const back = new THREE.Vector3();
+    let emitAcc = 0;
+    const prevRover = this.rover.position.clone();
+    this.life.addUpdater((dt) => {
+      // rover follows the mesh surface; rear wheels throw ballistic dust while it moves
+      const r = this.rover.position;
+      r.y = ground(r.x, r.z);
+      const moved = Math.hypot(r.x - prevRover.x, r.z - prevRover.z);
+      prevRover.copy(r);
+      emitAcc += moved * 6;
+      if (emitAcc >= 1) {
+        for (const w of [this.roverWheels[2], this.roverWheels[3]]) {
+          w.getWorldPosition(back);
+          back.sub(v2.position);
+          back.y = ground(back.x, back.z);
+          this.dust.emit(back, Math.floor(emitAcc / 2) + 1, this.life.rng);
+        }
+        emitAcc = 0;
+      }
+      this.dust.update(dt, ground);
+    });
+    this._buildWalker(ground);
+
+    // Close-range boulders (Poly Haven CC0), grounded and varied
+    this.rocks = [];
+    this.models = new ModelLibrary();
+    const ids = ['moon_rock_01', 'moon_rock_02', 'moon_rock_03'];
+    const rng = this.life.rng;
+    const spots = [];
+    let guard = 0;
+    while (spots.length < 12 && guard++ < 200) {
+      const ang = rng() * Math.PI * 2, rad = 7 + rng() * 38;
+      const dx = Math.cos(ang) * rad, dz = Math.sin(ang) * rad;
+      const dRover = Math.hypot(dx - 22, dz);
+      if (dRover > 6 && dRover < 13) continue; // keep the rover loop clear
+      if (Math.hypot(dx + 4.5, dz - 10.5) < 5) continue; // and the crew walk
+      spots.push([dx, dz]);
+    }
+    await Promise.all(spots.map(async ([dx, dz], i) => {
+      const h = 0.3 + Math.pow(rng(), 2) * 1.3;
+      const w = await this.models.place(v2, ids[i % 3], { targetHeight: h, rotationY: rng() * Math.PI * 2, position: [L.x + dx, 0, L.z + dz] });
+      if (!w) return;
+      w.traverse((c) => { if (c.isMesh && c.name !== 'v2-contact-shadow') c.material = c.material.clone(); });
+      w.rotation.x = (rng() - 0.5) * 0.25;
+      w.userData.rockHeight = h;
+      this._grounded.push({ obj: w, sink: h * 0.18 });
+      this.rocks.push(w);
+    }));
+    this._groundAll();
+    return this;
+  }
+
+  /** Crew member B walks a short path to a viewpoint, points at the Front, walks back. */
+  _buildWalker(ground) {
+    const L = this._lm;
+    const pts = [[4, 5], [1, 9], [-3, 12], [-7, 15], [-11, 16]].map(([dx, dz]) => new THREE.Vector3(L.x + dx, 0, L.z + dz));
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const len = curve.getLength();
+    const st = { phase: 'walk', u: 0, dir: 1, hold: 0 };
+    const p = new THREE.Vector3(), t = new THREE.Vector3();
+    const c = this.crewB;
+    this._walker = st;
+    const place = () => {
+      curve.getPointAt(st.u, p);
+      curve.getTangentAt(st.u, t);
+      if (st.dir < 0) t.negate();
+      c.root.position.set(p.x, ground(p.x, p.z) - 0.02, p.z);
+      c.root.rotation.y = Math.atan2(t.x, t.z);
+    };
+    place();
+    c.setAction('walk');
+    this.life.addUpdater((dt) => {
+      if (st.phase === 'walk') {
+        st.u += (st.dir * 0.85 * dt) / len;
+        if (st.u >= 1 || st.u <= 0) {
+          st.u = THREE.MathUtils.clamp(st.u, 0, 1);
+          st.phase = st.dir > 0 ? 'point' : 'rest';
+          st.hold = st.dir > 0 ? 6 : 4;
+          c.setAction(st.dir > 0 ? 'point' : 'idle');
+          if (st.dir > 0) c.root.rotation.y = 2.6; // face south-east, toward the Apennine Front
+          return;
+        }
+        place();
+      } else {
+        st.hold -= dt;
+        if (st.hold <= 0) {
+          st.dir = st.phase === 'point' ? -1 : 1;
+          st.phase = 'walk';
+          c.setAction('walk');
+          place();
+        }
+      }
+    });
+  }
+
+  /** Re-ground every v2 prop on the current mesh (the mesh is rebuilt per preset). */
+  _groundAll() {
+    for (const { obj, sink } of this._grounded || []) {
+      const y = this.meshHeightAt(obj.position.x, obj.position.z);
+      if (!Number.isNaN(y)) obj.position.y = y - sink;
+    }
+  }
+
+  setCalmMode(on) { this.life?.setCalmMode(on); }
+
+  setReducedMotion(on) { this.life?.setReducedMotion(on); }
+}
+
+/** Closed elliptical loop (rover drive) as CatmullRom waypoints. */
+function _loop(cx, cz, rx, rz, n = 10) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    out.push(new THREE.Vector3(cx + Math.cos(a) * rx, 0, cz + Math.sin(a) * rz));
+  }
+  return out;
 }
 
 function _discTexture(color, intensity) {
