@@ -9,10 +9,24 @@ describe('v2 Hadley hero props', () => {
     const lm = buildLunarModule();
     expect(meshCount(lm)).toBeLessThanOrEqual(6);
     const size = new THREE.Box3().setFromObject(lm).getSize(new THREE.Vector3());
-    const diagonal = size.x * Math.SQRT2; // legs sit on the diagonals
-    expect(diagonal).toBeGreaterThan(9);
-    expect(diagonal).toBeLessThan(10.5);
+    // legs sit on the axes (mid long sides of the octagonal stage, as on the real
+    // LM), so the footpad-to-footpad span is the box width on both x and z
+    for (const span of [size.x, size.z]) {
+      expect(span).toBeGreaterThan(9);
+      expect(span).toBeLessThan(10.5);
+    }
     expect(size.y).toBeGreaterThan(2.5);
+  });
+
+  it('rover dust can be cleared at once (no grains left hanging when motion freezes)', () => {
+    const d = createDustBurst(20);
+    d.emit(new THREE.Vector3(0, 0, 0), 10, () => 0.5);
+    d.update(0.1, () => 0);
+    expect(d.live).toBe(10);
+    d.clear();
+    expect(d.live).toBe(0);
+    d.update(0.1, () => 0);
+    expect(d.live).toBe(0);
   });
 
   it('rover keeps four separate wheels (they turn) and a merged body', () => {

@@ -318,7 +318,11 @@ export class HadleySite {
     const back = new THREE.Vector3();
     let emitAcc = 0;
     const prevRover = this.rover.position.clone();
-    this.life.addUpdater((dt) => {
+    this.dust.points.visible = !reducedMotion; // frozen grains would hang mid-air (M-2)
+    const dustBase = this.dust.points.material.opacity;
+    this.life.addUpdater((dt, _t, calm = 1) => {
+      // calm mode dims the dust with the rest of the ambient motion (M-1)
+      this.dust.points.material.opacity = dustBase * (0.2 + 0.8 * calm);
       // rover follows the mesh surface; rear wheels throw ballistic dust while it moves
       const r = this.rover.position;
       r.y = ground(r.x, r.z);
@@ -420,7 +424,15 @@ export class HadleySite {
 
   setCalmMode(on) { this.life?.setCalmMode(on); }
 
-  setReducedMotion(on) { this.life?.setReducedMotion(on); }
+  setReducedMotion(on) {
+    this.life?.setReducedMotion(on);
+    // Ambient updates stop under reduced motion, so in-flight dust would freeze
+    // in mid-air: drop it and hide the points until motion resumes (M-2).
+    if (this.dust) {
+      if (on) this.dust.clear();
+      this.dust.points.visible = !on;
+    }
+  }
 }
 
 /** Closed elliptical loop (rover drive) as CatmullRom waypoints. */

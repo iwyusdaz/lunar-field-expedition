@@ -32,86 +32,167 @@ function shadowed(group) {
   return group;
 }
 
+/** Irregular octagon (long sides on the axes, short clipped corners) in the xz plane. */
+const LM_HALF = 2.1; // apothem of the long sides (m): ~4.2 m across the flats
+const LM_CORNER = 0.95; // half-length of a long side; short diagonal sides join them
+function lmOutline() {
+  const A = LM_HALF, B = LM_CORNER;
+  // counter-clockwise, starting on the +z long side
+  return [[-B, A], [B, A], [A, B], [A, -B], [B, -A], [-B, -A], [-A, -B], [-A, B]];
+}
+
+/** Octagonal prism from the outline, `h` tall, base at y0. */
+function lmPrism(h, y0, inset, material) {
+  const shape = new THREE.Shape();
+  lmOutline().forEach(([x, z], i) => {
+    const s = 1 - inset;
+    // Shape is in xy; after rotateX(-PI/2) shape-y becomes -z
+    if (i === 0) shape.moveTo(x * s, -z * s); else shape.lineTo(x * s, -z * s);
+  });
+  shape.closePath();
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: h, bevelEnabled: false });
+  geo.rotateX(-Math.PI / 2);
+  const m = new THREE.Mesh(geo, material);
+  m.position.y = y0;
+  return m;
+}
+
 /**
- * Lunar Module descent stage (what stays on the surface after lift-off):
- * gold-foil octagonal body, four splayed legs with footpads, descent engine
- * bell, ladder on the forward (+x) leg. ~9.4 m across the footpads.
+ * Lunar Module descent stage (what stays on the surface after lift-off), after
+ * AS15-86-11603 / AS15-87-11839 (NASA PD): a faceted octagonal stage with four
+ * long and four short sides, wrapped in a patchwork of black and amber Kapton
+ * thermal blankets with gold foil only in places; the descent engine sits up in
+ * the central bay; four splayed silver legs with primary and secondary struts
+ * meeting the deck rim, dish footpads; ladder and porch on the forward (+z) leg.
+ * ~9.4 m across the footpads. Simplified, approximate geometry.
  */
 export function buildLunarModule() {
   const g = new THREE.Group();
   g.name = 'v2-lunar-module';
   // Own materials per prop so hover highlights only this prop.
-  const foil = new THREE.MeshStandardMaterial({ color: 0xc9a23a, metalness: 0.85, roughness: 0.38 });
-  const blackFoil = new THREE.MeshStandardMaterial({ color: 0x2a2826, metalness: 0.4, roughness: 0.55 });
-  const legMat = new THREE.MeshStandardMaterial({ color: 0xbfb8a8, metalness: 0.7, roughness: 0.42 });
-  const engine = new THREE.MeshStandardMaterial({ color: 0x4a4744, metalness: 0.6, roughness: 0.5, side: THREE.DoubleSide });
+  const amber = new THREE.MeshStandardMaterial({ color: 0xa8732c, metalness: 0.55, roughness: 0.42 });
+  const blackFoil = new THREE.MeshStandardMaterial({ color: 0x1c1b1a, metalness: 0.35, roughness: 0.5 });
+  const gold = new THREE.MeshStandardMaterial({ color: 0xd2ab45, metalness: 0.85, roughness: 0.32 });
+  const legMat = new THREE.MeshStandardMaterial({ color: 0xc9c4b8, metalness: 0.7, roughness: 0.4 });
+  const engine = new THREE.MeshStandardMaterial({ color: 0x3e3b38, metalness: 0.6, roughness: 0.5, side: THREE.DoubleSide });
 
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.1, 1.6, 8), foil);
-  body.rotation.y = Math.PI / 8;
-  body.position.y = 2.0;
-  g.add(body);
-  const deck = new THREE.Mesh(new THREE.CylinderGeometry(1.95, 2.1, 0.12, 8), blackFoil);
-  deck.rotation.y = Math.PI / 8;
-  deck.position.y = 2.86;
-  g.add(deck);
-  // dark thermal-blanket quadrant panels between the legs
+  const Y0 = 1.45, H = 1.55; // stage sits ~1.45 m up on its legs
+  g.add(lmPrism(H, Y0, 0.02, blackFoil)); // structure under the blankets
+  g.add(lmPrism(0.1, Y0 + H, 0.04, blackFoil)); // top deck
+  // Blanket panels, one per face, slightly proud of the structure: long faces in
+  // amber with a black centre strip (where the leg outrigger is), short corner
+  // faces in black with a gold band; a thin gold skirt along the bottom edge.
+  const V = lmOutline();
+  for (let i = 0; i < 8; i++) {
+    const [x0, z0] = V[i], [x1, z1] = V[(i + 1) % 8];
+    const len = Math.hypot(x1 - x0, z1 - z0);
+    const mx = (x0 + x1) / 2, mz = (z0 + z1) / 2;
+    const nLen = Math.hypot(mx, mz), nx = mx / nLen, nz = mz / nLen;
+    const yaw = Math.atan2(nx, nz);
+    const long = i % 2 === 0;
+    const at = (w, h, y, along, out, mat) => {
+      const tx = (x1 - x0) / len, tz = (z1 - z0) / len;
+      const p = box(w, h, 0.04, mat, mx + nx * out + tx * along, y, mz + nz * out + tz * along);
+      p.rotation.y = yaw;
+      g.add(p);
+    };
+    if (long) {
+      at(len * 0.38, H * 0.86, Y0 + H * 0.5, -len * 0.29, 0.03, amber);
+      at(len * 0.38, H * 0.86, Y0 + H * 0.5, len * 0.29, 0.03, amber);
+      at(len * 0.18, H * 0.92, Y0 + H * 0.5, 0, 0.05, blackFoil);
+    } else {
+      at(len * 0.9, H * 0.9, Y0 + H * 0.5, 0, 0.03, blackFoil);
+      at(len * 0.92, 0.22, Y0 + H * 0.72, 0, 0.05, gold);
+    }
+    at(len * 0.96, 0.12, Y0 + 0.06, 0, 0.06, gold);
+  }
+  // descent engine: bell up inside the central bay, only its lower lip shows
+  const bell = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.78, 0.9, 20, 1, true), engine);
+  bell.position.y = Y0 + 0.15;
+  g.add(bell);
+  // four legs on the axes (mid long sides), splayed out to dish footpads
+  const PAD_R = 4.25, rim = LM_HALF + 0.05;
   for (let i = 0; i < 4; i++) {
     const a = i * Math.PI / 2;
-    const p = box(1.5, 1.1, 0.06, blackFoil, Math.sin(a) * 2.0, 2.0, Math.cos(a) * 2.0);
-    p.rotation.y = a;
-    g.add(p);
-  }
-  const bell = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.82, 0.95, 20, 1, true), engine);
-  bell.position.y = 0.72;
-  g.add(bell);
-  // legs on the diagonals
-  for (let i = 0; i < 4; i++) {
-    const a = Math.PI / 4 + i * Math.PI / 2;
     const s = Math.sin(a), c = Math.cos(a);
-    const top = [s * 2.0, 2.5, c * 2.0];
-    const pad = [s * 4.4, 0.32, c * 4.4];
-    g.add(strut(top, pad, 0.09, legMat));
-    g.add(strut([s * 2.05, 1.25, c * 2.05], [s * 3.6, 0.75, c * 3.6], 0.05, legMat));
-    g.add(strut([s * 1.4 + c * 0.9, 1.22, c * 1.4 - s * 0.9], [s * 3.3, 0.9, c * 3.3], 0.04, legMat));
-    const fp = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.42, 0.14, 16), legMat);
-    fp.position.set(s * 4.45, 0.07, c * 4.45);
+    const P = (r, y, side = 0) => [s * r + c * side, y, c * r - s * side];
+    g.add(strut(P(rim, Y0 + H - 0.2), P(PAD_R, 0.34), 0.085, legMat)); // primary strut
+    g.add(strut(P(rim, Y0 + 0.05, -LM_CORNER), P(PAD_R - 0.95, 0.88), 0.045, legMat)); // secondary struts
+    g.add(strut(P(rim, Y0 + 0.05, LM_CORNER), P(PAD_R - 0.95, 0.88), 0.045, legMat));
+    g.add(strut(P(rim, Y0 + 0.02), P(PAD_R - 0.95, 0.88), 0.04, legMat)); // down-lock strut
+    const fp = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.4, 0.16, 18), legMat);
+    fp.position.set(s * PAD_R, 0.08, c * PAD_R);
     g.add(fp);
   }
-  // ladder on the forward leg (+x, +z diagonal) and the porch
-  const la = Math.PI / 4, ls = Math.sin(la), lc = Math.cos(la);
+  // ladder on the forward (+z) leg, below the porch and hatch
   for (const off of [-0.22, 0.22]) {
-    g.add(strut([ls * 2.2 + lc * off, 2.45, lc * 2.2 - ls * off], [ls * 4.1 + lc * off, 0.45, lc * 4.1 - ls * off], 0.025, legMat));
+    g.add(strut([off, Y0 + H - 0.1, rim + 0.15], [off, 0.5, PAD_R - 0.35], 0.025, legMat));
   }
   for (let r = 0; r < 8; r++) {
     const t = (r + 0.5) / 8;
-    const cx = ls * (2.2 + 1.9 * t), cz = lc * (2.2 + 1.9 * t), cy = 2.45 - 2.0 * t;
-    const rung = strut([cx - lc * 0.22, cy, cz + ls * 0.22], [cx + lc * 0.22, cy, cz - ls * 0.22], 0.018, legMat);
-    g.add(rung);
+    const z = rim + 0.15 + (PAD_R - 0.5 - rim) * t, y = Y0 + H - 0.1 - (Y0 + H - 0.6) * t;
+    g.add(strut([-0.22, y, z], [0.22, y, z], 0.018, legMat));
   }
-  const porch = box(0.9, 0.06, 0.7, legMat, ls * 2.25, 2.6, lc * 2.25);
-  porch.rotation.y = la;
-  g.add(porch);
+  g.add(box(0.95, 0.06, 0.7, legMat, 0, Y0 + H + 0.05, rim + 0.3)); // porch
   shadowed(g);
   mergeStaticGroup(g);
   return g;
 }
 
-/** Chevron-mesh tyre texture so wheel rotation reads on screen. */
+/**
+ * Wire-mesh tyre tread: a dark woven zinc-coated steel mesh with bright titanium
+ * chevrons (as in AS15-88-11866), so the wheels read open and dark and their
+ * rotation shows on screen.
+ */
 function tyreTexture() {
   if (typeof document === 'undefined') return null; // unit tests (node)
   const c = document.createElement('canvas');
-  c.width = 128; c.height = 32;
+  c.width = 256; c.height = 64;
   const x = c.getContext('2d');
-  x.fillStyle = '#7d7973';
-  x.fillRect(0, 0, 128, 32);
-  x.strokeStyle = '#3f3c38';
-  x.lineWidth = 3;
-  for (let i = 0; i < 128; i += 10) {
-    x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 5, 16); x.lineTo(i, 32); x.stroke();
+  x.fillStyle = '#26282b';
+  x.fillRect(0, 0, 256, 64);
+  // woven mesh: two fine diagonal line sets
+  x.strokeStyle = '#6a6c6e';
+  x.lineWidth = 1;
+  for (let i = -64; i < 256 + 64; i += 6) {
+    x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 64, 64); x.stroke();
+    x.beginPath(); x.moveTo(i + 64, 0); x.lineTo(i, 64); x.stroke();
+  }
+  // titanium chevrons
+  x.strokeStyle = '#c9c6bf';
+  x.lineWidth = 4;
+  for (let i = 0; i < 256; i += 21) {
+    x.beginPath(); x.moveTo(i, 4); x.lineTo(i + 9, 32); x.lineTo(i, 60); x.stroke();
   }
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   t.wrapS = THREE.RepeatWrapping;
+  return t;
+}
+
+/** Wheel side: dark rim ring, open spoked/mesh hub (alpha) so the wheel reads open. */
+function wheelSideTexture() {
+  if (typeof document === 'undefined') return null; // unit tests (node)
+  const c = document.createElement('canvas');
+  c.width = 128; c.height = 128;
+  const x = c.getContext('2d');
+  x.clearRect(0, 0, 128, 128);
+  const C = 64;
+  x.strokeStyle = '#1d1e20';
+  x.lineWidth = 10;
+  x.beginPath(); x.arc(C, C, 58, 0, Math.PI * 2); x.stroke(); // tyre edge
+  x.strokeStyle = '#8d8f91';
+  x.lineWidth = 3;
+  x.beginPath(); x.arc(C, C, 50, 0, Math.PI * 2); x.stroke(); // bump-stop ring
+  x.lineWidth = 2.5;
+  for (let k = 0; k < 12; k++) { // spokes
+    const a = (k / 12) * Math.PI * 2;
+    x.beginPath(); x.moveTo(C + Math.cos(a) * 12, C + Math.sin(a) * 12); x.lineTo(C + Math.cos(a) * 52, C + Math.sin(a) * 52); x.stroke();
+  }
+  x.fillStyle = '#b8b5ae';
+  x.beginPath(); x.arc(C, C, 13, 0, Math.PI * 2); x.fill(); // hub
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
 
@@ -126,7 +207,8 @@ export function buildRover() {
   const body = new THREE.Group();
   body.name = 'v2-rover-body';
   const frame = new THREE.MeshStandardMaterial({ color: 0xb9b6b0, metalness: 0.75, roughness: 0.4 });
-  const fender = new THREE.MeshStandardMaterial({ color: 0x8f949b, metalness: 0.3, roughness: 0.6 });
+  // Apollo 15 fenders read orange / salmon in AS15-88-11866 (fibreglass)
+  const fender = new THREE.MeshStandardMaterial({ color: 0xc8643a, metalness: 0.1, roughness: 0.65 });
   const seat = new THREE.MeshStandardMaterial({ color: 0x5a6f8a, roughness: 0.85 });
   const dark = new THREE.MeshStandardMaterial({ color: 0x222326, metalness: 0.3, roughness: 0.6 });
   const dish = new THREE.MeshStandardMaterial({ color: 0xe8e4dc, metalness: 0.4, roughness: 0.35, side: THREE.DoubleSide });
@@ -156,11 +238,18 @@ export function buildRover() {
   mergeStaticGroup(body);
   group.add(body);
 
+  // One mesh per wheel (two material groups: mesh tread on the side wall, spoked
+  // open disc on the caps) so each wheel is still one object that turns.
   const tyreMat = new THREE.MeshStandardMaterial({ color: 0xffffff, map: tyreTexture(), metalness: 0.5, roughness: 0.6 });
-  const wheelGeo = new THREE.CylinderGeometry(0.41, 0.41, 0.23, 20);
+  const sideMap = wheelSideTexture();
+  const sideMat = new THREE.MeshStandardMaterial({
+    color: sideMap ? 0xffffff : 0x2a2b2d, map: sideMap, alphaTest: 0.5, transparent: false,
+    side: THREE.DoubleSide, metalness: 0.5, roughness: 0.55,
+  });
+  const wheelGeo = new THREE.CylinderGeometry(0.41, 0.41, 0.23, 24);
   const wheels = [];
   for (const [x, z] of [[-0.92, 1.15], [0.92, 1.15], [-0.92, -1.15], [0.92, -1.15]]) {
-    const w = new THREE.Mesh(wheelGeo, tyreMat);
+    const w = new THREE.Mesh(wheelGeo, [tyreMat, sideMat, sideMat]);
     w.rotation.z = Math.PI / 2; // axle along x; spinning rotation.x turns it about the axle
     w.position.set(x, 0.41, z);
     w.castShadow = true;
@@ -236,6 +325,13 @@ export function createDustBurst(max = 160) {
   return {
     points,
     get live() { return live; },
+    /** Drop every grain (used when motion freezes, so nothing hangs mid-air). */
+    clear() {
+      pos.fill(-1e6);
+      vel.fill(0);
+      live = 0;
+      geo.attributes.position.needsUpdate = true;
+    },
     emit(at, count, rng = Math.random) {
       for (let k = 0; k < count; k++) {
         const i = next; next = (next + 1) % max;

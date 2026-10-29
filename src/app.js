@@ -7,6 +7,7 @@
  * @module app
  */
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Engine } from './core/engine.js';
 import { loadJSON, hasWebGL2 } from './core/assets.js';
 // Learning content is authored in content/*.json and bundled at build time
@@ -170,8 +171,8 @@ export class App {
       return { cameraPos: [cx, site.meshHeightAt(cx, cz) + h, cz], cameraTarget: [tx, ty + 1.6, tz] };
     };
     const orange = 0xe87722;
-    world.registerInteractive(site.lmProp, { id: 'lm', label: 'Lunar Module descent stage', hint: 'Click to glide closer', highlightColor: orange, ...view(0, 0, 0.8, 0.6, 3.5, 17) });
-    world.registerInteractive(site.rover, { id: 'rover', label: 'Lunar Roving Vehicle', hint: 'Click to watch it drive', highlightColor: orange, ...view(22, 0, -0.2, 1, 6, 24) });
+    world.registerInteractive(site.lmProp, { id: 'lm', label: 'Lunar Module descent stage (simplified model)', hint: 'Click to glide closer', highlightColor: orange, ...view(0, 0, 0.8, 0.6, 3.5, 17) });
+    world.registerInteractive(site.rover, { id: 'rover', label: 'Lunar Roving Vehicle (simplified model; its driving loop is illustrative)', hint: 'Click to glide closer', highlightColor: orange, ...view(22, 0, -0.2, 1, 6, 24) });
     world.registerInteractive(site.flag, { id: 'flag', label: 'Flag', hint: 'No air: it never flutters', highlightColor: orange, ...view(-9, 8, 0.7, 0.7, 1.8, 6) });
     world.registerInteractive(site.crewA.root, { id: 'crew-a', label: 'Crew member A (fictional mission)', hint: 'Click to glide closer', highlightColor: orange, ...view(5.4, 3.2, 0.9, 0.4, 1.8, 6) });
     world.registerInteractive(site.crewB.root, { id: 'crew-b', label: 'Crew member B (fictional mission)', hint: 'Walking to a viewpoint', highlightColor: orange, ...view(-11, 16, 0.6, -0.8, 2.2, 9) });
@@ -183,6 +184,7 @@ export class App {
     const ring = (id, label, x, z, scale, v) => {
       const r = world.addHotspotRing([x, site.meshHeightAt(x, z) + 0.05, z], { id, label, hint: 'Click to glide here', color: orange, ...v });
       r.scale.setScalar(scale);
+      addRingHalo(world.hotspotRings.find((h) => h.group === r)?.outer);
       // flat ring on sloped ground: draw the floor discs over the terrain, not through it
       for (const m of r.children) if (m.geometry?.type !== 'OctahedronGeometry') { m.material.depthTest = false; m.renderOrder = 5; }
       return r;
@@ -285,7 +287,7 @@ export class App {
     // honesty labels that belong to the 3D view itself
     const note = document.createElement('p');
     note.className = 'scene-note';
-    note.textContent = 'Terrain: real NASA LROC elevation model, no exaggeration. Earth\'s position in the sky is approximate. The field-team mission is fictional.';
+    note.textContent = 'Terrain: real NASA LROC elevation model, no exaggeration. Earth\'s position in the sky is approximate and its rotation is sped up. The field-team mission is fictional; the crew and rover motion is illustrative, and the LM and rover are simplified models.';
     poiWrap.appendChild(note);
   }
 
@@ -1340,6 +1342,34 @@ export class App {
   _applySavedSettings() {
     this.settings._apply();
   }
+}
+
+/**
+ * Dark halo bands just outside and inside the orange viewpoint ring (review H-4):
+ * orange #e87722 on sunlit regolith is only ~1.2:1, but against this near-black
+ * band it is ~5:1, above the 3:1 non-text minimum (WCAG 1.4.11) on any ground.
+ * Merged into the ring's own mesh (same per-vertex RGBA layout), so it costs no
+ * extra draw call. Halo triangles come first so the orange draws over them.
+ */
+function addRingHalo(outer) {
+  if (!outer?.geometry) return;
+  const dark = new THREE.Color(0x0b0c0e);
+  const band = (inner, outerR, alpha) => {
+    const g = new THREE.RingGeometry(inner, outerR, 32).toNonIndexed();
+    g.rotateX(-Math.PI / 2);
+    g.translate(0, 0.018, 0);
+    const n = g.attributes.position.count;
+    const rgba = new Float32Array(n * 4);
+    for (let i = 0; i < n; i++) rgba.set([dark.r, dark.g, dark.b, alpha], i * 4);
+    g.setAttribute('color', new THREE.BufferAttribute(rgba, 4));
+    return g;
+  };
+  const merged = BufferGeometryUtils.mergeGeometries([
+    band(0.38, 0.47, 0.9), band(0.2, 0.28, 0.75), outer.geometry,
+  ], false);
+  if (!merged) return;
+  outer.geometry.dispose();
+  outer.geometry = merged;
 }
 
 /** Bootstrap. */
