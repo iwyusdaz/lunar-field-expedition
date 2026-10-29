@@ -142,7 +142,11 @@ export class TerrainField {
   _buildMaterial() {
     const albedo = new THREE.TextureLoader().load(`${BASE}assets/terrain/albedo-wac.png`);
     albedo.colorSpace = THREE.SRGBColorSpace;
+    // Grazing-angle views (eye height over a 10 km tile) streak without
+    // anisotropic filtering (review V-2); three.js clamps to the GPU maximum.
+    albedo.anisotropy = 8;
     const normalMap = new THREE.TextureLoader().load(`${BASE}assets/terrain/normal-l2.png`);
+    normalMap.anisotropy = 8;
     this.material = new THREE.MeshStandardMaterial({
       map: albedo,
       normalMap,
@@ -156,6 +160,7 @@ export class TerrainField {
   useCoarseNormalMap() {
     if (!this.material) return;
     const coarse = new THREE.TextureLoader().load(`${BASE}assets/terrain/normal-l1.png`);
+    coarse.anisotropy = 4;
     this.material.normalMap = coarse;
     this.material.needsUpdate = true;
   }
