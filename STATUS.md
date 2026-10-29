@@ -11,7 +11,7 @@ Last updated: 2026-10-29
 | Ambient life (5 systems), calm mode during tasks, reduced motion stops it | done |
 | In-world interaction (viewpoint rings + glide, hover tooltips, WASD pan) with crater marking / sun slider / traverse parity | done |
 | Version bump, posters 2.0.0 from the real scene, showcase.json validates 2.0.0 | done |
-| Unit + browser + sub-path tests | see the latest commit message / CHANGELOG |
+| Unit + browser + sub-path tests | done 2026-10-29 — 72/72 unit (vitest), 8/8 functional + a11y (Playwright, test build), sub-path 1/1 (release build); gitleaks clean |
 | Draw calls (Module 2 site view, Medium, headless software WebGL) | 196 (budget ≤ 300) |
 | Headed GPU fps on Medium | pending |
 | Agent reviews of v2 + ≥ 5 revisions, trailer re-record | pending |
