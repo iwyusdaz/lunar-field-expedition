@@ -1,0 +1,621 @@
+{
+ "tool": "scripts/fetch-v3-assets.mjs",
+ "note": "Agent-run licence check. Every source passed the four checks listed in the script header; failures are not recorded as sources.",
+ "allowed": [
+  "CC0-1.0",
+  "public-domain",
+  "CC-BY-4.0"
+ ],
+ "sources": [
+  {
+   "id": "moon_01",
+   "name": "Moon 01",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+   "page": "https://polyhaven.com/a/moon_01",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    3100.0001430511475,
+    3100.0001430511475
+   ],
+   "checkedAt": "2026-10-30T19:29:54.971Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_01/moon_01_diff_2k.jpg",
+     "dest": "data/raw/v3/moon_01/moon_01_diff_2k.jpg",
+     "bytes": 1486173,
+     "sha256": "9527d2c2abba5751c84df872514227e49f64e5041b7ee48178e5cb5da0a6b374",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_01/moon_01_nor_gl_2k.jpg",
+     "dest": "data/raw/v3/moon_01/moon_01_nor_gl_2k.jpg",
+     "bytes": 5019429,
+     "sha256": "073f01d6540b346f338dd41eaf04f2d5594fb5e90ec0fec34d6c690e0b9b219f",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_01/moon_01_arm_2k.jpg",
+     "dest": "data/raw/v3/moon_01/moon_01_arm_2k.jpg",
+     "bytes": 2888496,
+     "sha256": "bb26c585fbabaf2c52c32bbe7bd50301e7e917e264c7e2fef55a651c67146a85",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_01/moon_01_disp_2k.jpg",
+     "dest": "data/raw/v3/moon_01/moon_01_disp_2k.jpg",
+     "bytes": 1187495,
+     "sha256": "63f074dec515d82a45b890eb1d791f70785c81cf91bdd286df7caacc5f088cce",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_dusted_02",
+   "name": "Moon Dusted 02",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+   "page": "https://polyhaven.com/a/moon_dusted_02",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    399.9999761581421,
+    399.9999761581421
+   ],
+   "checkedAt": "2026-10-30T19:29:55.672Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_dusted_02/moon_dusted_02_diff_2k.jpg",
+     "dest": "data/raw/v3/moon_dusted_02/moon_dusted_02_diff_2k.jpg",
+     "bytes": 2066500,
+     "sha256": "fa382aa3541eb6fd6d62f0ec9f90b0c1babebe9a674de41d3c5b4852fb8f3576",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_dusted_02/moon_dusted_02_nor_gl_2k.jpg",
+     "dest": "data/raw/v3/moon_dusted_02/moon_dusted_02_nor_gl_2k.jpg",
+     "bytes": 4344011,
+     "sha256": "81ced75846799e86209b17ae160d46301735061780439c1e34aa3fab5c56dd5b",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_dusted_02/moon_dusted_02_arm_2k.jpg",
+     "dest": "data/raw/v3/moon_dusted_02/moon_dusted_02_arm_2k.jpg",
+     "bytes": 3313892,
+     "sha256": "b2c9b15aa155b1e05eefc657d5c7601e6d95326e03f7764a23d01a1b597f3838",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_dusted_02/moon_dusted_02_disp_2k.jpg",
+     "dest": "data/raw/v3/moon_dusted_02/moon_dusted_02_disp_2k.jpg",
+     "bytes": 966984,
+     "sha256": "2410b5190ac1770d9e3fb7cdccff5a4b3f47851f466bd91b6f4849f9548f791d",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_footprints_01",
+   "name": "Moon Footprints 01",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+   "page": "https://polyhaven.com/a/moon_footprints_01",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    1550.0000715255737,
+    3100.0001430511475
+   ],
+   "checkedAt": "2026-10-30T19:29:56.397Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_footprints_01/moon_footprints_01_diff_2k.jpg",
+     "dest": "data/raw/v3/moon_footprints_01/moon_footprints_01_diff_2k.jpg",
+     "bytes": 2416770,
+     "sha256": "dd356f3205f39120b857464868fea664fff37fa4ad1a7c8724ba51e1e035e0c2",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_footprints_01/moon_footprints_01_nor_gl_2k.jpg",
+     "dest": "data/raw/v3/moon_footprints_01/moon_footprints_01_nor_gl_2k.jpg",
+     "bytes": 6498015,
+     "sha256": "58bb8f99cf4f65e4faa027cd8ec540e3a614ef1d0317795d6360669190519e7b",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_footprints_01/moon_footprints_01_arm_2k.jpg",
+     "dest": "data/raw/v3/moon_footprints_01/moon_footprints_01_arm_2k.jpg",
+     "bytes": 2910962,
+     "sha256": "33d4cd8dca26e6d3dec5e094987be20141eb9e3edf2edfbabe26ccbbd2d32790",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_footprints_01/moon_footprints_01_disp_2k.jpg",
+     "dest": "data/raw/v3/moon_footprints_01/moon_footprints_01_disp_2k.jpg",
+     "bytes": 1106281,
+     "sha256": "22c1f3f80b36e25a87d5fdafc59a37a5a7f3233c8d9779e5e702e5556701c7a4",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_track_04",
+   "name": "Moon Track 04",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+   "page": "https://polyhaven.com/a/moon_track_04",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    199.99998807907104,
+    399.9999761581421
+   ],
+   "checkedAt": "2026-10-30T19:29:57.150Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_track_04/moon_track_04_diff_2k.jpg",
+     "dest": "data/raw/v3/moon_track_04/moon_track_04_diff_2k.jpg",
+     "bytes": 3180758,
+     "sha256": "489b1607fa23fbfbcb84b915695cacdd3a1495cdb488ae03bd32ac9898112537",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_track_04/moon_track_04_nor_gl_2k.jpg",
+     "dest": "data/raw/v3/moon_track_04/moon_track_04_nor_gl_2k.jpg",
+     "bytes": 6275317,
+     "sha256": "036dd1006b613e728d7177b88846175f0d43fa893209ba3c25904440483422a5",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_track_04/moon_track_04_arm_2k.jpg",
+     "dest": "data/raw/v3/moon_track_04/moon_track_04_arm_2k.jpg",
+     "bytes": 4618051,
+     "sha256": "9fc2058a22b4de6c4a404950b299ebe715b85289f59fc5045fa474d34b00ebe4",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_track_04/moon_track_04_disp_2k.jpg",
+     "dest": "data/raw/v3/moon_track_04/moon_track_04_disp_2k.jpg",
+     "bytes": 1220083,
+     "sha256": "3056b900fe5ba01a6717343d1512e6603ed3b8c7faaeb5c5a08814ab7f72782e",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_rock_04",
+   "name": "Moon Rock 04",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+   "page": "https://polyhaven.com/a/moon_rock_04",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    119.77694556117058,
+    173.899844288826,
+    53.921069484204054
+   ],
+   "checkedAt": "2026-10-30T19:29:57.624Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/moon_rock_04/moon_rock_04_1k.gltf",
+     "dest": "data/raw/v3/moon_rock_04/moon_rock_04_1k.gltf",
+     "bytes": 2786,
+     "sha256": "09f7f305fd3e3711a4d52712bdb2e935cfcf669c30965827f089b57d81930d0f",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_04/moon_rock_04_nor_gl_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_04/textures/moon_rock_04_nor_gl_1k.jpg",
+     "bytes": 666275,
+     "sha256": "a62082b898900550d273a9af0207ed7bf3d1fcb2e742a21361216af5e2e86bf3",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_04/moon_rock_04_diff_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_04/textures/moon_rock_04_diff_1k.jpg",
+     "bytes": 325832,
+     "sha256": "4d94c93aa585555d7aedc579b7bdd160a38b5ee47ef96a1e6c20a9134aaee2ba",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_04/moon_rock_04_arm_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_04/textures/moon_rock_04_arm_1k.jpg",
+     "bytes": 361429,
+     "sha256": "9b0f994f4e0a8b815a6fa017a07ec4e7b4bb1dfa66fee9851a1fe11ec22f966b",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/moon_rock_04/moon_rock_04.bin",
+     "dest": "data/raw/v3/moon_rock_04/moon_rock_04.bin",
+     "bytes": 175960,
+     "sha256": "561664fd5fcac47a00012f050af4e427c8357f156497189f063d67e38a64ce5e",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_rock_05",
+   "name": "Moon Rock 05",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+   "page": "https://polyhaven.com/a/moon_rock_05",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    71.70041278004646,
+    81.24681562185287,
+    73.56124802026898
+   ],
+   "checkedAt": "2026-10-30T19:29:58.015Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/moon_rock_05/moon_rock_05_1k.gltf",
+     "dest": "data/raw/v3/moon_rock_05/moon_rock_05_1k.gltf",
+     "bytes": 2789,
+     "sha256": "f41052a54dd51d6c4e7c0b26556ea80798cf566bd9797c7c0529960b86cc0be2",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_05/moon_rock_05_nor_gl_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_05/textures/moon_rock_05_nor_gl_1k.jpg",
+     "bytes": 659695,
+     "sha256": "6b0b85bbade95df9ecfd2f5fb1576a3da8c98824a1c1ceea7ce2c48f6068a1d6",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_05/moon_rock_05_diff_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_05/textures/moon_rock_05_diff_1k.jpg",
+     "bytes": 288046,
+     "sha256": "0be388345c96c3f0da59ba69cac23a4579a7804e34e46f6a9f130b73db45a216",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_05/moon_rock_05_arm_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_05/textures/moon_rock_05_arm_1k.jpg",
+     "bytes": 353183,
+     "sha256": "7697d7612515f5f96aae196d769e44d458084afcfd91a260379a877d06ec5dc3",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/moon_rock_05/moon_rock_05.bin",
+     "dest": "data/raw/v3/moon_rock_05/moon_rock_05.bin",
+     "bytes": 226972,
+     "sha256": "15fd7e9cc1a2636c432a5f7cf3112dcf60bca059068db0f18e212e693c7af07e",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_rock_06",
+   "name": "Moon Rock 06",
+   "author": "Greg Zaal, Jenelle van Heerden, Rico Cilliers",
+   "page": "https://polyhaven.com/a/moon_rock_06",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    85.80135554075241,
+    91.83185920119286,
+    55.31582306139171
+   ],
+   "checkedAt": "2026-10-30T19:29:58.618Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/moon_rock_06/moon_rock_06_1k.gltf",
+     "dest": "data/raw/v3/moon_rock_06/moon_rock_06_1k.gltf",
+     "bytes": 2790,
+     "sha256": "8761f36dc8a800d326dcabb826a15b39d07aa8f3663ef4b591c79f8d2016e320",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_06/moon_rock_06_nor_gl_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_06/textures/moon_rock_06_nor_gl_1k.jpg",
+     "bytes": 628363,
+     "sha256": "bc5c052a09b6a79a897a5d0021fe478be19170c76802aa0b315d3dbba8a10f73",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_06/moon_rock_06_diff_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_06/textures/moon_rock_06_diff_1k.jpg",
+     "bytes": 339277,
+     "sha256": "2b70037d05ee05df98893d60adf4e63795a5e5922b4562ff03c3fb659e3b9498",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_06/moon_rock_06_arm_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_06/textures/moon_rock_06_arm_1k.jpg",
+     "bytes": 345311,
+     "sha256": "1955fd2613d0e2d0a7edffa6f5ce1d25eec8394f7ed484a3daaa46d3a29dc6f3",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/moon_rock_06/moon_rock_06.bin",
+     "dest": "data/raw/v3/moon_rock_06/moon_rock_06.bin",
+     "bytes": 165072,
+     "sha256": "41885795c796e492cc8158fe8ada1ac2cf0d0b91cbcb9bf6f473b81cabfd7418",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "moon_rock_07",
+   "name": "Moon Rock 07",
+   "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+   "page": "https://polyhaven.com/a/moon_rock_07",
+   "licence": "CC0-1.0",
+   "licenceText": "CC0 1.0 Universal (Poly Haven)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://polyhaven.com/license",
+     "matched": "/CC0/"
+    },
+    "md5": true
+   },
+   "dimensionsMm": [
+    96.8347117304802,
+    73.83224368095398,
+    60.427604243159294
+   ],
+   "checkedAt": "2026-10-30T19:29:59.284Z",
+   "files": [
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/moon_rock_07/moon_rock_07_1k.gltf",
+     "dest": "data/raw/v3/moon_rock_07/moon_rock_07_1k.gltf",
+     "bytes": 2787,
+     "sha256": "5aec6881f1c76cfd57a9c58c356bf2bf69c5acb80705246fc5df63dde9fc906e",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_07/moon_rock_07_nor_gl_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_07/textures/moon_rock_07_nor_gl_1k.jpg",
+     "bytes": 587027,
+     "sha256": "c5c40bd39c605ac2128bfa17d869868c73dad9af830fcda5be0f84ea83cebea6",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_07/moon_rock_07_diff_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_07/textures/moon_rock_07_diff_1k.jpg",
+     "bytes": 318944,
+     "sha256": "ea0228898a9ee7cbca4392aa385d5998f6769adcc70b3d778ccde4b944029617",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moon_rock_07/moon_rock_07_arm_1k.jpg",
+     "dest": "data/raw/v3/moon_rock_07/textures/moon_rock_07_arm_1k.jpg",
+     "bytes": 311598,
+     "sha256": "b3e39d8b88a181960c6b950c9f7642addbec3793aeda319e577d5154d9ec4be3",
+     "md5Checked": true
+    },
+    {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/moon_rock_07/moon_rock_07.bin",
+     "dest": "data/raw/v3/moon_rock_07/moon_rock_07.bin",
+     "bytes": 162168,
+     "sha256": "86d82068bc2d7f65cf653e9e591cd14b40e3ef893924dba46a8c9747269f1e14",
+     "md5Checked": true
+    }
+   ]
+  },
+  {
+   "id": "sldem2015-window",
+   "author": "NASA LOLA Team and JAXA SELENE/Kaguya Team (Barker et al. 2016)",
+   "page": "https://astrogeology.usgs.gov/search/map/moon_lro_lola_selene_kaguya_tc_dem_merge_60n60s_59m",
+   "licence": "public-domain",
+   "licenceText": "Public domain (USGS Astropedia: access constraints \"public domain\"; please cite authors)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://astrogeology.usgs.gov/search/map/moon_lro_lola_selene_kaguya_tc_dem_merge_60n60s_59m",
+     "matched": "/public domain/i"
+    },
+    "md5": true
+   },
+   "checkedAt": "2026-10-30T19:30:42.046Z",
+   "files": [
+    {
+     "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/sldem2015/tiles/float_img/SLDEM2015_512_00N_30N_000_045_FLOAT.LBL",
+     "dest": "data/raw/v3/SLDEM2015_512_00N_30N_000_045_FLOAT.LBL",
+     "bytes": 4692,
+     "sha256": "575e055a07344769d74546d3fdbc8c10c2704dd684eed17babc890429ee6412b",
+     "md5Checked": false
+    },
+    {
+     "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/sldem2015/tiles/float_img/SLDEM2015_512_00N_30N_000_045_FLOAT.IMG",
+     "dest": "data/raw/v3/sldem2015-hadley-window.f32",
+     "bytes": 8859136,
+     "sha256": "b04f2df886beb525ee8b40bee8876d1df818daf0d98430001385ff08f45f93c0",
+     "md5Checked": false,
+     "window": {
+      "latS": 24.75,
+      "latN": 27.5,
+      "lonW": 2.1,
+      "lonE": 5.17
+     }
+    }
+   ]
+  },
+  {
+   "id": "clementine-750nm-window",
+   "author": "USGS Astrogeology Science Center / Clementine UVVIS (Lee et al. 2009)",
+   "page": "https://astrogeology.usgs.gov/search/map/moon_clementine_uvvis_global_mosaic_118m",
+   "licence": "public-domain",
+   "licenceText": "Public domain (USGS Astropedia product page)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://astrogeology.usgs.gov/search/map/moon_clementine_uvvis_global_mosaic_118m",
+     "matched": "/public domain/i"
+    },
+    "md5": true
+   },
+   "checkedAt": "2026-10-30T19:35:14.012Z",
+   "files": [
+    {
+     "url": "https://planetarymaps.usgs.gov/mosaic/Lunar_Clementine_UVVIS_750nm_Global_Mosaic_118m_v2.1.tif",
+     "dest": "data/raw/v3/clementine-750nm-hadley-window.tif",
+     "bytes": 555111,
+     "sha256": "2dff662f85623bf3f9361c6378bdf62e117b4278d076370cd045b45b211a58a7",
+     "md5Checked": false,
+     "window": {
+      "latS": 24.75,
+      "latN": 27.5,
+      "lonW": 2.1,
+      "lonE": 5.17
+     }
+    }
+   ]
+  },
+  {
+   "id": "bluemarble-2048",
+   "author": "NASA Goddard Space Flight Center (Visible Earth)",
+   "page": "https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography",
+   "licence": "public-domain",
+   "licenceText": "Public domain (NASA media usage guidelines)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+     "matched": "/not subject to copyright/i"
+    },
+    "md5": true
+   },
+   "checkedAt": "2026-10-30T19:35:16.709Z",
+   "files": [
+    {
+     "url": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg",
+     "dest": "data/raw/v3/land_shallow_topo_2048.jpg",
+     "bytes": 238676,
+     "sha256": "5b54cc586c6cbf2b28762ef4d4011f6cf4227a8b93a637b818a0c54090ce6c2c",
+     "md5Checked": false
+    }
+   ]
+  },
+  {
+   "id": "bluemarble-clouds-2048",
+   "author": "NASA Goddard Space Flight Center (Visible Earth)",
+   "page": "https://visibleearth.nasa.gov/images/57747/blue-marble-clouds",
+   "licence": "public-domain",
+   "licenceText": "Public domain (NASA media usage guidelines)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+     "matched": "/not subject to copyright/i"
+    },
+    "md5": true
+   },
+   "checkedAt": "2026-10-30T19:35:22.480Z",
+   "files": [
+    {
+     "url": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57747/cloud_combined_2048.jpg",
+     "dest": "data/raw/v3/cloud_combined_2048.jpg",
+     "bytes": 829367,
+     "sha256": "daddaad84d7a33bbbc86cdda3f591099f57cee8607b7bcf3b67eb7e4f7a1c793",
+     "md5Checked": false
+    }
+   ]
+  },
+  {
+   "id": "bsc5p",
+   "author": "Hoffleit & Warren, Yale Bright Star Catalogue 5th ed. (preliminary); NASA HEASARC table",
+   "page": "https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/bsc5p.html",
+   "licence": "public-domain",
+   "licenceText": "Public domain (U.S. Government work, data.nasa.gov licence https://www.usa.gov/government-works)",
+   "checks": {
+    "allowedLicence": true,
+    "forbiddenTerms": false,
+    "hostsAllowed": true,
+    "evidence": {
+     "url": "https://data.nasa.gov/dataset/bright-star-catalog",
+     "matched": "/government-works/"
+    },
+    "md5": true
+   },
+   "checkedAt": "2026-10-30T19:35:28.491Z",
+   "files": [
+    {
+     "url": "https://heasarc.gsfc.nasa.gov/FTP/heasarc/dbase/tdat_files/heasarc_bsc5p.tdat.gz",
+     "dest": "data/raw/v3/heasarc_bsc5p.tdat.gz",
+     "bytes": 913895,
+     "sha256": "122628cde2d8bedf7e16ddf5f888167ac58c04b5592d6155408ce297f3073931",
+     "md5Checked": false
+    }
+   ]
+  }
+ ]
+}

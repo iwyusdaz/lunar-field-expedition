@@ -1,0 +1,177 @@
+{
+ "generatedBy": "scripts/build-v3-models.mjs",
+ "units": "metres, +Y up, origin at ground contact",
+ "items": [
+  {
+   "id": "alsep-central-station",
+   "boundsM": [
+    0.62,
+    1.39,
+    0.46
+   ],
+   "triangles": 2564
+  },
+  {
+   "id": "alsep-seismometer",
+   "boundsM": [
+    0.236,
+    0.314,
+    0.236
+   ],
+   "triangles": 424
+  },
+  {
+   "id": "alsep-retroreflector",
+   "boundsM": [
+    1.04,
+    0.394,
+    0.568
+   ],
+   "triangles": 198
+  },
+  {
+   "id": "alsep-magnetometer",
+   "boundsM": [
+    1.602,
+    0.803,
+    1.401
+   ],
+   "triangles": 744
+  },
+  {
+   "id": "alsep-heat-flow",
+   "boundsM": [
+    0.601,
+    0.205,
+    0.24
+   ],
+   "triangles": 104
+  },
+  {
+   "id": "rtg",
+   "boundsM": [
+    0.4,
+    0.46,
+    0.4
+   ],
+   "triangles": 428
+  },
+  {
+   "id": "sample-bag",
+   "boundsM": [
+    0.19,
+    0.052,
+    0.21
+   ],
+   "triangles": 264
+  },
+  {
+   "id": "pse-skirt",
+   "boundsM": [
+    1.24,
+    0.018,
+    1.24
+   ],
+   "triangles": 576
+  },
+  {
+   "id": "moon-rock-04",
+   "file": "moon-rock-04.glb",
+   "boundsM": [
+    0.1198,
+    0.0538,
+    0.1738
+   ],
+   "polyhavenDimensionsMm": [
+    119.77694556117058,
+    173.899844288826,
+    53.921069484204054
+   ],
+   "scaledTo": null
+  },
+  {
+   "id": "moon-rock-05",
+   "file": "moon-rock-05.glb",
+   "boundsM": [
+    0.0717,
+    0.0734,
+    0.0811
+   ],
+   "polyhavenDimensionsMm": [
+    71.70041278004646,
+    81.24681562185287,
+    73.56124802026898
+   ],
+   "scaledTo": null
+  },
+  {
+   "id": "moon-rock-06",
+   "file": "moon-rock-06.glb",
+   "boundsM": [
+    0.0857,
+    0.055,
+    0.0918
+   ],
+   "polyhavenDimensionsMm": [
+    85.80135554075241,
+    91.83185920119286,
+    55.31582306139171
+   ],
+   "scaledTo": null
+  },
+  {
+   "id": "moon-rock-07",
+   "file": "moon-rock-07.glb",
+   "boundsM": [
+    0.0968,
+    0.0603,
+    0.0738
+   ],
+   "polyhavenDimensionsMm": [
+    96.8347117304802,
+    73.83224368095398,
+    60.427604243159294
+   ],
+   "scaledTo": null
+  },
+  {
+   "id": "genesis-rock",
+   "file": "genesis-rock-reconstructed.glb",
+   "boundsM": [
+    0.075,
+    0.0467,
+    0.0571
+   ],
+   "polyhavenDimensionsMm": [
+    96.8347117304802,
+    73.83224368095398,
+    60.427604243159294
+   ],
+   "scaledTo": 0.075
+  },
+  {
+   "file": "public/assets/v3/models/alsep-set.glb",
+   "bytes": 872748
+  },
+  {
+   "file": "public/assets/v3/models/moon-rock-04.glb",
+   "bytes": 481384
+  },
+  {
+   "file": "public/assets/v3/models/moon-rock-05.glb",
+   "bytes": 491632
+  },
+  {
+   "file": "public/assets/v3/models/moon-rock-06.glb",
+   "bytes": 478108
+  },
+  {
+   "file": "public/assets/v3/models/moon-rock-07.glb",
+   "bytes": 454864
+  },
+  {
+   "file": "public/assets/v3/models/genesis-rock-reconstructed.glb",
+   "bytes": 463916
+  }
+ ]
+}

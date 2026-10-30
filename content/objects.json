@@ -1,0 +1,543 @@
+{
+  "_meta": {
+    "description": "Inspectable-object catalog (plan 10 §4.1). Learning content, editable without touching code. Every source is listed in research/sources.md and every number in research/apollo15-facts.md (v3 S4 table).",
+    "fields": [
+      "id",
+      "scene",
+      "name",
+      "short",
+      "more",
+      "whyItMatters",
+      "realSize",
+      "honesty",
+      "source",
+      "role"
+    ],
+    "optionalFields": {
+      "realSizeNote": "why realSize is null (terrain feature larger than the modelled terrain, a layer, a line, a flash or the stars), so no bounding-box scale test applies"
+    },
+    "realSize": "metres; a number is the largest side, an array is [x, y, z] (sorted before comparison by the scale check)",
+    "honestyValues": [
+      "real",
+      "reconstructed",
+      "fictional",
+      "illustrative",
+      "time-lapse"
+    ],
+    "roles": [
+      "task",
+      "explore"
+    ],
+    "fictionFraming": "The learner is a member of a fictional future field team; the lander, rover, crew, orbiter and sample bags belong to it. Apollo 15 history and the geology are real and cited.",
+    "scenes": [
+      {
+        "id": "hadley-surface",
+        "name": "Hadley-Apennine surface (Modules 2-5)",
+        "main": true
+      },
+      {
+        "id": "orbit",
+        "name": "Orbit approach (Module 1)",
+        "main": false
+      }
+    ],
+    "preparedBy": "Agent (plan 10 S4), 2026-10-31, from the owner-approved S0 draft"
+  },
+  "objects": [
+    {
+      "id": "lm-descent-stage",
+      "scene": "hadley-surface",
+      "name": "Lunar Module descent stage",
+      "short": "The lower half of the lander, with the landing legs and descent engine. It stays behind as a launch pad when the crew leaves.",
+      "more": "The descent stage carried the descent engine, four landing legs, propellant tanks and stowed equipment such as the rover. It is about 3.2 m tall and 9.4 m across the footpads. When the crew left, the upper ascent stage fired its own engine and used the descent stage as a launch platform, so a descent stage remains at every Apollo landing site. In this app the lander belongs to the fictional field-team mission; it is a simplified model built from Apollo-era reference.",
+      "whyItMatters": "",
+      "realSize": [
+        9.4,
+        3.23,
+        9.4
+      ],
+      "honesty": "reconstructed",
+      "source": "https://en.wikipedia.org/wiki/Apollo_Lunar_Module",
+      "role": "explore"
+    },
+    {
+      "id": "lrv",
+      "scene": "hadley-surface",
+      "name": "Lunar Roving Vehicle",
+      "short": "A battery-powered car with four wire-mesh wheels. Apollo 15 was the first mission to drive one on the Moon.",
+      "more": "The rover let the crew reach stations several kilometres from the lander; on Apollo 15 it covered about 28 km over three moonwalks. It is about 3.1 m long and 1.14 m high. Its wheels are woven zinc-coated steel wire with titanium chevrons, not rubber tyres. Dust thrown by the wheels flies in clean arcs and falls straight back down, because there is no air to hold it up. The rover here belongs to the fictional field team.",
+      "whyItMatters": "Module 4: the rover's range and speed set how far your traverse can reach.",
+      "realSize": [
+        2.06,
+        1.14,
+        3.1
+      ],
+      "honesty": "reconstructed",
+      "source": "https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html",
+      "role": "explore"
+    },
+    {
+      "id": "flag",
+      "scene": "hadley-surface",
+      "name": "Flag on its horizontal rod",
+      "short": "The flag hangs from a horizontal rod along its top edge. With no air on the Moon, it never moves.",
+      "more": "Apollo flags were 0.91 by 1.52 m nylon flags held out by a telescoping aluminium rod sewn into the top hem, because there is no wind to spread the cloth. Photos that seem to show a flag waving were taken while an astronaut was twisting the pole into the ground. Once left alone, a flag on the Moon stays perfectly still, so this one never flutters.",
+      "whyItMatters": "",
+      "realSize": [
+        1.52,
+        1.9,
+        0.05
+      ],
+      "honesty": "reconstructed",
+      "source": "https://en.wikipedia.org/wiki/Lunar_Flag_Assembly",
+      "role": "explore"
+    },
+    {
+      "id": "alsep-central-station",
+      "scene": "hadley-surface",
+      "name": "ALSEP central station",
+      "short": "The radio and power hub of the experiment package. It collected data from every instrument and sent it to Earth.",
+      "more": "The Apollo Lunar Surface Experiments Package (ALSEP) was a set of instruments left running after the crew departed. The central station took power from the nuclear generator, sent commands to the instruments and radioed their data to Earth through a 58 cm helical antenna pointed at Earth. The Apollo stations ran until 1977. This is a simplified model.",
+      "whyItMatters": "",
+      "realSize": [
+        0.62,
+        1.39,
+        0.46
+      ],
+      "honesty": "reconstructed",
+      "source": "https://en.wikipedia.org/wiki/Apollo_Lunar_Surface_Experiments_Package",
+      "role": "explore"
+    },
+    {
+      "id": "alsep-seismometer",
+      "scene": "hadley-surface",
+      "name": "Passive seismometer",
+      "short": "A drum-shaped instrument that recorded moonquakes and meteoroid impacts. A foil skirt around it kept its temperature steady.",
+      "more": "The passive seismic experiment sat in a drum 23 cm wide and 29 cm tall. It detected ground vibrations from moonquakes, meteoroid impacts and deliberate impacts of spent rocket stages. Signals recorded at several Apollo sites together helped scientists work out the structure of the Moon's interior. This is a simplified model.",
+      "whyItMatters": "",
+      "realSize": [
+        0.23,
+        0.29,
+        0.23
+      ],
+      "honesty": "reconstructed",
+      "source": "https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-008C-04",
+      "role": "explore"
+    },
+    {
+      "id": "alsep-retroreflector",
+      "scene": "hadley-surface",
+      "name": "Laser retroreflector",
+      "short": "A tilted panel of 300 glass corner cubes that bounces laser light straight back to Earth. Observatories still use it.",
+      "more": "Each corner cube returns a laser pulse toward where it came from. Timing the round trip lets observatories measure the Earth-Moon distance very precisely. The Apollo 15 array is about 1.04 by 0.61 m with 300 cubes, three times larger than the Apollo 11 and 14 arrays, so it returns the most light. It is still in use today. This is a simplified model.",
+      "whyItMatters": "",
+      "realSize": [
+        1.04,
+        0.39,
+        0.57
+      ],
+      "honesty": "reconstructed",
+      "source": "https://www.apo.nmsu.edu/mainpage/apollo/apollolrrr/",
+      "role": "explore"
+    },
+    {
+      "id": "alsep-magnetometer",
+      "scene": "hadley-surface",
+      "name": "Surface magnetometer",
+      "short": "Three arms holding sensors about 70 cm above the ground. Together they measured the local magnetic field.",
+      "more": "The Moon has no global magnetic field today, but its rocks keep traces of older fields. The magnetometer's three sensors sat on booms about 1.5 m apart and measured the weak local field and how it changed as the Moon moved through the solar wind. The data also told scientists about the electrical properties of the interior. This is a simplified model.",
+      "whyItMatters": "",
+      "realSize": [
+        1.6,
+        0.8,
+        1.4
+      ],
+      "honesty": "reconstructed",
+      "source": "https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1972-031C-03",
+      "role": "explore"
+    },
+    {
+      "id": "alsep-heat-flow",
+      "scene": "hadley-surface",
+      "name": "Heat flow experiment",
+      "short": "An electronics box wired to probes in drilled holes. It measured how much heat escapes from the Moon's interior.",
+      "more": "The crew drilled holes and lowered temperature probes into them. The rate at which heat flows out tells scientists about the Moon's internal heat sources. On Apollo 15 drilling was much harder than expected, so the probes did not reach their planned depth. Only the electronics box and its cables show above the ground. This is a simplified model; its size is approximate.",
+      "whyItMatters": "",
+      "realSize": [
+        0.6,
+        0.21,
+        0.24
+      ],
+      "honesty": "reconstructed",
+      "source": "https://en.wikipedia.org/wiki/Apollo_Lunar_Surface_Experiments_Package",
+      "role": "explore"
+    },
+    {
+      "id": "rtg",
+      "scene": "hadley-surface",
+      "name": "Nuclear power generator (RTG)",
+      "short": "A finned cylinder that turned heat from decaying plutonium into electricity for the experiments, day and night.",
+      "more": "A radioisotope thermoelectric generator has no moving parts. Heat from radioactive decay flows through thermocouples that make about 70 watts of electricity, and the dark fins shed the waste heat. Sunlight could not power the instruments through the two-week lunar night, so every ALSEP used one. The SNAP-27 is 46 cm tall and about 40 cm across its fins. This is a simplified model.",
+      "whyItMatters": "",
+      "realSize": [
+        0.4,
+        0.46,
+        0.4
+      ],
+      "honesty": "reconstructed",
+      "source": "https://airandspace.si.edu/collection-objects/generator-assembly-rtg-snap-27/nasm_A19731201000",
+      "role": "explore"
+    },
+    {
+      "id": "hadley-rille",
+      "scene": "hadley-surface",
+      "name": "Hadley Rille",
+      "short": "A winding channel cut by lava, about 1.2 km wide and up to about 370 m deep near the landing site.",
+      "more": "Scientists agree that volcanism, not water, made the rille. Two ideas remain open: turbulent lava flows carved it, or the roof of a lava tube collapsed. The crew photographed layered outcrops in the walls, some layers up to about 60 m thick, and boulders on the floor that fell from them. The IAU gazetteer lists the rille as about 116 km long. The shape you see is the real NASA elevation model.",
+      "whyItMatters": "Modules 2 and 3: a landform you read under low sun and use to argue how the plain formed.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "https://en.wikipedia.org/wiki/Hadley_Rille",
+      "role": "task",
+      "realSizeNote": "Terrain feature larger than the modelled terrain (IAU length 116 km); its scale is the LROC/SLDEM elevation data itself, so no bounding-box scale test applies."
+    },
+    {
+      "id": "apennine-front",
+      "scene": "hadley-surface",
+      "name": "Apennine Front",
+      "short": "The mountain wall above the plain, pushed up by the Imbrium impact about 3.9 billion years ago.",
+      "more": "The Apennine mountains are part of the rim of the Imbrium basin, a giant impact scar. The Front exposes old crustal rock, about 3.9 billion years old. The darker lava plain at its foot is younger, about 3.3 billion years, and laps against the mountains; that contact is the superposition evidence in Module 3. In the elevation data used here, Mons Hadley rises about 4.1 km above the landing site; published heights for the Front reach about 4.5 km.",
+      "whyItMatters": "Module 3 (which is older?) compares the Front with the mare plain.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "https://en.wikipedia.org/wiki/Hadley%E2%80%93Apennine",
+      "role": "task",
+      "realSizeNote": "Mountain range far larger than the modelled terrain; scale comes from the elevation data."
+    },
+    {
+      "id": "mare-plain",
+      "scene": "hadley-surface",
+      "name": "Mare plain (Palus Putredinis)",
+      "short": "The flat, darker plain the lander sits on: solidified lava about 3.3 billion years old.",
+      "more": "Mare means sea; early astronomers thought the dark plains were water. They are basalt lava flows that filled low ground after the big impacts. Because they cover older terrain and lap against the mountains, they must be younger than the Apennine Front. The age is about 3.3 billion years, from the Apollo 15 basalt samples.",
+      "whyItMatters": "Module 3: the younger unit in the superposition argument.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "https://spudislunarresources.nss.org/Bibliography/p/105.pdf",
+      "role": "task",
+      "realSizeNote": "Plain larger than the modelled terrain; scale comes from the elevation data."
+    },
+    {
+      "id": "mount-hadley",
+      "scene": "hadley-surface",
+      "name": "Mount Hadley (Mons Hadley)",
+      "short": "The great massif to the north-east, about 20 km away and about 4 km higher than the landing site.",
+      "more": "Mons Hadley is one of the highest peaks of the Montes Apenninus, about 26 km across at its base. In the SLDEM2015 elevation model used here its summit is about 4.1 km above the landing site; the IAU-cited height is 4.5 km above the adjacent plain. With no haze on the Moon, it looks much closer than it is. In low morning light its flanks look sharp; under a high Sun they flatten out.",
+      "whyItMatters": "Module 2: compare the same slope under low and high Sun.",
+      "realSize": 26400,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/3983",
+      "role": "explore"
+    },
+    {
+      "id": "hadley-delta",
+      "scene": "hadley-surface",
+      "name": "Hadley Delta (Mons Hadley Delta)",
+      "short": "The mountain to the south. The crew sampled its lower slopes at St. George and Spur craters.",
+      "more": "Mons Hadley Delta forms the southern part of the Front near the site, about 17 km across. In the elevation model used here its summit is about 3.5 km above the landing site and about 18 km away. Station 2 near St. George crater and the EVA 2 stations, including Spur crater where the Genesis Rock was found, sit on its lower slopes.",
+      "whyItMatters": "Module 4: station stops on the Front.",
+      "realSize": 17240,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/3984",
+      "role": "explore"
+    },
+    {
+      "id": "st-george-crater",
+      "scene": "hadley-surface",
+      "name": "St. George crater",
+      "short": "A crater about 2.4 km across at the foot of Hadley Delta, near Station 2 of the first moonwalk.",
+      "more": "On EVA 1 the crew drove to Elbow crater and then to Station 2 near St. George, at the base of the mountain front, where they sampled boulders and took a double core. The IAU gazetteer lists its diameter as 2.42 km. Its position in the app comes from published coordinates and is approximate.",
+      "whyItMatters": "Module 4: a traverse stop on the Front.",
+      "realSize": 2420,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/5678",
+      "role": "task"
+    },
+    {
+      "id": "spur-crater",
+      "scene": "hadley-surface",
+      "name": "Spur crater (Station 7)",
+      "short": "A crater about 80 m across on the Front where the crew found the Genesis Rock, a white crystalline anorthosite.",
+      "more": "On EVA 2, at Station 7, the crew found among many samples a white crystalline rock later called the Genesis Rock (sample 15415). It is anorthosite, a rock from the Moon's early crust. Early analyses gave about 4.1 billion years; later work on related rocks suggests it may be older. The IAU gazetteer lists Spur as 80 m across.",
+      "whyItMatters": "Modules 3 and 5: the oldest evidence in the case, with honest age uncertainty.",
+      "realSize": 80,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/5673",
+      "role": "task"
+    },
+    {
+      "id": "elbow-crater",
+      "scene": "hadley-surface",
+      "name": "Elbow crater (Station 1)",
+      "short": "A crater about 340 m across at a sharp bend of the rille, the first rover stop about 3.2 km from the lander.",
+      "more": "Elbow sits at a sharp bend of Hadley Rille. It was Station 1 on the first moonwalk, about a 3.2 km drive from the lander. The IAU gazetteer lists it as 340 m across. Its position in the app comes from published coordinates that reproduce that drive distance.",
+      "whyItMatters": "Module 4: first station on the EVA 1 route.",
+      "realSize": 340,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/1759",
+      "role": "explore"
+    },
+    {
+      "id": "dune-crater",
+      "scene": "hadley-surface",
+      "name": "Dune crater (Station 4)",
+      "short": "A crater about 380 m across on the plain, where the crew sampled a large boulder full of gas holes.",
+      "more": "On the way back from Spur crater on EVA 2, the crew made a quick stop at the south rim of Dune crater and sampled a large boulder full of gas holes (vesicles), a sign of lava that once held gas. The IAU gazetteer lists Dune as 380 m across. Its position in the app is approximate.",
+      "whyItMatters": "Module 4: last stop of EVA 2.",
+      "realSize": 380,
+      "honesty": "real",
+      "source": "https://planetarynames.wr.usgs.gov/Feature/1662",
+      "role": "explore"
+    },
+    {
+      "id": "craterlets",
+      "scene": "hadley-surface",
+      "name": "Small craters (craterlets)",
+      "short": "Small bowl-shaped pits made by meteoroid impacts. Counting them per area tells you how old a surface is.",
+      "more": "A surface collects impact craters the longer it is exposed, so older surfaces have more craters per square kilometre. In Module 3 you count craters on the plain and on the Front to compare their ages. The craters here come from the real elevation model; none are added for looks. The app's counts are a computer count of craters 20 m and wider, and they are approximate.",
+      "whyItMatters": "Module 3: crater counting is the main dating method in the case.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15",
+      "role": "task",
+      "realSizeNote": "Many craters of different sizes in the elevation data; no single size to test."
+    },
+    {
+      "id": "boulders",
+      "scene": "hadley-surface",
+      "name": "Boulders",
+      "short": "Rocks thrown out by impacts or broken from outcrops. Their size and spread hint at nearby craters.",
+      "more": "Larger boulders usually sit near young craters, because impacts dig them up and micrometeoroids slowly break them down over time. The boulders here are scans of real rocks from a free (CC0) library, scaled up and placed on the real terrain; their positions and sizes are illustrative.",
+      "whyItMatters": "Module 2: shadows on boulders show the Sun angle.",
+      "realSize": [
+        2.0,
+        1.2,
+        1.6
+      ],
+      "honesty": "illustrative",
+      "source": "https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine",
+      "role": "task"
+    },
+    {
+      "id": "regolith",
+      "scene": "hadley-surface",
+      "name": "Regolith (lunar soil)",
+      "short": "Fine, sharp dust and broken rock covering the whole surface, made by billions of years of impacts.",
+      "more": "Regolith is not soil in the Earth sense: there is no water or life in it. It is rock ground down by impacts. It is fine like flour, sticks to everything and has sharp edges, because no wind or water rounds the grains. The close-up surface texture here is a scan from a free (CC0) library and is illustrative; the brightness of the plains and mountains comes from real orbital data.",
+      "whyItMatters": "",
+      "realSize": null,
+      "honesty": "illustrative",
+      "source": "https://svs.gsfc.nasa.gov/4720",
+      "role": "explore",
+      "realSizeNote": "A surface layer, not an object with a size."
+    },
+    {
+      "id": "footprints",
+      "scene": "hadley-surface",
+      "name": "Bootprints",
+      "short": "Crisp prints in the regolith around the lander. With no wind or rain, they last a very long time.",
+      "more": "Only slow processes change the surface: micrometeoroid hits and the temperature swing between day and night. Apollo bootprints are expected to last at least a million years. The trampled patch here belongs to the fictional field crew; its texture is a scan from a free (CC0) library and its layout is illustrative.",
+      "whyItMatters": "",
+      "realSize": [
+        1.55,
+        0.02,
+        3.1
+      ],
+      "honesty": "illustrative",
+      "source": "https://www.amnh.org/exhibitions/permanent/meteorites/meteorite-impacts/on-the-moon",
+      "role": "explore"
+    },
+    {
+      "id": "rover-tracks",
+      "scene": "hadley-surface",
+      "name": "Rover tracks",
+      "short": "Two chevron-patterned tracks from the rover's mesh wheels, running between the lander and the stations.",
+      "more": "The rover's wire-mesh wheels carried titanium chevrons over half of their contact area, which left a distinctive tread. The two tracks are 1.83 m apart. Like bootprints, they stay sharp because nothing on the Moon blows or washes them away. The track layout follows the app's traverse routes and is illustrative.",
+      "whyItMatters": "Module 4: the tracks show the route you planned.",
+      "realSize": [
+        2.06,
+        0.02,
+        10
+      ],
+      "honesty": "illustrative",
+      "source": "https://en.wikipedia.org/wiki/Lunar_Roving_Vehicle",
+      "role": "explore",
+      "realSizeNote": "Clickable 10 m section of both wheel tracks."
+    },
+    {
+      "id": "sample-bag",
+      "scene": "hadley-surface",
+      "name": "Sample bag",
+      "short": "A numbered bag for one rock or soil sample. Each bag is logged with its station and a photo.",
+      "more": "Geologists record where every sample came from, because a rock without its context is much less useful. Apollo crews photographed each sample before and after collection and dropped it into a numbered bag. This bag belongs to the fictional field team; its size is approximate.",
+      "whyItMatters": "Module 5: the field report uses samples together with their stations.",
+      "realSize": [
+        0.19,
+        0.05,
+        0.21
+      ],
+      "honesty": "reconstructed",
+      "source": "https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine",
+      "role": "explore"
+    },
+    {
+      "id": "earth",
+      "scene": "hadley-surface",
+      "name": "Earth",
+      "short": "Earth hangs almost still in the southern sky. It spins and changes phase, but it never rises or sets here.",
+      "more": "The Moon always keeps the same face toward Earth, so from Hadley Earth stays about 64 degrees above the southern horizon (approximate), drifting only a few degrees over a month. It turns once a day; the app shows the spin and the moving clouds as a time-lapse. Its phase is the opposite of the Moon's phase seen from Earth: when the Sun is low here, Earth looks about half lit.",
+      "whyItMatters": "",
+      "realSize": 12742000,
+      "honesty": "time-lapse",
+      "source": "https://en.wikipedia.org/wiki/Libration",
+      "role": "explore"
+    },
+    {
+      "id": "sun",
+      "scene": "hadley-surface",
+      "name": "Sun",
+      "short": "A hard white disc in a black sky. A lunar day lasts about 29.5 Earth days, so it moves very slowly.",
+      "more": "With no air to scatter light, the sky stays black even at noon and shadows are sharp and very dark. The Sun crosses the lunar sky at about half a degree per hour, because one day-night cycle takes about 29.5 Earth days. The app speeds up the Sun's motion so you can watch shadows sweep the terrain; that motion is time-lapse.",
+      "whyItMatters": "Module 2: the Sun angle changes which landforms you can see.",
+      "realSize": 1391400000,
+      "honesty": "time-lapse",
+      "source": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+      "role": "task"
+    },
+    {
+      "id": "starfield",
+      "scene": "hadley-surface",
+      "name": "Stars",
+      "short": "Stars do not twinkle on the Moon, because there is no air. They show only when your eyes are not dazzled.",
+      "more": "Twinkling on Earth comes from moving air bending starlight, so on the Moon the stars are steady points. Apollo surface photos show no stars because the cameras were set for the bright, sunlit ground. The app uses real star positions and brightnesses from the Yale Bright Star Catalogue. It brightens the stars when you look away from the sunlit surface and fades them toward it; that fade is illustrative.",
+      "whyItMatters": "",
+      "realSize": null,
+      "honesty": "real",
+      "source": "http://earthobservatory.nasa.gov/blogs/earthmatters/2011/09/28/where-are-the-stars/",
+      "role": "explore",
+      "realSizeNote": "Stars are effectively at infinite distance; no size to test."
+    },
+    {
+      "id": "endeavour",
+      "scene": "hadley-surface",
+      "name": "Orbiter pass overhead",
+      "short": "A moving point of light: the field team's own orbiter (fictional mission). Its pass is time-compressed.",
+      "more": "In this app the light belongs to the fictional field team's orbiter, and its pass is time-compressed so you can see one. It does the job Al Worden did on Apollo 15 in 1971: he stayed in lunar orbit in the command module Endeavour while Scott and Irwin worked on the surface. At about 110 km up, an orbit of the Moon takes about two hours.",
+      "whyItMatters": "",
+      "realSize": [
+        3.9,
+        3.9,
+        11.0
+      ],
+      "honesty": "fictional",
+      "source": "https://en.wikipedia.org/wiki/Apollo_15",
+      "role": "explore"
+    },
+    {
+      "id": "micrometeoroid-flash",
+      "scene": "hadley-surface",
+      "name": "Micrometeoroid impact",
+      "short": "A tiny flash and dust puff on distant ground. There are no meteor streaks: there is no air to burn in.",
+      "more": "Meteoroids hit the Moon all the time at many kilometres per second. Without an atmosphere they are not slowed or burned up, so there is no shooting-star streak; they hit the ground directly, make a crater and throw up a plume of debris. NASA telescopes record impact flashes on the Moon's night side. How often the app shows one is illustrative.",
+      "whyItMatters": "",
+      "realSize": null,
+      "honesty": "illustrative",
+      "source": "https://www.nasa.gov/meteoroid-environment-office/lunar-impact-monitoring/",
+      "role": "explore",
+      "realSizeNote": "A brief flash; no object size to test."
+    },
+    {
+      "id": "field-crew",
+      "scene": "hadley-surface",
+      "name": "Field crew (two astronauts)",
+      "short": "Two suited geologists who lope, sample and point. They belong to the app's fictional field-team mission.",
+      "more": "Walking in one-sixth gravity, most Apollo crews found a loping gait easiest: pushing off with each step and floating forward before planting the next foot. The two figures here are not portraits of Scott and Irwin; they are the app's fictional field team, and their motion is illustrative.",
+      "whyItMatters": "",
+      "realSize": [
+        0.8,
+        1.9,
+        0.6
+      ],
+      "honesty": "fictional",
+      "source": "https://www.nasa.gov/wp-content/uploads/static/history/alsj/a11/a11.gaits.html",
+      "role": "explore"
+    },
+    {
+      "id": "horizon",
+      "scene": "hadley-surface",
+      "name": "Close horizon",
+      "short": "The horizon looks close because the Moon is small: on flat ground it is only about 2.4 km away for a standing person.",
+      "more": "The Moon's radius is about 1,737 km, roughly a quarter of Earth's, so the ground curves away faster. For eyes 1.7 m above flat ground the horizon is about 2.4 km away. With no haze to show distance, far mountains also look much closer than they are, a known trap for judging distance on the Moon. The terrain in this app includes the Moon's curvature.",
+      "whyItMatters": "Module 4: distances on the traverse are longer than they look.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+      "role": "explore",
+      "realSizeNote": "A line of sight, not an object."
+    },
+    {
+      "id": "genesis-rock",
+      "scene": "hadley-surface",
+      "name": "Genesis Rock (sample 15415)",
+      "short": "A fist-sized white anorthosite of about 270 g, one of the oldest rocks returned by Apollo.",
+      "more": "The crew thought it might be a piece of the Moon's first crust, hence the nickname. Later analysis showed it formed a little after the first crust solidified, but it is still exceptionally old: about 4.1 billion years by early analyses, likely older still. The model is a recoloured scan of another rock at about the right size; it does not reproduce the real sample's shape.",
+      "whyItMatters": "Module 5: the age-uncertainty discussion.",
+      "realSize": [
+        0.075,
+        0.047,
+        0.057
+      ],
+      "honesty": "reconstructed",
+      "source": "https://curator.jsc.nasa.gov/lunar/lsc/15415.pdf",
+      "role": "task"
+    },
+    {
+      "id": "moon-globe",
+      "scene": "orbit",
+      "name": "The Moon from orbit",
+      "short": "The near side, built from NASA's LROC colour map. It turns slowly in time-lapse.",
+      "more": "The colour map comes from NASA's Scientific Visualization Studio, built from the LROC wide-angle camera mosaic and tuned for appearance, not science. The Moon is 3,475 km across. The globe's turn and the moving day-night line are sped up.",
+      "whyItMatters": "Module 1: find the landing site on the globe.",
+      "realSize": 3474800,
+      "honesty": "time-lapse",
+      "source": "https://svs.gsfc.nasa.gov/4720",
+      "role": "task"
+    },
+    {
+      "id": "terminator",
+      "scene": "orbit",
+      "name": "Terminator (day-night line)",
+      "short": "The line between day and night. Near it the Sun is low and shadows are long, so relief stands out.",
+      "more": "Along the terminator every crater rim and ridge casts a long shadow, which is why astronomers look there for detail. Apollo 15 landed soon after local sunrise, with the Sun low, so the crew could see the relief clearly. The line's movement here is time-lapse.",
+      "whyItMatters": "Module 2 link: low Sun reveals landforms.",
+      "realSize": null,
+      "honesty": "time-lapse",
+      "source": "https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine",
+      "role": "explore",
+      "realSizeNote": "A line of shadow, not an object."
+    },
+    {
+      "id": "mare-imbrium",
+      "scene": "orbit",
+      "name": "Mare Imbrium",
+      "short": "The huge dark plain in the north-west of the near side; the landing site lies near its eastern edge.",
+      "more": "Imbrium is an impact basin later filled by lava. The Apennine mountains form part of its rim, which is why the landing site has both old mountains and younger lava plains side by side.",
+      "whyItMatters": "Modules 1 and 3: the setting of the age question.",
+      "realSize": null,
+      "honesty": "real",
+      "source": "https://en.wikipedia.org/wiki/Hadley%E2%80%93Apennine",
+      "role": "explore",
+      "realSizeNote": "Basin is part of the globe texture; no separate object."
+    }
+  ]
+}

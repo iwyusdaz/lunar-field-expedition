@@ -1,0 +1,13 @@
+{
+ "source": "Clementine UVVIS 750 nm global mosaic v2.1, 118 m/px (USGS Astrogeology)",
+ "meaning": "relative albedo at 750 nm (grey, linear DN 0-255 as published); use as a brightness multiplier, not as colour",
+ "extentM": {
+  "west": -40960,
+  "east": 40960,
+  "south": -40960,
+  "north": 40960
+ },
+ "frame": "terrain-v3 tileset frame (x east, y north, origin at the LM); row 0 = north edge",
+ "pixelM": 80,
+ "resampling": "GDAL cubic from 118 m to 80 m (no new detail; upsampled)"
+}

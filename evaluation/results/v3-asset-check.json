@@ -1,0 +1,192 @@
+{
+ "tool": "scripts/check-v3-assets.mjs",
+ "pass": true,
+ "failures": [],
+ "licences": {
+  "sources": 13,
+  "allowed": [
+   "CC0-1.0",
+   "public-domain",
+   "CC-BY-4.0"
+  ]
+ },
+ "attribution": {
+  "rows": 30,
+  "attributionJsonRows": 30
+ },
+ "files": {
+  "count": 2081,
+  "totalMB": 70.78,
+  "largest": {
+   "file": "public/assets/v3/decals/bootprints-normal.ktx2",
+   "MB": 1.711
+  },
+  "tiersMB": {
+   "streamed-after-first-click": 63.38,
+   "streamed-on-inspect": 3.8,
+   "first-load": 3.6
+  }
+ },
+ "catalog": {
+  "objects": 35,
+  "perScene": {
+   "hadley-surface": 32,
+   "orbit": 3
+  },
+  "realSizeNull": [
+   "hadley-rille",
+   "apennine-front",
+   "mare-plain",
+   "craterlets",
+   "regolith",
+   "starfield",
+   "micrometeoroid-flash",
+   "horizon",
+   "terminator",
+   "mare-imbrium"
+  ],
+  "honesty": {
+   "real": 13,
+   "reconstructed": 11,
+   "fictional": 2,
+   "illustrative": 5,
+   "time-lapse": 4
+  },
+  "roles": {
+   "task": 10,
+   "explore": 25
+  }
+ },
+ "bounds": [
+  {
+   "id": "alsep-central-station",
+   "boundsM": [
+    0.62,
+    1.39,
+    0.46
+   ],
+   "realSize": [
+    0.62,
+    1.39,
+    0.46
+   ],
+   "error": 0
+  },
+  {
+   "id": "alsep-seismometer",
+   "boundsM": [
+    0.236,
+    0.314,
+    0.236
+   ],
+   "realSize": [
+    0.23,
+    0.29,
+    0.23
+   ],
+   "error": 0.083
+  },
+  {
+   "id": "alsep-retroreflector",
+   "boundsM": [
+    1.04,
+    0.394,
+    0.568
+   ],
+   "realSize": [
+    1.04,
+    0.39,
+    0.57
+   ],
+   "error": 0.01
+  },
+  {
+   "id": "alsep-magnetometer",
+   "boundsM": [
+    1.602,
+    0.803,
+    1.401
+   ],
+   "realSize": [
+    1.6,
+    0.8,
+    1.4
+   ],
+   "error": 0.004
+  },
+  {
+   "id": "alsep-heat-flow",
+   "boundsM": [
+    0.601,
+    0.205,
+    0.24
+   ],
+   "realSize": [
+    0.6,
+    0.21,
+    0.24
+   ],
+   "error": 0.024
+  },
+  {
+   "id": "rtg",
+   "boundsM": [
+    0.4,
+    0.46,
+    0.4
+   ],
+   "realSize": [
+    0.4,
+    0.46,
+    0.4
+   ],
+   "error": 0
+  },
+  {
+   "id": "sample-bag",
+   "boundsM": [
+    0.19,
+    0.052,
+    0.21
+   ],
+   "realSize": [
+    0.19,
+    0.05,
+    0.21
+   ],
+   "error": 0.04
+  },
+  {
+   "id": "genesis-rock",
+   "boundsM": [
+    0.075,
+    0.0467,
+    0.0571
+   ],
+   "realSize": [
+    0.075,
+    0.047,
+    0.057
+   ],
+   "error": 0.006
+  }
+ ],
+ "repo": {
+  "filesToCommit": 2280,
+  "filesToCommitMB": 113.3,
+  "largestFile": {
+   "file": "docs/trailer.webm",
+   "MB": 11.16
+  },
+  "gitCountObjects": {
+   "count": "550",
+   "size": "52.57 MiB",
+   "in-pack": "0",
+   "packs": "0",
+   "size-pack": "0 bytes",
+   "prune-packable": "0",
+   "garbage": "0",
+   "size-garbage": "0 bytes"
+  }
+ }
+}

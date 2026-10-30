@@ -107,3 +107,23 @@ orbiter, labelled "fictional mission, orbit time-compressed". Its card explains 
 Apollo 15 in 1971 Al Worden flew the command module Endeavour on exactly this job. The
 card cites a source from `research/`. No Apollo 15 orbit source is in `research/` yet
 (the draft entry cites Wikipedia), so S4 adds one and the card cites it.
+
+## v3 assets staged in S4 (2026-10-31)
+
+Built by the scripts listed; formats from `_templates/spikes/RESULTS.md`; sources and licences in
+`ATTRIBUTION.md` rows 15-30 and `evaluation/results/asset-licence-check.json`; tiers in
+`public/assets/v3/manifest.json`.
+
+| Asset | Files | Notes |
+|---|---|---|
+| Streamed terrain | `public/assets/terrain-v3/` (`scripts/build-v3-terrain.mjs`) | Near: NAC DTM 5 m, 1,705 tiles. Far: SLDEM2015 80 m, 341 tiles, whole Apennine Front with Mons Hadley (summit about 4.1 km above the LM, 20 km away) and Hadley Delta (3.5 km, 18 km). Lunar curvature applied. |
+| Regional albedo | `public/assets/v3/terrain/albedo-clementine-750nm-1024.ktx2` | Clementine 750 nm, multiplier for the far terrain |
+| Regolith detail | `public/assets/v3/regolith/` | Poly Haven CC0 moon_01 (3.1 m tile) and moon_dusted_02 (0.4 m tile); 512 px first, 1024 px streamed |
+| Decals | `public/assets/v3/decals/` | Poly Haven CC0 bootprint patch and chevron tyre track (illustrative) |
+| ALSEP set | `public/assets/v3/models/alsep-set.glb` | Own work: central station, seismometer (+ skirt), retroreflector, magnetometer, heat flow box, RTG, sample bag |
+| Rocks | `public/assets/v3/models/moon-rock-04..07.glb`, `genesis-rock-reconstructed.glb` | Poly Haven CC0 scans; boulders are scaled instances (illustrative) |
+| Sky | `public/assets/v3/sky/` | Blue Marble 2048 day map and clouds (time-lapse spin), BSC5P star catalogue (real positions, no twinkle) |
+| Grade | `public/assets/v3/grade/hadley-ektachrome-33.png` (source `design/grade/hadley-ektachrome-33.cube`) | Own-work LUT for the S3 tone-mapping pass |
+
+Not staged here: the LM, rover, flag and crew stay the v2 own-work procedural models for S5
+(DECISIONS #25); fonts (Jost + IBM Plex Sans) come with the S3 template sync.

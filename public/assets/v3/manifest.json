@@ -1,0 +1,336 @@
+{
+ "generatedBy": "scripts/check-v3-assets.mjs",
+ "tiers": {
+  "first-load": "needed for the first surface view (counts toward the 15 MB desktop / 8 MB phone budget)",
+  "streamed-after-first-click": "loaded after the first interaction (plan §7)",
+  "streamed-on-inspect": "loaded when the learner opens that object"
+ },
+ "decoders": "KTX2 needs three/examples/jsm/libs/basis (self-hosted); GLB tiles and models need the meshopt decoder (three/examples/jsm/libs/meshopt_decoder.module.js)",
+ "files": [
+  {
+   "path": "assets/terrain-v3/build-meta.json",
+   "bytes": 1743,
+   "sha256": "e09c32393a2e123a",
+   "tier": "streamed-after-first-click",
+   "attribution": []
+  },
+  {
+   "path": "assets/terrain-v3/tileset.json",
+   "bytes": 362730,
+   "sha256": "2b025a3a6b238b03",
+   "tier": "streamed-after-first-click",
+   "attribution": []
+  },
+  {
+   "path": "assets/v3/decals/bootprints-albedo.ktx2",
+   "bytes": 181300,
+   "sha256": "d0498b4658ee4b3a",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    20
+   ]
+  },
+  {
+   "path": "assets/v3/decals/bootprints-ard.ktx2",
+   "bytes": 255031,
+   "sha256": "0f52b3256bfbfed3",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    20
+   ]
+  },
+  {
+   "path": "assets/v3/decals/bootprints-normal.ktx2",
+   "bytes": 1794037,
+   "sha256": "92ba76f6774c6657",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    20
+   ]
+  },
+  {
+   "path": "assets/v3/decals/rover-track-albedo.ktx2",
+   "bytes": 68314,
+   "sha256": "2c83a7f24434b38a",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    21
+   ]
+  },
+  {
+   "path": "assets/v3/decals/rover-track-ard.ktx2",
+   "bytes": 117289,
+   "sha256": "c683949c03e74442",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    21
+   ]
+  },
+  {
+   "path": "assets/v3/decals/rover-track-normal.ktx2",
+   "bytes": 437643,
+   "sha256": "73c5f116e596dd60",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    21
+   ]
+  },
+  {
+   "path": "assets/v3/grade/hadley-ektachrome-33.png",
+   "bytes": 89888,
+   "sha256": "339c716ddb59f006",
+   "tier": "first-load",
+   "attribution": [
+    30
+   ]
+  },
+  {
+   "path": "assets/v3/manifest.json",
+   "bytes": 7068,
+   "sha256": "7b1fedac99b406d2",
+   "tier": "first-load",
+   "attribution": []
+  },
+  {
+   "path": "assets/v3/models/alsep-set.glb",
+   "bytes": 872748,
+   "sha256": "bf0badfcaafff13c",
+   "tier": "first-load",
+   "attribution": [
+    29
+   ]
+  },
+  {
+   "path": "assets/v3/models/genesis-rock-reconstructed.glb",
+   "bytes": 463916,
+   "sha256": "9afd91fdfd2b06c0",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    25
+   ]
+  },
+  {
+   "path": "assets/v3/models/models-meta.json",
+   "bytes": 2739,
+   "sha256": "28ef15f445e7a4a2",
+   "tier": "first-load",
+   "attribution": []
+  },
+  {
+   "path": "assets/v3/models/moon-rock-04.glb",
+   "bytes": 481384,
+   "sha256": "936ffef4e85a5e26",
+   "tier": "first-load",
+   "attribution": [
+    22
+   ]
+  },
+  {
+   "path": "assets/v3/models/moon-rock-05.glb",
+   "bytes": 491632,
+   "sha256": "ecbece35f0c50a0b",
+   "tier": "first-load",
+   "attribution": [
+    23
+   ]
+  },
+  {
+   "path": "assets/v3/models/moon-rock-06.glb",
+   "bytes": 478108,
+   "sha256": "649cab85eeac1919",
+   "tier": "first-load",
+   "attribution": [
+    24
+   ]
+  },
+  {
+   "path": "assets/v3/models/moon-rock-07.glb",
+   "bytes": 454864,
+   "sha256": "79f21c8f6ff964f9",
+   "tier": "first-load",
+   "attribution": [
+    25
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-albedo-1024.ktx2",
+   "bytes": 139411,
+   "sha256": "85f4d2ec8eb37293",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-albedo-512.ktx2",
+   "bytes": 29425,
+   "sha256": "4b65dcc2a7df4143",
+   "tier": "first-load",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-ard-1024.ktx2",
+   "bytes": 232005,
+   "sha256": "34decd262f081d79",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-ard-512.ktx2",
+   "bytes": 82479,
+   "sha256": "6af9b4868f19b64f",
+   "tier": "first-load",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-normal-1024.ktx2",
+   "bytes": 1156239,
+   "sha256": "aa9b83b3dfd60556",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-macro-normal-512.ktx2",
+   "bytes": 269108,
+   "sha256": "d4965b672d8fc68d",
+   "tier": "first-load",
+   "attribution": [
+    19
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-albedo-1024.ktx2",
+   "bytes": 78441,
+   "sha256": "233323564e629f52",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-albedo-512.ktx2",
+   "bytes": 14697,
+   "sha256": "e674e8bdbb550868",
+   "tier": "first-load",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-ard-1024.ktx2",
+   "bytes": 252501,
+   "sha256": "456885e58a2e2d5a",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-ard-512.ktx2",
+   "bytes": 92207,
+   "sha256": "26e6b96a4286ec70",
+   "tier": "first-load",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-normal-1024.ktx2",
+   "bytes": 1283559,
+   "sha256": "9957f373aa140fb2",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/regolith/regolith-meso-normal-512.ktx2",
+   "bytes": 316379,
+   "sha256": "4152d521f24b9de2",
+   "tier": "first-load",
+   "attribution": [
+    18
+   ]
+  },
+  {
+   "path": "assets/v3/sky/earth-clouds-2048.ktx2",
+   "bytes": 442385,
+   "sha256": "1844d74c3bd9eae5",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    27
+   ]
+  },
+  {
+   "path": "assets/v3/sky/earth-day-2048.ktx2",
+   "bytes": 223615,
+   "sha256": "0b240e375e1ce836",
+   "tier": "streamed-on-inspect",
+   "attribution": [
+    26
+   ]
+  },
+  {
+   "path": "assets/v3/sky/stars-bsc5p.bin",
+   "bytes": 90960,
+   "sha256": "d02d1a1f8f417e80",
+   "tier": "first-load",
+   "attribution": [
+    28
+   ]
+  },
+  {
+   "path": "assets/v3/sky/stars-bsc5p.json",
+   "bytes": 479,
+   "sha256": "b03865c8ea2ccc72",
+   "tier": "first-load",
+   "attribution": [
+    28
+   ]
+  },
+  {
+   "path": "assets/v3/terrain/albedo-clementine-750nm-1024.json",
+   "bytes": 488,
+   "sha256": "9d1bdbe7bfbbd111",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    17
+   ]
+  },
+  {
+   "path": "assets/v3/terrain/albedo-clementine-750nm-1024.ktx2",
+   "bytes": 70836,
+   "sha256": "3a24910695b8ce86",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    17
+   ]
+  },
+  {
+   "path": "assets/terrain-v3/near/",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    15
+   ],
+   "files": 1705,
+   "bytes": 52606472
+  },
+  {
+   "path": "assets/terrain-v3/far/",
+   "tier": "streamed-after-first-click",
+   "attribution": [
+    16
+   ],
+   "files": 341,
+   "bytes": 10277620
+  }
+ ]
+}

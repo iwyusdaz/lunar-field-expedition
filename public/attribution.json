@@ -110,5 +110,133 @@
     "license": "MIT (code) / CC BY 4.0 (content)",
     "retrieved": "—",
     "changes": "Built procedurally in three.js from public-domain NASA Apollo 15 surface photographs (Apollo Lunar Surface Journal image library, https://www.hq.nasa.gov/alsj/a15/images15.html); no third-party model files are used. Simplified, approximate geometry."
+  },
+  {
+    "asset": "LROC NAC DTM \"NAC_DTM_APOLLO15\", v3 streamed near terrain (`public/assets/terrain-v3/near/`)",
+    "author": "NASA / GSFC / Arizona State University",
+    "source": "http://wms.lroc.asu.edu/lroc/view_rdr_product/NAC_DTM_APOLLO15",
+    "license": "Public domain (NASA data; credit requested)",
+    "retrieved": "2026-10-30",
+    "changes": "Averaged from 2 m to 5 m on a local grid centred on the LM, gaps filled from SLDEM2015 (row 16), lunar curvature applied, cut into a 3D Tiles quadtree of meshopt-compressed GLB tiles by `scripts/build-v3-terrain.mjs`. No vertical exaggeration."
+  },
+  {
+    "asset": "SLDEM2015 LOLA + Kaguya TC merged DEM, 512 px/deg (`public/assets/terrain-v3/far/`, and the gap fill of the near tiles)",
+    "author": "NASA LOLA Team and JAXA SELENE/Kaguya Team (Barker et al. 2016, Icarus 273); distributed by NASA PDS / USGS Astrogeology",
+    "source": "https://astrogeology.usgs.gov/search/map/moon_lro_lola_selene_kaguya_tc_dem_merge_60n60s_59m (tile from https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/sldem2015/tiles/float_img/)",
+    "license": "Public domain (USGS Astropedia; please cite the authors)",
+    "retrieved": "2026-10-30",
+    "changes": "Window 24.75-27.5 N, 2.1-5.17 E read by HTTP range requests; resampled to 80 m over an 81.92 km square, shifted +0.25 m onto the NAC datum, curvature applied, 3D Tiles quadtree by `scripts/build-v3-terrain.mjs`."
+  },
+  {
+    "asset": "Clementine UVVIS 750 nm global mosaic v2.1, 118 m (`public/assets/v3/terrain/albedo-clementine-750nm-1024.ktx2`)",
+    "author": "USGS Astrogeology Science Center; Clementine mission (BMDO/NASA)",
+    "source": "https://astrogeology.usgs.gov/search/map/moon_clementine_uvvis_global_mosaic_118m",
+    "license": "Public domain (USGS Astropedia)",
+    "retrieved": "2026-10-30",
+    "changes": "Window cut with GDAL, reprojected onto the far terrain square at 80 m/px (cubic), encoded as grey KTX2. Used as relative albedo, not colour."
+  },
+  {
+    "asset": "Poly Haven texture \"Moon 01\" (`public/assets/v3/regolith/regolith-meso-*`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+    "source": "https://polyhaven.com/a/moon_01",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "2k JPG maps resized to 1024 and 512 px; AO, roughness and displacement packed into one map; encoded as KTX2 (ETC1S / UASTC) by `scripts/build-v3-textures.mjs`."
+  },
+  {
+    "asset": "Poly Haven texture \"Moon Dusted 02\" (`public/assets/v3/regolith/regolith-macro-*`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_dusted_02",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "As row 18."
+  },
+  {
+    "asset": "Poly Haven texture \"Moon Footprints 01\" (`public/assets/v3/decals/bootprints-*`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden, Dario Barresi",
+    "source": "https://polyhaven.com/a/moon_footprints_01",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "2k maps resized to 1024 px wide, packed and encoded as KTX2. Used as an illustrative bootprint patch for the fictional crew (labelled)."
+  },
+  {
+    "asset": "Poly Haven texture \"Moon Track 04\" (`public/assets/v3/decals/rover-track-*`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_track_04",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "2k maps resized to 512 px wide, packed and encoded as KTX2. Used as an illustrative rover-track strip (labelled)."
+  },
+  {
+    "asset": "Poly Haven model \"Moon Rock 04\" (`public/assets/v3/models/moon-rock-04.glb`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_04",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "1k glTF wrapped in a root node, textures resized to 512 px and encoded as KTX2, meshopt-compressed by `scripts/build-v3-models.mjs`."
+  },
+  {
+    "asset": "Poly Haven model \"Moon Rock 05\" (`public/assets/v3/models/moon-rock-05.glb`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_05",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "As row 22."
+  },
+  {
+    "asset": "Poly Haven model \"Moon Rock 06\" (`public/assets/v3/models/moon-rock-06.glb`)",
+    "author": "Greg Zaal, Jenelle van Heerden, Rico Cilliers",
+    "source": "https://polyhaven.com/a/moon_rock_06",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "As row 22."
+  },
+  {
+    "asset": "Poly Haven model \"Moon Rock 07\" (`public/assets/v3/models/moon-rock-07.glb`, `public/assets/v3/models/genesis-rock-reconstructed.glb`)",
+    "author": "Greg Zaal, Rico Cilliers, Jenelle van Heerden",
+    "source": "https://polyhaven.com/a/moon_rock_07",
+    "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
+    "retrieved": "2026-10-30",
+    "changes": "As row 22. The Genesis Rock copy is scaled to 7.5 cm and its colour map turned white-grey (anorthosite tone); labelled reconstructed, not the real shape of sample 15415."
+  },
+  {
+    "asset": "Blue Marble: land surface, shallow water and shaded topography, 2048 px (`public/assets/v3/sky/earth-day-2048.ktx2`)",
+    "author": "NASA Goddard Space Flight Center (Visible Earth)",
+    "source": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg",
+    "license": "Public domain (NASA media usage guidelines: https://www.nasa.gov/nasa-brand-center/images-and-media/; credit requested)",
+    "retrieved": "2026-10-30",
+    "changes": "Encoded as KTX2 (ETC1S sRGB) for the Earth close-up."
+  },
+  {
+    "asset": "Blue Marble: clouds, 2048 px (`public/assets/v3/sky/earth-clouds-2048.ktx2`)",
+    "author": "NASA Goddard Space Flight Center (Visible Earth)",
+    "source": "https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57747/cloud_combined_2048.jpg",
+    "license": "Public domain (NASA media usage guidelines; credit requested)",
+    "retrieved": "2026-10-30",
+    "changes": "Converted to grey and encoded as single-channel KTX2 for the moving cloud layer (time-lapse)."
+  },
+  {
+    "asset": "Yale Bright Star Catalogue, 5th revised ed. (preliminary), HEASARC table BSC5P (`public/assets/v3/sky/stars-bsc5p.bin`)",
+    "author": "D. Hoffleit and W. H. Warren Jr. (Yale University Observatory); table by NASA HEASARC",
+    "source": "https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/bsc5p.html",
+    "license": "Public domain (U.S. Government work; https://data.nasa.gov/dataset/bright-star-catalog lists https://www.usa.gov/government-works)",
+    "retrieved": "2026-10-30",
+    "changes": "9,000+ stars converted to J2000 unit vectors, V magnitude and B-V colour, packed as int16 (`scripts/build-v3-textures.mjs`)."
+  },
+  {
+    "asset": "ALSEP instrument set and sample bag (`public/assets/v3/models/alsep-set.glb`) with procedural foil, paint, Teflon and corner-cube textures",
+    "author": "This project (original work)",
+    "source": "—",
+    "license": "MIT (code) / CC BY 4.0 (content)",
+    "retrieved": "—",
+    "changes": "Modelled in code by `scripts/build-v3-models.mjs` from the published dimensions in research/apollo15-facts.md (v3 S4 table); simplified geometry, sizes partly approximate. No third-party model files."
+  },
+  {
+    "asset": "Colour grade LUT \"hadley-ektachrome-33\" (`public/assets/v3/grade/hadley-ektachrome-33.png`, source `design/grade/hadley-ektachrome-33.cube`)",
+    "author": "This project (original work)",
+    "source": "—",
+    "license": "MIT (code) / CC BY 4.0 (content)",
+    "retrieved": "—",
+    "changes": "Generated by `scripts/build-v3-textures.mjs` (33^3 grade: gentle S-curve, warm highlights, cool shadows)."
   }
 ]

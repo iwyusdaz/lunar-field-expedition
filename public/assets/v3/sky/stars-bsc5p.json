@@ -1,0 +1,16 @@
+{
+ "source": "Yale Bright Star Catalogue, 5th revised ed. (preliminary), NASA HEASARC table BSC5P",
+ "count": 9096,
+ "layout": "little-endian int16 x 5 per star, brightest first: x, y, z = J2000 equatorial unit vector * 32767 (x toward RA 0, z toward the north celestial pole); V magnitude * 100; B-V colour index * 1000 (0.6 where the catalogue has none)",
+ "vmagRange": [
+  -1.46,
+  7.96
+ ],
+ "brightest": [
+  "HR 2491",
+  "HR 2326",
+  "HR 5340",
+  "HR 5459",
+  "HR 7001"
+ ]
+}

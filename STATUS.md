@@ -1,6 +1,14 @@
 # Status — lunar-field-expedition
 
-Last updated: 2026-10-29
+Last updated: 2026-10-31
+
+## v3.0.0 (plan 10) — in progress
+
+| Item | Status |
+|---|---|
+| S0 owner direction (font pair, layout, reference board, object list) | done 2026-10-30 — `design/art-bible.md` |
+| S4 assets: terrain tiles, textures, models, sky data, LUT, `content/objects.json` (35 objects, 32 in the main scene) | done 2026-10-31 — `npm run check:v3-assets` passes (`evaluation/results/v3-asset-check.json`); licence log `evaluation/results/asset-licence-check.json` |
+| S5 build, gates, reviews, owner approval, release | pending |
 
 ## v2.0.0 ("Hasselblad at Hadley") — status
 

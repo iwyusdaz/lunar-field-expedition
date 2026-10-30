@@ -1,0 +1,77 @@
+{
+ "generatedBy": "scripts/build-v3-terrain.mjs",
+ "frame": "Z-up tileset frame: x east, y north, z up (glTF content Y-up); origin at the LM 26.13239 N 3.63330 E; 1 unit = 1 m; no vertical exaggeration",
+ "curvature": "applied: z = h - hLM - (x^2 + y^2) / (2 * 1737400)",
+ "lmElevationM": -1923.37,
+ "datumCheck": {
+  "medianNacMinusSldemM": 0.25,
+  "p10": -4.77,
+  "p90": 4.12,
+  "samples": 69123
+ },
+ "sldemOffsetAppliedM": 0.25,
+ "nearCellsFilledFromSldem": 832999,
+ "nearCellsTotal": 5249025,
+ "near": {
+  "source": "LROC NAC_DTM_APOLLO15 (2 m) averaged to 5 m; gaps from SLDEM2015 + offset",
+  "extentM": {
+   "west": -3575,
+   "east": 1545,
+   "south": -15360,
+   "north": 10240
+  },
+  "levels": "L0 80 m ... L4 5 m",
+  "tiles": 1705,
+  "bytes": 52606472,
+  "largest": 33172
+ },
+ "far": {
+  "source": "SLDEM2015 512 ppd (~59 m) bilinear to 80 m",
+  "extentM": {
+   "west": -40960,
+   "east": 40960,
+   "south": -40960,
+   "north": 40960
+  },
+  "levels": "L0 1280 m ... L4 80 m",
+  "tiles": 341,
+  "bytes": 10277620,
+  "largest": 32808,
+  "droppedCells": 24984
+ },
+ "landmarks": {
+  "monsHadleySummit": {
+   "gazetteerBounds": {
+    "latS": 26.32,
+    "latN": 27.13,
+    "lonW": 3.74,
+    "lonE": 4.4
+   },
+   "east": 13440,
+   "north": 14960,
+   "lat": 26.6257,
+   "lon": 4.127,
+   "elevationM": 2143,
+   "heightAboveLmM": 4066,
+   "heightAboveLowestNearbyM": 4377,
+   "distanceKm": 20.1
+  },
+  "monsHadleyDeltaSummit": {
+   "gazetteerBounds": {
+    "latS": 25.44,
+    "latN": 25.99,
+    "lonW": 3.46,
+    "lonE": 3.86
+   },
+   "east": 3520,
+   "north": -17200,
+   "lat": 25.5652,
+   "lon": 3.7626,
+   "elevationM": 1590,
+   "heightAboveLmM": 3513,
+   "heightAboveLowestNearbyM": 3861,
+   "distanceKm": 17.6
+  }
+ },
+ "seconds": 10.581
+}
