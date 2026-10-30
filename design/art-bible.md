@@ -74,3 +74,36 @@ No star twinkle (no atmosphere), no flag flutter, no audio.
 - The crater-marking click handler, the sun slider, the traverse planner and the
   evidence board are unchanged; every action keeps its keyboard and text-mode
   equivalent.
+
+## v3 owner direction (S0), recorded 2026-10-30
+
+The owner made these choices for plan 10 (v3.0.0) on 2026-10-30, after reviewing the
+S0 direction pack. The choices are the owner's; an agent prepared the pack.
+
+| Item | Choice |
+|---|---|
+| Font pair | **Pair A: Jost (display, 600) + IBM Plex Sans (body).** SIL OFL 1.1, self-hosted WOFF2. Specimen: `repos/immersive/_direction/lunar-field-expedition/specimen.html` |
+| Layout | Scene-first mock `repos/immersive/_direction/lunar-field-expedition/layout.svg` approved, with the label change below |
+| Reference board | Approved as drafted: `repos/immersive/_direction/lunar-field-expedition/index.html#refs` (10 links) |
+| Object list | Approved as drafted: `repos/immersive/_direction/lunar-field-expedition/objects.draft.json` (32 objects in the main scene, 3 secondary). S4 turns it into `content/objects.json` and resolves each object's `_check` note |
+
+### Object name labels are hidden by default (owner change, all seven repos)
+
+The mock shows a name label on every object. The owner wants no labels at rest:
+
+- Mouse: hovering an object shows its outline and its name label, with a fade in and out of about 150 ms. With reduced motion on, the label appears and disappears instantly.
+- Keyboard: when an object takes focus (Tab or the "Objects in view" list), its label shows the same way.
+- Touch (no hover): a tap opens the object's info card directly, and the label shows with it.
+- Off by default: a "Show all labels" menu setting, saved in localStorage; holding a key (Alt or L) shows all labels while held, and the controls cheat sheet lists that key.
+- Task cues (for example a numbered survey flag or a glint) are not name labels and stay visible. Their text labels follow the same hover rule. The plan §4.2 task/explore distinction still applies.
+- Gate: a ui-audit check and a browser test prove that no object labels are visible at rest, that hover, focus and tap each show the correct label, and that "Show all labels" shows them all.
+
+This is built once in the S3 template (`_templates/immersive-core`) and synced into the repo.
+
+### Open question: Endeavour card
+
+Keep the app's fictional framing. The moving light overhead is the field team's own
+orbiter, labelled "fictional mission, orbit time-compressed". Its card explains that on
+Apollo 15 in 1971 Al Worden flew the command module Endeavour on exactly this job. The
+card cites a source from `research/`. No Apollo 15 orbit source is in `research/` yet
+(the draft entry cites Wikipedia), so S4 adds one and the card cites it.
