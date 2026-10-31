@@ -227,16 +227,25 @@ export function buildRover() {
   }
   body.add(box(0.5, 0.35, 0.18, dark, 0, 0.92, 0.55)); // control console
   body.add(box(0.9, 0.3, 0.45, dark, 0, 0.72, -1.0)); // rear pallet / tool carrier
-  body.add(strut([0.35, 0.62, 0.95], [0.35, 1.7, 0.95], 0.02, frame)); // high-gain mast
+  // Communications relay unit (LCRU) masts: built apart from the chassis so the
+  // chassis keeps the published size (3.1 m x 2.06 m x 1.14 m) and the ground-
+  // commanded TV camera can be added and turned by the v3 scene.
+  const lcru = new THREE.Group();
+  lcru.name = 'v2-rover-lcru';
+  lcru.add(strut([0.35, 0.62, 0.95], [0.35, 1.7, 0.95], 0.02, frame)); // high-gain mast
   const hga = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.06, 0.18, 16, 1, true), dish);
   hga.position.set(0.35, 1.78, 0.95);
   hga.rotation.x = -0.5;
-  body.add(hga);
-  body.add(strut([-0.4, 0.62, 0.95], [-0.4, 1.6, 0.95], 0.012, frame)); // low-gain antenna
-  body.add(box(0.14, 0.14, 0.2, dark, 0, 1.12, 0.95)); // TV camera
+  lcru.add(hga);
+  lcru.add(strut([-0.4, 0.62, 0.95], [-0.4, 1.6, 0.95], 0.012, frame)); // low-gain antenna
   shadowed(body);
+  shadowed(lcru);
   mergeStaticGroup(body);
-  group.add(body);
+  mergeStaticGroup(lcru);
+  const chassis = new THREE.Group();
+  chassis.name = 'v2-rover-chassis';
+  chassis.add(body);
+  group.add(chassis, lcru);
 
   // One mesh per wheel (two material groups: mesh tread on the side wall, spoked
   // open disc on the caps) so each wheel is still one object that turns.
@@ -254,10 +263,10 @@ export function buildRover() {
     w.position.set(x, 0.41, z);
     w.castShadow = true;
     w.name = 'v2-rover-wheel';
-    group.add(w);
+    chassis.add(w);
     wheels.push(w);
   }
-  return { group, wheels };
+  return { group, wheels, chassis, lcru };
 }
 
 /** US flag canvas (13 stripes, canton with star dots), as flown on Apollo. */

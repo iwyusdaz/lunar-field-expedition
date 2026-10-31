@@ -34,7 +34,7 @@ export class TerrainField {
   /**
    * @param {'low'|'medium'|'high'|'ultra'} presetName
    */
-  async load(presetName = 'medium') {
+  async load(presetName = 'medium', { mesh = true } = {}) {
     this.meta = await loadJSON('assets/terrain/terrain-meta.json');
     const l1 = this.meta.lods[1];
     const [pngBuf, metaRes] = await Promise.all([
@@ -56,7 +56,8 @@ export class TerrainField {
     }
     this.grid = { width: w, height: h, mPerPx: l1.mPerPx, data };
     this.ready = true;
-    this.setQuality(presetName);
+    // v3 renders the streamed tiles and keeps this field for tools and text mode only.
+    if (mesh) this.setQuality(presetName);
     return this;
   }
 

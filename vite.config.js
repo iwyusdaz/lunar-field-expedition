@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite';
-
+import { selfHostedDecoders } from './vite-plugin-decoders.js';
 // base './' so the build works at any sub-path (build contract, 08 section 5.1).
-// No decoder plugin: the project loads no glTF/KTX2/Draco assets, so shipping the
-// 1.7 MB of decoders would only add transfer (see DECISIONS.md).
+// v3 loads KTX2 textures and meshopt GLBs: the Basis transcoder is served from
+// the site's own origin by the decoder plugin (DECISIONS #26, supersedes #13);
+// the meshopt decoder is bundled from the pinned three package.
 export default defineConfig({
   base: './',
+  plugins: [selfHostedDecoders()],
   build: {
     target: 'es2022',
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 1600,
     assetsInlineLimit: 4096,
   },
   server: { port: 5173 },

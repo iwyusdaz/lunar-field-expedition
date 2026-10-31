@@ -92,4 +92,17 @@ test('sub-path /play/<slug>/ loads with no failed requests or console errors', a
   // "All projects" link points to '/'.
   const link = page.getByRole('link', { name: /all projects/i }).first();
   await expect(link).toHaveAttribute('href', '/');
+
+  // v3: the streamed surface (3D Tiles, KTX2 textures, meshopt models, the
+  // self-hosted Basis transcoder) also loads from the sub-path. A fresh start:
+  // the text-mode visit above already counted Module 1's reading steps.
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(`http://127.0.0.1:${port}/play/${SLUG}/`, { waitUntil: 'networkidle', timeout: 30_000 });
+  await page.getByRole('button', { name: /^start$/i }).click();
+  await page.getByRole('button', { name: /skip practice/i }).click();
+  await page.getByRole('button', { name: /land at hadley/i }).click();
+  await page.waitForTimeout(8000);
+  await page.waitForLoadState('networkidle', { timeout: 60_000 }).catch(() => {});
+  expect(failed, `failed requests after landing: ${failed.join('\n')}`).toEqual([]);
+  expect(errors, `console errors after landing: ${errors.join('\n')}`).toEqual([]);
 });

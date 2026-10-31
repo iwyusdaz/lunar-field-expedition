@@ -2,13 +2,31 @@
 
 Last updated: 2026-10-31
 
-## v3.0.0 (plan 10) — in progress
-
-| Item | Status |
+## v3.0.0 (plan 10) — S5 build done, reviews pending
+Agent work. No human review or learner testing has happened; owner visual approval is still to come (plan §8).
+| Item (plan §11) | Status |
 |---|---|
 | S0 owner direction (font pair, layout, reference board, object list) | done 2026-10-30 — `design/art-bible.md` |
-| S4 assets: terrain tiles, textures, models, sky data, LUT, `content/objects.json` (35 objects, 32 in the main scene) | done 2026-10-31 — `npm run check:v3-assets` passes (`evaluation/results/v3-asset-check.json`); licence log `evaluation/results/asset-licence-check.json` |
-| S5 build, gates, reviews, owner approval, release | pending |
+| S4 assets (terrain tiles, textures, models, sky data, LUT, catalog) | done 2026-10-31 — `npm run check:v3-assets` |
+| Scene-first shell, type tokens, Now card, drawer, journal, camera rig, onboarding (template v3 synced) | done — `src/v3/` (sync record `src/v3/.sync-record.json`), repo code in `src/lunar/` |
+| All §7 gates at 1440×900, 1280×720, 390×844, 844×390 in every module state (headed GPU, Apple M1) | done — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.0; see the commit record for the numbers) |
+| ≥ 20 inspectable objects per main scene; catalog complete; journal by mouse, keyboard list and text mode | done — 32 surface objects + 3 orbit objects (35 catalog entries); reach gate passes |
+| ≥ 8 motion systems, every motion accurate or labelled; calm mode and reduced motion | done — 13 systems over four layers (12 surface + the orbit day); `motion.checkLabels` passes; reduced-motion test passes |
+| No abstract markers without a label and legend; no bare primitives | done — gates pass; legend in the controls sheet |
+| Camera rig and onboarding on desktop and touch emulation | done — browser tests (touch tap, keyboard, practice); ui-audit phone viewports |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done — see the commit record |
+| Agent reviews (scene, learner) | pending (S5 review step) |
+| Owner visual approval, release, posters, trailer, showcase pin | pending (G1, S7) |
+
+### v2 carry-overs
+| v2 item | v3 status |
+|---|---|
+| Full ~4.6 km Apennine Front (v1 crop, DECISIONS #3) | done — streamed 3D Tiles (DECISIONS #23, #31) |
+| Keyboard-only completion "partly" (crater marking needs a pointer) | done for the course: a browser test completes all five modules by keyboard alone. Marking individual craters in 3D still needs a pointer; by keyboard the counts are submitted and the text-mode size-frequency tables are the equivalent task. Re-deferred: keyboard crater marking (needs a keyboard cursor on the terrain; not in plan 10) |
+| Low preset tested in phone emulation | re-deferred — ui-audit runs the phone viewports on Medium (the gate preset); Low is used by the headless browser tests only. No physical phone is available |
+| Guidepup VoiceOver logs | re-deferred — macOS permission dialogs block it in this environment (unchanged since v1); axe and the accessibility tree are checked |
+| Learner and real-device testing | not possible in this run (no learners, no phones); `evaluation/human-protocol/` templates unchanged |
+| Captioned trailer, posters | to S7 (release) — the v2 trailer and posters show v2 |
 
 ## v2.0.0 ("Hasselblad at Hadley") — status
 

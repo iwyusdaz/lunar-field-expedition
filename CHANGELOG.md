@@ -1,4 +1,12 @@
 # Changelog — lunar-field-expedition
+## 3.0.0 — unreleased (plan 10 "scene-first revamp"; awaiting reviews and owner approval)
+- Scene-first shell from the v3 template: one 56 px top bar with a module stepper, a short Now card (at most 60 words) with one action, a drawer for the planner, notebook, report, rubric and readings, a discovery journal, a controls sheet with a legend.
+- Orbit view (true-size Moon, real stars, time-lapse lunar day) for the title and Module 1; the Hadley surface streams after the first click: the whole Apennine Front, Mons Hadley and Hadley Delta from 3D Tiles (NAC 5 m near, SLDEM2015 80 m far, curvature applied), regolith detail at three scales, SunLight cascades, the Ektachrome LUT.
+- Airless sky at true scale: BSC5P stars that never twinkle and show only when the view is not dazzled; the Sun disc; Earth at 1.9° with its correct phase, a time-lapse spin and clouds; the field team's orbiter passing (time-compressed).
+- Living site: rover driving with ballistic dust and a TV camera panning, two suited geologists (lope with a flight phase, sampling), a sample bag swinging at lunar gravity, bootstep dust, micrometeoroid flashes (frequency illustrative), the Sun sweeping shadows in time-lapse. No twinkle, no meteor streaks, no flag flutter.
+- 35 clickable catalog objects (ALSEP instruments, LM, rover, flag, crew, boulders, bootprints, tracks, sample bag, Genesis Rock at Spur, rille, Front, mare, craters, massifs, horizon, Earth, Sun, stars, orbiter, impact area; Moon, Mare Imbrium and terminator in orbit). Labels hidden at rest.
+- Typography: Jost (display) + IBM Plex Sans (body), S0 pair A.
+- Modules keep the v2 learning content and step ids; four check items reworded shorter; Module 3 has a short intro step.
 
 ## 2.0.0 — 2026-10-29 ("Hasselblad at Hadley")
 - v2 agent-review revisions (R-11 to R-19 in DECISIONS.md):

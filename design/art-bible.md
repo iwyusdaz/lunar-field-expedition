@@ -127,3 +127,18 @@ Built by the scripts listed; formats from `_templates/spikes/RESULTS.md`; source
 
 Not staged here: the LM, rover, flag and crew stay the v2 own-work procedural models for S5
 (DECISIONS #25); fonts (Jost + IBM Plex Sans) come with the S3 template sync.
+
+## v3 build (S5, 2026-10-31)
+
+Agent work; the owner's visual approval is pending (plan §8).
+
+| Item | v3 |
+|---|---|
+| Fonts | Jost 600 (title, chapter cards, in-world labels) + IBM Plex Sans 400/600 (all UI text), `src/styles/case-fonts.css` |
+| Colours | `--v3-*` tokens from the palette above: shadow-black surfaces, sunlit-highlight text, NASA orange accent (#f08a3c on #090a0d, about 7.6:1) |
+| Light | SunLight 2 × 2048 cascades to 3 km on Medium; faint earthshine fill; reflections (black sky over grey ground) on the hardware only; AgX + the Ektachrome LUT |
+| Ground | Streamed tiles; regolith brightness detail at 0.4 m, 3.1 m, 37 m and 230 m scales (grey, from the Poly Haven scans' luminance) over the Clementine 750 nm albedo |
+| Sky | True angular sizes (Earth 1.9°, Sun 0.53°); BSC5P stars with B−V colours; exposure model for star visibility |
+| Crew | Own-work suited geologists (`src/lunar/astronaut.js`): white beta-cloth with seams and dust on the legs, PLSS with purge unit, gold visor, commander's red stripes on one suit |
+| Motion | 13 systems (see `src/lunar/surface.js` header and the motion report); every non-accurate one is labelled on its card |
+| Cues | Lettered survey tags (A–D) and numbered station flags (real 2 m flag pole + a screen-size tag), crater marks, patch circles, the profile line, the Apollo 15 routes, the task glint; all listed in the legend |

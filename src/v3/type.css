@@ -1,0 +1,59 @@
+/**
+ * type.css — v3 type tokens (plan 10 §3).
+ *
+ * Body and UI text use one legible sans (--font-body), chosen per case from
+ * Inter, IBM Plex Sans, Source Sans 3, Atkinson Hyperlegible, Lexend or
+ * Nunito Sans (SIL OFL, self-hosted). The display face (--font-display) is for
+ * title screens, chapter cards and in-world signage/labels only.
+ *
+ * Repos set the two families in src/styles/case-fonts.css (their own
+ * @font-face rules); the template ships Inter 400/600 as the default.
+ *
+ * Sizes: body 16 px desktop / 17 px phone, small 14 px (the minimum), card
+ * heading 20 px, drawer heading 24 px, display 32 px and up (title and chapter
+ * cards only). At most three sizes per screen: small, body, card heading.
+ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/inter-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/inter-latin-600-normal.woff2') format('woff2');
+}
+
+:root {
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --type-small: 0.875rem;          /* 14 px desktop */
+  --type-body: 1rem;               /* 16 px desktop, 17 px phone */
+  --type-card-heading: 1.25rem;    /* 20 px */
+  --type-drawer-heading: 1.5rem;   /* 24 px */
+  --type-chapter: 2rem;            /* 32 px, chapter cards only */
+  --type-display: 2.5rem;          /* 40 px, title screen only */
+
+  --leading-body: 1.45;
+  --leading-heading: 1.2;
+  --measure: 65ch;                 /* line length 45-75 characters */
+}
+
+/* Phones (same rule as ui-audit: the shorter side under 600 px) get 17 px body. */
+@media (max-width: 599px), (max-height: 599px) {
+  :root { font-size: 106.25%; }
+}
+
+:root[data-text-size="large"] { font-size: 112.5%; }
+:root[data-text-size="xlarge"] { font-size: 125%; }
+
+/* Plain font: the display face is replaced by the body face everywhere. */
+:root[data-plain-font="on"] {
+  --font-display: var(--font-body);
+}

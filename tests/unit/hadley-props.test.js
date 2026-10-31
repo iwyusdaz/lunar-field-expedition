@@ -30,9 +30,14 @@ describe('v2 Hadley hero props', () => {
   });
 
   it('rover keeps four separate wheels (they turn) and a merged body', () => {
-    const { group, wheels } = buildRover();
+    const { group, wheels, chassis, lcru } = buildRover();
     expect(wheels).toHaveLength(4);
-    for (const w of wheels) expect(w.parent).toBe(group);
+    for (const w of wheels) expect(w.parent).toBe(chassis);
+    expect(chassis.parent).toBe(group);
+    expect(lcru.parent).toBe(group);
+    // v3: the chassis keeps the published size (3.1 m long, 2.06 m wide, 1.14 m high); the relay masts sit apart.
+    const c = new THREE.Box3().setFromObject(chassis).getSize(new THREE.Vector3());
+    expect(c.y).toBeLessThan(1.14 * 1.15);
     const body = group.getObjectByName('v2-rover-body');
     expect(meshCount(body)).toBeLessThanOrEqual(6);
     const size = new THREE.Box3().setFromObject(group).getSize(new THREE.Vector3());

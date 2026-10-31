@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "test:subpath": "playwright test tests/sub-path.spec.js",
+    "test:subpath": "npm run build && playwright test tests/sub-path.spec.js",
     "check:a11y": "playwright test tests/a11y.spec.js",
     "build:poster": "node scripts/render-poster.mjs",
     "build:attribution": "node scripts/build-attribution.mjs",
@@ -22,9 +22,11 @@
     "build:v3-terrain": "node scripts/build-v3-terrain.mjs",
     "build:v3-textures": "node scripts/build-v3-textures.mjs",
     "build:v3-models": "node scripts/build-v3-models.mjs",
-    "check:v3-assets": "node scripts/check-v3-assets.mjs"
+    "check:v3-assets": "node scripts/check-v3-assets.mjs",
+    "make:lut": "node scripts/make-lut.mjs"
   },
   "dependencies": {
+    "3d-tiles-renderer": "0.5.3",
     "n8ao": "2.0.1",
     "postprocessing": "6.39.5",
     "three": "0.186.1"

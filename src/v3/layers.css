@@ -1,0 +1,30 @@
+/**
+ * layers.css — the one z-index scale for every immersive project (plan 10 §2.1).
+ *
+ * This file is the only place a numeric z-index may appear. Repo CSS uses the
+ * tokens (`z-index: var(--z-card)`); tests/unit/v3-core.test.js fails on any
+ * other numeric z-index under src/. Native <dialog> elements opened with
+ * showModal() sit in the browser's top layer and need no token.
+ *
+ * Order, bottom to top:
+ *   scene         the canvas
+ *   world-label   in-world name labels and task-cue labels (never take clicks)
+ *   hud           top bar, camera cluster, joystick, Now card
+ *   card          object info card (opens beside the object)
+ *   drawer        Read more / Objects / Journal drawer
+ *   title         title screen and chapter cards
+ *   cinematic     caption and Skip during a shot
+ *   toast         short notices ("Discovered: Bench")
+ *   skip-link     the "Skip to text mode" link when focused
+ */
+:root {
+  --z-scene: 0;
+  --z-world-label: 10;
+  --z-hud: 20;
+  --z-card: 30;
+  --z-drawer: 40;
+  --z-title: 50;
+  --z-cinematic: 60;
+  --z-toast: 70;
+  --z-skip-link: 80;
+}

@@ -14,7 +14,8 @@
       "role"
     ],
     "optionalFields": {
-      "realSizeNote": "why realSize is null (terrain feature larger than the modelled terrain, a layer, a line, a flash or the stars), so no bounding-box scale test applies"
+      "realSizeNote": "why realSize is null (terrain feature larger than the modelled terrain, a layer, a line, a flash or the stars), so no bounding-box scale test applies",
+      "realDistance": "metres; for sky bodies drawn at their true angular size on a far sky shell: the scale check compares realSize / realDistance with the size the camera sees (Earth: mean distance; it varies by about +-6 % over a month)"
     },
     "realSize": "metres; a number is the largest side, an array is [x, y, z] (sorted before comparison by the scale check)",
     "honestyValues": [
@@ -65,7 +66,7 @@
       "scene": "hadley-surface",
       "name": "Lunar Roving Vehicle",
       "short": "A battery-powered car with four wire-mesh wheels. Apollo 15 was the first mission to drive one on the Moon.",
-      "more": "The rover let the crew reach stations several kilometres from the lander; on Apollo 15 it covered about 28 km over three moonwalks. It is about 3.1 m long and 1.14 m high. Its wheels are woven zinc-coated steel wire with titanium chevrons, not rubber tyres. Dust thrown by the wheels flies in clean arcs and falls straight back down, because there is no air to hold it up. The rover here belongs to the fictional field team.",
+      "more": "The rover let the crew reach stations several kilometres from the lander; on Apollo 15 it covered about 28 km over three moonwalks. It is about 3.1 m long and 1.14 m high. Its wheels are woven zinc-coated steel wire with titanium chevrons, not rubber tyres. Dust thrown by the wheels flies in clean arcs and falls straight back down, because there is no air to hold it up. The rover here belongs to the fictional field team. The short driving loop shown here is illustrative.",
       "whyItMatters": "Module 4: the rover's range and speed set how far your traverse can reach.",
       "realSize": [
         2.06,
@@ -400,7 +401,8 @@
       "realSize": 12742000,
       "honesty": "time-lapse",
       "source": "https://en.wikipedia.org/wiki/Libration",
-      "role": "explore"
+      "role": "explore",
+      "realDistance": 384400000
     },
     {
       "id": "sun",
@@ -412,7 +414,8 @@
       "realSize": 1391400000,
       "honesty": "time-lapse",
       "source": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
-      "role": "task"
+      "role": "task",
+      "realDistance": 149600000000
     },
     {
       "id": "starfield",
@@ -432,7 +435,7 @@
       "scene": "hadley-surface",
       "name": "Orbiter pass overhead",
       "short": "A moving point of light: the field team's own orbiter (fictional mission). Its pass is time-compressed.",
-      "more": "In this app the light belongs to the fictional field team's orbiter, and its pass is time-compressed so you can see one. It does the job Al Worden did on Apollo 15 in 1971: he stayed in lunar orbit in the command module Endeavour while Scott and Irwin worked on the surface. At about 110 km up, an orbit of the Moon takes about two hours.",
+      "more": "In this app the light belongs to the fictional field team's orbiter, and its pass is time-compressed (a time-lapse) so you can see one. It does the job Al Worden did on Apollo 15 in 1971: he stayed in lunar orbit in the command module Endeavour while Scott and Irwin worked on the surface. At about 110 km up, an orbit of the Moon takes about two hours.",
       "whyItMatters": "",
       "realSize": [
         3.9,

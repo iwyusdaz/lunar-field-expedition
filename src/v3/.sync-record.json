@@ -1,0 +1,29 @@
+{
+ "tool": "sync-v3-core.mjs",
+ "template": "_templates/immersive-core",
+ "syncedAt": "2026-10-30T23:12:25.288Z",
+ "files": {
+  "src/v3/catalog-views.js": "09b538a3adaa8271b16a0553eb0a573628e1092d4bc82a0baa3d32b81db83669",
+  "src/v3/catalog.js": "35216aab5fb0e97c2967793bc988645f71db089efa9d5d6541f45d546a4117a9",
+  "src/v3/cinematic.js": "11180bb0f001ed6800568f78f0160000393eaf5bae67a50215086e3d4556f029",
+  "src/v3/engine.js": "17f75571e9e4973f413714e2c98b2aa503b4d9853e75aac7f3455d484966d9ad",
+  "src/v3/fonts/LICENSE-Inter.txt": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345",
+  "src/v3/fonts/inter-latin-400-normal.woff2": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+  "src/v3/fonts/inter-latin-600-normal.woff2": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+  "src/v3/gpu-timer.js": "74bcaff676bdd5c0d3929744b87792a43532cc4320c33349b6cc6440fd807819",
+  "src/v3/inspect.js": "cde8dd2f94bee9ceaefbecb98e0e0ac65f144fb03cab7b82c2555ecdca0393cf",
+  "src/v3/journal.js": "a9f488a128e006682a4d46546ff4d0d62203d0e6ab961a689fbee3d781c65b8c",
+  "src/v3/layers.css": "53cc92fb828323e9125d9bb339928ced90776e6f08df3db933c44fd0a31bfd53",
+  "src/v3/layers.js": "91bb1e7539fb2713820a936c9e8504d9f9d6c3cb998311bc752aa227f19177bc",
+  "src/v3/layout-math.js": "e74d9e13097d52f6923bff5562de8c25e82dbe0af8238af143389bf5eb7331d7",
+  "src/v3/motion-layers.js": "f2ad3a24b5acb6a0df71ac0b1ced46b5b454c39abae635b2c901854b0618b9a0",
+  "src/v3/onboarding.js": "f3793e4b876d91e8399b752aefaca3fd9107e5adc4446ff6c54cc664b3107b2a",
+  "src/v3/quality.js": "aeb8dd4bd5331f5d1562a3a92f9cd84ae3307b8c90b8875366155fca6f86328b",
+  "src/v3/render-chain.js": "5d7f50daf375b12f3c8b1632de0356f05986c09958e5baa3fd23ba253d8ab650",
+  "src/v3/shell.css": "233738faf03d057757527b011ec57769781eb71af1566f46d626dae625a5e2f3",
+  "src/v3/shell.js": "69872e72fc1f86ada82443b8fd9cc88b2bb82facb9884b0564b22a03a010216f",
+  "src/v3/type.css": "6f7a0de74e52f7aab564d4dbdc2465bc484f5ef54afd2fd1a65b9d5ee8b481f8",
+  "src/v3/app.js": "7f0f7843fa64d977a8543595ee001803f67a4fe580d2b31b8d4b8b5818a80926",
+  "src/v3/camera-rig.js": "e88d98ad1e31d916b337b186177c71845813eff696a310abdd095e846dd94ddf"
+ }
+}

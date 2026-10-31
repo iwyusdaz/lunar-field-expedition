@@ -1,0 +1,88 @@
+{
+  "_note": "Extra exploration states for the plan 10 \u00a77 gates and catalog reach: views a learner reaches with the camera rig (walk, look up, the Go to Spur crater button). Module states m1-m5 come from the stepper. The orbit view (m1) is the secondary scene (3 catalog objects), so it is not a main scene.",
+  "notMainScene": "^(start|m1)$",
+  "settleMs": 3500,
+  "extraStates": [
+    {
+      "name": "site-alsep",
+      "label": "Walk to the ALSEP instruments",
+      "steps": [
+        {
+          "eval": "document.querySelectorAll('[data-ui=module-step]')[4].click()"
+        },
+        {
+          "wait": 4000
+        },
+        {
+          "eval": "window.__TEST__.rig.flyTo(window.__TEST__.lessons.viewRel(-103, -38, 9, 0.5, 1.25, 0.4), 0.05)"
+        },
+        {
+          "wait": 5000
+        }
+      ]
+    },
+    {
+      "name": "sky-earth",
+      "label": "Look up at Earth from the LM",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.lookToward(window.__TEST__.scene.surface.sky.earthDir, 14, 12, 0.05)"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "sky-east",
+      "label": "Look east toward the Sun",
+      "steps": [
+        {
+          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.sunDir; window.__TEST__.lessons.lookToward({ x: d.x, y: Math.max(0.12, d.y * 0.7), z: d.z }, 14, 12, 0.05); })()"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "sky-overhead",
+      "label": "Watch the orbiter rise in the east",
+      "steps": [
+        {
+          "eval": "window.__TEST__.scene.surface.sky.orbiterPhase = 0.1"
+        },
+        {
+          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.orbiterDirection(0.12); window.__TEST__.lessons.lookToward({ x: d.x, y: d.y - 0.12, z: d.z }, 14, 12, 0.05); })()"
+        },
+        {
+          "wait": 1500
+        }
+      ]
+    },
+    {
+      "name": "sky-north",
+      "label": "Look up at the northern sky (stars)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.lookToward({ x: 0, y: 0.62, z: -0.78 }, 14, 12, 0.05)"
+        },
+        {
+          "wait": 3000
+        }
+      ]
+    },
+    {
+      "name": "site-spur",
+      "label": "Go to Spur crater (Module 5 button)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.goSpur()"
+        },
+        {
+          "wait": 9000
+        }
+      ]
+    }
+  ]
+}

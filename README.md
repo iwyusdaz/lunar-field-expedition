@@ -70,7 +70,8 @@ Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-
 ## Play it your way
 
 - **Text mode:** every module, with annotated orthoimages under high and low sun, elevation profiles as data tables, crater counts as a data task, the traverse as a station-choice list with costs, and the same CER builder.
-- **Keyboard:** the sun sliders, profile presets, crater-counter controls (patch tabs, undo, submit, reveal) and route planning are native buttons, selects and sliders. Marking individual craters in 3D needs a pointer; the text-mode crater data task is the keyboard equivalent.
+- **Keyboard:** all five modules can be finished with the keyboard alone (a browser test does it): the Now card, the Sun slider, the landform letters, the profile presets, the crater counter, the planner, the report and the checks are native buttons, sliders, selects and fields. The menu's "Objects in view" list reaches every object; Enter opens its card. Marking individual craters in 3D needs a pointer; the text-mode crater data task is the keyboard equivalent.
+- **Explore (v3):** drag to look, W A S D or the arrow keys to walk, the wheel to zoom, double-click the ground to fly there; on touch, the joystick and the camera buttons. Click or tap anything (the lander, the instruments, the rille, Earth, the stars) to learn what it is; every find goes into the discovery journal. Hold Alt or L to show every label; `?` shows the controls and the legend.
 - **Reduced motion:** follows your system setting, with an in-app toggle; camera flights become still frames.
 - **Quality presets:** Low, Medium, High and Ultra, chosen automatically and overridable in Settings.
 
@@ -82,7 +83,8 @@ Tested with axe-core (WCAG 2.1 A/AA rules), scripted keyboard playthroughs and t
 
 - A current Chrome, Edge, Firefox or Safari with WebGL2. Without it, every objective is still available in text mode.
 - Best on a desktop or laptop. Phones use the Low preset; checked with device emulation only.
-- The play area is cropped: it contains the lower ~1 km of the Apennine Front, not its full ~4.6 km rise.
+- From v3 the whole ~4.6 km Apennine Front, Mons Hadley and Hadley Delta stream in as 3D Tiles after the first click (NAC 5 m near the site, SLDEM2015 80 m farther out). The tools (profiles, crater patches, traverse costs) still read the 10 m v2 heightfield inside the original play area.
+- Sped-up or simplified motion is labelled on the object's card: the Sun and Earth move in time-lapse, the orbiter's pass is time-compressed, the micrometeoroid flashes' frequency is illustrative.
 - Some station positions are approximate (read from NASA's traverse map) and labeled so in the app.
 
 ## Teacher guide
@@ -91,7 +93,7 @@ Timing, misconceptions (for example, "craters are volcanoes"), discussion prompt
 
 ## Tools used
 
-three.js 0.186.1, Vite 8.3.5, GDAL 3.13.3 for the terrain pipeline, Vitest, Playwright with axe-core. NASA LROC, LOLA and Apollo imagery (public domain). AI assistance: an AI coding agent wrote the code, content and documents under my direction. Facts were checked against the sources in the research log; design reviews are done by a separate agent and labeled as such.
+three.js 0.186.1, 3d-tiles-renderer 0.5.3, postprocessing 6.39.5, Vite 8.3.5, GDAL 3.13.3 for the terrain pipeline, Vitest, Playwright with axe-core. NASA LROC, LOLA and Apollo imagery (public domain). AI assistance: an AI coding agent wrote the code, content and documents under my direction. Facts were checked against the sources in the research log; design reviews are done by a separate agent and labeled as such.
 
 ## License and attribution
 

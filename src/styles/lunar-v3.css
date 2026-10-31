@@ -1,0 +1,50 @@
+/**
+ * lunar-v3.css — repo styles inside the v3 shell: the compact Now-card tools
+ * (sun slider, landform letters, profile chart), and the v2 tools that open in
+ * the drawer or text mode (traverse planner, evidence board, field report,
+ * rubric, data tables). Type sizes use the v3 tokens only (no text under 14 px);
+ * z-index only through the layer registry (none needed here).
+ */
+.lfe-slider { display: flex; align-items: center; gap: 10px; flex: 1 1 100%; }
+.lfe-slider input[type="range"] { flex: 1; min-height: 44px; accent-color: var(--v3-accent); }
+.lfe-slider output { min-width: 3ch; font-variant-numeric: tabular-nums; font-weight: 600; }
+.lfe-letter { min-width: 48px; justify-content: center; font-weight: 600; }
+.lfe-chart { display: block; width: 100%; max-width: 260px; height: 64px; color: var(--v3-accent); flex: 1 1 100%; }
+
+/* v2 tools reused in the drawer and text mode */
+.v3-drawer-body .btn, .v3-tm .btn, .v3-drawer-body .choice-btn, .v3-tm .choice-btn {
+  font: inherit; font-size: var(--type-body); color: var(--v3-text);
+  background: rgba(255, 255, 255, 0.07); border: 1px solid var(--v3-border); border-radius: 10px;
+  min-height: 44px; padding: 6px 14px; cursor: pointer; margin: 4px 6px 4px 0;
+}
+.v3-drawer-body .btn:hover, .v3-tm .btn:hover, .v3-drawer-body .choice-btn:hover, .v3-tm .choice-btn:hover { border-color: var(--v3-accent); }
+.v3-drawer-body .btn:disabled, .v3-tm .btn:disabled, .v3-tm .choice-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.v3-drawer-body .choice-btn, .v3-tm .choice-btn { display: block; width: 100%; text-align: left; }
+.choice-btn.correct { border-color: var(--v3-ok); }
+.choice-btn.incorrect { border-color: var(--v3-err); }
+.v3 .feedback, .v3 .feedback-step { margin: 8px 0; padding: 8px 12px; border-left: 3px solid var(--v3-accent); background: rgba(240, 138, 60, 0.1); }
+.v3 .feedback-step { border-left-color: var(--v3-ok); background: rgba(111, 220, 155, 0.08); }
+.v3 .tool-hint, .v3 .tp-seg-cost, .v3 .evidence-source { color: var(--v3-muted); font-size: var(--type-small); }
+.v3 .evidence-kind { font-weight: 600; font-size: var(--type-small); text-transform: uppercase; letter-spacing: 0.04em; color: var(--v3-accent); }
+.v3 .evidence-list { padding-left: 1.2rem; }
+.v3 label.choice, .v3 .lfe-check { display: flex; gap: 8px; align-items: center; min-height: 44px; }
+.v3 .lfe-field { display: block; margin: 12px 0 4px; }
+.v3 textarea { width: 100%; font: inherit; color: var(--v3-text); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--v3-border); border-radius: 8px; padding: 8px; }
+.v3 fieldset { border: 1px solid var(--v3-border); border-radius: 10px; padding: 8px 12px; margin: 8px 0; }
+.v3 table { border-collapse: collapse; width: 100%; margin: 8px 0; font-variant-numeric: tabular-nums; display: block; overflow-x: auto; }
+.v3 th, .v3 td { border-bottom: 1px solid var(--v3-border); padding: 6px 8px; text-align: left; vertical-align: top; }
+.v3 caption { text-align: left; color: var(--v3-muted); padding-bottom: 4px; }
+.v3 .traverse-planner .tp-columns { display: flex; gap: 16px; flex-wrap: wrap; }
+.v3 .tp-map { width: 260px; max-width: 100%; height: auto; aspect-ratio: 260 / 600; border: 1px solid var(--v3-border); border-radius: 8px; }
+.v3 .tp-plan-col { flex: 1 1 16rem; min-width: 14rem; }
+.v3 .tp-stations { display: flex; flex-direction: column; gap: 4px; }
+.v3 .tp-route { padding-left: 1.3rem; }
+.v3 .tp-route select, .v3 select { font: inherit; min-height: 44px; color: var(--v3-text); background: var(--v3-surface-solid); border: 1px solid var(--v3-border); border-radius: 8px; }
+.v3 .meter label { display: block; }
+.v3 meter, .v3 progress { width: 100%; height: 14px; }
+.v3 .found-card, .v3 .station-card { border: 1px solid var(--v3-border); border-radius: 10px; padding: 8px 12px; margin: 8px 0; }
+.v3 .rubric-selfcheck h3, .v3 .assessment-item h3 { font-size: var(--type-body); }
+.lfe-photo { display: block; width: 100%; max-width: 32rem; border-radius: 8px; margin: 8px 0; }
+.lfe-ortho { position: relative; margin: 8px 0; max-width: 32rem; }
+.lfe-ortho img { display: block; width: 100%; border: 1px solid var(--v3-border); }
+.lfe-ortho-marker { position: absolute; transform: translate(-50%, -50%); color: var(--v3-focus); font-weight: 600; text-shadow: 0 0 3px #000; }
