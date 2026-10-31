@@ -14,7 +14,7 @@ Agent work. No human review or learner testing has happened; owner visual approv
 | ≥ 8 motion systems, every motion accurate or labelled; calm mode and reduced motion | done — 13 systems over four layers (12 surface + the orbit day); `motion.checkLabels` passes; reduced-motion test passes |
 | No abstract markers without a label and legend; no bare primitives | done — gates pass; legend in the controls sheet |
 | Camera rig and onboarding on desktop and touch emulation | done — browser tests (touch tap, keyboard, practice); ui-audit phone viewports |
-| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done 2026-10-31 — vitest 120/120; Playwright 10/10 (incl. keyboard-only completion of all five modules, text-mode parity, reduced motion, touch, no-WebGL2, axe 0 critical/serious on 12 states) + sub-path 1/1 |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done 2026-10-31 at `3772f9e` — vitest 120/120; Playwright 11/11 with `npm run build && npm run test:e2e` (keyboard-only completion of all five modules, text-mode parity, reduced motion, touch tap, no-WebGL2, axe 0 critical/serious on 12 states, sub-path `/play/<slug>/` incl. the streamed surface) |
 | Agent reviews (scene, learner) | pending (S5 review step); evidence in `.agents/tasks/immersive-v3/evidence/lunar-field-expedition/` |
 | Owner visual approval, release, posters, trailer, showcase pin | pending (G1, S7) |
 
