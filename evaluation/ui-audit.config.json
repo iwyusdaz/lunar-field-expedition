@@ -47,13 +47,13 @@
     },
     {
       "name": "sky-overhead",
-      "label": "Watch the orbiter rise in the east",
+      "label": "Watch the orbiter climb from the eastern horizon",
       "steps": [
         {
           "eval": "window.__TEST__.scene.surface.sky.orbiterPhase = 0.1"
         },
         {
-          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.orbiterDirection(0.12); window.__TEST__.lessons.lookToward({ x: d.x, y: d.y - 0.12, z: d.z }, 14, 12, 0.05); })()"
+          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.orbiterDirection(0.2); window.__TEST__.lessons.lookToward({ x: d.x, y: d.y - 0.1, z: d.z }, 14, 12, 0.05); })()"
         },
         {
           "wait": 1500
