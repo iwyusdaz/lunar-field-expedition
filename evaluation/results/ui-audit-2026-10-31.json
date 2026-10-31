@@ -1,22 +1,22 @@
 {
   "tool": "ui-audit",
-  "toolVersion": "1.1.2",
+  "toolVersion": "1.1.3",
   "plan": "implementation-plans/immersive/10-visual-richness.md §7",
-  "label": "S5 v3 build",
+  "label": "S5 pass 2",
   "repo": "lunar-field-expedition",
   "version": "2.0.0",
   "git": {
     "branch": "v3",
-    "commit": "87252ee",
+    "commit": "8d81875",
     "dirty": false
   },
-  "measuredAt": "2026-10-31T02:40:08.650Z",
+  "measuredAt": "2026-10-31T12:33:11.349Z",
   "mode": "headed Chromium on the local GPU",
   "machine": {
     "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
     "browser": "Chromium 143.0.7499.4 (Playwright 1.57.0)"
   },
-  "method": "VITE_TEST_HOOKS=1 build served on 127.0.0.1:5211 (gzip for text types, no cache). Fresh browser context per viewport (desktop DSF 2; phone DSF 3, isMobile, hasTouch). Download = bytes the server sent from navigation until 2 s of network silence. States: first load, then each module tab (and its cinematic sub-state while a shot plays). Medium preset forced after the download measurement. Alive: two canvas-only screenshots 5 s apart, 3x3 grid, a region counts when >= 0.25% of its pixels change by > 12/255. Performance: 4 s sample per state; GPU time from EXT_disjoint_timer_query_webgl2 around each requestAnimationFrame dispatch; draw calls and triangles counted at the WebGL call level (all passes), max over the sample.",
+  "method": "VITE_TEST_HOOKS=1 build served on 127.0.0.1:5201 (gzip for text types, no cache). Fresh browser context per viewport (desktop DSF 2; phone DSF 3, isMobile, hasTouch). Download = bytes the server sent from navigation until 2 s of network silence. States: first load, then each module tab (and its cinematic sub-state while a shot plays). Medium preset forced after the download measurement. Alive: two canvas-only screenshots 5 s apart, 3x3 grid, a region counts when >= 0.25% of its pixels change by > 12/255. Performance: 4 s sample per state; GPU time from EXT_disjoint_timer_query_webgl2 around each requestAnimationFrame dispatch; draw calls and triangles counted at the WebGL call level (all passes), max over the sample.",
   "thresholds": {
     "panelMaxPctDesktop": 25,
     "panelMaxPctPhone": 40,
@@ -53,127 +53,155 @@
     "states": "auto (module tabs)",
     "configFile": "evaluation/ui-audit.config.json"
   },
-  "pass": true,
+  "pass": false,
   "summary": {
     "sceneCoverage": {
       "status": "pass",
       "failing": 0,
-      "judged": 44,
+      "judged": 68,
       "skipped": 0,
       "where": []
     },
     "topChrome": {
       "status": "pass",
       "failing": 0,
-      "judged": 48,
+      "judged": 72,
       "skipped": 0,
       "where": []
     },
     "blockedControls": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "overlappingControls": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "targetSize": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "textSize": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "typeface": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "instructionLength": {
       "status": "pass",
       "failing": 0,
-      "judged": 44,
+      "judged": 68,
       "skipped": 0,
       "where": []
     },
     "readability": {
       "status": "pass",
       "failing": 0,
-      "judged": 44,
+      "judged": 56,
       "skipped": 0,
       "where": []
     },
     "inspectableObjects": {
       "status": "pass",
       "failing": 0,
-      "judged": 40,
+      "judged": 64,
       "skipped": 0,
       "where": []
     },
     "barePrimitives": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "abstractMarkers": {
       "status": "pass",
       "failing": 0,
-      "judged": 52,
+      "judged": 76,
       "skipped": 0,
       "where": []
     },
     "alive": {
-      "status": "pass",
-      "failing": 0,
-      "judged": 48,
+      "status": "fail",
+      "failing": 1,
+      "judged": 67,
       "skipped": 0,
-      "where": []
+      "where": [
+        {
+          "viewport": "1440x900",
+          "state": "sky-overhead",
+          "value": 2
+        }
+      ]
     },
     "performance": {
-      "status": "pass",
-      "failing": 0,
-      "judged": 52,
+      "status": "fail",
+      "failing": 1,
+      "judged": 76,
       "skipped": 0,
-      "where": []
+      "where": [
+        {
+          "viewport": "1440x900",
+          "state": "drawer-board",
+          "value": {
+            "preset": "medium",
+            "resolutionScale": 1,
+            "canvas": "2160x1350",
+            "frames": 240,
+            "fps": 60,
+            "frameMsP95": 17.6,
+            "gpuMsP95": 14.08,
+            "gpuSamples": 240,
+            "gpuTimer": true,
+            "drawCallsMax": 237,
+            "trianglesMax": 1164895,
+            "threeInfoLastFrame": {
+              "calls": 237,
+              "triangles": 1164895
+            }
+          }
+        }
+      ]
     },
     "download": {
       "status": "pass",
       "byViewport": {
         "1440x900": {
           "status": "pass",
-          "mb": 2.95,
+          "mb": 2.96,
           "limitMB": 15
         },
         "1280x720": {
           "status": "pass",
-          "mb": 2.95,
+          "mb": 2.96,
           "limitMB": 15
         },
         "390x844": {
           "status": "pass",
-          "mb": 2.95,
+          "mb": 2.96,
           "limitMB": 8
         },
         "844x390": {
           "status": "pass",
-          "mb": 2.95,
+          "mb": 2.96,
           "limitMB": 8
         }
       }
@@ -393,7 +421,7 @@
     "390x844": {},
     "844x390": {}
   },
-  "statesRun": 52,
+  "statesRun": 76,
   "errorStates": [],
   "systemSuspended": [],
   "runs": [
@@ -502,15 +530,15 @@
               "value": 8,
               "limit": 3,
               "fractions": [
-                0.0025,
-                0.1053,
+                0.0026,
+                0.1091,
                 0.0023,
-                0.0181,
-                0.4794,
-                0.0035,
-                0.0039,
-                0.143,
-                0.0057
+                0.0262,
+                0.5703,
+                0.0151,
+                0.004,
+                0.1058,
+                0.0061
               ]
             },
             "performance": {
@@ -519,11 +547,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 3.22,
-                "gpuSamples": 241,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 2.73,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -543,15 +571,15 @@
           "gates": {
             "sceneCoverage": {
               "status": "pass",
-              "value": 9.7,
+              "value": 10.5,
               "limit": 25,
-              "unionPct": 9.5,
-              "sceneVisiblePct": 84.2,
+              "unionPct": 10.3,
+              "sceneVisiblePct": 83.4,
               "panels": [
                 {
                   "el": "section#v3-now.v3-now",
-                  "pct": 9.7,
-                  "chars": 259
+                  "pct": 10.5,
+                  "chars": 278
                 }
               ]
             },
@@ -609,7 +637,7 @@
                 },
                 {
                   "px": 16,
-                  "chars": 243
+                  "chars": 262
                 },
                 {
                   "px": 20,
@@ -627,16 +655,16 @@
             },
             "instructionLength": {
               "status": "pass",
-              "value": 50,
+              "value": 52,
               "limit": 60,
               "source": "now-card",
-              "renderedTextChars": 376,
-              "uiTextChars": 471
+              "renderedTextChars": 395,
+              "uiTextChars": 490
             },
             "readability": {
               "status": "pass",
               "mode": "fk",
-              "value": 0.8,
+              "value": 1.7,
               "limit": 8
             },
             "inspectableObjects": {
@@ -660,14 +688,14 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0027,
-                0.0262,
                 0.0028,
-                0.0103,
-                0.2175,
-                0.0044,
-                0.0029,
-                0.0371,
+                0.041,
+                0.0028,
+                0.0037,
+                0.3001,
+                0.0105,
+                0.0028,
+                0.061,
                 0.0073
               ]
             },
@@ -677,11 +705,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 3.57,
-                "gpuSamples": 240,
+                "frameMsP95": 18.2,
+                "gpuMsP95": 2.82,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -787,15 +815,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 6.81,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 7.51,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 156,
-                "trianglesMax": 591653,
+                "drawCallsMax": 160,
+                "trianglesMax": 629467,
                 "threeInfoLastFrame": {
-                  "calls": 153,
-                  "triangles": 564005
+                  "calls": 157,
+                  "triangles": 601819
                 }
               },
               "failures": []
@@ -925,16 +953,16 @@
             },
             "alive": {
               "status": "pass",
-              "value": 5,
+              "value": 6,
               "limit": 3,
               "fractions": [
-                0.0113,
-                0.0136,
-                0.0245,
-                0.0543,
-                0.0115,
-                0.0013,
-                0,
+                0.0048,
+                0.0042,
+                0.014,
+                0.0566,
+                0.0118,
+                0.0005,
+                0.0028,
                 0,
                 0.0007
               ]
@@ -945,17 +973,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.25,
-                "gpuSamples": 241,
+                "frameMsP95": 18.2,
+                "gpuMsP95": 8.61,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 167,
-                "trianglesMax": 671175,
+                "drawCallsMax": 171,
+                "trianglesMax": 708989,
                 "threeInfoLastFrame": {
-                  "calls": 167,
-                  "triangles": 671175
+                  "calls": 171,
+                  "triangles": 708989
                 }
               },
               "failures": []
@@ -1090,13 +1118,13 @@
               "fractions": [
                 0.0073,
                 0.0069,
-                0.0418,
-                0.0305,
+                0.0415,
+                0.0301,
                 0,
-                0.0003,
-                0.005,
-                0.0006,
-                0.0014
+                0.0002,
+                0.0051,
+                0.0011,
+                0.0011
               ]
             },
             "performance": {
@@ -1107,15 +1135,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.84,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 8.27,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 156,
-                "trianglesMax": 566957,
+                "drawCallsMax": 160,
+                "trianglesMax": 604771,
                 "threeInfoLastFrame": {
-                  "calls": 156,
-                  "triangles": 566957
+                  "calls": 160,
+                  "triangles": 604771
                 }
               },
               "failures": []
@@ -1248,11 +1276,11 @@
               "value": 5,
               "limit": 3,
               "fractions": [
-                0.0037,
-                0.012,
-                0.084,
-                0.0092,
-                0.0184,
+                0.0075,
+                0.0257,
+                0.1466,
+                0.0124,
+                0.0346,
                 0,
                 0,
                 0,
@@ -1265,17 +1293,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.8,
-                "gpuMsP95": 7.1,
-                "gpuSamples": 241,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 7.86,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 170,
-                "trianglesMax": 613579,
+                "drawCallsMax": 174,
+                "trianglesMax": 651393,
                 "threeInfoLastFrame": {
-                  "calls": 170,
-                  "triangles": 613579
+                  "calls": 174,
+                  "triangles": 651393
                 }
               },
               "failures": []
@@ -1408,14 +1436,14 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0162,
-                0.0039,
+                0.0181,
+                0.0065,
                 0,
-                0.0001,
-                0.0235,
-                0.0143,
-                0.1009,
-                0.12,
+                0,
+                0.0161,
+                0.0429,
+                0.0981,
+                0.0079,
                 0
               ]
             },
@@ -1427,15 +1455,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 8.51,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 10.01,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 200,
-                "trianglesMax": 1115639,
+                "trianglesMax": 1158981,
                 "threeInfoLastFrame": {
                   "calls": 200,
-                  "triangles": 1115639
+                  "triangles": 1158981
                 }
               },
               "failures": []
@@ -1547,7 +1575,7 @@
             },
             "inspectableObjects": {
               "status": "pass",
-              "value": 31,
+              "value": 32,
               "limit": 20,
               "catalogEntries": 35
             },
@@ -1568,15 +1596,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0268,
-                0.0289,
-                0.0287,
-                0.0044,
-                0.012,
-                0.0252,
-                0.0045,
-                0.0069,
-                0.0049
+                0.027,
+                0.0292,
+                0.029,
+                0.0049,
+                0.0138,
+                0.0245,
+                0.0065,
+                0.0093,
+                0.0068
               ]
             },
             "performance": {
@@ -1587,15 +1615,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 7.47,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 8.39,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 200,
-                "trianglesMax": 719359,
+                "drawCallsMax": 201,
+                "trianglesMax": 727395,
                 "threeInfoLastFrame": {
-                  "calls": 200,
-                  "triangles": 719359
+                  "calls": 201,
+                  "triangles": 727395
                 }
               },
               "failures": []
@@ -1728,14 +1756,14 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.003,
+                0.0028,
                 0.0039,
                 0.002,
-                0.0039,
-                0.0073,
-                0.0021,
                 0.0043,
-                0.0032,
+                0.0073,
+                0.0023,
+                0.0042,
+                0.0033,
                 0.0017
               ]
             },
@@ -1747,15 +1775,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 4.42,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.36,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 94,
-                "trianglesMax": 432053,
+                "drawCallsMax": 93,
+                "trianglesMax": 473305,
                 "threeInfoLastFrame": {
-                  "calls": 94,
-                  "triangles": 432053
+                  "calls": 93,
+                  "triangles": 473305
                 }
               },
               "failures": []
@@ -1857,7 +1885,7 @@
               "limit": 60,
               "source": "now-card",
               "renderedTextChars": 264,
-              "uiTextChars": 470
+              "uiTextChars": 493
             },
             "readability": {
               "status": "pass",
@@ -1888,15 +1916,15 @@
               "value": 7,
               "limit": 3,
               "fractions": [
+                0.0002,
+                0.0074,
                 0.0003,
-                0.01,
-                0.0004,
-                0.0581,
-                0.0855,
-                0.0369,
-                0.0587,
-                0.0529,
-                0.0373
+                0.0854,
+                0.1106,
+                0.066,
+                0.0384,
+                0.025,
+                0.0204
               ]
             },
             "performance": {
@@ -1905,17 +1933,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 8.34,
-                "gpuSamples": 241,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 6.93,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 130,
-                "trianglesMax": 904745,
+                "drawCallsMax": 131,
+                "trianglesMax": 941901,
                 "threeInfoLastFrame": {
-                  "calls": 130,
-                  "triangles": 904745
+                  "calls": 131,
+                  "triangles": 941901
                 }
               },
               "failures": []
@@ -1924,7 +1952,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter climb from the eastern horizon",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -2044,19 +2072,19 @@
               "items": []
             },
             "alive": {
-              "status": "pass",
-              "value": 5,
+              "status": "fail",
+              "value": 2,
               "limit": 3,
               "fractions": [
-                0.0017,
-                0.0024,
-                0.0022,
-                0.0017,
-                0.0036,
-                0.0369,
-                0.5648,
-                0.549,
-                0.605
+                0.0004,
+                0.0015,
+                0.0004,
+                0.033,
+                0.0359,
+                0.0004,
+                0,
+                0,
+                0
               ]
             },
             "performance": {
@@ -2067,15 +2095,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.1,
-                "gpuMsP95": 8.61,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 8.31,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 218,
-                "trianglesMax": 1128821,
+                "drawCallsMax": 267,
+                "trianglesMax": 1216265,
                 "threeInfoLastFrame": {
-                  "calls": 218,
-                  "triangles": 1128821
+                  "calls": 267,
+                  "triangles": 1216265
                 }
               },
               "failures": []
@@ -2208,15 +2236,15 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0035,
-                0.004,
-                0.0021,
-                0.0046,
-                0.0046,
+                0.0033,
+                0.0042,
+                0.0018,
+                0.0044,
+                0.0044,
                 0.0023,
                 0.0038,
-                0.0036,
-                0.0021
+                0.0035,
+                0.0018
               ]
             },
             "performance": {
@@ -2227,15 +2255,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 4.8,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 3.6,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 116,
-                "trianglesMax": 642369,
+                "drawCallsMax": 114,
+                "trianglesMax": 685359,
                 "threeInfoLastFrame": {
-                  "calls": 116,
-                  "triangles": 642369
+                  "calls": 114,
+                  "triangles": 685359
                 }
               },
               "failures": []
@@ -2311,7 +2339,7 @@
               "sizes": [
                 {
                   "px": 14,
-                  "chars": 119
+                  "chars": 96
                 },
                 {
                   "px": 16,
@@ -2336,8 +2364,8 @@
               "value": 25,
               "limit": 60,
               "source": "now-card",
-              "renderedTextChars": 287,
-              "uiTextChars": 493
+              "renderedTextChars": 264,
+              "uiTextChars": 469
             },
             "readability": {
               "status": "pass",
@@ -2368,15 +2396,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.689,
-                0.7239,
-                0.7623,
-                0.676,
-                0.7558,
-                0.7448,
-                0.6467,
-                0.6824,
-                0.688
+                0.2024,
+                0.1465,
+                0.1038,
+                0.1829,
+                0.0661,
+                0.0828,
+                0.2214,
+                0.2254,
+                0.2365
               ]
             },
             "performance": {
@@ -2385,11 +2413,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 274,
-                "fps": 59.4,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 8.16,
-                "gpuSamples": 274,
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 6.27,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 38,
                 "trianglesMax": 248653,
@@ -2401,12 +2429,975 @@
               "failures": []
             }
           }
+        },
+        {
+          "name": "drawer-board",
+          "label": "Module 5: Open the notebook (evidence board drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.5,
+              "limit": 25,
+              "unionPct": 24.7,
+              "sceneVisiblePct": 69,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.5,
+                  "chars": 208
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 2.5,
+                  "chars": 34
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 232
+                },
+                {
+                  "px": 24,
+                  "chars": 14
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 359,
+              "uiTextChars": 478
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0479,
+                0.0411,
+                0.024,
+                0.0351,
+                0.0519,
+                0.0598,
+                0.0484,
+                0.0057,
+                0.0063
+              ]
+            },
+            "performance": {
+              "status": "fail",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 14.08,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 237,
+                "trianglesMax": 1164895,
+                "threeInfoLastFrame": {
+                  "calls": 237,
+                  "triangles": 1164895
+                }
+              },
+              "failures": [
+                "GPU p95 14.08 ms"
+              ]
+            }
+          }
+        },
+        {
+          "name": "drawer-report",
+          "label": "Module 5: Write the report (field report drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.5,
+              "limit": 25,
+              "unionPct": 24.7,
+              "sceneVisiblePct": 69,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.5,
+                  "chars": 1289
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 2.5,
+                  "chars": 37
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 12,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 805
+                },
+                {
+                  "px": 24,
+                  "chars": 12
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 8,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 930,
+              "uiTextChars": 1558
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 5,
+              "limit": 3,
+              "fractions": [
+                0.0185,
+                0.0223,
+                0.021,
+                0.001,
+                0.0413,
+                0.0142,
+                0.0012,
+                0.0013,
+                0.0008
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 10.43,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 219,
+                "trianglesMax": 1162373,
+                "threeInfoLastFrame": {
+                  "calls": 219,
+                  "triangles": 1162373
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-selfcheck",
+          "label": "Module 5: Open the self-check (rubric drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.5,
+              "limit": 25,
+              "unionPct": 24.7,
+              "sceneVisiblePct": 69,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.5,
+                  "chars": 1355
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 2.5,
+                  "chars": 31
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 17,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 819
+                },
+                {
+                  "px": 24,
+                  "chars": 17
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 949,
+              "uiTextChars": 1625
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0477,
+                0.0441,
+                0.0202,
+                0.0132,
+                0.0749,
+                0.0549,
+                0.0407,
+                0.0348,
+                0.0193
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 10.31,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 220,
+                "trianglesMax": 1162517,
+                "threeInfoLastFrame": {
+                  "calls": 219,
+                  "triangles": 1162373
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-comparison",
+          "label": "Module 5: Read the comparison (Apollo 15 drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 11.2,
+              "limit": 25,
+              "unionPct": 11.1,
+              "sceneVisiblePct": 82.7,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 11.2,
+                  "chars": 288
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 104
+                },
+                {
+                  "px": 16,
+                  "chars": 202
+                },
+                {
+                  "px": 20,
+                  "chars": 87
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 58,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 410,
+              "uiTextChars": 518
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "calm mode"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 10.51,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 219,
+                "trianglesMax": 1162373,
+                "threeInfoLastFrame": {
+                  "calls": 219,
+                  "triangles": 1162373
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-planner",
+          "label": "Module 4: Open the planner (traverse planner drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.5,
+              "limit": 25,
+              "unionPct": 24.7,
+              "sceneVisiblePct": 69,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.5,
+                  "chars": 654
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 2.5,
+                  "chars": 32
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 216
+                },
+                {
+                  "px": 24,
+                  "chars": 16
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 345,
+              "uiTextChars": 922
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0599,
+                0.067,
+                0.1357,
+                0.0143,
+                0.0487,
+                0,
+                0.0052,
+                0.0072,
+                0.0036
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 6.94,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 174,
+                "trianglesMax": 651393,
+                "threeInfoLastFrame": {
+                  "calls": 174,
+                  "triangles": 651393
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-results",
+          "label": "Module 3: See the results (crater counts drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.5,
+              "limit": 25,
+              "unionPct": 24.7,
+              "sceneVisiblePct": 69,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.5,
+                  "chars": 768
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 2.5,
+                  "chars": 26
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 677
+                },
+                {
+                  "px": 24,
+                  "chars": 13
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 6,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 803,
+              "uiTextChars": 1030
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": -2.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "calm mode"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 7.64,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 50,
+                "trianglesMax": 384343,
+                "threeInfoLastFrame": {
+                  "calls": 50,
+                  "triangles": 384343
+                }
+              },
+              "failures": []
+            }
+          }
         }
       ],
       "errors": [],
       "download": {
         "status": "pass",
-        "mb": 2.95,
+        "mb": 2.96,
         "limitMB": 15,
         "requests": 19,
         "networkIdle": true,
@@ -2416,7 +3407,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 16.09
+        "streamedAfterFirstInteractionMB": 17.18
       },
       "preset": "medium"
     },
@@ -2526,14 +3517,14 @@
               "limit": 3,
               "fractions": [
                 0.0037,
-                0.0967,
-                0.0035,
+                0.0979,
+                0.0032,
                 0.0056,
-                0.4449,
-                0.0051,
-                0.0055,
-                0.1332,
-                0.009
+                0.5391,
+                0.0053,
+                0.0053,
+                0.0961,
+                0.0092
               ]
             },
             "performance": {
@@ -2544,8 +3535,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.2,
-                "gpuMsP95": 4.8,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.09,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -2566,15 +3557,15 @@
           "gates": {
             "sceneCoverage": {
               "status": "pass",
-              "value": 13.7,
+              "value": 14.8,
               "limit": 25,
-              "unionPct": 13.7,
-              "sceneVisiblePct": 78.5,
+              "unionPct": 14.4,
+              "sceneVisiblePct": 77.4,
               "panels": [
                 {
                   "el": "section#v3-now.v3-now",
-                  "pct": 13.7,
-                  "chars": 259
+                  "pct": 14.8,
+                  "chars": 278
                 }
               ]
             },
@@ -2632,7 +3623,7 @@
                 },
                 {
                   "px": 16,
-                  "chars": 243
+                  "chars": 262
                 },
                 {
                   "px": 20,
@@ -2650,16 +3641,16 @@
             },
             "instructionLength": {
               "status": "pass",
-              "value": 50,
+              "value": 52,
               "limit": 60,
               "source": "now-card",
-              "renderedTextChars": 376,
-              "uiTextChars": 471
+              "renderedTextChars": 395,
+              "uiTextChars": 490
             },
             "readability": {
               "status": "pass",
               "mode": "fk",
-              "value": 0.8,
+              "value": 1.7,
               "limit": 8
             },
             "inspectableObjects": {
@@ -2684,14 +3675,14 @@
               "limit": 3,
               "fractions": [
                 0.004,
-                0.0235,
+                0.0361,
                 0.0044,
-                0.0049,
-                0.1958,
-                0.0078,
-                0.0044,
-                0.0337,
-                0.01
+                0.0048,
+                0.2691,
+                0.0079,
+                0.0046,
+                0.0544,
+                0.0102
               ]
             },
             "performance": {
@@ -2702,8 +3693,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 2.49,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 2.24,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -2810,15 +3801,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 5.95,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 5.29,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 156,
-                "trianglesMax": 591653,
+                "drawCallsMax": 160,
+                "trianglesMax": 629467,
                 "threeInfoLastFrame": {
-                  "calls": 156,
-                  "triangles": 591653
+                  "calls": 160,
+                  "triangles": 629467
                 }
               },
               "failures": []
@@ -2951,15 +3942,15 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0315,
+                0.0314,
                 0.0366,
                 0.0522,
-                0.0654,
-                0.0195,
+                0.0655,
+                0.0196,
                 0.0032,
-                0.011,
+                0.0109,
                 0,
-                0.0005
+                0.0006
               ]
             },
             "performance": {
@@ -2968,17 +3959,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
                 "frameMsP95": 17.7,
-                "gpuMsP95": 7.21,
-                "gpuSamples": 240,
+                "gpuMsP95": 6.26,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 167,
-                "trianglesMax": 671175,
+                "drawCallsMax": 171,
+                "trianglesMax": 708989,
                 "threeInfoLastFrame": {
-                  "calls": 167,
-                  "triangles": 671175
+                  "calls": 171,
+                  "triangles": 708989
                 }
               },
               "failures": []
@@ -3108,18 +4099,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 8,
+              "value": 7,
               "limit": 3,
               "fractions": [
                 0.0539,
-                0.0703,
-                0.0902,
-                0.0266,
+                0.0704,
+                0.0901,
+                0.0265,
                 0.009,
                 0.0002,
-                0.0162,
-                0.0049,
-                0.0026
+                0.0161,
+                0.0047,
+                0.0022
               ]
             },
             "performance": {
@@ -3128,17 +4119,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 17.7,
-                "gpuMsP95": 6.7,
-                "gpuSamples": 240,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 5.74,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 147,
-                "trianglesMax": 517157,
+                "drawCallsMax": 151,
+                "trianglesMax": 554971,
                 "threeInfoLastFrame": {
-                  "calls": 147,
-                  "triangles": 517157
+                  "calls": 151,
+                  "triangles": 554971
                 }
               },
               "failures": []
@@ -3268,18 +4259,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 8,
+              "value": 7,
               "limit": 3,
               "fractions": [
-                0.0514,
-                0.088,
-                0.1377,
-                0.0068,
-                0.0509,
+                0.0416,
+                0.0793,
+                0.1243,
+                0.0072,
+                0.0488,
                 0,
-                0.0025,
-                0.0067,
-                0.0048
+                0.0004,
+                0.0044,
+                0.0033
               ]
             },
             "performance": {
@@ -3290,15 +4281,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.9,
-                "gpuMsP95": 6.41,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 5.35,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 161,
-                "trianglesMax": 536647,
+                "drawCallsMax": 165,
+                "trianglesMax": 574461,
                 "threeInfoLastFrame": {
-                  "calls": 161,
-                  "triangles": 536647
+                  "calls": 165,
+                  "triangles": 574461
                 }
               },
               "failures": []
@@ -3431,15 +4422,15 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0135,
-                0.0238,
-                0.0271,
-                0.0206,
-                0.0347,
-                0.0062,
-                0.0137,
-                0.0003,
-                0
+                0.0129,
+                0.0204,
+                0.0222,
+                0.0042,
+                0.0345,
+                0.013,
+                0.0297,
+                0.0008,
+                0.0007
               ]
             },
             "performance": {
@@ -3450,15 +4441,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 8.42,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 8.31,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 223,
-                "trianglesMax": 1144071,
+                "drawCallsMax": 221,
+                "trianglesMax": 1189151,
                 "threeInfoLastFrame": {
-                  "calls": 223,
-                  "triangles": 1144071
+                  "calls": 218,
+                  "triangles": 1161503
                 }
               },
               "failures": []
@@ -3592,14 +4583,14 @@
               "limit": 3,
               "fractions": [
                 0.0296,
-                0.037,
-                0.0377,
-                0.006,
-                0.0195,
+                0.0367,
+                0.0372,
+                0.0067,
+                0.0168,
                 0.0225,
-                0.019,
-                0.0249,
-                0.0181
+                0.0214,
+                0.0277,
+                0.0205
               ]
             },
             "performance": {
@@ -3610,15 +4601,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.1,
-                "gpuMsP95": 6.81,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 6.44,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 203,
-                "trianglesMax": 747007,
+                "drawCallsMax": 204,
+                "trianglesMax": 755043,
                 "threeInfoLastFrame": {
-                  "calls": 203,
-                  "triangles": 747007
+                  "calls": 204,
+                  "triangles": 755043
                 }
               },
               "failures": []
@@ -3751,15 +4742,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0035,
-                0.0072,
+                0.0039,
+                0.0068,
                 0.0031,
-                0.0058,
+                0.006,
                 0.0097,
-                0.0035,
+                0.0032,
+                0.0066,
                 0.0063,
-                0.0058,
-                0.0027
+                0.0026
               ]
             },
             "performance": {
@@ -3768,17 +4759,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 17.5,
-                "gpuMsP95": 3.51,
-                "gpuSamples": 240,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.89,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 94,
-                "trianglesMax": 459603,
+                "drawCallsMax": 93,
+                "trianglesMax": 500855,
                 "threeInfoLastFrame": {
-                  "calls": 94,
-                  "triangles": 459603
+                  "calls": 93,
+                  "triangles": 500855
                 }
               },
               "failures": []
@@ -3912,14 +4903,14 @@
               "limit": 3,
               "fractions": [
                 0.0006,
-                0.0058,
+                0.0052,
                 0.0015,
                 0.0006,
-                0.0207,
-                0.0031,
-                0.7144,
-                0.6144,
-                0.6516
+                0.0213,
+                0.004,
+                0.7629,
+                0.6411,
+                0.6835
               ]
             },
             "performance": {
@@ -3931,14 +4922,14 @@
                 "frames": 240,
                 "fps": 60,
                 "frameMsP95": 17.7,
-                "gpuMsP95": 5.78,
+                "gpuMsP95": 5.32,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 119,
-                "trianglesMax": 859105,
+                "drawCallsMax": 125,
+                "trianglesMax": 896469,
                 "threeInfoLastFrame": {
-                  "calls": 111,
-                  "triangles": 858805
+                  "calls": 114,
+                  "triangles": 895959
                 }
               },
               "failures": []
@@ -3947,7 +4938,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter climb from the eastern horizon",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -4068,18 +5059,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 7,
+              "value": 6,
               "limit": 3,
               "fractions": [
-                0.0021,
-                0.0037,
-                0.0032,
-                0.0025,
-                0.0056,
-                0.0304,
-                0.0068,
-                0.0111,
-                0.0348
+                0.0006,
+                0.002,
+                0.0008,
+                0.0057,
+                0.0496,
+                0.046,
+                0.1372,
+                0.1289,
+                0.1488
               ]
             },
             "performance": {
@@ -4088,17 +5079,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 17.7,
-                "gpuMsP95": 6.47,
-                "gpuSamples": 240,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 6.5,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 225,
-                "trianglesMax": 1184157,
+                "drawCallsMax": 274,
+                "trianglesMax": 1271563,
                 "threeInfoLastFrame": {
-                  "calls": 225,
-                  "triangles": 1184157
+                  "calls": 272,
+                  "triangles": 1271451
                 }
               },
               "failures": []
@@ -4231,15 +5222,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0048,
-                0.0054,
-                0.0031,
-                0.0064,
-                0.0063,
+                0.0044,
+                0.0066,
+                0.0026,
+                0.006,
+                0.0071,
                 0.0033,
-                0.0287,
-                0.0056,
-                0.0623
+                0.0338,
+                0.0053,
+                0.0056
               ]
             },
             "performance": {
@@ -4250,15 +5241,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.7,
-                "gpuMsP95": 3.83,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 2.81,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 122,
-                "trianglesMax": 670409,
+                "drawCallsMax": 121,
+                "trianglesMax": 713723,
                 "threeInfoLastFrame": {
-                  "calls": 121,
-                  "triangles": 642905
+                  "calls": 118,
+                  "triangles": 686075
                 }
               },
               "failures": []
@@ -4391,15 +5382,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.1446,
-                0.115,
-                0.0527,
-                0.1606,
-                0.0627,
-                0.0936,
-                0.192,
-                0.1901,
-                0.1978
+                0.3344,
+                0.2827,
+                0.1973,
+                0.3322,
+                0.1532,
+                0.2512,
+                0.3471,
+                0.3174,
+                0.3641
               ]
             },
             "performance": {
@@ -4410,8 +5401,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 5.98,
+                "frameMsP95": 17,
+                "gpuMsP95": 4.56,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 38,
@@ -4424,12 +5415,990 @@
               "failures": []
             }
           }
+        },
+        {
+          "name": "drawer-board",
+          "label": "Module 5: Open the notebook (evidence board drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 208
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 34
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 232
+                },
+                {
+                  "px": 24,
+                  "chars": 14
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 358,
+              "uiTextChars": 477
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0451,
+                0.0457,
+                0.0238,
+                0.0324,
+                0.0402,
+                0.0202,
+                0.0447,
+                0.0043,
+                0.0058
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 8.13,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 221,
+                "trianglesMax": 1189151,
+                "threeInfoLastFrame": {
+                  "calls": 221,
+                  "triangles": 1189151
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-report",
+          "label": "Module 5: Write the report (field report drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 1289
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 37
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 11,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 659
+                },
+                {
+                  "px": 24,
+                  "chars": 12
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 8,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 783,
+              "uiTextChars": 1557
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 5,
+              "limit": 3,
+              "fractions": [
+                0.0207,
+                0.0271,
+                0.0241,
+                0.0019,
+                0.0394,
+                0.019,
+                0.0012,
+                0.0011,
+                0.0015
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 8.1,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 203,
+                "trianglesMax": 1186629,
+                "threeInfoLastFrame": {
+                  "calls": 203,
+                  "triangles": 1186629
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-selfcheck",
+          "label": "Module 5: Open the self-check (rubric drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 1355
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 31
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 13,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 550
+                },
+                {
+                  "px": 24,
+                  "chars": 17
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 679,
+              "uiTextChars": 1624
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.046,
+                0.0414,
+                0.0231,
+                0.0295,
+                0.0426,
+                0.0389,
+                0.049,
+                0.0388,
+                0.0261
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 8.9,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 221,
+                "trianglesMax": 1189151,
+                "threeInfoLastFrame": {
+                  "calls": 209,
+                  "triangles": 1188373
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-comparison",
+          "label": "Module 5: Read the comparison (Apollo 15 drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 1998
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 34
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 862
+                },
+                {
+                  "px": 24,
+                  "chars": 19
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 993,
+              "uiTextChars": 2269
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0339,
+                0.0373,
+                0.0231,
+                0.0021,
+                0.0454,
+                0.0117,
+                0.0019,
+                0.0027,
+                0.0036
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 8.23,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 208,
+                "trianglesMax": 1187257,
+                "threeInfoLastFrame": {
+                  "calls": 209,
+                  "triangles": 1188573
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-planner",
+          "label": "Module 4: Open the planner (traverse planner drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 654
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 32
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 216
+                },
+                {
+                  "px": 24,
+                  "chars": 16
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 344,
+              "uiTextChars": 921
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0521,
+                0.0858,
+                0.1469,
+                0.007,
+                0.0553,
+                0,
+                0.0056,
+                0.0074,
+                0.0017
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 5.54,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 165,
+                "trianglesMax": 574461,
+                "threeInfoLastFrame": {
+                  "calls": 165,
+                  "triangles": 574461
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-results",
+          "label": "Module 3: See the results (crater counts drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 22.1,
+              "limit": 25,
+              "unionPct": 25.5,
+              "sceneVisiblePct": 66.7,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 22.1,
+                  "chars": 768
+                },
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 3.5,
+                  "chars": 26
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 318
+                },
+                {
+                  "px": 24,
+                  "chars": 13
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 6,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 443,
+              "uiTextChars": 1029
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": -2.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "calm mode"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1920x1080",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 5.43,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 41,
+                "trianglesMax": 301399,
+                "threeInfoLastFrame": {
+                  "calls": 41,
+                  "triangles": 301399
+                }
+              },
+              "failures": []
+            }
+          }
         }
       ],
       "errors": [],
       "download": {
         "status": "pass",
-        "mb": 2.95,
+        "mb": 2.96,
         "limitMB": 15,
         "requests": 19,
         "networkIdle": true,
@@ -4439,7 +6408,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 12.76
+        "streamedAfterFirstInteractionMB": 12.93
       },
       "preset": "medium"
     },
@@ -4548,15 +6517,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.096,
-                0.2678,
-                0.0026,
-                0.6048,
-                0.9613,
-                0.0123,
-                0.1528,
-                0.34,
-                0.006
+                0.2036,
+                0.1208,
+                0.0526,
+                0.6907,
+                0.5359,
+                0.4869,
+                0.1517,
+                0.1299,
+                0.0806
               ]
             },
             "performance": {
@@ -4567,8 +6536,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.4,
-                "gpuMsP95": 1.64,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 1.17,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -4589,15 +6558,15 @@
           "gates": {
             "sceneCoverage": {
               "status": "pass",
-              "value": 33.3,
+              "value": 36.2,
               "limit": 40,
-              "unionPct": 44.5,
-              "sceneVisiblePct": 49.7,
+              "unionPct": 47.3,
+              "sceneVisiblePct": 46.9,
               "panels": [
                 {
                   "el": "section#v3-now.v3-now",
-                  "pct": 33.3,
-                  "chars": 258
+                  "pct": 36.2,
+                  "chars": 277
                 },
                 {
                   "el": "div.v3-cluster",
@@ -4665,7 +6634,7 @@
                 },
                 {
                   "px": 17,
-                  "chars": 247
+                  "chars": 266
                 }
               ]
             },
@@ -4677,16 +6646,16 @@
             },
             "instructionLength": {
               "status": "pass",
-              "value": 50,
+              "value": 52,
               "limit": 60,
               "source": "now-card",
-              "renderedTextChars": 289,
-              "uiTextChars": 452
+              "renderedTextChars": 308,
+              "uiTextChars": 471
             },
             "readability": {
               "status": "pass",
               "mode": "fk",
-              "value": 1,
+              "value": 2,
               "limit": 8
             },
             "inspectableObjects": {
@@ -4710,15 +6679,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.048,
-                0.0354,
-                0.0036,
-                0.3255,
-                0.2955,
-                0.0368,
-                0.0453,
-                0.0638,
-                0.014
+                0.0285,
+                0.0733,
+                0.0369,
+                0.2357,
+                0.3635,
+                0.342,
+                0.0712,
+                0.0852,
+                0.0489
               ]
             },
             "performance": {
@@ -4727,11 +6696,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.1,
-                "gpuMsP95": 1.65,
-                "gpuSamples": 241,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 1.22,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -4837,15 +6806,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 3.57,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.57,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 132,
-                "trianglesMax": 370469,
+                "drawCallsMax": 136,
+                "trianglesMax": 408283,
                 "threeInfoLastFrame": {
-                  "calls": 132,
-                  "triangles": 370469
+                  "calls": 136,
+                  "triangles": 408283
                 }
               },
               "failures": []
@@ -4983,11 +6952,11 @@
               "limit": 3,
               "fractions": [
                 0.0157,
-                0.0349,
-                0.0443,
-                0.0097,
+                0.0347,
+                0.0441,
+                0.0096,
                 0.0185,
-                0.0175,
+                0.0173,
                 0,
                 0,
                 0
@@ -4999,11 +6968,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 3.51,
-                "gpuSamples": 241,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.94,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 44,
                 "trianglesMax": 319489,
@@ -5146,14 +7115,14 @@
               "value": 4,
               "limit": 3,
               "fractions": [
-                0.0587,
-                0.0626,
-                0.0521,
+                0.0592,
+                0.063,
+                0.0525,
                 0,
                 0.0002,
                 0,
                 0,
-                0.0169,
+                0.0167,
                 0
               ]
             },
@@ -5166,14 +7135,14 @@
                 "frames": 240,
                 "fps": 60,
                 "frameMsP95": 17.6,
-                "gpuMsP95": 3.47,
+                "gpuMsP95": 2.8,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 135,
-                "trianglesMax": 398117,
+                "drawCallsMax": 139,
+                "trianglesMax": 435931,
                 "threeInfoLastFrame": {
-                  "calls": 135,
-                  "triangles": 398117
+                  "calls": 139,
+                  "triangles": 435931
                 }
               },
               "failures": []
@@ -5307,16 +7276,16 @@
             },
             "alive": {
               "status": "pass",
-              "value": 7,
+              "value": 5,
               "limit": 3,
               "fractions": [
-                0.0367,
-                0.0945,
-                0.0648,
-                0.1247,
-                0.0165,
-                0.004,
-                0.0041,
+                0.0292,
+                0.0836,
+                0.0585,
+                0.1159,
+                0.0155,
+                0.001,
+                0.0023,
                 0,
                 0
               ]
@@ -5327,17 +7296,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
                 "frameMsP95": 17.7,
-                "gpuMsP95": 3.18,
-                "gpuSamples": 240,
+                "gpuMsP95": 2.82,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 150,
-                "trianglesMax": 468467,
+                "drawCallsMax": 154,
+                "trianglesMax": 506281,
                 "threeInfoLastFrame": {
-                  "calls": 150,
-                  "triangles": 468467
+                  "calls": 154,
+                  "triangles": 506281
                 }
               },
               "failures": []
@@ -5474,15 +7443,15 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0294,
-                0.0184,
-                0.0146,
-                0.0099,
-                0.0367,
-                0.0498,
-                0.0003,
+                0.0277,
+                0.0154,
+                0.0125,
+                0.0041,
+                0.0391,
+                0.0566,
+                0.0013,
                 0.0004,
-                0
+                0.0014
               ]
             },
             "performance": {
@@ -5493,15 +7462,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.6,
-                "gpuMsP95": 4.87,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 4.22,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 179,
-                "trianglesMax": 930455,
+                "trianglesMax": 973797,
                 "threeInfoLastFrame": {
                   "calls": 179,
-                  "triangles": 930455
+                  "triangles": 973797
                 }
               },
               "failures": []
@@ -5638,15 +7607,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0302,
+                0.0297,
                 0.0366,
-                0.0332,
-                0.0068,
-                0.0131,
-                0.0301,
-                0.0353,
-                0.0285,
-                0.0536
+                0.0326,
+                0.0083,
+                0.0194,
+                0.0312,
+                0.04,
+                0.0318,
+                0.0587
               ]
             },
             "performance": {
@@ -5657,15 +7626,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.9,
-                "gpuMsP95": 3.49,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.87,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 162,
-                "trianglesMax": 455169,
+                "trianglesMax": 463157,
                 "threeInfoLastFrame": {
                   "calls": 162,
-                  "triangles": 455169
+                  "triangles": 463157
                 }
               },
               "failures": []
@@ -5802,15 +7771,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0042,
-                0.0055,
-                0.0052,
-                0.007,
-                0.0135,
-                0.0044,
-                0.0054,
-                0.0041,
-                0.0028
+                0.0043,
+                0.0053,
+                0.0053,
+                0.0079,
+                0.0136,
+                0.0047,
+                0.0051,
+                0.0036,
+                0.003
               ]
             },
             "performance": {
@@ -5821,15 +7790,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.3,
-                "gpuMsP95": 2.51,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 1.78,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 36,
-                "trianglesMax": 306289,
+                "drawCallsMax": 30,
+                "trianglesMax": 339525,
                 "threeInfoLastFrame": {
-                  "calls": 36,
-                  "triangles": 306289
+                  "calls": 30,
+                  "triangles": 339525
                 }
               },
               "failures": []
@@ -5963,18 +7932,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 6,
+              "value": 5,
               "limit": 3,
               "fractions": [
                 0.0007,
-                0.0148,
-                0.0009,
-                0.0473,
-                0.0334,
-                0.0013,
-                0.8374,
-                0.6734,
-                0.4684
+                0.0542,
+                0.0008,
+                0.0008,
+                0.0347,
+                0.0011,
+                0.119,
+                0.1228,
+                0.1943
               ]
             },
             "performance": {
@@ -5985,15 +7954,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.3,
-                "gpuMsP95": 3.35,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.53,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 72,
-                "trianglesMax": 542097,
+                "drawCallsMax": 71,
+                "trianglesMax": 577435,
                 "threeInfoLastFrame": {
-                  "calls": 69,
-                  "triangles": 514449
+                  "calls": 68,
+                  "triangles": 549787
                 }
               },
               "failures": []
@@ -6002,7 +7971,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter climb from the eastern horizon",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -6130,15 +8099,15 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0021,
-                0.0027,
-                0.0025,
-                0.0039,
-                0.0061,
-                0.0032,
-                0.0128,
-                0.0138,
-                0.0123
+                0.0007,
+                0.0038,
+                0.0009,
+                0.017,
+                0.1031,
+                0.0315,
+                0.1563,
+                0.1661,
+                0.1497
               ]
             },
             "performance": {
@@ -6147,17 +8116,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.2,
-                "gpuMsP95": 3.69,
-                "gpuSamples": 241,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 3.59,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 127,
-                "trianglesMax": 731221,
+                "drawCallsMax": 182,
+                "trianglesMax": 830821,
                 "threeInfoLastFrame": {
-                  "calls": 126,
-                  "triangles": 731189
+                  "calls": 164,
+                  "triangles": 828299
                 }
               },
               "failures": []
@@ -6294,14 +8263,14 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.005,
-                0.0038,
-                0.0035,
-                0.0051,
+                0.0062,
+                0.0049,
+                0.0037,
+                0.0057,
+                0.0052,
+                0.0043,
                 0.0047,
-                0.0036,
-                0.0041,
-                0.003,
+                0.0033,
                 0.0035
               ]
             },
@@ -6313,15 +8282,15 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.48,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 1.83,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 103,
-                "trianglesMax": 530645,
+                "drawCallsMax": 101,
+                "trianglesMax": 571895,
                 "threeInfoLastFrame": {
-                  "calls": 103,
-                  "triangles": 530645
+                  "calls": 101,
+                  "triangles": 571895
                 }
               },
               "failures": []
@@ -6458,15 +8427,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.1404,
-                0.123,
-                0.1194,
-                0.0594,
-                0.0431,
-                0.055,
-                0.1807,
-                0.1947,
-                0.2229
+                0.8694,
+                0.884,
+                0.9074,
+                0.9144,
+                0.9295,
+                0.9367,
+                0.8268,
+                0.8292,
+                0.82
               ]
             },
             "performance": {
@@ -6477,8 +8446,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 3.71,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 2.75,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 23,
@@ -6491,12 +8460,948 @@
               "failures": []
             }
           }
+        },
+        {
+          "name": "drawer-board",
+          "label": "Module 5: Open the notebook (evidence board drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 35.2,
+              "limit": 40,
+              "unionPct": 35.2,
+              "sceneVisiblePct": 58.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 35.2,
+                  "chars": 208
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 189
+                },
+                {
+                  "px": 25.5,
+                  "chars": 14
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 229,
+              "uiTextChars": 405
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0973,
+                0.0185,
+                0.0173,
+                0.0087,
+                0.0625,
+                0.1109,
+                0.0078,
+                0.0105,
+                0.0115
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 4.15,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 179,
+                "trianglesMax": 973797,
+                "threeInfoLastFrame": {
+                  "calls": 179,
+                  "triangles": 973797
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-report",
+          "label": "Module 5: Write the report (field report drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 38.1,
+              "sceneVisiblePct": 55.3,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 38,
+                  "chars": 1289
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 312
+                },
+                {
+                  "px": 25.5,
+                  "chars": 12
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 350,
+              "uiTextChars": 1482
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0367,
+                0.0217,
+                0.0171,
+                0.0092,
+                0.0751,
+                0.0899,
+                0.1291,
+                0.0413,
+                0.0026
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.99,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 179,
+                "trianglesMax": 973797,
+                "threeInfoLastFrame": {
+                  "calls": 179,
+                  "triangles": 973797
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-selfcheck",
+          "label": "Module 5: Open the self-check (rubric drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 38.1,
+              "sceneVisiblePct": 55.3,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 38,
+                  "chars": 1355
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 267
+                },
+                {
+                  "px": 25.5,
+                  "chars": 17
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 310,
+              "uiTextChars": 1555
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0876,
+                0.0217,
+                0.0165,
+                0.0119,
+                0.0636,
+                0.0713,
+                0.0304,
+                0.0441,
+                0.0501
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.95,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 179,
+                "trianglesMax": 973797,
+                "threeInfoLastFrame": {
+                  "calls": 179,
+                  "triangles": 973797
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-comparison",
+          "label": "Module 5: Read the comparison (Apollo 15 drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 38.1,
+              "sceneVisiblePct": 55.3,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 38,
+                  "chars": 1998
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 241
+                },
+                {
+                  "px": 25.5,
+                  "chars": 19
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 286,
+              "uiTextChars": 2197
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0761,
+                0.018,
+                0.017,
+                0.0048,
+                0.0588,
+                0.0649,
+                0.0551,
+                0.0077,
+                0.0078
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 4.27,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 179,
+                "trianglesMax": 973797,
+                "threeInfoLastFrame": {
+                  "calls": 179,
+                  "triangles": 973797
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-planner",
+          "label": "Module 4: Open the planner (traverse planner drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 38.1,
+              "sceneVisiblePct": 55.3,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 38,
+                  "chars": 654
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 175
+                },
+                {
+                  "px": 25.5,
+                  "chars": 16
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 217,
+              "uiTextChars": 851
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0486,
+                0.0937,
+                0.0851,
+                0.1091,
+                0.0192,
+                0.0062,
+                0.0116,
+                0,
+                0
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 2.92,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 154,
+                "trianglesMax": 506281,
+                "threeInfoLastFrame": {
+                  "calls": 154,
+                  "triangles": 506281
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-results",
+          "label": "Module 3: See the results (crater counts drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 38.1,
+              "sceneVisiblePct": 55.3,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 38,
+                  "chars": 768
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 9
+                },
+                {
+                  "px": 17,
+                  "chars": 82
+                },
+                {
+                  "px": 25.5,
+                  "chars": 13
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 121,
+              "uiTextChars": 965
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "calm mode"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 2.96,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 35,
+                "trianglesMax": 218499,
+                "threeInfoLastFrame": {
+                  "calls": 35,
+                  "triangles": 218499
+                }
+              },
+              "failures": []
+            }
+          }
         }
       ],
       "errors": [],
       "download": {
         "status": "pass",
-        "mb": 2.95,
+        "mb": 2.96,
         "limitMB": 8,
         "requests": 19,
         "networkIdle": true,
@@ -6506,7 +9411,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 12.64
+        "streamedAfterFirstInteractionMB": 12.81
       },
       "preset": "medium"
     },
@@ -6615,15 +9520,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0111,
-                0.0898,
                 0.0109,
-                0.0159,
-                0.3679,
-                0.0171,
-                0.0161,
-                0.1283,
-                0.0272
+                0.0876,
+                0.0108,
+                0.0158,
+                0.439,
+                0.0169,
+                0.016,
+                0.0934,
+                0.027
               ]
             },
             "performance": {
@@ -6632,11 +9537,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.16,
-                "gpuSamples": 241,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 1.06,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -6664,7 +9569,7 @@
                 {
                   "el": "section#v3-now.v3-now",
                   "pct": 29.1,
-                  "chars": 258
+                  "chars": 277
                 },
                 {
                   "el": "div.v3-cluster",
@@ -6701,7 +9606,7 @@
             "blockedControls": {
               "status": "pass",
               "value": 0,
-              "of": 17,
+              "of": 16,
               "items": [],
               "blockers": {},
               "inertUnderOverlay": 0
@@ -6732,7 +9637,7 @@
                 },
                 {
                   "px": 17,
-                  "chars": 240
+                  "chars": 259
                 }
               ]
             },
@@ -6744,16 +9649,16 @@
             },
             "instructionLength": {
               "status": "pass",
-              "value": 50,
+              "value": 52,
               "limit": 60,
               "source": "now-card",
-              "renderedTextChars": 305,
-              "uiTextChars": 470
+              "renderedTextChars": 306,
+              "uiTextChars": 489
             },
             "readability": {
               "status": "pass",
               "mode": "fk",
-              "value": 1,
+              "value": 2,
               "limit": 8
             },
             "inspectableObjects": {
@@ -6777,15 +9682,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0098,
-                0.0268,
+                0.0097,
+                0.0354,
+                0.0145,
                 0.0142,
-                0.014,
-                0.1446,
-                0.0239,
-                0.0134,
-                0.0388,
-                0.0267
+                0.2057,
+                0.0238,
+                0.0133,
+                0.0557,
+                0.0268
               ]
             },
             "performance": {
@@ -6796,8 +9701,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18,
-                "gpuMsP95": 1.86,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 1.09,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -6904,15 +9809,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.5,
-                "gpuMsP95": 3.68,
+                "frameMsP95": 18.2,
+                "gpuMsP95": 2.69,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 123,
-                "trianglesMax": 307745,
+                "drawCallsMax": 127,
+                "trianglesMax": 345559,
                 "threeInfoLastFrame": {
-                  "calls": 123,
-                  "triangles": 307745
+                  "calls": 127,
+                  "triangles": 345559
                 }
               },
               "failures": []
@@ -7049,13 +9954,13 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0354,
-                0.0391,
-                0.0408,
-                0.054,
+                0.0353,
+                0.0388,
+                0.0406,
+                0.0544,
                 0.0161,
-                0.0062,
-                0.0239,
+                0.0064,
+                0.0236,
                 0,
                 0.0005
               ]
@@ -7068,15 +9973,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.4,
-                "gpuMsP95": 4.44,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.54,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 167,
-                "trianglesMax": 675111,
+                "drawCallsMax": 171,
+                "trianglesMax": 712925,
                 "threeInfoLastFrame": {
-                  "calls": 167,
-                  "triangles": 675111
+                  "calls": 171,
+                  "triangles": 712925
                 }
               },
               "failures": []
@@ -7215,13 +10120,13 @@
               "fractions": [
                 0.0286,
                 0.0465,
-                0.0938,
-                0.016,
-                0.0102,
+                0.0937,
+                0.0163,
+                0.0101,
                 0,
-                0.0113,
-                0.0033,
-                0.0008
+                0.0116,
+                0.0035,
+                0.0005
               ]
             },
             "performance": {
@@ -7232,15 +10137,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.2,
-                "gpuMsP95": 3.88,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.08,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 135,
-                "trianglesMax": 413033,
+                "drawCallsMax": 139,
+                "trianglesMax": 450847,
                 "threeInfoLastFrame": {
-                  "calls": 135,
-                  "triangles": 413033
+                  "calls": 139,
+                  "triangles": 450847
                 }
               },
               "failures": []
@@ -7374,18 +10279,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 6,
+              "value": 5,
               "limit": 3,
               "fractions": [
-                0.0298,
-                0.0943,
-                0.1093,
-                0.0012,
-                0.0443,
+                0.0226,
+                0.078,
+                0.0982,
+                0.0008,
+                0.0405,
                 0,
-                0.0269,
-                0.0062,
-                0.0019
+                0.0157,
+                0.0016,
+                0.0007
               ]
             },
             "performance": {
@@ -7396,15 +10301,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.9,
-                "gpuMsP95": 4.11,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 2.94,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 143,
-                "trianglesMax": 374923,
+                "drawCallsMax": 147,
+                "trianglesMax": 412737,
                 "threeInfoLastFrame": {
-                  "calls": 143,
-                  "triangles": 374923
+                  "calls": 147,
+                  "triangles": 412737
                 }
               },
               "failures": []
@@ -7538,18 +10443,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 6,
+              "value": 5,
               "limit": 3,
               "fractions": [
-                0.0079,
-                0.023,
-                0.0228,
-                0.0035,
-                0.0189,
-                0.001,
-                0.0286,
-                0,
-                0
+                0.007,
+                0.0188,
+                0.0174,
+                0.0013,
+                0.0347,
+                0.0017,
+                0.0237,
+                0.0007,
+                0.0011
               ]
             },
             "performance": {
@@ -7558,17 +10463,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 17.4,
-                "gpuMsP95": 6.01,
-                "gpuSamples": 240,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 4.84,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 241,
-                "trianglesMax": 1309959,
+                "drawCallsMax": 239,
+                "trianglesMax": 1355039,
                 "threeInfoLastFrame": {
-                  "calls": 241,
-                  "triangles": 1309959
+                  "calls": 239,
+                  "triangles": 1355039
                 }
               },
               "failures": []
@@ -7705,15 +10610,15 @@
               "value": 8,
               "limit": 3,
               "fractions": [
-                0.0256,
+                0.0257,
                 0.0353,
-                0.0319,
-                0.0052,
-                0.0151,
+                0.0313,
+                0.0058,
+                0.0154,
                 0.0091,
-                0.0029,
-                0.0051,
-                0.002
+                0.0037,
+                0.0061,
+                0.0024
               ]
             },
             "performance": {
@@ -7722,17 +10627,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 16.8,
-                "gpuMsP95": 4.47,
-                "gpuSamples": 241,
+                "frameMsP95": 18.7,
+                "gpuMsP95": 3.62,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 203,
-                "trianglesMax": 747007,
+                "drawCallsMax": 204,
+                "trianglesMax": 755043,
                 "threeInfoLastFrame": {
-                  "calls": 203,
-                  "triangles": 747007
+                  "calls": 204,
+                  "triangles": 755043
                 }
               },
               "failures": []
@@ -7869,14 +10774,14 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0113,
-                0.022,
-                0.0086,
-                0.0155,
-                0.0286,
-                0.0088,
-                0.0157,
-                0.0213,
+                0.0112,
+                0.0224,
+                0.0085,
+                0.016,
+                0.0282,
+                0.0093,
+                0.0153,
+                0.0214,
                 0.0068
               ]
             },
@@ -7886,17 +10791,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 242,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.78,
-                "gpuSamples": 242,
+                "frameMsP95": 18.7,
+                "gpuMsP95": 2.01,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 94,
-                "trianglesMax": 459603,
+                "drawCallsMax": 93,
+                "trianglesMax": 500855,
                 "threeInfoLastFrame": {
-                  "calls": 94,
-                  "triangles": 459603
+                  "calls": 93,
+                  "triangles": 500855
                 }
               },
               "failures": []
@@ -8033,15 +10938,15 @@
               "value": 8,
               "limit": 3,
               "fractions": [
-                0.0016,
-                0.0074,
-                0.0035,
-                0.0449,
-                0.0205,
-                0.046,
-                0.7225,
-                0.6564,
-                0.7708
+                0.0014,
+                0.015,
+                0.0027,
+                0.0079,
+                0.0112,
+                0.0129,
+                0.0864,
+                0.1257,
+                0.054
               ]
             },
             "performance": {
@@ -8052,15 +10957,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.5,
-                "gpuMsP95": 4.16,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 3.37,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 128,
-                "trianglesMax": 859393,
+                "drawCallsMax": 125,
+                "trianglesMax": 896469,
                 "threeInfoLastFrame": {
-                  "calls": 114,
-                  "triangles": 858949
+                  "calls": 125,
+                  "triangles": 896469
                 }
               },
               "failures": []
@@ -8069,7 +10974,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter climb from the eastern horizon",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -8194,18 +11099,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 9,
+              "value": 7,
               "limit": 3,
               "fractions": [
-                0.0062,
-                0.0114,
-                0.0094,
-                0.0075,
-                0.0174,
-                0.0576,
-                0.0197,
-                0.022,
-                0.0468
+                0.0013,
+                0.0041,
+                0.0024,
+                0.0437,
+                0.0389,
+                0.0377,
+                0.0667,
+                0.0538,
+                0.0686
               ]
             },
             "performance": {
@@ -8216,15 +11121,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.1,
-                "gpuMsP95": 4.56,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 4.21,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 231,
-                "trianglesMax": 1239453,
+                "drawCallsMax": 289,
+                "trianglesMax": 1393807,
                 "threeInfoLastFrame": {
-                  "calls": 231,
-                  "triangles": 1239453
+                  "calls": 289,
+                  "triangles": 1393807
                 }
               },
               "failures": []
@@ -8361,15 +11266,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0116,
-                0.0196,
-                0.0086,
-                0.0157,
-                0.022,
-                0.0095,
-                0.109,
-                0.0178,
-                0.1461
+                0.0123,
+                0.0213,
+                0.0076,
+                0.0152,
+                0.0241,
+                0.0104,
+                0.1736,
+                0.017,
+                0.0215
               ]
             },
             "performance": {
@@ -8380,15 +11285,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 17.2,
-                "gpuMsP95": 3.07,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.35,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 135,
-                "trianglesMax": 781041,
+                "drawCallsMax": 134,
+                "trianglesMax": 824371,
                 "threeInfoLastFrame": {
-                  "calls": 135,
-                  "triangles": 781041
+                  "calls": 134,
+                  "triangles": 824371
                 }
               },
               "failures": []
@@ -8525,15 +11430,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0698,
-                0.0212,
-                0.0057,
-                0.0608,
-                0.0065,
-                0.0133,
-                0.0874,
-                0.0598,
-                0.0829
+                0.9151,
+                0.9775,
+                0.9878,
+                0.9095,
+                0.9834,
+                0.979,
+                0.8791,
+                0.9238,
+                0.9112
               ]
             },
             "performance": {
@@ -8542,11 +11447,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.2,
-                "gpuMsP95": 3.6,
-                "gpuSamples": 240,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.72,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 41,
                 "trianglesMax": 301261,
@@ -8558,12 +11463,948 @@
               "failures": []
             }
           }
+        },
+        {
+          "name": "drawer-board",
+          "label": "Module 5: Open the notebook (evidence board drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 208
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 200
+                },
+                {
+                  "px": 25.5,
+                  "chars": 14
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 245,
+              "uiTextChars": 423
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.036,
+                0.0463,
+                0.0236,
+                0.0064,
+                0.0352,
+                0.0068,
+                0.0315,
+                0.0014,
+                0.0019
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 4.92,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 239,
+                "trianglesMax": 1355039,
+                "threeInfoLastFrame": {
+                  "calls": 239,
+                  "triangles": 1355039
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-report",
+          "label": "Module 5: Write the report (field report drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 1289
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 249
+                },
+                {
+                  "px": 25.5,
+                  "chars": 12
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 292,
+              "uiTextChars": 1500
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 31,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0137,
+                0.0305,
+                0.023,
+                0.0029,
+                0.0461,
+                0.0041,
+                0.0286,
+                0.0542,
+                0.0019
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 4.86,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 221,
+                "trianglesMax": 1352517,
+                "threeInfoLastFrame": {
+                  "calls": 221,
+                  "triangles": 1352517
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-selfcheck",
+          "label": "Module 5: Open the self-check (rubric drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 1355
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 273
+                },
+                {
+                  "px": 25.5,
+                  "chars": 17
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 321,
+              "uiTextChars": 1573
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0535,
+                0.0385,
+                0.0232,
+                0.013,
+                0.026,
+                0.0198,
+                0.0515,
+                0.0043,
+                0.0071
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 4.96,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 242,
+                "trianglesMax": 1355137,
+                "threeInfoLastFrame": {
+                  "calls": 239,
+                  "triangles": 1355039
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-comparison",
+          "label": "Module 5: Read the comparison (Apollo 15 drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 1998
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 195
+                },
+                {
+                  "px": 25.5,
+                  "chars": 19
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 245,
+              "uiTextChars": 2215
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0288,
+                0.0418,
+                0.0224,
+                0.0041,
+                0.043,
+                0.0196,
+                0.0182,
+                0.0131,
+                0.0019
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 4.9,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 240,
+                "trianglesMax": 1355909,
+                "threeInfoLastFrame": {
+                  "calls": 240,
+                  "triangles": 1355909
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-planner",
+          "label": "Module 4: Open the planner (traverse planner drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 654
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 186
+                },
+                {
+                  "px": 25.5,
+                  "chars": 16
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 2
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 233,
+              "uiTextChars": 869
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0295,
+                0.0765,
+                0.1086,
+                0.0018,
+                0.0464,
+                0,
+                0.0319,
+                0.0111,
+                0.0025
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.93,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 147,
+                "trianglesMax": 412737,
+                "threeInfoLastFrame": {
+                  "calls": 147,
+                  "triangles": 412737
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "drawer-results",
+          "label": "Module 3: See the results (crater counts drawer)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 28.6,
+              "sceneVisiblePct": 57.1,
+              "panels": [
+                {
+                  "el": "aside#v3-drawer.v3-drawer",
+                  "pct": 29.1,
+                  "chars": 768
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 7,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 14
+                },
+                {
+                  "px": 17,
+                  "chars": 93
+                },
+                {
+                  "px": 25.5,
+                  "chars": 13
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 0,
+              "limit": 60,
+              "source": "none",
+              "renderedTextChars": 137,
+              "uiTextChars": 983
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "no instruction text"
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": 32,
+              "limit": 20,
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "calm mode"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.8,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 47,
+                "trianglesMax": 356695,
+                "threeInfoLastFrame": {
+                  "calls": 47,
+                  "triangles": 356695
+                }
+              },
+              "failures": []
+            }
+          }
         }
       ],
       "errors": [],
       "download": {
         "status": "pass",
-        "mb": 2.95,
+        "mb": 2.96,
         "limitMB": 8,
         "requests": 19,
         "networkIdle": true,
@@ -8573,7 +12414,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 12.4
+        "streamedAfterFirstInteractionMB": 12.46
       },
       "preset": "medium"
     }

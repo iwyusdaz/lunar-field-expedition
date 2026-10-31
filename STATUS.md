@@ -2,20 +2,24 @@
 
 Last updated: 2026-10-31
 
-## v3.0.0 (plan 10) — S5 build done, reviews pending
+## v3.0.0 (plan 10) — S5 pass 2 (review fixes) done, reviews pending
 Agent work. No human review or learner testing has happened; owner visual approval is still to come (plan §8).
 | Item (plan §11) | Status |
 |---|---|
 | S0 owner direction (font pair, layout, reference board, object list) | done 2026-10-30 — `design/art-bible.md` |
 | S4 assets (terrain tiles, textures, models, sky data, LUT, catalog) | done 2026-10-31 — `npm run check:v3-assets` |
 | Scene-first shell, type tokens, Now card, drawer, journal, camera rig, onboarding (template v3 synced) | done — `src/v3/` (sync record `src/v3/.sync-record.json`), repo code in `src/lunar/` |
-| All §7 gates at 1440×900, 1280×720, 390×844, 844×390 in every module state (headed GPU, Apple M1) | done 2026-10-31 at `87252ee` — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.2): PASS, 52 states; max GPU p95 8.61 ms in this run (earlier headed runs on this branch measured up to 11.5 ms: the M1 GPU clock varies between runs), ≥ 59.4 fps, max 241 draw calls, max 1.31 M triangles, 2.95 MB before first interaction at every viewport (12.4–16.1 MB streamed after) |
+| S5 review pass 1 findings F1-F27 (`.agents/tasks/immersive-v3/s5-lunar-field-expedition/review.md`) | fixed in `37a29a2` and follow-ups (DECISIONS #46-#53): orbit globe geography, card hold, LM and LRV rebuilt, authored inspect views, practice cue, Module 1 action, crater-count visibility and loading state, clocks question, report evidence labels, drawers |
+| All §7 gates, pass 2 (19 states incl. six drawer states, F12) | 2026-10-31 at `8d81875` — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.3): every gate passes except two cells at 1440×900: alive in `sky-overhead` (2 of 3 regions; 6-7 at the other viewports) and GPU p95 14.08 ms in `drawer-board` (10.98 ms in an earlier run on this branch). Max 289 draw calls, 1.39 M triangles, ≥ 60 fps, 2.96 MB before first interaction. Not yet resolved; recorded for the reviewers |
+| All §7 gates at 1440×900, 1280×720, 390×844, 844×390 in every module state (headed GPU, Apple M1), pass 1 | done 2026-10-31 at `87252ee` — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.2): PASS, 52 states; max GPU p95 8.61 ms in this run (earlier headed runs on this branch measured up to 11.5 ms: the M1 GPU clock varies between runs), ≥ 59.4 fps, max 241 draw calls, max 1.31 M triangles, 2.95 MB before first interaction at every viewport (12.4–16.1 MB streamed after) |
 | ≥ 20 inspectable objects per main scene; catalog complete; journal by mouse, keyboard list and text mode | done — 32 surface objects + 3 orbit objects (35 catalog entries); reach gate passes |
 | ≥ 8 motion systems, every motion accurate or labelled; calm mode and reduced motion | done — 13 systems over four layers (12 surface + the orbit day); `motion.checkLabels` passes; reduced-motion test passes |
 | No abstract markers without a label and legend; no bare primitives | done — gates pass; legend in the controls sheet |
 | Camera rig and onboarding on desktop and touch emulation | done — browser tests (touch tap, keyboard, practice); ui-audit phone viewports |
-| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done 2026-10-31 at `3772f9e` — vitest 120/120; Playwright 11/11 with `npm run build && npm run test:e2e` (keyboard-only completion of all five modules, text-mode parity, reduced motion, touch tap, no-WebGL2, axe 0 critical/serious on 12 states, sub-path `/play/<slug>/` incl. the streamed surface) |
-| Agent reviews (scene, learner) | pending (S5 review step); evidence in `.agents/tasks/immersive-v3/evidence/lunar-field-expedition/` |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path, pass 2 | 2026-10-31 on the `37a29a2` tree: vitest 124/124, Playwright 12/12 (adds card hold, practice cue, clocks question in text mode); later commits re-ran vitest 124/124 and the card-hold and reduced-motion browser tests |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path, pass 1 | done 2026-10-31 at `3772f9e` — vitest 120/120; Playwright 11/11 with `npm run build && npm run test:e2e` (keyboard-only completion of all five modules, text-mode parity, reduced motion, touch tap, no-WebGL2, axe 0 critical/serious on 12 states, sub-path `/play/<slug>/` incl. the streamed surface) |
+| LM descent stage and LRV detail (DECISIONS #25 handed to S5) | done — own work, `src/scenes/hadley-hardware.js` (DECISIONS #47) |
+| Agent reviews (scene, learner) | pass 1 CHANGES_REQUESTED (27 findings); pass 2 pending; evidence in `.agents/tasks/immersive-v3/evidence/lunar-field-expedition/` |
 | Owner visual approval, release, posters, trailer, showcase pin | pending (G1, S7) |
 
 ### v2 carry-overs
