@@ -1,16 +1,16 @@
 {
   "tool": "ui-audit",
-  "toolVersion": "1.1.0",
+  "toolVersion": "1.1.2",
   "plan": "implementation-plans/immersive/10-visual-richness.md §7",
   "label": "S5 v3 build",
   "repo": "lunar-field-expedition",
   "version": "2.0.0",
   "git": {
     "branch": "v3",
-    "commit": "ad8e575",
+    "commit": "87252ee",
     "dirty": false
   },
-  "measuredAt": "2026-10-31T01:12:14.743Z",
+  "measuredAt": "2026-10-31T02:40:08.650Z",
   "mode": "headed Chromium on the local GPU",
   "machine": {
     "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
@@ -499,18 +499,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 7,
+              "value": 8,
               "limit": 3,
               "fractions": [
-                0.0024,
-                0.1058,
-                0.0022,
-                0.018,
-                0.4813,
-                0.0036,
+                0.0025,
+                0.1053,
+                0.0023,
+                0.0181,
+                0.4794,
+                0.0035,
                 0.0039,
-                0.1438,
-                0.006
+                0.143,
+                0.0057
               ]
             },
             "performance": {
@@ -519,11 +519,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.85,
-                "gpuSamples": 240,
+                "frameMsP95": 18.7,
+                "gpuMsP95": 3.22,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -666,8 +666,8 @@
                 0.0103,
                 0.2175,
                 0.0044,
-                0.0028,
-                0.0372,
+                0.0029,
+                0.0371,
                 0.0073
               ]
             },
@@ -677,11 +677,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.85,
-                "gpuSamples": 241,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 3.57,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -785,11 +785,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 8.4,
-                "gpuSamples": 241,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 6.81,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 156,
                 "trianglesMax": 591653,
@@ -928,12 +928,12 @@
               "value": 5,
               "limit": 3,
               "fractions": [
-                0.0104,
-                0.0119,
-                0.0228,
-                0.0546,
-                0.0116,
-                0.0012,
+                0.0113,
+                0.0136,
+                0.0245,
+                0.0543,
+                0.0115,
+                0.0013,
                 0,
                 0,
                 0.0007
@@ -948,7 +948,7 @@
                 "frames": 241,
                 "fps": 60,
                 "frameMsP95": 18.7,
-                "gpuMsP95": 9.44,
+                "gpuMsP95": 7.25,
                 "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 167,
@@ -1057,7 +1057,7 @@
               "limit": 60,
               "source": "now-card",
               "renderedTextChars": 381,
-              "uiTextChars": 593
+              "uiTextChars": 584
             },
             "readability": {
               "status": "pass",
@@ -1088,15 +1088,15 @@
               "value": 5,
               "limit": 3,
               "fractions": [
-                0.0074,
+                0.0073,
                 0.0069,
-                0.0421,
+                0.0418,
                 0.0305,
-                0.0001,
-                0.0002,
-                0.0051,
-                0.0016,
-                0.0008
+                0,
+                0.0003,
+                0.005,
+                0.0006,
+                0.0014
               ]
             },
             "performance": {
@@ -1107,8 +1107,8 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 8.99,
+                "frameMsP95": 18.7,
+                "gpuMsP95": 7.84,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 156,
@@ -1248,11 +1248,11 @@
               "value": 5,
               "limit": 3,
               "fractions": [
-                0.0053,
-                0.0175,
-                0.1152,
-                0.0106,
-                0.0243,
+                0.0037,
+                0.012,
+                0.084,
+                0.0092,
+                0.0184,
                 0,
                 0,
                 0,
@@ -1265,11 +1265,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18,
-                "gpuMsP95": 8.65,
-                "gpuSamples": 240,
+                "frameMsP95": 17.8,
+                "gpuMsP95": 7.1,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 170,
                 "trianglesMax": 613579,
@@ -1408,14 +1408,14 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0171,
-                0.0053,
+                0.0162,
+                0.0039,
                 0,
                 0.0001,
-                0.0245,
-                0.026,
-                0.0635,
-                0.0175,
+                0.0235,
+                0.0143,
+                0.1009,
+                0.12,
                 0
               ]
             },
@@ -1425,11 +1425,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
                 "frameMsP95": 18.7,
-                "gpuMsP95": 11.25,
-                "gpuSamples": 241,
+                "gpuMsP95": 8.51,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 200,
                 "trianglesMax": 1115639,
@@ -1547,7 +1547,7 @@
             },
             "inspectableObjects": {
               "status": "pass",
-              "value": 32,
+              "value": 31,
               "limit": 20,
               "catalogEntries": 35
             },
@@ -1568,15 +1568,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0258,
-                0.0279,
-                0.0278,
-                0.004,
-                0.0134,
-                0.0237,
+                0.0268,
+                0.0289,
+                0.0287,
                 0.0044,
-                0.0067,
-                0.0045
+                0.012,
+                0.0252,
+                0.0045,
+                0.0069,
+                0.0049
               ]
             },
             "performance": {
@@ -1587,8 +1587,8 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 10.1,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 7.47,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 200,
@@ -1728,13 +1728,13 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0028,
+                0.003,
                 0.0039,
+                0.002,
+                0.0039,
+                0.0073,
                 0.0021,
-                0.0039,
-                0.0074,
-                0.0024,
-                0.0044,
+                0.0043,
                 0.0032,
                 0.0017
               ]
@@ -1745,11 +1745,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
                 "frameMsP95": 18.6,
-                "gpuMsP95": 3.26,
-                "gpuSamples": 241,
+                "gpuMsP95": 4.42,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 94,
                 "trianglesMax": 432053,
@@ -1889,14 +1889,14 @@
               "limit": 3,
               "fractions": [
                 0.0003,
-                0.0094,
+                0.01,
                 0.0004,
-                0.0541,
-                0.0773,
-                0.0303,
-                0.0603,
-                0.0521,
-                0.0354
+                0.0581,
+                0.0855,
+                0.0369,
+                0.0587,
+                0.0529,
+                0.0373
               ]
             },
             "performance": {
@@ -1905,17 +1905,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
                 "frameMsP95": 18.6,
-                "gpuMsP95": 8.97,
-                "gpuSamples": 240,
+                "gpuMsP95": 8.34,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 136,
-                "trianglesMax": 904937,
+                "drawCallsMax": 130,
+                "trianglesMax": 904745,
                 "threeInfoLastFrame": {
-                  "calls": 136,
-                  "triangles": 904937
+                  "calls": 130,
+                  "triangles": 904745
                 }
               },
               "failures": []
@@ -1924,7 +1924,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter rise in the east",
+          "label": "Watch the orbiter climb from the eastern horizon",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -2045,18 +2045,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 7,
+              "value": 5,
               "limit": 3,
               "fractions": [
-                0.0013,
-                0.0028,
-                0.0016,
-                0.2161,
-                0.1991,
-                0.2946,
-                0.9966,
-                0.9972,
-                0.9929
+                0.0017,
+                0.0024,
+                0.0022,
+                0.0017,
+                0.0036,
+                0.0369,
+                0.5648,
+                0.549,
+                0.605
               ]
             },
             "performance": {
@@ -2067,15 +2067,15 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.4,
-                "gpuMsP95": 9.46,
+                "frameMsP95": 18.1,
+                "gpuMsP95": 8.61,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 222,
-                "trianglesMax": 1156509,
+                "drawCallsMax": 218,
+                "trianglesMax": 1128821,
                 "threeInfoLastFrame": {
-                  "calls": 219,
-                  "triangles": 1156411
+                  "calls": 218,
+                  "triangles": 1128821
                 }
               },
               "failures": []
@@ -2208,12 +2208,12 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0036,
-                0.0039,
-                0.002,
-                0.0044,
-                0.0044,
+                0.0035,
+                0.004,
                 0.0021,
+                0.0046,
+                0.0046,
+                0.0023,
                 0.0038,
                 0.0036,
                 0.0021
@@ -2227,8 +2227,8 @@
                 "canvas": "2160x1350",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 3.77,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 4.8,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 116,
@@ -2368,15 +2368,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.6918,
-                0.7327,
-                0.7694,
-                0.6778,
-                0.7714,
-                0.7505,
-                0.6487,
-                0.6878,
-                0.6924
+                0.689,
+                0.7239,
+                0.7623,
+                0.676,
+                0.7558,
+                0.7448,
+                0.6467,
+                0.6824,
+                0.688
               ]
             },
             "performance": {
@@ -2385,11 +2385,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "2160x1350",
-                "frames": 240,
-                "fps": 60,
+                "frames": 274,
+                "fps": 59.4,
                 "frameMsP95": 18.6,
-                "gpuMsP95": 8.18,
-                "gpuSamples": 240,
+                "gpuMsP95": 8.16,
+                "gpuSamples": 274,
                 "gpuTimer": true,
                 "drawCallsMax": 38,
                 "trianglesMax": 248653,
@@ -2416,7 +2416,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 15.73
+        "streamedAfterFirstInteractionMB": 16.09
       },
       "preset": "medium"
     },
@@ -2526,14 +2526,14 @@
               "limit": 3,
               "fractions": [
                 0.0037,
-                0.097,
-                0.0031,
-                0.0057,
-                0.4454,
-                0.0054,
-                0.0054,
-                0.1335,
-                0.0092
+                0.0967,
+                0.0035,
+                0.0056,
+                0.4449,
+                0.0051,
+                0.0055,
+                0.1332,
+                0.009
               ]
             },
             "performance": {
@@ -2544,8 +2544,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.25,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 4.8,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -2686,12 +2686,12 @@
                 0.004,
                 0.0235,
                 0.0044,
-                0.0048,
-                0.1959,
-                0.0079,
-                0.0046,
+                0.0049,
+                0.1958,
+                0.0078,
+                0.0044,
                 0.0337,
-                0.0101
+                0.01
               ]
             },
             "performance": {
@@ -2702,8 +2702,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.26,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 2.49,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -2810,8 +2810,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.24,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 5.95,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 156,
@@ -2959,7 +2959,7 @@
                 0.0032,
                 0.011,
                 0,
-                0.0006
+                0.0005
               ]
             },
             "performance": {
@@ -2970,15 +2970,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 8.05,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 7.21,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 168,
-                "trianglesMax": 671177,
+                "drawCallsMax": 167,
+                "trianglesMax": 671175,
                 "threeInfoLastFrame": {
-                  "calls": 168,
-                  "triangles": 671177
+                  "calls": 167,
+                  "triangles": 671175
                 }
               },
               "failures": []
@@ -3117,7 +3117,7 @@
                 0.0266,
                 0.009,
                 0.0002,
-                0.0161,
+                0.0162,
                 0.0049,
                 0.0026
               ]
@@ -3130,8 +3130,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.6,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 6.7,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 147,
@@ -3272,13 +3272,13 @@
               "limit": 3,
               "fractions": [
                 0.0514,
-                0.0882,
-                0.138,
+                0.088,
+                0.1377,
                 0.0068,
-                0.0515,
+                0.0509,
                 0,
                 0.0025,
-                0.0069,
+                0.0067,
                 0.0048
               ]
             },
@@ -3288,11 +3288,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.29,
-                "gpuSamples": 241,
+                "frameMsP95": 16.9,
+                "gpuMsP95": 6.41,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 161,
                 "trianglesMax": 536647,
@@ -3432,12 +3432,12 @@
               "limit": 3,
               "fractions": [
                 0.0135,
-                0.0235,
-                0.0267,
-                0.0226,
-                0.0362,
-                0.0061,
-                0.0145,
+                0.0238,
+                0.0271,
+                0.0206,
+                0.0347,
+                0.0062,
+                0.0137,
                 0.0003,
                 0
               ]
@@ -3450,15 +3450,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 10.3,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 8.42,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 223,
                 "trianglesMax": 1144071,
                 "threeInfoLastFrame": {
-                  "calls": 220,
-                  "triangles": 1116423
+                  "calls": 223,
+                  "triangles": 1144071
                 }
               },
               "failures": []
@@ -3592,14 +3592,14 @@
               "limit": 3,
               "fractions": [
                 0.0296,
-                0.0369,
-                0.0375,
+                0.037,
+                0.0377,
                 0.006,
-                0.0171,
+                0.0195,
                 0.0225,
-                0.0192,
-                0.0253,
-                0.0185
+                0.019,
+                0.0249,
+                0.0181
               ]
             },
             "performance": {
@@ -3610,8 +3610,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 8.62,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 6.81,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 203,
@@ -3751,15 +3751,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0036,
-                0.0068,
-                0.0033,
+                0.0035,
+                0.0072,
+                0.0031,
                 0.0058,
-                0.0099,
-                0.0034,
+                0.0097,
+                0.0035,
                 0.0063,
-                0.0059,
-                0.0026
+                0.0058,
+                0.0027
               ]
             },
             "performance": {
@@ -3770,8 +3770,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.84,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 3.51,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 94,
@@ -3912,14 +3912,14 @@
               "limit": 3,
               "fractions": [
                 0.0006,
-                0.0059,
+                0.0058,
                 0.0015,
-                0.0004,
-                0.0208,
-                0.0032,
-                0.7156,
-                0.6172,
-                0.6537
+                0.0006,
+                0.0207,
+                0.0031,
+                0.7144,
+                0.6144,
+                0.6516
               ]
             },
             "performance": {
@@ -3930,8 +3930,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 7.38,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 5.78,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 119,
@@ -3947,7 +3947,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter rise in the east",
+          "label": "Watch the orbiter climb from the eastern horizon",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -4068,18 +4068,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 5,
+              "value": 7,
               "limit": 3,
               "fractions": [
-                0.0017,
-                0.004,
-                0.0028,
-                0.0069,
-                0.0113,
-                0.0719,
-                0.0004,
-                0.0004,
-                0.0012
+                0.0021,
+                0.0037,
+                0.0032,
+                0.0025,
+                0.0056,
+                0.0304,
+                0.0068,
+                0.0111,
+                0.0348
               ]
             },
             "performance": {
@@ -4090,15 +4090,15 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 8.27,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 6.47,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 225,
                 "trianglesMax": 1184157,
                 "threeInfoLastFrame": {
-                  "calls": 222,
-                  "triangles": 1184059
+                  "calls": 225,
+                  "triangles": 1184157
                 }
               },
               "failures": []
@@ -4231,15 +4231,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0049,
-                0.0055,
-                0.0032,
-                0.0062,
+                0.0048,
+                0.0054,
+                0.0031,
                 0.0064,
-                0.0035,
-                0.0283,
-                0.0055,
-                0.0618
+                0.0063,
+                0.0033,
+                0.0287,
+                0.0056,
+                0.0623
               ]
             },
             "performance": {
@@ -4250,8 +4250,8 @@
                 "canvas": "1920x1080",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.89,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 3.83,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 122,
@@ -4391,15 +4391,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.1441,
-                0.1149,
-                0.0528,
-                0.156,
-                0.059,
-                0.092,
-                0.2109,
-                0.1875,
-                0.1915
+                0.1446,
+                0.115,
+                0.0527,
+                0.1606,
+                0.0627,
+                0.0936,
+                0.192,
+                0.1901,
+                0.1978
               ]
             },
             "performance": {
@@ -4408,11 +4408,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1920x1080",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 6.86,
-                "gpuSamples": 241,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 5.98,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 38,
                 "trianglesMax": 248653,
@@ -4548,14 +4548,14 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0963,
-                0.2682,
-                0.003,
-                0.6074,
-                0.9612,
-                0.0104,
-                0.1536,
-                0.3384,
+                0.096,
+                0.2678,
+                0.0026,
+                0.6048,
+                0.9613,
+                0.0123,
+                0.1528,
+                0.34,
                 0.006
               ]
             },
@@ -4567,8 +4567,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 1.43,
+                "frameMsP95": 17.4,
+                "gpuMsP95": 1.64,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -4710,13 +4710,13 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0487,
-                0.0358,
-                0.0035,
-                0.3269,
-                0.2953,
+                0.048,
+                0.0354,
+                0.0036,
+                0.3255,
+                0.2955,
                 0.0368,
-                0.046,
+                0.0453,
                 0.0638,
                 0.014
               ]
@@ -4727,11 +4727,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 1.43,
-                "gpuSamples": 240,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 1.65,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
                 "trianglesMax": 146691,
@@ -4837,8 +4837,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.44,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.57,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 132,
@@ -4985,7 +4985,7 @@
                 0.0157,
                 0.0349,
                 0.0443,
-                0.0096,
+                0.0097,
                 0.0185,
                 0.0175,
                 0,
@@ -5001,8 +5001,8 @@
                 "canvas": "585x1266",
                 "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 5.1,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.51,
                 "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 44,
@@ -5146,14 +5146,14 @@
               "value": 4,
               "limit": 3,
               "fractions": [
-                0.0588,
-                0.0627,
-                0.0522,
+                0.0587,
+                0.0626,
+                0.0521,
                 0,
-                0.0003,
+                0.0002,
                 0,
                 0,
-                0.0142,
+                0.0169,
                 0
               ]
             },
@@ -5163,11 +5163,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 4.97,
-                "gpuSamples": 241,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 3.47,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 135,
                 "trianglesMax": 398117,
@@ -5310,13 +5310,13 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0374,
-                0.0951,
-                0.0656,
-                0.1266,
-                0.0167,
+                0.0367,
+                0.0945,
+                0.0648,
+                0.1247,
+                0.0165,
                 0.004,
-                0.0047,
+                0.0041,
                 0,
                 0
               ]
@@ -5329,8 +5329,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 4.72,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 3.18,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 150,
@@ -5474,12 +5474,12 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0293,
-                0.0185,
+                0.0294,
+                0.0184,
                 0.0146,
-                0.0097,
-                0.0417,
-                0.0437,
+                0.0099,
+                0.0367,
+                0.0498,
                 0.0003,
                 0.0004,
                 0
@@ -5493,8 +5493,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 6.11,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 4.87,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 179,
@@ -5639,14 +5639,14 @@
               "limit": 3,
               "fractions": [
                 0.0302,
-                0.0367,
-                0.0331,
-                0.012,
-                0.0134,
-                0.03,
-                0.0348,
-                0.028,
-                0.0529
+                0.0366,
+                0.0332,
+                0.0068,
+                0.0131,
+                0.0301,
+                0.0353,
+                0.0285,
+                0.0536
               ]
             },
             "performance": {
@@ -5657,8 +5657,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.87,
+                "frameMsP95": 16.9,
+                "gpuMsP95": 3.49,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 162,
@@ -5802,15 +5802,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0044,
-                0.0058,
+                0.0042,
+                0.0055,
                 0.0052,
-                0.0069,
-                0.0136,
-                0.0045,
-                0.0049,
+                0.007,
+                0.0135,
+                0.0044,
+                0.0054,
                 0.0041,
-                0.003
+                0.0028
               ]
             },
             "performance": {
@@ -5821,8 +5821,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 1.82,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 2.51,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 36,
@@ -5966,15 +5966,15 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0008,
-                0.0149,
-                0.0011,
-                0.0472,
+                0.0007,
+                0.0148,
+                0.0009,
+                0.0473,
                 0.0334,
-                0.0012,
-                0.836,
-                0.6748,
-                0.4682
+                0.0013,
+                0.8374,
+                0.6734,
+                0.4684
               ]
             },
             "performance": {
@@ -5985,8 +5985,8 @@
                 "canvas": "585x1266",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.44,
+                "frameMsP95": 18.3,
+                "gpuMsP95": 3.35,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 72,
@@ -6002,7 +6002,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter rise in the east",
+          "label": "Watch the orbiter climb from the eastern horizon",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -6127,18 +6127,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 4,
+              "value": 7,
               "limit": 3,
               "fractions": [
-                0.0023,
-                0.0052,
-                0.0024,
-                0.0124,
+                0.0021,
+                0.0027,
+                0.0025,
+                0.0039,
+                0.0061,
+                0.0032,
                 0.0128,
-                0.0208,
-                0.0013,
-                0.0014,
-                0.0012
+                0.0138,
+                0.0123
               ]
             },
             "performance": {
@@ -6147,17 +6147,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 2.83,
-                "gpuSamples": 240,
+                "frameMsP95": 18.2,
+                "gpuMsP95": 3.69,
+                "gpuSamples": 241,
                 "gpuTimer": true,
-                "drawCallsMax": 132,
-                "trianglesMax": 758997,
+                "drawCallsMax": 127,
+                "trianglesMax": 731221,
                 "threeInfoLastFrame": {
-                  "calls": 129,
-                  "triangles": 758899
+                  "calls": 126,
+                  "triangles": 731189
                 }
               },
               "failures": []
@@ -6295,14 +6295,14 @@
               "limit": 3,
               "fractions": [
                 0.005,
-                0.0039,
+                0.0038,
                 0.0035,
-                0.0049,
-                0.0044,
-                0.0037,
-                0.0042,
-                0.0031,
-                0.0036
+                0.0051,
+                0.0047,
+                0.0036,
+                0.0041,
+                0.003,
+                0.0035
               ]
             },
             "performance": {
@@ -6311,11 +6311,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "585x1266",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 1.77,
-                "gpuSamples": 241,
+                "frameMsP95": 18.7,
+                "gpuMsP95": 2.48,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 103,
                 "trianglesMax": 530645,
@@ -6458,15 +6458,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.1201,
-                0.1106,
-                0.1117,
-                0.0812,
-                0.0545,
-                0.0534,
-                0.2033,
-                0.2105,
-                0.2302
+                0.1404,
+                0.123,
+                0.1194,
+                0.0594,
+                0.0431,
+                0.055,
+                0.1807,
+                0.1947,
+                0.2229
               ]
             },
             "performance": {
@@ -6478,7 +6478,7 @@
                 "frames": 240,
                 "fps": 60,
                 "frameMsP95": 18.6,
-                "gpuMsP95": 4.04,
+                "gpuMsP95": 3.71,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 23,
@@ -6506,7 +6506,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 12.76
+        "streamedAfterFirstInteractionMB": 12.64
       },
       "preset": "medium"
     },
@@ -6615,15 +6615,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0113,
-                0.0901,
-                0.0105,
-                0.0158,
-                0.3672,
-                0.0168,
-                0.0164,
-                0.1292,
-                0.0271
+                0.0111,
+                0.0898,
+                0.0109,
+                0.0159,
+                0.3679,
+                0.0171,
+                0.0161,
+                0.1283,
+                0.0272
               ]
             },
             "performance": {
@@ -6634,8 +6634,8 @@
                 "canvas": "1266x585",
                 "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 1.35,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.16,
                 "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -6777,15 +6777,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0097,
-                0.0271,
+                0.0098,
+                0.0268,
                 0.0142,
-                0.0142,
-                0.1451,
-                0.0236,
+                0.014,
+                0.1446,
+                0.0239,
                 0.0134,
-                0.0392,
-                0.0269
+                0.0388,
+                0.0267
               ]
             },
             "performance": {
@@ -6796,8 +6796,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 1.35,
+                "frameMsP95": 18,
+                "gpuMsP95": 1.86,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 4,
@@ -6904,8 +6904,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.64,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 3.68,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 123,
@@ -7053,11 +7053,11 @@
                 0.0391,
                 0.0408,
                 0.054,
-                0.0162,
+                0.0161,
                 0.0062,
-                0.0238,
+                0.0239,
                 0,
-                0.0006
+                0.0005
               ]
             },
             "performance": {
@@ -7066,17 +7066,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 5.48,
-                "gpuSamples": 241,
+                "frameMsP95": 17.4,
+                "gpuMsP95": 4.44,
+                "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 168,
-                "trianglesMax": 675113,
+                "drawCallsMax": 167,
+                "trianglesMax": 675111,
                 "threeInfoLastFrame": {
-                  "calls": 168,
-                  "triangles": 675113
+                  "calls": 167,
+                  "triangles": 675111
                 }
               },
               "failures": []
@@ -7213,14 +7213,14 @@
               "value": 7,
               "limit": 3,
               "fractions": [
-                0.0288,
-                0.0466,
+                0.0286,
+                0.0465,
                 0.0938,
-                0.0161,
-                0.0103,
+                0.016,
+                0.0102,
                 0,
                 0.0113,
-                0.0034,
+                0.0033,
                 0.0008
               ]
             },
@@ -7232,8 +7232,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 5.02,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 3.88,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 135,
@@ -7377,15 +7377,15 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.0285,
-                0.0909,
-                0.1067,
-                0.001,
-                0.0431,
+                0.0298,
+                0.0943,
+                0.1093,
+                0.0012,
+                0.0443,
                 0,
-                0.0245,
-                0.0048,
-                0.0017
+                0.0269,
+                0.0062,
+                0.0019
               ]
             },
             "performance": {
@@ -7394,11 +7394,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 4.49,
-                "gpuSamples": 241,
+                "frameMsP95": 16.9,
+                "gpuMsP95": 4.11,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 143,
                 "trianglesMax": 374923,
@@ -7541,13 +7541,13 @@
               "value": 6,
               "limit": 3,
               "fractions": [
-                0.008,
+                0.0079,
                 0.023,
-                0.023,
-                0.0036,
-                0.0208,
+                0.0228,
+                0.0035,
+                0.0189,
                 0.001,
-                0.0303,
+                0.0286,
                 0,
                 0
               ]
@@ -7560,8 +7560,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 6.88,
+                "frameMsP95": 17.4,
+                "gpuMsP95": 6.01,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 241,
@@ -7705,13 +7705,13 @@
               "value": 8,
               "limit": 3,
               "fractions": [
-                0.0258,
-                0.0352,
-                0.0318,
+                0.0256,
+                0.0353,
+                0.0319,
                 0.0052,
-                0.015,
+                0.0151,
                 0.0091,
-                0.0027,
+                0.0029,
                 0.0051,
                 0.002
               ]
@@ -7722,11 +7722,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 240,
+                "frames": 241,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 3.61,
-                "gpuSamples": 240,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 4.47,
+                "gpuSamples": 241,
                 "gpuTimer": true,
                 "drawCallsMax": 203,
                 "trianglesMax": 747007,
@@ -7869,15 +7869,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0103,
+                0.0113,
                 0.022,
+                0.0086,
+                0.0155,
+                0.0286,
                 0.0088,
-                0.0154,
-                0.0294,
-                0.0093,
                 0.0157,
-                0.0205,
-                0.0067
+                0.0213,
+                0.0068
               ]
             },
             "performance": {
@@ -7886,11 +7886,11 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 240,
+                "frames": 242,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 1.81,
-                "gpuSamples": 240,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.78,
+                "gpuSamples": 242,
                 "gpuTimer": true,
                 "drawCallsMax": 94,
                 "trianglesMax": 459603,
@@ -8035,13 +8035,13 @@
               "fractions": [
                 0.0016,
                 0.0074,
-                0.0038,
-                0.0458,
-                0.0212,
-                0.0467,
-                0.7205,
-                0.6621,
-                0.7755
+                0.0035,
+                0.0449,
+                0.0205,
+                0.046,
+                0.7225,
+                0.6564,
+                0.7708
               ]
             },
             "performance": {
@@ -8050,17 +8050,17 @@
                 "preset": "medium",
                 "resolutionScale": 1,
                 "canvas": "1266x585",
-                "frames": 241,
+                "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.6,
-                "gpuMsP95": 3.18,
-                "gpuSamples": 241,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 4.16,
+                "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 128,
                 "trianglesMax": 859393,
                 "threeInfoLastFrame": {
-                  "calls": 115,
-                  "triangles": 858961
+                  "calls": 114,
+                  "triangles": 858949
                 }
               },
               "failures": []
@@ -8069,7 +8069,7 @@
         },
         {
           "name": "sky-overhead",
-          "label": "Watch the orbiter rise in the east",
+          "label": "Watch the orbiter climb from the eastern horizon",
           "phase": "explore",
           "gates": {
             "sceneCoverage": {
@@ -8194,18 +8194,18 @@
             },
             "alive": {
               "status": "pass",
-              "value": 6,
+              "value": 9,
               "limit": 3,
               "fractions": [
-                0.0051,
-                0.0106,
-                0.0108,
-                0.0205,
-                0.0278,
-                0.1173,
-                0,
-                0,
-                0.0002
+                0.0062,
+                0.0114,
+                0.0094,
+                0.0075,
+                0.0174,
+                0.0576,
+                0.0197,
+                0.022,
+                0.0468
               ]
             },
             "performance": {
@@ -8216,15 +8216,15 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 5.97,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 4.56,
                 "gpuSamples": 240,
                 "gpuTimer": true,
-                "drawCallsMax": 261,
-                "trianglesMax": 1309917,
+                "drawCallsMax": 231,
+                "trianglesMax": 1239453,
                 "threeInfoLastFrame": {
-                  "calls": 257,
-                  "triangles": 1309639
+                  "calls": 231,
+                  "triangles": 1239453
                 }
               },
               "failures": []
@@ -8361,15 +8361,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0112,
-                0.02,
-                0.0085,
-                0.015,
-                0.0225,
-                0.0093,
-                0.1081,
-                0.0176,
-                0.1471
+                0.0116,
+                0.0196,
+                0.0086,
+                0.0157,
+                0.022,
+                0.0095,
+                0.109,
+                0.0178,
+                0.1461
               ]
             },
             "performance": {
@@ -8380,8 +8380,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 2.1,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 3.07,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 135,
@@ -8525,15 +8525,15 @@
               "value": 9,
               "limit": 3,
               "fractions": [
-                0.0718,
-                0.0237,
-                0.0088,
-                0.07,
-                0.0122,
-                0.0255,
-                0.0755,
-                0.0332,
-                0.079
+                0.0698,
+                0.0212,
+                0.0057,
+                0.0608,
+                0.0065,
+                0.0133,
+                0.0874,
+                0.0598,
+                0.0829
               ]
             },
             "performance": {
@@ -8544,8 +8544,8 @@
                 "canvas": "1266x585",
                 "frames": 240,
                 "fps": 60,
-                "frameMsP95": 18.7,
-                "gpuMsP95": 3.22,
+                "frameMsP95": 18.2,
+                "gpuMsP95": 3.6,
                 "gpuSamples": 240,
                 "gpuTimer": true,
                 "drawCallsMax": 41,
@@ -8573,7 +8573,7 @@
           "mb": 3.43
         },
         "filesOver20MB": [],
-        "streamedAfterFirstInteractionMB": 12.64
+        "streamedAfterFirstInteractionMB": 12.4
       },
       "preset": "medium"
     }
