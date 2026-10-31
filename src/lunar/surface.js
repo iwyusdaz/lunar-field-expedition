@@ -336,14 +336,14 @@ export class SurfaceScene {
     // scan, no shadow casting (illustrative sizes and spacing).
     const prng = mulberry(4242);
     const pebbleGeo = (() => { const g = new THREE.IcosahedronGeometry(0.5, 1); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const k = 0.75 + 0.4 * prng(); p.setXYZ(i, p.getX(i) * k, p.getY(i) * k * 0.7, p.getZ(i) * k); } g.computeVertexNormals(); g.computeBoundingBox(); return g; })();
-    const pebbles = [[], [], [], []];
+    const pebbles = [[]]; // one instanced mesh (one draw call) with the first scan's material
     for (let i = 0; i < 420; i++) {
       const nearPatch = i < 25;
       const a = prng() * Math.PI * 2, d = nearPatch ? Math.sqrt(prng()) * 4.5 : 3 + Math.sqrt(prng()) * 36;
       const dx = nearPatch ? -14 + Math.cos(a) * d : Math.cos(a) * d, dz = nearPatch ? 20 + Math.sin(a) * d : Math.sin(a) * d;
       if (Math.hypot(dx, dz) < 5.2 && !nearPatch) continue; // not under the LM
       const sz = 0.03 + prng() ** 2.2 * 0.12;
-      pebbles[i % 4].push({ sc: V(sz, sz, sz), dx, dz, ry: prng() * 6.28, sink: sz * 0.25, lift: sz * 0.35 });
+      pebbles[0].push({ sc: V(sz, sz, sz), dx, dz, ry: prng() * 6.28, sink: sz * 0.25, lift: sz * 0.35 });
     }
     pebbles.forEach((items, k) => {
       const im = new THREE.InstancedMesh(pebbleGeo, meshOf(k).material, items.length);
@@ -460,7 +460,7 @@ export class SurfaceScene {
     for (const [px, pz] of probes) {
       const x = this.lm.x + px, z = this.lm.z + pz;
       const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.06, 12), capMat);
-      cap.position.set(x, this.groundY(x, z) + 0.02, z); cap.castShadow = true; cap.raycast = () => {};
+      cap.position.set(x, this.groundY(x, z) + 0.02, z); cap.raycast = () => {};
       grp.add(cap);
     }
     this.cables = grp;

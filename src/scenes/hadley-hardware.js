@@ -22,6 +22,7 @@
  * @module scenes/hadley-hardware
  */
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mergeStaticGroup } from '../v2/cinematic-grade.js';
 
 const hasDOM = typeof document !== 'undefined';
@@ -190,6 +191,7 @@ export function buildLunarModuleV3() {
   // Blanket panels: long faces amber in two quilted halves with a black centre
   // strip (the leg outrigger), short corner faces black with a gold band; gold skirt.
   const V = lmOutline();
+  const decalGeos = [];
   for (let i = 0; i < 8; i++) {
     const [x0, z0] = V[i], [x1, z1] = V[(i + 1) % 8];
     const len = Math.hypot(x1 - x0, z1 - z0);
@@ -205,10 +207,9 @@ export function buildLunarModuleV3() {
       at(len * 0.16, H * 0.92, Y0 + H * 0.5, 0, 0.055, black);
       // painted lettering and flag on the two long side faces (east and west)
       if (i === 2 || i === 6) {
-        const p = new THREE.Mesh(new THREE.PlaneGeometry(len * 0.62, len * 0.31), decal);
-        p.position.set(mx + nx * 0.075, Y0 + H * 0.52, mz + nz * 0.075); p.rotation.y = yaw;
-        p.userData.v2NoMerge = true; p.castShadow = false;
-        g.add(p);
+        const p = new THREE.PlaneGeometry(len * 0.62, len * 0.31);
+        p.applyMatrix4(new THREE.Matrix4().compose(new THREE.Vector3(mx + nx * 0.075, Y0 + H * 0.52, mz + nz * 0.075), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, yaw, 0)), new THREE.Vector3(1, 1, 1)));
+        decalGeos.push(p);
       }
     } else {
       at(len * 0.9, H * 0.9, Y0 + H * 0.5, 0, 0.03, black);
@@ -216,6 +217,9 @@ export function buildLunarModuleV3() {
     }
     at(len * 0.96, 0.12, Y0 + 0.06, 0, 0.06, gold);
   }
+  // Both painted faces in one mesh (one draw call, no shadow).
+  const decals = new THREE.Mesh(mergeGeometries(decalGeos), decal);
+  decals.userData.v2NoMerge = true; decals.name = 'lm-lettering';
   // Descent engine bell (up in its bay) and the gold heat shield under the stage.
   const bell = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.78, 0.9, 28, 1, true), engine);
   bell.position.y = Y0 + 0.15; g.add(bell);
@@ -257,6 +261,7 @@ export function buildLunarModuleV3() {
   g.add(box(0.95, 0.85, 0.08, mesa, -1.15, Y0 - 0.2, rim + 0.04, 0));
   g.add(box(0.9, 0.05, 0.45, legs, -1.15, Y0 - 0.62, rim + 0.28));
   shadowed(g);
+  g.add(decals); decals.receiveShadow = true;
   mergeStaticGroup(g);
   return g;
 }
@@ -357,8 +362,12 @@ export function buildRoverV3() {
   }
   // Console on a post, the T-handle hand controller between the seats.
   body.add(strut([0, 0.55, 0.62], [0, 0.86, 0.62], 0.02, frame));
-  const cons = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.36, 0.08), [dark, dark, dark, dark, panel, dark]);
-  cons.position.set(0, 0.95, 0.62); cons.rotation.x = 0.35; cons.userData.v2NoMerge = true; body.add(cons);
+  // Console: a dark box (merged with the body) and its instrument face (one draw call).
+  const cons = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.36, 0.08), dark);
+  cons.position.set(0, 0.95, 0.62); cons.rotation.x = 0.35; body.add(cons);
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(0.48, 0.34), panel);
+  face.position.set(0, 0.95 - 0.041 * Math.sin(0.35), 0.62 - 0.041 * Math.cos(0.35)); face.rotation.set(0.35, Math.PI, 0);
+  body.add(face);
   body.add(strut([0, 0.55, 0.05], [0, 0.82, 0.05], 0.012, dark));
   body.add(strut([-0.08, 0.83, 0.05], [0.08, 0.83, 0.05], 0.012, dark));
   // Rear tool pallet: a frame with sample-bag rack, tongs, scoop and rake (stowed upright).
@@ -367,8 +376,7 @@ export function buildRoverV3() {
   for (const [x, len] of [[-0.3, 0.45], [-0.1, 0.42], [0.12, 0.48], [0.32, 0.44]]) body.add(strut([x, 0.62, -1.4], [x + 0.02, 0.62 + len, -1.42], 0.01, frame));
   body.add(box(0.12, 0.04, 0.02, frame, 0.34, 1.08, -1.42)); // rake head
   body.add(box(0.08, 0.06, 0.06, frame, -0.28, 1.06, -1.4)); // scoop
-  const bags = foilMaterial([214, 212, 204], { seed: 70, metal: 0, rough: 0.8, strength: 4 }); // Teflon sample-bag dispenser
-  for (const x of [-0.25, 0, 0.25]) body.add(box(0.18, 0.16, 0.14, bags, x, 0.71, -1.28));
+  for (const x of [-0.25, 0, 0.25]) body.add(box(0.18, 0.16, 0.14, floor, x, 0.71, -1.28)); // sample-bag dispenser
   // Battery covers and front electronics box.
   body.add(box(0.7, 0.14, 0.3, dark, 0, 0.62, 1.32));
   shadowed(body);
@@ -381,7 +389,7 @@ export function buildRoverV3() {
   const hga = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.06, 0.18, 20, 1, true), dish); hga.position.set(0.35, 1.78, 0.95); hga.rotation.x = -0.5; lcru.add(hga);
   for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2; lcru.add(strut([0.35, 1.7, 0.95], [0.35 + Math.cos(a) * 0.48, 1.78 + Math.sin(a) * 0.2, 0.95 + Math.sin(a) * 0.12], 0.004, frame)); }
   lcru.add(strut([-0.4, 0.62, 0.95], [-0.4, 1.6, 0.95], 0.012, frame));
-  lcru.add(box(0.36, 0.22, 0.2, foilMaterial([210, 208, 200], { seed: 81, metal: 0.6, rough: 0.4 }), -0.4, 0.72, 1.0));
+  lcru.add(box(0.36, 0.22, 0.2, dish, -0.4, 0.72, 1.0)); // relay unit
   shadowed(lcru);
   mergeStaticGroup(lcru);
 
@@ -393,9 +401,11 @@ export function buildRoverV3() {
   const sideMat = new THREE.MeshStandardMaterial({ color: sideMap ? 0xffffff : 0x2a2b2d, map: sideMap, alphaTest: 0.5, side: THREE.DoubleSide, metalness: 0.5, roughness: 0.55 });
   tyreMat.userData.surfaceDetail = sideMat.userData.surfaceDetail = true;
   const wheelGeo = new THREE.CylinderGeometry(0.41, 0.41, 0.23, 28);
+  // One draw group for both wheel sides (the caps follow the tread in the index buffer).
+  { const [t, c1, c2] = wheelGeo.groups; wheelGeo.clearGroups(); wheelGeo.addGroup(t.start, t.count, 0); wheelGeo.addGroup(c1.start, c1.count + c2.count, 1); }
   const wheels = [];
   for (const [x, z] of [[-0.92, 1.15], [0.92, 1.15], [-0.92, -1.15], [0.92, -1.15]]) {
-    const w = new THREE.Mesh(wheelGeo, [tyreMat, sideMat, sideMat]);
+    const w = new THREE.Mesh(wheelGeo, [tyreMat, sideMat]);
     w.rotation.z = Math.PI / 2; w.position.set(x, 0.41, z); w.castShadow = true; w.name = 'lrv-wheel';
     chassis.add(w); wheels.push(w);
   }
