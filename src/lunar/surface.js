@@ -107,6 +107,10 @@ export class SurfaceScene {
     this._buildProxies();
     this.setSunElevation(this.sunBaseElevation);
     window.addEventListener('resize', () => this.streamed.resize());
+    // While the Sun's card is open the view is a narrow telephoto on the disc:
+    // the time-lapse pauses so the Sun does not slide out of the frame.
+    this.app.inspect?.on('open', (id) => { this._cardHold = id === 'sun'; });
+    this.app.inspect?.on('close', () => { this._cardHold = false; });
     return this;
   }
 
@@ -374,7 +378,7 @@ export class SurfaceScene {
     reg('flag', this.flag);
     reg('field-crew', [this.crewA.root, this.crewB.root]);
     reg('earth', this.sky.earth, { frame: { look: true, fitFov: true, heightFrac: 0.4 } });
-    reg('sun', this.sky.sun, { frame: { look: true, fitFov: true, heightFrac: 0.2 } });
+    reg('sun', this.sky.sun, { frame: { look: true, fitFov: true, heightFrac: 0.35 } });
     reg('endeavour', this.sky.orbiter, { frame: { look: true } });
     reg('starfield', this.starPatch, { frame: { look: true } });
     for (const [id, o, frame] of this.proxyList) reg(id, o, frame ? { frame } : {});
@@ -523,7 +527,7 @@ export class SurfaceScene {
       id: 'sun-time-lapse', layer: 'sky', label: 'time-lapse', objects: ['sun'],
       description: 'The Sun climbs through the lunar morning at about one lunar hour a second; shadows sweep the terrain. It loops back after about 43 hours of lunar time.',
       update: (dt) => {
-        if (this.sunHold) return;
+        if (this.sunHold || this._cardHold) return;
         this.lapse += dt * LAPSE_DEG_PER_S;
         if (this.lapse > LAPSE_SPAN_DEG) this.lapse = 0;
         this._applySun();

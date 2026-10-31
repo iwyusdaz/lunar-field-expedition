@@ -91,7 +91,7 @@ const SUN_VS = /* glsl */`varying vec3 vN; varying vec3 vView;
 void main() { vN = normalize(mat3(modelMatrix) * normal); vec4 wp = modelMatrix * vec4(position, 1.0); vView = normalize(cameraPosition - wp.xyz); gl_Position = projectionMatrix * viewMatrix * wp; }`;
 // Limb darkening: the solar disc is dimmer and warmer toward its edge.
 const SUN_FS = /* glsl */`varying vec3 vN; varying vec3 vView;
-void main() { float mu = clamp(dot(normalize(vN), vView), 0.0, 1.0); float l = 0.4 + 0.6 * pow(mu, 0.5); gl_FragColor = vec4(vec3(1.0, 0.97, 0.9) * mix(vec3(1.0, 0.85, 0.7), vec3(1.0), mu) * 4.0 * l, 1.0); }`;
+void main() { float mu = clamp(dot(normalize(vN), vView), 0.0, 1.0); float l = 0.55 + 0.45 * pow(mu, 0.6); gl_FragColor = vec4(vec3(1.0, 0.99, 0.97) * 6.0 * l, 1.0); }`;
 
 const STAR_VS = /* glsl */`
 attribute float aBright; attribute vec3 aColor;
@@ -188,12 +188,13 @@ export class LunarSky {
     const g = new THREE.Group();
     g.name = 'sun';
     const r = SKY_RADIUS.sun * Math.tan(Math.atan(SUN_DIAMETER_M / 2 / SUN_DISTANCE_M));
-    this.sunDisc = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 16), new THREE.ShaderMaterial({ vertexShader: SUN_VS, fragmentShader: SUN_FS, depthWrite: false }));
+    this.sunDisc = new THREE.Mesh(new THREE.SphereGeometry(r, 64, 32), new THREE.ShaderMaterial({ vertexShader: SUN_VS, fragmentShader: SUN_FS }));
     this.sunDisc.renderOrder = -1;
     g.add(this.sunDisc);
     // Glare around the disc (a camera and eye effect, not a sky glow: there is no air).
     this.sunGlare = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), transparent: true, depthWrite: false, opacity: 0.55 }));
-    this.sunGlare.scale.setScalar(r * 2 * 7);
+    this._glare0 = r * 2 * 7;
+    this.sunGlare.scale.setScalar(this._glare0);
     this.sunGlare.userData.noOutline = true;
     this.sunGlare.raycast = () => {};
     this.sunGlare.renderOrder = -1;
@@ -281,6 +282,8 @@ export class LunarSky {
     this.sun.position.copy(this.sunDir).multiplyScalar(SKY_RADIUS.sun);
     this.sunGlare.position.copy(this.sun.position);
     this.sun.visible = this.sunGlare.visible = sunVisible && this.sunDir.y > -0.01;
+    // Glare is a lens and eye effect: it keeps its size on screen when the view narrows.
+    this.sunGlare.scale.setScalar(this._glare0 * Math.min(1, camera.fov / 60));
     // Earth: fixed place in the sky, spin axis from the celestial pole.
     this.earth.position.copy(this.earthDir).multiplyScalar(SKY_RADIUS.earth);
     const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), this._earthAxis || new THREE.Vector3(0, 1, 0));
