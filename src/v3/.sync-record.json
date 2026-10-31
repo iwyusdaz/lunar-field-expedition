@@ -1,7 +1,7 @@
 {
  "tool": "sync-v3-core.mjs",
  "template": "_templates/immersive-core",
- "syncedAt": "2026-10-31T08:15:23.689Z",
+ "syncedAt": "2026-10-31T11:29:55.889Z",
  "files": {
   "src/v3/catalog-views.js": "09b538a3adaa8271b16a0553eb0a573628e1092d4bc82a0baa3d32b81db83669",
   "src/v3/catalog.js": "35216aab5fb0e97c2967793bc988645f71db089efa9d5d6541f45d546a4117a9",
@@ -23,7 +23,7 @@
   "src/v3/shell.css": "635ea126b8ac572268f5f9b8c83f52af31f9ee8211981bacd03b5e77c2f2562b",
   "src/v3/shell.js": "17fd7d92cd88dd87b76c6093c00b5464e07c2edbf7db5f0f7447bb70c178851c",
   "src/v3/type.css": "6f7a0de74e52f7aab564d4dbdc2465bc484f5ef54afd2fd1a65b9d5ee8b481f8",
-  "src/v3/app.js": "bfce5f59ad933b5c4b749927195a4b6fec8f5800eef396f10cc8887340d7d32c",
+  "src/v3/app.js": "5dc785ed6536384d61d63c5f99ccf9b08c7d6a1c2c0e35122d9d98dd000cebb6",
   "src/v3/camera-rig.js": "7737fbf8ab8b5e3c90e562433a32eaeeebe808ca86653fa76b2d96047abc02a9"
  }
 }
