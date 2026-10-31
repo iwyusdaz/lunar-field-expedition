@@ -12,7 +12,13 @@
  * - Click / Enter: the camera eases to frame the object (>= 35% of the viewport
  *   height) and the info card opens beside it, never over it. Esc, the close
  *   button or a click on empty scene closes it and eases back to the view the
- *   learner had.
+ *   learner had. With several roots under one card (two people, a row of
+ *   trees) a click frames the root that was hit. A repo can give an object an
+ *   authored view instead (opts.frame.view: a rig view or a function that
+ *   returns one) where a box framing would not show what the object is (a
+ *   landform, a line, a layer).
+ * - setCue(id): a lesson cue (the practice target): outline and name label
+ *   stay on until the cue is cleared; emits 'cue'.
  * - Every opened object is recorded in the discovery journal.
  * Scene contract (ui-audit): userData.objectId on each catalog object's root.
  * @module v3/inspect
@@ -68,6 +74,7 @@ export class InspectSystem {
     this.hovered = null;
     this.focused = null;
     this.selected = null;
+    this.cued = null;
     this.showAll = this._loadShowAll();
     this.holdAll = false;
     this.enabled = true;
@@ -111,7 +118,7 @@ export class InspectSystem {
     label.setAttribute('aria-hidden', 'true');
     label.textContent = entry.name;
     this._labelLayer.appendChild(label);
-    const item = { id, entry, roots: list, label, hulls: null, priority: opts.priority ?? (entry.role === 'task' ? 2 : 1), frame: opts.frame || {}, size: null };
+    const item = { id, entry, roots: list, active: list[0], label, hulls: null, priority: opts.priority ?? (entry.role === 'task' ? 2 : 1), frame: opts.frame || {}, size: null };
     this.items.set(id, item);
     this._emit('change');
     return item;
@@ -125,6 +132,7 @@ export class InspectSystem {
     this.roots = this.roots.filter((r) => !it.roots.includes(r));
     this.items.delete(id);
     if (this.selected === id) this.close({ restore: false });
+    if (this.cued === id) this.cued = null;
     this._emit('change');
   }
 
@@ -149,14 +157,28 @@ export class InspectSystem {
   focus(id) {
     const prev = this.focused;
     this.focused = id && this.items.has(id) ? id : null;
-    if (prev && prev !== this.focused && prev !== this.hovered && prev !== this.selected) this._setHulls(this.items.get(prev), false);
+    if (prev && prev !== this.focused && !this._keep(prev)) this._setHulls(this.items.get(prev), false);
     if (this.focused) this._setHulls(this.items.get(this.focused), true);
   }
 
+  /** A lesson cue (e.g. the practice target): outline and label stay on until setCue(null). */
+  setCue(id) {
+    const prev = this.cued;
+    this.cued = id && this.items.has(id) ? id : null;
+    if (prev && prev !== this.cued && !this._keep(prev)) this._setHulls(this.items.get(prev), false);
+    if (this.cued) this._setHulls(this.items.get(this.cued), true);
+    if (prev !== this.cued) this._emit('cue', this.cued);
+  }
+
+  /** True while something still wants this object's outline (hover, focus, open card, cue). */
+  _keep(id) { return id === this.hovered || id === this.focused || id === this.selected || id === this.cued; }
+
   /** Open an object's card: frame it, record the discovery, place the card beside it. */
-  async open(id, { via = 'pointer', trigger = null, onClose = null } = {}) {
+  async open(id, { via = 'pointer', trigger = null, onClose = null, root = null } = {}) {
     const it = this.items.get(id);
     if (!it || !this.enabled) return;
+    // The root that was clicked (several roots can share one card); else the first.
+    it.active = root && it.roots.includes(root) ? root : it.roots[0];
     if (this.selected && this.selected !== id) this._deselect();
     if (!this.selected) this._returnView = this.rig.view();
     this.selected = id;
@@ -172,12 +194,20 @@ export class InspectSystem {
     announce(`${it.entry.name}. ${it.entry.short}`);
     if (via === 'keyboard') this.card.querySelector('[data-action="card-close"]').focus();
     this._emit('open', id, via);
-    this._box.setFromObject(it.roots[0]);
+    this._userMoved = false;
     const lay = this.shell.layout;
     const frameOpts = lay === 'phone-portrait' ? { offsetX: 0, offsetY: 0.36, heightFrac: 0.4, maxWidthFrac: 0.8 }
       : lay === 'phone-landscape' ? { offsetX: -0.32, offsetY: -0.05, heightFrac: 0.45, maxWidthFrac: 0.45 }
         : { offsetX: -0.24, offsetY: -0.02, heightFrac: 0.45, maxWidthFrac: 0.4 };
-    this._userMoved = false;
+    // Authored view: { eye, center, fov? } (the camera at eye, center beside the
+    // card) or a plain rig view; a function gets the layout name.
+    const view = typeof it.frame.view === 'function' ? it.frame.view(lay) : it.frame.view;
+    if (view) {
+      const v = view.eye ? this.rig.viewFrom(view.eye, view.center, { offsetX: frameOpts.offsetX, offsetY: frameOpts.offsetY, fov: view.fov }) : view;
+      await this.rig.flyTo(v, it.frame.duration ?? 0.9);
+      return;
+    }
+    this._box.setFromObject(it.active);
     await this.rig.frame(this._box, { ...frameOpts, ...it.frame });
   }
 
@@ -199,25 +229,28 @@ export class InspectSystem {
   _deselect() {
     const it = this.items.get(this.selected);
     this.selected = null;
-    if (it && it.id !== this.hovered && it.id !== this.focused) this._setHulls(it, false);
+    if (it && !this._keep(it.id)) this._setHulls(it, false);
   }
 
   /** Object under a screen point: ray first, then (for small objects) the screen box. */
-  pick(x, y) {
+  pick(x, y) { return this.pickHit(x, y)?.id || null; }
+
+  /** Like pick(), with the registered root that was hit: { id, root } or null. */
+  pickHit(x, y) {
     const r = this.canvas.getBoundingClientRect();
     this._ndc.set(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
     this.raycaster.setFromCamera(this._ndc, this.camera);
     const hits = this.raycaster.intersectObjects(this.roots, true);
     for (const h of hits) {
       if (!this._visibleChain(h.object)) continue;
-      for (let p = h.object; p; p = p.parent) if (p.userData?.objectId && this.items.has(p.userData.objectId)) return p.userData.objectId;
+      for (let p = h.object; p; p = p.parent) if (p.userData?.objectId && this.items.has(p.userData.objectId)) return { id: p.userData.objectId, root: this.items.get(p.userData.objectId).roots.includes(p) ? p : null };
     }
     // Thin or small objects (poles, tools) are hard to hit exactly: accept a
     // click inside their on-screen box when nothing registered was hit.
     let best = null;
     const vw = r.width, vh = r.height;
-    for (const it of this.items.values()) {
-      const s = this._screenBox(it);
+    for (const it of this.items.values()) for (const root of it.roots) {
+      const s = this._screenBox(it, root);
       if (!s || (s.right - s.left) * (s.bottom - s.top) > 0.06 * vw * vh) continue;
       const m = 8;
       if (x >= s.left - m && x <= s.right + m && y >= s.top - m && y <= s.bottom + m) {
@@ -225,17 +258,16 @@ export class InspectSystem {
         // one object's box wins over the edge of a neighbour's.
         const w = Math.max(8, s.right - s.left), h = Math.max(8, s.bottom - s.top);
         const d = Math.max(Math.abs(x - (s.left + s.right) / 2) / w, Math.abs(y - (s.top + s.bottom) / 2) / h);
-        if (!best || d < best.d) best = { id: it.id, d };
+        if (!best || d < best.d) best = { id: it.id, root, d };
       }
     }
-    return best?.id || null;
+    return best ? { id: best.id, root: best.root } : null;
   }
 
   _visibleChain(o) { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; }
 
   /** Projected screen box of an object (CSS px), or null when off screen / behind. */
-  _screenBox(it) {
-    const root = it.roots[0];
+  _screenBox(it, root = it.active || it.roots[0]) {
     if (!this._visibleChain(root)) return null;
     this._box.setFromObject(root);
     if (this._box.isEmpty()) return null;
@@ -257,7 +289,7 @@ export class InspectSystem {
     if (id === this.hovered) return;
     const prev = this.hovered;
     this.hovered = id;
-    if (prev && prev !== this.selected && prev !== this.focused) this._setHulls(this.items.get(prev), false);
+    if (prev && !this._keep(prev)) this._setHulls(this.items.get(prev), false);
     if (id) this._setHulls(this.items.get(id), true);
     this.canvas.style.cursor = id ? 'pointer' : '';
   }
@@ -274,7 +306,10 @@ export class InspectSystem {
       it.hulls = [];
       for (const root of it.roots) {
         const meshes = [];
-        root.traverse((m) => { if (m.isMesh && !m.isSkinnedMesh && m.geometry?.attributes?.normal && !m.userData.noOutline) meshes.push(m); });
+        // Flat meshes (a decal slab, a ground patch) get no hull: an inverted hull
+        // of a sheet draws its underside as a filled sheet, not an outline.
+        const flat = (m) => { const g = m.geometry; if (!g.boundingBox) g.computeBoundingBox(); const s = g.boundingBox.getSize(this._v); return Math.min(s.x, s.y, s.z) < 0.03 * Math.max(s.x, s.y, s.z); };
+        root.traverse((m) => { if (m.isMesh && !m.isSkinnedMesh && m.geometry?.attributes?.normal && !m.userData.noOutline && !flat(m)) meshes.push(m); });
         for (const m of meshes) {
           const h = m.isInstancedMesh ? new THREE.InstancedMesh(m.geometry, mat, m.count) : new THREE.Mesh(m.geometry, mat);
           if (m.isInstancedMesh) h.instanceMatrix = m.instanceMatrix;
@@ -301,8 +336,8 @@ export class InspectSystem {
     this.canvas.addEventListener('pointerleave', () => { this._pointer = null; this._hover(null); });
     this.rig.on('tap', (x, y) => {
       if (!this.enabled) return;
-      const id = this.pick(x, y);
-      if (id) this.open(id, { via: 'pointer' });
+      const hit = this.pickHit(x, y);
+      if (hit) this.open(hit.id, { via: 'pointer', root: hit.root });
       else if (this.selected) this.close();
     });
     this.rig.on('drag', () => { if (this.selected) this._userMoved = true; });
@@ -392,7 +427,7 @@ export class InspectSystem {
     const all = this.showAll || this.holdAll;
     const want = [];
     for (const it of this.items.values()) {
-      const forced = it.id === this.hovered || it.id === this.focused || it.id === this.selected;
+      const forced = this._keep(it.id);
       if (!forced && !all) continue;
       if (!this.enabled && !forced) continue;
       const s = this._screenBox(it);

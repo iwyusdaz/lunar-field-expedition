@@ -313,8 +313,21 @@ export class SceneShell {
     this.root.dataset.drawerOpen = 'true';
     this._drawerTrigger = trigger;
     render(body);
-    if (trigger) this.drawer.querySelector('#v3-drawer-title').focus();
+    // Always start at the top (heading, intro, first item), also when the
+    // content is rebuilt while open (the observer below).
+    body.scrollTop = 0;
+    if (trigger) this.drawer.querySelector('#v3-drawer-title').focus({ preventScroll: true });
+    this._watchDrawer(body);
     announce(`${title} opened`);
+  }
+
+  /** Scroll the drawer back to the top whenever its top-level content is replaced. */
+  _watchDrawer(body) {
+    if (this._drawerObs || typeof MutationObserver === 'undefined') return;
+    this._drawerObs = new MutationObserver((list) => {
+      if (list.some((m) => m.removedNodes.length)) body.scrollTop = 0; // content replaced, not only added to
+    });
+    this._drawerObs.observe(body, { childList: true });
   }
 
   closeDrawer() {

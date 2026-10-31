@@ -31,8 +31,15 @@
 .v3 .lfe-field { display: block; margin: 12px 0 4px; }
 .v3 textarea { width: 100%; font: inherit; color: var(--v3-text); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--v3-border); border-radius: 8px; padding: 8px; }
 .v3 fieldset { border: 1px solid var(--v3-border); border-radius: 10px; padding: 8px 12px; margin: 8px 0; }
-.v3 table { border-collapse: collapse; width: 100%; margin: 8px 0; font-variant-numeric: tabular-nums; display: block; overflow-x: auto; }
-.v3 th, .v3 td { border-bottom: 1px solid var(--v3-border); padding: 6px 8px; text-align: left; vertical-align: top; }
+/* Text mode keeps the grid (it scrolls sideways when narrow); drawer tables stack (template shell.css). */
+.v3-tm table { border-collapse: collapse; width: 100%; margin: 8px 0; font-variant-numeric: tabular-nums; display: block; overflow-x: auto; }
+.v3-tm th, .v3-tm td { border-bottom: 1px solid var(--v3-border); padding: 6px 8px; text-align: left; vertical-align: top; }
+.v3-drawer-body table { margin: 8px 0; font-variant-numeric: tabular-nums; }
+.v3 .lfe-check { align-items: flex-start; padding: 4px 0; }
+.v3 .lfe-check > span { padding-top: 5px; }
+.v3 .lfe-from { color: var(--v3-muted); }
+.v3 .lfe-need { color: var(--v3-accent); }
+.v3 .lfe-needed { border-left: 3px solid var(--v3-accent); padding-left: 10px; }
 .v3 caption { text-align: left; color: var(--v3-muted); padding-bottom: 4px; }
 .v3 .traverse-planner .tp-columns { display: flex; gap: 16px; flex-wrap: wrap; }
 .v3 .tp-map { width: 260px; max-width: 100%; height: auto; aspect-ratio: 260 / 600; border: 1px solid var(--v3-border); border-radius: 8px; }

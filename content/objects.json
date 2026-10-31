@@ -409,7 +409,7 @@
       "scene": "hadley-surface",
       "name": "Sun",
       "short": "A hard white disc in a black sky. A lunar day lasts about 29.5 Earth days, so it moves very slowly.",
-      "more": "With no air to scatter light, the sky stays black even at noon and shadows are sharp and very dark. The Sun crosses the lunar sky at about half a degree per hour, because one day-night cycle takes about 29.5 Earth days. The app speeds up the Sun's motion so you can watch shadows sweep the terrain; that motion is time-lapse.",
+      "more": "With no air to scatter light, the sky stays black even at noon and shadows are sharp and very dark. The Sun crosses the lunar sky at about half a degree per hour, because one day-night cycle takes about 29.5 Earth days. The app speeds up the Sun's motion so you can watch shadows sweep the terrain; that motion is time-lapse. When you open the card of a crater, a mountain or the ground, the time-lapse moves to a Sun angle that shows it: low for small relief, higher for the big slopes.",
       "whyItMatters": "Module 2: the Sun angle changes which landforms you can see.",
       "realSize": 1391400000,
       "honesty": "time-lapse",

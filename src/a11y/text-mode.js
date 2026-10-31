@@ -74,11 +74,12 @@ export function dataTable(headers, rows, caption) {
   const tbody = document.createElement('tbody');
   for (const row of rows) {
     const tr = document.createElement('tr');
-    for (const cell of row) {
+    row.forEach((cell, c) => {
       const td = document.createElement('td');
       td.textContent = String(cell);
+      if (headers[c] != null) td.dataset.label = headers[c]; // stacked rows in narrow drawers
       tr.appendChild(td);
-    }
+    });
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);

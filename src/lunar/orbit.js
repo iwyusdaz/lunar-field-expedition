@@ -2,9 +2,10 @@
  * orbit.js — the orbit view (Module 1 and the title screen), in metres.
  *
  * The whole Moon from the NASA SVS CGI Moon Kit (LROC WAC colour, LOLA relief),
- * true radius 1,737.4 km. The Sun direction matches the morning Sun at Hadley,
- * so the day-night line (terminator) lies just west of the landing site, as on
- * the Apollo 15 landing day. The globe turns under the fixed Sun in time-lapse:
+ * true radius 1,737.4 km. The Sun direction matches the morning Sun at Hadley
+ * during the Apollo 15 surface stay (main.js: about 34 deg up, as on the third
+ * EVA; 12 deg at landing), so the day-night line (terminator) lies west of
+ * Mare Imbrium. The globe turns under the fixed Sun in time-lapse:
  * that is the lunar day passing, so the terminator creeps across the surface.
  * Stars: the same BSC5P catalogue as the surface sky.
  * @module lunar/orbit
@@ -16,11 +17,19 @@ import { BASE } from './loaders.js';
 import { hourAngleForElevation, MOON_RADIUS_M, SITE, bvToRgb } from './frame.js';
 
 const R = MOON_RADIUS_M;
-/** Selenographic lat/lon (deg) -> globe-local position (v2 mapping: 0 E faces -z, north is +y). */
+/**
+ * Selenographic lat/lon (deg) -> globe-local position, in the frame of three's
+ * SphereGeometry with an equirectangular map: 0 E faces +x, 90 E faces -z,
+ * north is +y. (The v2 formula swapped the axes, so lon landed on texture
+ * longitude 90 - lon; tests/unit/lunar-v3.test.js samples the sphere's UV.)
+ */
 export function globePoint(lat, lon, r = R) {
   const p = lat * Math.PI / 180, l = lon * Math.PI / 180;
-  return new THREE.Vector3(r * Math.cos(p) * Math.sin(l), r * Math.sin(p), -r * Math.cos(p) * Math.cos(l));
+  return new THREE.Vector3(r * Math.cos(p) * Math.cos(l), r * Math.sin(p), -r * Math.cos(p) * Math.sin(l));
 }
+
+/** Start spin (rad): Hadley a little left of the view centre, near side toward the camera. */
+export const START_SPIN = 1.14;
 
 function pickMat() { return new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide }); }
 
@@ -53,12 +62,13 @@ export class OrbitScene {
     moon.userData.noOutline = true;
     this.globe.add(moon);
     // Start with the near side toward the camera and Hadley a little left of centre.
-    this.spin = -0.32;
+    this.spin = START_SPIN;
     this.globe.rotation.y = this.spin;
     this.group.add(this.globe);
-    // Sun: subsolar point on the equator, east of Hadley by the morning hour angle.
+    // Sun: subsolar point on the equator, east of Hadley by the morning hour
+    // angle, on the globe as it starts (the Sun then stays fixed while the globe turns).
     const ls = SITE.lon + hourAngleForElevation(sunElevation);
-    this.sunDir = globePoint(0, ls, 1).normalize();
+    this.sunDir = globePoint(0, ls, 1).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), START_SPIN);
     this.sun = new THREE.DirectionalLight(0xffffff, 3.0);
     this.sun.position.copy(this.sunDir).multiplyScalar(R * 4);
     this.group.add(this.sun, this.sun.target);
@@ -71,6 +81,21 @@ export class OrbitScene {
     this.imbrium = capMesh(32.8, -15.6, 18.9, 2500);
     this.imbrium.name = 'mare-imbrium';
     this.globe.add(this.imbrium);
+    // Practice cue: a thin line round the basin rim, shown while Mare Imbrium is
+    // the practice target (legend: "Practice target outline").
+    const rim = [];
+    const c = globePoint(32.8, -15.6, 1).normalize();
+    const e1 = new THREE.Vector3(0, 1, 0).cross(c).normalize(), e2 = c.clone().cross(e1);
+    const a = 18.9 * Math.PI / 180;
+    for (let i = 0; i <= 128; i++) {
+      const t = (i / 128) * Math.PI * 2;
+      rim.push(c.clone().multiplyScalar(Math.cos(a)).addScaledVector(e1, Math.sin(a) * Math.cos(t)).addScaledVector(e2, Math.sin(a) * Math.sin(t)).multiplyScalar(R + 9000));
+    }
+    this.imbriumRim = new THREE.Line(new THREE.BufferGeometry().setFromPoints(rim), new THREE.LineBasicMaterial({ color: 0xffd27a, transparent: true, opacity: 0.9 }));
+    this.imbriumRim.userData.marker = { label: 'Practice target outline' };
+    this.imbriumRim.raycast = () => {};
+    this.imbriumRim.visible = false;
+    this.globe.add(this.imbriumRim);
     const band = new THREE.Mesh(new THREE.CylinderGeometry(R + 12000, R + 12000, 160000, 96, 1, true), pickMat()); // about 5 deg wide, above the highest relief
     band.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), this.sunDir);
     band.name = 'terminator';
@@ -109,17 +134,44 @@ export class OrbitScene {
   register(inspect) {
     for (const o of [this.globe, this.imbrium, this.terminator]) o.userData.scaleFrame = 'local';
     if (!inspect.items.has('moon-globe')) inspect.register('moon-globe', this.globe, { frame: { look: true, heightFrac: 0.6 } });
-    if (!inspect.items.has('mare-imbrium')) inspect.register('mare-imbrium', this.imbrium, { frame: { look: true } });
-    if (!inspect.items.has('terminator')) inspect.register('terminator', this.terminator, { frame: { look: true } });
+    const cam = inspect.camera;
+    // Imbrium: a telephoto view of the whole dark basin (about 1,150 km across).
+    const imbriumView = () => {
+      const c = this.globe.localToWorld(globePoint(32.8, -15.6, R));
+      const d = cam.position.distanceTo(c);
+      return { eye: cam.position.toArray(), center: c.toArray(), fov: THREE.MathUtils.radToDeg(2 * Math.atan(1146000 / 2 / d)) / 0.7 };
+    };
+    if (!inspect.items.has('mare-imbrium')) inspect.register('mare-imbrium', this.imbrium, { frame: { view: imbriumView } });
+    if (!this._cueBound) { this._cueBound = true; inspect.on('cue', (id) => { this.imbriumRim.visible = id === 'mare-imbrium'; }); }
+    // Terminator: a telephoto view along the day-night line where it crosses the
+    // side facing the camera, half lit and half dark, with long shadows.
+    const terminatorView = () => {
+      const eye = cam.position.clone();
+      const d = eye.clone().normalize();
+      const p = d.addScaledVector(this.sunDir, -d.dot(this.sunDir)).normalize().multiplyScalar(R);
+      return { eye: eye.toArray(), center: p.toArray(), fov: 16 };
+    };
+    if (!inspect.items.has('terminator')) inspect.register('terminator', this.terminator, { frame: { view: terminatorView } });
   }
 
   addMotion(motion) {
     motion.add({
-      id: 'globe-day', layer: 'sky', label: 'time-lapse', objects: ['moon-globe', 'terminator'],
+      id: 'globe-day', layer: 'sky', label: 'time-lapse', objects: ['moon-globe', 'terminator', 'mare-imbrium'],
       description: 'The Moon turns under the Sun once in about 10 minutes (time-lapse of the 29.5-day lunar day), so the day-night line creeps across the surface.',
       update: (dt) => { if (!this.group.visible) return; this.spin += dt * (Math.PI * 2 / 600); this.globe.rotation.y = this.spin; },
     });
   }
+
+  /** Per frame: the site glint keeps its start-view screen size when the view narrows. */
+  update(camera) {
+    if (!this.group.visible || !this.siteGlint) return;
+    const d = camera.position.distanceTo(this.siteGlint.getWorldPosition(this._gp || (this._gp = new THREE.Vector3())));
+    const k = (d / (R * 2.1)) * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) / Math.tan(Math.PI / 6);
+    this.siteGlint.scale.setScalar(90000 * Math.min(1, k));
+  }
+
+  /** Back to the start orientation (entering the orbit view again). */
+  resetSpin() { this.spin = START_SPIN; if (this.globe) this.globe.rotation.y = this.spin; }
 
   /** The orbit camera view (rig spherical around the globe centre). */
   view() { return { target: [0, 0, 0], radius: R * 3.1, theta: Math.PI * 0.94, phi: Math.PI * 0.42 }; }

@@ -21,7 +21,8 @@
  */
 import * as THREE from 'three';
 import { TerrainField } from '../scenes/terrain.js';
-import { buildLunarModule, buildRover, createDustBurst } from '../scenes/hadley-props.js';
+import { createDustBurst } from '../scenes/hadley-props.js';
+import { buildLunarModuleV3, buildRoverV3 } from '../scenes/hadley-hardware.js';
 import { createSun } from '../v3/render-chain.js';
 import { createGlint } from '../v3/inspect.js';
 import { StreamedTerrain, loadRegolithTextures } from './terrain-v3.js';
@@ -33,6 +34,11 @@ import { hourAngleForElevation, curvatureDrop, LUNAR_G, SITE } from './frame.js'
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const LAPSE_DEG_PER_S = 0.5; // sun time-lapse: about one lunar hour per second
 const LAPSE_SPAN_DEG = 22;   // then the time-lapse loops back (about 43 hours of lunar morning)
+// Landform and ground cards: the Sun angle (deg) that shows each one. Low for
+// small relief (craters, prints, soil); higher for big slopes, whose
+// sun-facing sides would otherwise sit in shadow in the early morning.
+const CARD_SUN = { 'craterlets': 9, 'dune-crater': 9, 'mare-plain': 9, 'footprints': 9, 'rover-tracks': 9, 'regolith': 9, 'spur-crater': 22,
+  'elbow-crater': 22, 'st-george-crater': 35, 'mount-hadley': 35, 'hadley-delta': 35, 'apennine-front': 35 };
 
 /** Invisible pick volume (raycast still works; nothing is drawn). */
 function pickMaterial() { const m = new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide }); m.userData.pickVolume = true; return m; }
@@ -107,10 +113,27 @@ export class SurfaceScene {
     this._buildProxies();
     this.setSunElevation(this.sunBaseElevation);
     window.addEventListener('resize', () => this.streamed.resize());
-    // While the Sun's card is open the view is a narrow telephoto on the disc:
-    // the time-lapse pauses so the Sun does not slide out of the frame.
-    this.app.inspect?.on('open', (id) => { this._cardHold = id === 'sun'; });
-    this.app.inspect?.on('close', () => { this._cardHold = false; });
+    // While a card is open, the motion systems that move its object pause (the
+    // template's card hold, motion-layers.js): the Sun stays in its telephoto
+    // frame, the rover and the walking geologist stay beside their cards.
+    // A station crater's card shows its Apollo 15 station flag; the impact
+    // card shows a flash in its framed spot soon after it opens.
+    const STATION_OF = { 'spur-crater': 'spur', 'dune-crater': 'dune', 'elbow-crater': 'elbow', 'st-george-crater': 'stgeorge' };
+    this.app.inspect?.on('open', (id) => {
+      this.removeMarker('card-station');
+      const sid = STATION_OF[id];
+      if (sid) {
+        const p = this.terrain.fromLonLat(this.stations[sid].lon, this.stations[sid].lat);
+        const m = this.addMarker('card-station', p.xM, p.yM, this.stations[sid].apolloStation || '', '#ffffff');
+        m.userData.marker = { label: 'Station survey flag' };
+      }
+      this._flashSoon = id === 'micrometeoroid-flash' ? 0.9 : null;
+      // Landform and ground cards: the time-lapse moves to the Sun angle that
+      // shows the landform (CARD_SUN); the Sun's card says so.
+      this._lowSun = CARD_SUN[id] && !this.sunHold ? CARD_SUN[id] : 0;
+      if (this._lowSun && this.app.motionPrefs?.reduced) this.setSunElevation(this._lowSun);
+    });
+    this.app.inspect?.on('close', () => { this.removeMarker('card-station'); this._flashSoon = null; this._lowSun = 0; });
     return this;
   }
 
@@ -166,13 +189,13 @@ export class SurfaceScene {
   // ------------------------------------------------------------------ site
   _buildSite() {
     const g = this.group;
-    const lm = buildLunarModule();
+    const lm = buildLunarModuleV3();
     lm.position.copy(this.rel(0, 0, -0.05));
     this.lmProp = lm; g.add(lm);
     const flag = buildFlagV3();
     flag.position.copy(this.rel(-9, 8, -0.25));
     this.flag = flag; g.add(flag);
-    const rover = buildRover();
+    const rover = buildRoverV3();
     this.rover = rover.group; this.roverWheels = rover.wheels; this.roverChassis = rover.chassis;
     this.tvCam = this._buildTvCamera();
     rover.lcru.add(this.tvCam);
@@ -246,6 +269,9 @@ export class SurfaceScene {
       this.alsep[id] = grp;
       this.grounded.push({ obj: grp, dx: C[0] + dx, dz: C[1] + dz, sink: 0 });
     }
+    this.alsepCenter = C;
+    this._cableMat = new THREE.MeshStandardMaterial({ color: 0x6f6d69, metalness: 0.5, roughness: 0.6, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4 });
+    this._cableMat.userData.surfaceDetail = true;
     const skirt = node('pse-skirt');
     if (skirt) { const s = skirt.clone(true); s.position.set(0, 0, 0); this.group.add(s); this.grounded.push({ obj: s, dx: C[0] - 4.2, dz: C[1] + 2.6, sink: -0.005 }); }
     const bagSrc = node('sample-bag');
@@ -293,6 +319,27 @@ export class SurfaceScene {
       this.group.add(im);
       this.boulderSets.push(im);
     }
+    // Pebbles (3-15 cm) scattered round the site and thicker on the regolith
+    // patch: low-poly stones with the scans' materials, one instanced mesh per
+    // scan, no shadow casting (illustrative sizes and spacing).
+    const prng = mulberry(4242);
+    const pebbleGeo = (() => { const g = new THREE.IcosahedronGeometry(0.5, 1); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const k = 0.75 + 0.4 * prng(); p.setXYZ(i, p.getX(i) * k, p.getY(i) * k * 0.7, p.getZ(i) * k); } g.computeVertexNormals(); g.computeBoundingBox(); return g; })();
+    const pebbles = [[], [], [], []];
+    for (let i = 0; i < 420; i++) {
+      const nearPatch = i < 25;
+      const a = prng() * Math.PI * 2, d = nearPatch ? Math.sqrt(prng()) * 4.5 : 3 + Math.sqrt(prng()) * 36;
+      const dx = nearPatch ? -14 + Math.cos(a) * d : Math.cos(a) * d, dz = nearPatch ? 20 + Math.sin(a) * d : Math.sin(a) * d;
+      if (Math.hypot(dx, dz) < 5.2 && !nearPatch) continue; // not under the LM
+      const sz = 0.03 + prng() ** 2.2 * 0.12;
+      pebbles[i % 4].push({ sc: V(sz, sz, sz), dx, dz, ry: prng() * 6.28, sink: sz * 0.25, lift: sz * 0.35 });
+    }
+    pebbles.forEach((items, k) => {
+      const im = new THREE.InstancedMesh(pebbleGeo, meshOf(k).material, items.length);
+      im.name = 'pebbles-instanced'; im.castShadow = false; im.receiveShadow = true;
+      im.userData.items = items;
+      this.group.add(im);
+      this.boulderSets.push(im);
+    });
     // The Genesis Rock (reconstructed shape), on the rim of Spur crater (Station 7).
     const gen = await loadGLB(r, 'assets/v3/models/genesis-rock-reconstructed.glb');
     const gr = new THREE.Group(); gr.name = 'genesis-rock';
@@ -308,25 +355,26 @@ export class SurfaceScene {
 
   async _loadDecals() {
     const r = this.engine.renderer;
-    const [ba, bn, ta, tn] = await Promise.all([
+    const [ba, bn] = await Promise.all([
       loadKTX2(r, 'assets/v3/decals/bootprints-albedo.ktx2'), loadKTX2(r, 'assets/v3/decals/bootprints-normal.ktx2', { srgb: false }),
-      loadKTX2(r, 'assets/v3/decals/rover-track-albedo.ktx2', { repeat: true }), loadKTX2(r, 'assets/v3/decals/rover-track-normal.ktx2', { srgb: false, repeat: true }),
     ]);
+    // Rover tracks: both wheel tracks drawn here (the Poly Haven strip held a single track).
+    const { map: ta, normalMap: tn, alphaMap: tAlpha } = roverTrackTextures();
     const edge = edgeMask();
     // A thin slab 2 cm deep (the depth of the prints): only its top face draws the decal.
     const hidden = new THREE.MeshBasicMaterial({ visible: false });
-    const mk = (w, l, map, nrm, rep = 1) => {
+    const mk = (w, l, map, nrm, rep = 1, alpha = edge) => {
       if (rep > 1) { map.repeat.set(1, rep); nrm.repeat.set(1, rep); }
       // The scans are brighter than this regolith: tone them down so the prints read as disturbed soil, not a mat.
-      const top = new THREE.MeshStandardMaterial({ map, normalMap: nrm, alphaMap: edge, color: 0x8a8782, transparent: true, opacity: 0.85, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, roughness: 1 });
+      const top = new THREE.MeshStandardMaterial({ map, normalMap: nrm, alphaMap: alpha, color: 0x8a8782, transparent: true, opacity: 0.85, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, roughness: 1 });
       const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.02, l), [hidden, hidden, top, hidden, hidden, hidden]);
       m.position.y = -0.008; m.receiveShadow = true; m.renderOrder = 1;
       const grp = new THREE.Group(); grp.add(m); return grp;
     };
     this.footprints = mk(1.55, 3.1, ba, bn); this.footprints.name = 'bootprints';
-    this.tracks = mk(2.06, 10, ta, tn, 3); this.tracks.name = 'rover-tracks';
+    this.tracks = mk(2.06, 10, ta, tn, 1, tAlpha); this.tracks.name = 'rover-tracks';
     this.group.add(this.footprints, this.tracks);
-    this.grounded.push({ obj: this.footprints, dx: 3.2, dz: 5.6, sink: -0.01 }, { obj: this.tracks, dx: 12.5, dz: -9, sink: -0.01 });
+    this.grounded.push({ obj: this.footprints, dx: 3.2, dz: 5.6, sink: -0.01 }, { obj: this.tracks, dx: 24, dz: -16, sink: -0.01 }); // leading north out of the rover's loop
     this._registerModels();
   }
 
@@ -357,6 +405,54 @@ export class SurfaceScene {
       im.computeBoundingSphere();
     }
     this._placeProxies?.();
+    this._buildCables();
+  }
+
+  /**
+   * ALSEP flat cables on the ground (as in AS15-87-11847): from the central
+   * station to the RTG, seismometer, magnetometer and heat flow electronics,
+   * and from the heat flow box to its two probes in their drill holes (white
+   * probe tops). Not catalog objects (they sit outside the instrument roots);
+   * they make the station read as the hub and the heat flow experiment as
+   * "a box with probes in the ground". Layout simplified.
+   */
+  _buildCables() {
+    if (!this.alsepCenter || !this._cableMat) return;
+    if (this.cables) { this.group.remove(this.cables); this.cables.traverse((m) => m.geometry?.dispose?.()); }
+    const [cx, cz] = this.alsepCenter;
+    const hfe = [cx - 2.4, cz - 3.8];
+    const probes = [[hfe[0] - 4.6, hfe[1] - 1.2], [hfe[0] + 0.8, hfe[1] - 5.2]];
+    const runs = [
+      [[cx + 0.2, cz + 0.15], [cx + 3.0, cz + 1.4]], [[cx - 0.2, cz + 0.15], [cx - 3.95, cz + 2.45]],
+      [[cx + 0.15, cz - 0.15], [cx + 2.35, cz - 4.2]], [[cx - 0.15, cz - 0.15], [hfe[0] + 0.1, hfe[1] + 0.12]],
+      [[hfe[0] - 0.15, hfe[1]], probes[0]], [[hfe[0] + 0.1, hfe[1] - 0.1], probes[1]],
+    ];
+    const pos = [], idx = [], w = 0.025;
+    for (const [[x0, z0], [x1, z1]] of runs) {
+      const n = 24, len = Math.hypot(x1 - x0, z1 - z0), tx = (x1 - x0) / len, tz = (z1 - z0) / len;
+      const base = pos.length / 3;
+      for (let i = 0; i <= n; i++) {
+        const t = i / n, wig = Math.sin(t * Math.PI * 3 + x0) * 0.12 * Math.sin(t * Math.PI); // laid by hand, not taut
+        const x = this.lm.x + x0 + (x1 - x0) * t - tz * wig, z = this.lm.z + z0 + (z1 - z0) * t + tx * wig;
+        const y = this.groundY(x, z) + 0.025;
+        pos.push(x - tz * w, y, z + tx * w, x + tz * w, y, z - tx * w);
+        if (i) { const a = base + (i - 1) * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+    const grp = new THREE.Group(); grp.name = 'alsep-cables';
+    const ribbon = new THREE.Mesh(g, this._cableMat); ribbon.receiveShadow = true; ribbon.raycast = () => {};
+    grp.add(ribbon);
+    const capMat = this._probeMat || (this._probeMat = Object.assign(new THREE.MeshStandardMaterial({ color: 0xe8e6e0, roughness: 0.6 }), { userData: { surfaceDetail: true } }));
+    for (const [px, pz] of probes) {
+      const x = this.lm.x + px, z = this.lm.z + pz;
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.06, 12), capMat);
+      cap.position.set(x, this.groundY(x, z) + 0.02, z); cap.castShadow = true; cap.raycast = () => {};
+      grp.add(cap);
+    }
+    this.cables = grp;
+    this.group.add(grp);
   }
 
   // ------------------------------------------------------------------ catalog
@@ -379,15 +475,74 @@ export class SurfaceScene {
     reg('field-crew', [this.crewA.root, this.crewB.root]);
     reg('earth', this.sky.earth, { frame: { look: true, fitFov: true, heightFrac: 0.4 } });
     reg('sun', this.sky.sun, { frame: { look: true, fitFov: true, heightFrac: 0.35 } });
-    reg('endeavour', this.sky.orbiter, { frame: { look: true } });
+    // The orbiter: a telephoto look (like a long lens) that resolves the real-size spacecraft.
+    reg('endeavour', this.sky.orbiter, { frame: { look: true, fitFov: true, heightFrac: 0.3, minFov: 0.002 } });
     reg('starfield', this.starPatch, { frame: { look: true } });
-    for (const [id, o, frame] of this.proxyList) reg(id, o, frame ? { frame } : {});
-    for (const [id, o] of Object.entries(this.alsep || {})) reg(id, o);
+    const views = this._inspectViews();
+    for (const [id, o, frame] of this.proxyList) reg(id, o, views[id] ? { frame: { view: views[id] } } : frame ? { frame } : {});
+    for (const [id, o] of Object.entries(this.alsep || {})) reg(id, o, id === 'alsep-heat-flow' ? { frame: { view: views['alsep-heat-flow'] } } : id === 'alsep-central-station' ? { frame: { heightFrac: 0.22 } } : undefined);
     reg('sample-bag', this.sampleBag);
     reg('boulders', this.boulders);
     reg('genesis-rock', this.genesis, { frame: { heightFrac: 0.4 } });
-    reg('footprints', this.footprints);
-    reg('rover-tracks', this.tracks);
+    reg('footprints', this.footprints, { frame: { view: views.footprints } });
+    reg('rover-tracks', this.tracks, { frame: { view: views['rover-tracks'] } });
+  }
+
+  /**
+   * Authored inspect views (review F13-F27): where a box framing cannot show
+   * what an object is (a landform kilometres wide, a line, a layer, a patch of
+   * ground), the camera goes to a chosen spot and looks at it, beside the card.
+   * Positions are metres east (x) and south (z) of the LM; heights are above
+   * the ground there. Each view is computed when the card opens (streamed
+   * ground heights).
+   */
+  _inspectViews() {
+    const lm = this.lm;
+    const P = (dx, dz, lift = 0) => { const x = lm.x + dx, z = lm.z + dz; return [x, this.groundY(x, z) + lift, z]; };
+    // An eye above the higher of its own ground and the target's (slopes).
+    const H = (dx, dz, tx, tz, lift) => { const e = P(dx, dz, 0), t = P(tx, tz, 0); e[1] = Math.max(e[1], t[1]) + lift; return e; };
+    const A = (dx, dz, y) => [lm.x + dx, lm.y + y, lm.z + dz]; // absolute height above the LM datum (far targets)
+    const fit = (size, eye, center) => THREE.MathUtils.radToDeg(2 * Math.atan(size / 2 / Math.hypot(eye[0] - center[0], eye[1] - center[1], eye[2] - center[2])));
+    const v = (eye, center, fov) => () => ({ eye: eye(), center: center(), fov: typeof fov === 'function' ? fov() : fov });
+    const st = (id) => { const p = this.terrain.fromLonLat(this.stations[id].lon, this.stations[id].lat); return [p.xM - lm.x, p.yM - lm.z]; };
+    const [sgx, sgz] = st('stgeorge'), [spx, spz] = [this.bowls.spur.x - lm.x, this.bowls.spur.z - lm.z];
+    const [elx, elz] = [this.bowls.elbow.x - lm.x, this.bowls.elbow.z - lm.z], [dux, duz] = [this.bowls.dune.x - lm.x, this.bowls.dune.z - lm.z];
+    const mp = this.craterPatches?.mare ? [this.craterPatches.mare.xM - lm.x, this.craterPatches.mare.yM - lm.z] : [480, -350];
+    return {
+      // Eye level, looking north over the flat mare: the horizon line about 2.4 km away, black sky above.
+      horizon: v(() => P(10, 9, 1.7), () => P(10, -2400, 45), 50),
+      // Low over the soil a few metres from the LM: grains, pebbles, small pits.
+      regolith: v(() => P(-13.2, 21.6, 0.9), () => P(-14, 20.2, 0), 40),
+      // Low along the line of prints, so the tread relief catches the Sun.
+      footprints: v(() => P(3.4, 7.9, 1.25), () => P(3.2, 5.0, 0), 42),
+      // Low along both wheel tracks.
+      'rover-tracks': v(() => P(24, -12.5, 1.3), () => P(24, -18.5, 0), 46), // looking north, the rover's loop behind the camera
+      // Looking down at a cluster of small craters on the mare (no mountains in view).
+      craterlets: v(() => P(mp[0] - 190, mp[1] + 40, 210), () => P(mp[0], mp[1], 0), 52),
+      // Wide view down over the dark plain, north-west of the site.
+      'mare-plain': v(() => P(-200, -300, 140), () => P(-700, -1500, 0), 56),
+      // From above the rim: Dune crater's bowl and its far wall.
+      'dune-crater': v(() => H(dux - 330, duz - 260, dux, duz, 300), () => P(dux, duz, 0), 60),
+      // From the rille edge above Elbow crater.
+      'elbow-crater': (() => { const [ex, ez] = st('elbow'); return v(() => H(ex + 380, ez + 40, ex, ez, 230), () => P(ex - 60, ez, 0), 50); })(), // from the east, the sunlit west wall and the rille beyond
+      // Spur crater on the Front slope, its station flag and the Genesis Rock on its rim.
+      'spur-crater': v(() => H(spx + 95, spz + 10, spx, spz, 70), () => P(spx, spz, 0), 44), // from the east: the sunlit far (west) wall of the bowl
+      // St. George on the flank of Hadley Delta, seen from south-west of the site (the LM behind the camera).
+      // (its centre lies up the Delta flank, south-west of the station on its rim)
+      'st-george-crater': (() => { const e = () => P(-700, 700, 60), c = () => P(sgx - 650, sgz + 650, 0); return v(e, c, () => fit(2420 * 1.9, e(), c())); })(),
+      // Mount Hadley across the plain to the north-east, with the LM in front of it.
+      'mount-hadley': v(() => P(-26, 30, 3.2), () => A(13440 * 0.6, -14960 * 0.6, 1500), 58),
+      // Hadley Delta to the south, with the flag in front of it.
+      'hadley-delta': v(() => P(-10.5, -4, 1.9), () => A(3520 * 0.6, 17200 * 0.6, 1250), 58),
+      // The Apennine Front: the arc of mountains east and south of the plain, from above the plain.
+      'apennine-front': v(() => P(-900, -900, 520), () => A(5200, 4200, 500), 76),
+      // Hadley Rille from its east rim: the channel, about 1 km wide and 300 m deep.
+      'hadley-rille': v(() => H(-2050, -700, -2700, 900, 260), () => P(-2720, 900, 0), 60),
+      // The heat flow electronics box with its two cables running to the probes in their drill holes.
+      'alsep-heat-flow': (() => { const [cx, cz] = this.alsepCenter || [-104, -38]; return v(() => P(cx - 2.4 + 3.2, cz - 3.8 + 3.0, 2.4), () => P(cx - 2.4 - 1.6, cz - 3.8 - 2.6, 0), 52); })(),
+      // Close on the impact area: the flash and its dust puff (frequency illustrative).
+      'micrometeoroid-flash': v(() => P(this.flashArea.x - lm.x - 22, this.flashArea.z - lm.z + 26, 7), () => [this.flashArea.x, this.groundY(this.flashArea.x, this.flashArea.z) + 0.5, this.flashArea.z], 34),
+    };
   }
 
   /** Landform pick volumes (invisible, draped on the CPU heightfield, real extents). */
@@ -399,16 +554,21 @@ export class SurfaceScene {
       return P(id, this._drape(c.xM, c.yM, diam / 2, lift, 'disc'));
     };
     const look = { look: true, fitFov: true, heightFrac: 0.45 };
+    // The station coordinates (Davies & Colvin 2000) are where the crew stopped,
+    // on a crater's rim. Dune and Elbow are big enough for the 10 m elevation
+    // grid: their pick discs sit on the bowl found nearest the station.
+    this.bowls = { dune: this._findBowl(st.dune, 380), elbow: this._findBowl(st.elbow, 340), spur: this._findBowl(st.spur, 80) };
+    const bowlDisc = (id, b, diam, lift) => P(id, this._drape(b.x, b.z, diam / 2, lift, 'disc'));
     this.proxyList = [
       ['st-george-crater', disc('st-george-crater', st.stgeorge.lon, st.stgeorge.lat, 2420, 4), look],
-      ['spur-crater', disc('spur-crater', st.spur.lon, st.spur.lat, 80, 0.4), { heightFrac: 0.4 }],
-      ['elbow-crater', disc('elbow-crater', st.elbow.lon, st.elbow.lat, 340, 9), look], // above the rille ribbon: Elbow sits on the rille
-      ['dune-crater', disc('dune-crater', st.dune.lon, st.dune.lat, 380, 1.5), look],
+      ['spur-crater', bowlDisc('spur-crater', this.bowls.spur, 80, 0.4), { heightFrac: 0.4 }],
+      ['elbow-crater', bowlDisc('elbow-crater', this.bowls.elbow, 340, 9), look], // above the rille ribbon: Elbow sits on the rille
+      ['dune-crater', bowlDisc('dune-crater', this.bowls.dune, 380, 1.5), look],
     ];
     const mp = this.craterPatches?.mare || { xM: this.lm.x + 480, yM: this.lm.z - 350, radiusM: 150 };
     this.proxyList.push(['craterlets', P('craterlets', this._drape(mp.xM, mp.yM, mp.radiusM, 0.6, 'disc')), look]);
     this.proxyList.push(['mare-plain', P('mare-plain', this._drape(this.lm.x + 1350, this.lm.z - 1700, 650, 1.0, 'disc')), look]);
-    this.proxyList.push(['regolith', P('regolith', this._drape(this.lm.x + 15, this.lm.z + 13, 3.5, 0.03, 'disc')), { heightFrac: 0.5 }]);
+    this.proxyList.push(['regolith', P('regolith', this._drape(this.lm.x - 14, this.lm.z + 20, 3.5, 0.03, 'disc')), { heightFrac: 0.5 }]);
     this.proxyList.push(['hadley-rille', P('hadley-rille', this._rilleRibbon()), look]);
     this.proxyList.push(['apennine-front', P('apennine-front', this._frontPatch()), look]);
     // Massifs beyond the v2 heightfield: cones at their gazetteer footprints (build-meta.json).
@@ -439,6 +599,24 @@ export class SurfaceScene {
       hz.position.set(x, this.groundY(x, z) + 10, z);
     };
     this._placeProxies();
+  }
+
+  /**
+   * Centre of the deepest bowl of diameter `diam` within 2.2 radii of a station:
+   * mean height on a ring of that radius minus the centre height, on the v2
+   * elevation grid. Falls back to the station point. @returns {{ x: number, z: number }}
+   */
+  _findBowl(station, diam) {
+    const T = this.terrain, p = T.fromLonLat(station.lon, station.lat), r = diam / 2, step = Math.max(5, r / 12);
+    let best = { x: p.xM, z: p.yM, dep: 0 };
+    for (let x = p.xM - 2.2 * r; x <= p.xM + 2.2 * r; x += step) for (let z = p.yM - 2.2 * r; z <= p.yM + 2.2 * r; z += step) {
+      const c = T.elevationAt(x, z);
+      if (!Number.isFinite(c)) continue;
+      let sum = 0, n = 0;
+      for (let k = 0; k < 24; k++) { const a = (k / 24) * Math.PI * 2; const e = T.elevationAt(x + Math.cos(a) * r, z + Math.sin(a) * r); if (Number.isFinite(e)) { sum += e; n++; } }
+      if (n >= 20 && sum / n - c > best.dep) best = { x, z, dep: sum / n - c };
+    }
+    return best;
   }
 
   /** A disc of radius r (m) draped on the heightfield, `lift` metres up. */
@@ -527,14 +705,20 @@ export class SurfaceScene {
       id: 'sun-time-lapse', layer: 'sky', label: 'time-lapse', objects: ['sun'],
       description: 'The Sun climbs through the lunar morning at about one lunar hour a second; shadows sweep the terrain. It loops back after about 43 hours of lunar time.',
       update: (dt) => {
-        if (this.sunHold || this._cardHold) return;
+        if (this.sunHold) return;
+        if (this._lowSun) {
+          const e = this.sky.sunElevationDeg;
+          const goal = this._lowSun;
+          if (Math.abs(e - goal) > 0.05) this.setSunElevation(e + (goal - e) * Math.min(1, dt * 2.5) + Math.sign(goal - e) * Math.min(Math.abs(goal - e), dt * 2));
+          return;
+        }
         this.lapse += dt * LAPSE_DEG_PER_S;
         if (this.lapse > LAPSE_SPAN_DEG) this.lapse = 0;
         this._applySun();
       },
     });
     motion.add({
-      id: 'earth-spin', layer: 'sky', label: 'time-lapse', objects: ['earth'],
+      id: 'earth-spin', layer: 'sky', label: 'time-lapse', objects: ['earth'], holdWithCard: false,
       description: 'Earth turns once in about 90 s (time-lapse) with its cloud layer drifting; it stays at the same place in the sky.',
       update: (dt) => { sky.earthSpin += dt * (Math.PI * 2 / 90); sky.cloudShift = (sky.cloudShift + dt * 0.0012) % 1; },
     });
@@ -562,7 +746,7 @@ export class SurfaceScene {
       },
     });
     motion.add({
-      id: 'rover-dust', layer: 'environment', label: 'accurate', objects: ['lrv'],
+      id: 'rover-dust', layer: 'environment', label: 'accurate', objects: ['lrv'], holdWithCard: false, // grains in flight land; none are thrown while the rover is held
       description: 'Dust thrown by the wheels flies in clean ballistic arcs at lunar gravity and falls straight back: no air, no billowing cloud.',
       onFreeze: (f) => { if (f) this.roverDust.clear(); this.roverDust.points.visible = !f; },
       update: (dt) => {
@@ -574,7 +758,7 @@ export class SurfaceScene {
       },
     });
     motion.add({
-      id: 'tv-camera-pan', layer: 'objects', label: 'accurate', objects: ['lrv'],
+      id: 'tv-camera-pan', layer: 'objects', label: 'accurate', objects: ['lrv'], holdWithCard: false,
       description: 'The rover\'s TV camera pans slowly left and right, as Mission Control steered it from Earth.',
       update: (dt, t) => { this.tvCam.rotation.y = Math.sin(t * 0.25) * 1.0; },
     });
@@ -587,10 +771,19 @@ export class SurfaceScene {
       this.bootDust.emit(V(p.x, this.groundY(p.x, p.z), p.z), 6, rng);
     };
     motion.add({
-      id: 'crew-lope', layer: 'agents', label: 'accurate', objects: ['field-crew'],
+      id: 'crew-lope', layer: 'agents', label: 'accurate', objects: ['field-crew'], holdWithCard: false,
       description: 'A geologist lopes between the LM and the ALSEP in bounding skips with a short flight phase, the gait Apollo crews used at one-sixth gravity; the route is the field team\'s.',
       update: (dt) => {
         const c = this.crewB;
+        // Card hold: while the crew's card is open the geologist stops and stands
+        // where they are (no frozen mid-air hop), then lopes on.
+        if (this.app.motion?.held.has('field-crew')) {
+          if (c.action !== 'idle') c.setAction('idle');
+          c.update(dt);
+          c.root.position.y = this.groundY(c.root.position.x, c.root.position.z);
+          return;
+        }
+        if (c.action === 'idle') c.setAction(hold > 0 ? 'point' : 'lope');
         if (hold > 0) { hold -= dt; if (hold <= 0) c.setAction('lope'); c.update(dt); return; }
         wu = (wu + (1.3 * dt) / wlen) % 1;
         if (Math.abs(wu - 0.55) < 0.0015) { hold = 5; c.setAction('point'); }
@@ -601,12 +794,12 @@ export class SurfaceScene {
       },
     });
     motion.add({
-      id: 'crew-sampling', layer: 'agents', label: 'accurate', objects: ['field-crew'],
+      id: 'crew-sampling', layer: 'agents', label: 'accurate', objects: ['field-crew'], holdWithCard: false,
       description: 'A geologist bends at the knees to pick up samples with tongs and stands again.',
       update: (dt) => { this.crewA.update(dt); },
     });
     motion.add({
-      id: 'boot-dust', layer: 'environment', label: 'accurate', objects: ['footprints'],
+      id: 'boot-dust', layer: 'environment', label: 'accurate', objects: ['footprints'], holdWithCard: false,
       description: 'Each footfall kicks a few grains that arc and drop at lunar gravity.',
       onFreeze: (f) => { if (f) this.bootDust.clear(); this.bootDust.points.visible = !f; },
       update: (dt) => this.bootDust.update(dt, (x, z) => this.groundY(x, z)),
@@ -619,13 +812,16 @@ export class SurfaceScene {
     let nextFlash = 2 + rng() * 4, flashT = -1;
     const fp = V();
     motion.add({
-      id: 'micrometeoroid-flashes', layer: 'environment', label: 'illustrative', objects: ['micrometeoroid-flash'],
+      id: 'micrometeoroid-flashes', layer: 'environment', label: 'illustrative', objects: ['micrometeoroid-flash'], holdWithCard: false,
       description: 'Now and then a tiny flash and a dust puff on distant ground. The frequency is illustrative; there are no meteor streaks because there is no air.',
       onFreeze: (f) => { if (f) { this.puff.clear(); this.flash.material.opacity = 0; } },
       update: (dt) => {
         nextFlash -= dt;
+        // With the impact card open, flashes land near the framed spot every few seconds.
+        const near = this._flashSoon != null;
+        if (near) { this._flashSoon -= dt; if (this._flashSoon <= 0) { nextFlash = 0; this._flashSoon = 3.5; } }
         if (nextFlash <= 0) {
-          const a = rng() * Math.PI * 2, d = Math.sqrt(rng()) * this.flashArea.r;
+          const a = rng() * Math.PI * 2, d = near ? rng() * 3 : Math.sqrt(rng()) * this.flashArea.r;
           const x = this.flashArea.x + Math.cos(a) * d, z = this.flashArea.z + Math.sin(a) * d;
           fp.set(x, this.groundY(x, z) + 0.3, z);
           this.flash.position.copy(fp);
@@ -749,6 +945,48 @@ function tagTexture(label, color) {
   g.beginPath(); g.moveTo(8, 8); g.lineTo(88, 8); g.lineTo(88, 88); g.lineTo(56, 88); g.lineTo(48, 124); g.lineTo(40, 88); g.lineTo(8, 88); g.closePath(); g.fill(); g.stroke();
   g.fillStyle = '#111'; g.font = 'bold 56px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(label, 48, 50);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+
+/**
+ * Both LRV wheel tracks on a 2.06 x 10 m strip (own work): two 23 cm bands
+ * 1.83 m apart (centre to centre), pressed a centimetre or two into the soil,
+ * with the chevron print of the wheels' titanium tread every 10 cm. Returns
+ * albedo, normal and alpha (bands only, ends faded) canvases.
+ */
+function roverTrackTextures() {
+  const W = 128, H = 1024;
+  const height = new Float32Array(W * H), mask = new Float32Array(W * H);
+  const bandC = [W * (0.11 / 2.06), W * (1 - 0.11 / 2.06)], half = W * (0.115 / 2.06);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    let h = 0, m = 0;
+    for (const c of bandC) {
+      const u = (x - c) / half; // -1..1 across the band
+      if (Math.abs(u) > 1.35) continue;
+      const inBand = Math.abs(u) <= 1;
+      const v = (y / H) * 100 + Math.abs(u) * 0.5; // chevrons every 10 cm, V-shaped
+      const chevron = Math.abs((v % 1) - 0.5) < 0.12 ? 0.5 : 0;
+      h = inBand ? -1 + chevron : 0.35 * (1 - (Math.abs(u) - 1) / 0.35); // a small berm of pushed soil at the edges
+      m = Math.max(m, inBand ? 1 : 0.6 * (1 - (Math.abs(u) - 1) / 0.35));
+    }
+    const end = Math.min(1, y / (H * 0.06), (H - y) / (H * 0.06));
+    height[y * W + x] = h; mask[y * W + x] = m * end;
+  }
+  const canvas = (fill) => {
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d'), img = g.createImageData(W, H);
+    for (let i = 0; i < W * H; i++) img.data.set(fill(i), i * 4);
+    g.putImageData(img, 0, 0);
+    return new THREE.CanvasTexture(c);
+  };
+  const map = canvas((i) => { const v = 150 + 40 * height[i] + 10 * (((i * 2654435761) >>> 0) % 7 - 3) / 3; return [v, v * 0.98, v * 0.95, 255]; });
+  map.colorSpace = THREE.SRGBColorSpace;
+  const normalMap = canvas((i) => {
+    const x = i % W, y = (i / W) | 0, at = (a, b) => height[Math.min(H - 1, Math.max(0, b)) * W + Math.min(W - 1, Math.max(0, a))];
+    const dx = (at(x + 1, y) - at(x - 1, y)) * 2.2, dy = (at(x, y + 1) - at(x, y - 1)) * 2.2, l = Math.hypot(dx, dy, 1);
+    return [(-dx / l * 0.5 + 0.5) * 255, (dy / l * 0.5 + 0.5) * 255, (1 / l * 0.5 + 0.5) * 255, 255];
+  });
+  const alphaMap = canvas((i) => { const v = 255 * mask[i]; return [v, v, v, 255]; });
+  return { map, normalMap, alphaMap };
 }
 
 /** Soft edges on all four sides (alpha), so a decal blends into the ground. */

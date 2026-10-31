@@ -105,3 +105,32 @@ describe('Now cards (plan 10 §2.1: at most 60 words)', () => {
     expect(short('Correct. The low Sun casts long shadows. More text here.')).toBe('The low Sun casts long shadows.');
   });
 });
+describe('orbit globe geography (review F1)', async () => {
+  const { globePoint, START_SPIN } = await import('../../src/lunar/orbit.js');
+  /** Texture lat/lon at the SphereGeometry vertex nearest a direction. */
+  const geo = new THREE.SphereGeometry(1, 360, 180);
+  const P = geo.attributes.position, UV = geo.attributes.uv;
+  const sample = (v) => {
+    let best = -2, k = 0;
+    for (let i = 0; i < P.count; i++) { const d = P.getX(i) * v.x + P.getY(i) * v.y + P.getZ(i) * v.z; if (d > best) { best = d; k = i; } }
+    return { lon: UV.getX(k) * 360 - 180, lat: (UV.getY(k) - 0.5) * 180 };
+  };
+  it('globePoint(lat, lon) lands on the same lat/lon of the map', () => {
+    for (const [lat, lon] of [[26.13, 3.63], [32.8, -15.6], [17, 59], [-10, -120], [0, 0], [45, 90]]) {
+      const s = sample(globePoint(lat, lon, 1));
+      expect(Math.abs(s.lat - lat)).toBeLessThan(1.1);
+      expect(Math.abs(((s.lon - lon + 540) % 360) - 180)).toBeLessThan(1.1);
+    }
+  });
+  it('east is to the right of a viewer facing the near side, and the start view sees Hadley and Imbrium', () => {
+    // Facing 0 N 0 E from outside: screen right = up x back.
+    const back = globePoint(0, 0, 1);
+    const right = new THREE.Vector3(0, 1, 0).cross(back);
+    expect(globePoint(0, 60, 1).dot(right)).toBeGreaterThan(0.8); // Mare Crisium side
+    const view = { theta: Math.PI * 0.94, phi: Math.PI * 0.42 };
+    const cam = new THREE.Vector3(Math.sin(view.phi) * Math.sin(view.theta), Math.cos(view.phi), Math.sin(view.phi) * Math.cos(view.theta));
+    const spun = (lat, lon) => globePoint(lat, lon, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), START_SPIN);
+    expect(spun(26.13, 3.63).dot(cam)).toBeGreaterThan(0.9);
+    expect(spun(32.8, -15.6).dot(cam)).toBeGreaterThan(0.75);
+  });
+});

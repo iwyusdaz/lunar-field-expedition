@@ -33,6 +33,14 @@ test('title, practice in orbit, then Module 1 in orbit with the landing-site gli
   await expect(page.locator('[data-ui="title-screen"]')).toBeVisible();
   await page.getByRole('button', { name: /^start$/i }).click();
   await expect(page.locator('[data-ui="now-card"]')).toContainText(/Practice 1 of 4/);
+  // Practice 3 (review F5): only Mare Imbrium (outlined and named) advances it.
+  await T(page, () => { const o = window.__TEST__.app.onboarding; o.i = 2; o._show(); });
+  await expect(page.locator('[data-ui="now-card"]')).toContainText('Click the Mare Imbrium');
+  expect(await T(page, () => window.__TEST__.inspect.cued)).toBe('mare-imbrium');
+  await T(page, () => window.__TEST__.inspect.open('moon-globe'));
+  await expect(page.locator('[data-ui="now-card"]')).toContainText('Practice 3 of 4');
+  await T(page, () => { window.__TEST__.inspect.close(); window.__TEST__.inspect.open('mare-imbrium'); });
+  await expect(page.locator('[data-ui="now-card"]')).toContainText('Practice 4 of 4');
   await page.getByRole('button', { name: /skip practice/i }).click();
   await expect(page.locator('[data-ui="now-card"]')).toContainText('Find the landing site');
   const s = await T(page, () => ({ scene: window.__TEST__.lessons.sceneName, ids: window.__TEST__.inspect.ids(), legend: document.querySelector('[data-ui="legend"]').textContent }));
@@ -126,6 +134,8 @@ test('keyboard-only completion of all five modules', async ({ page }) => {
   await kb(page, now(page, /Next step/));
   await kb(page, page.locator('[data-ui="now-card"] [data-choice="a"]'));
   await kb(page, now(page, /Next step/));
+  // Step 4 asks which clock to trust (review F8): an answer, then Next module.
+  await kb(page, page.locator('[data-ui="now-card"] [data-choice="b"]'));
   await kb(page, now(page, /Next module/));
   // Module 4: question, planner in the drawer (stations, drive, stops), debrief
   await kb(page, page.locator('[data-ui="now-card"] [data-choice="h-front"]'));
@@ -194,6 +204,12 @@ test('text mode: every module renders, every catalog object is listed, decisions
   await fs.getByRole('button', { name: /Submit answer/ }).click();
   await page.waitForTimeout(300);
   expect(await T(page, () => window.__TEST__.lessons.state.state.decisions['m3-superposition'])).toBe('a');
+  const fc = tm.locator('fieldset', { hasText: /Which clock do you trust/ });
+  await fc.getByRole('radio', { name: /Rock samples for the Front/i }).check();
+  await fc.getByRole('button', { name: /Submit answer/ }).click();
+  await page.waitForTimeout(300);
+  expect(await T(page, () => window.__TEST__.lessons.state.state.decisions['m3-debrief'])).toBe('b');
+  expect(await T(page, () => window.__TEST__.shell.done.has(2))).toBe(true);
   for (const [i, re] of [[0, /Pre-check/], [1, /Elevation profiles as data tables/], [3, /traverse planner/i], [4, /Field report/]]) {
     await T(page, (n) => window.__TEST__.app.goModule(n), i);
     await page.waitForTimeout(1200);
@@ -213,6 +229,25 @@ test('reduced motion stops the sun time-lapse, the rover and the crew', async ({
   expect(await T(page, () => window.__TEST__.motion.factor)).toBe(0);
 });
 
+test('card hold: the rover and the walking geologist stay in their inspect frame (review F2)', async ({ page }) => {
+  await ready(page);
+  await T(page, () => window.__TEST__.app.goModule(4));
+  await page.waitForTimeout(3000);
+  await T(page, () => window.__TEST__.inspect.open('lrv'));
+  const pos = () => T(page, () => window.__TEST__.scene.surface.rover.position.toArray());
+  const a = await pos();
+  await page.waitForTimeout(1500);
+  expect(await pos()).toEqual(a);
+  await T(page, () => { const T2 = window.__TEST__; T2.inspect.close({ restore: false }); T2.inspect.open('field-crew', { root: T2.scene.surface.crewB.root }); });
+  const it = await T(page, () => window.__TEST__.inspect.items.get('field-crew').active.name);
+  expect(it).toBe('crew-b');
+  const b = await T(page, () => window.__TEST__.scene.surface.crewB.root.position.toArray());
+  await page.waitForTimeout(1500);
+  expect(await T(page, () => window.__TEST__.scene.surface.crewB.root.position.toArray())).toEqual(b);
+  await T(page, () => window.__TEST__.inspect.close());
+  await page.waitForTimeout(1500);
+  expect(await pos()).not.toEqual(a);
+});
 test('motion report: at least eight systems on four layers, every label on a card', async ({ page }) => {
   await ready(page);
   const r = await T(page, () => ({ rep: window.__TEST__.motion.report(), problems: window.__TEST__.motion.checkLabels(window.__TEST__.catalog) }));

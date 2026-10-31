@@ -84,6 +84,9 @@ export async function createSceneApp(o) {
     bindJoystick(shell.joystick, rig);
     inspect = new InspectSystem({ camera: engine.camera, scene: engine.scene, canvas: shell.canvas, rig, catalog, journal, shell, reducedMotion: () => motionPrefs.reduced });
     shell.setShowAllPressed(inspect.showAll);
+    // Card hold (motion-layers.js): what the open card frames stops moving out of the frame.
+    inspect.on('open', (id) => motion.setHeld([id]));
+    inspect.on('close', () => motion.setHeld([]));
   } else {
     // Only text mode exists: hide the menu items that need the 3D view.
     for (const a of ['practice', 'show-labels', 'camera-controls', 'hide-panel', 'textmode']) shell.menu.querySelector(`[data-action="${a}"]`).closest('li').hidden = true;

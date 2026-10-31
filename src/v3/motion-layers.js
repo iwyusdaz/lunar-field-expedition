@@ -10,6 +10,11 @@
  * (`report().ok`). Calm mode (09 decision 1) slows non-essential motion to 30%
  * during focused tasks and sets data-calm="on" on <html>; reduced motion stops
  * every non-essential system, including camera drift.
+ * Card hold: while an object's info card is open, the systems that move that
+ * object (s.objects lists its id) pause, so the framed object stays in the
+ * frame beside its card (a driving vehicle, a walking person, the Sun in
+ * time-lapse). A system that changes the object in place and is part of what
+ * the card shows (a spinning globe, a flicker) sets holdWithCard: false.
  * @module v3/motion-layers
  */
 
@@ -27,7 +32,14 @@ export class MotionLayerManager {
     this.factor = this.reducedMotion ? 0 : 1;
     this.root = opts.root === undefined ? (typeof document !== 'undefined' ? document.documentElement : null) : opts.root;
     this.time = 0; // scene time, advanced by dt * factor
+    this.held = new Set(); // catalog ids whose card is open (card hold)
   }
+
+  /** Card hold: pause the systems that move these catalog ids (empty to release). */
+  setHeld(ids = []) { this.held = new Set(ids); }
+
+  /** True while a system is paused by an open card. */
+  isHeld(s) { return s.holdWithCard !== false && this.held.size > 0 && s.objects.some((id) => this.held.has(id)); }
 
   /**
    * Register a motion system.
@@ -40,6 +52,7 @@ export class MotionLayerManager {
    * @param {string[]} [s.objects]           catalog ids whose cards explain this motion
    * @param {boolean} [s.essential=false]    keeps running under reduced motion (lesson-critical only)
    * @param {(frozen: boolean) => void} [s.onFreeze]  called when reduced motion stops or restarts it
+   * @param {boolean} [s.holdWithCard=true]  pause while a card of one of s.objects is open
    */
   add(s) {
     if (!MOTION_LAYERS.includes(s.layer)) throw new Error(`motion ${s.id}: layer must be one of ${MOTION_LAYERS.join(', ')}`);
@@ -72,7 +85,7 @@ export class MotionLayerManager {
     this.time += eff;
     for (const s of this.systems.values()) {
       if (s.essential) { s.update(dt, this.time, 1); continue; }
-      if (this.reducedMotion) continue;
+      if (this.reducedMotion || this.isHeld(s)) continue;
       s.update(eff, this.time, this.factor);
     }
   }
@@ -83,7 +96,7 @@ export class MotionLayerManager {
     const list = [];
     for (const s of this.systems.values()) {
       byLayer[s.layer]++;
-      list.push({ id: s.id, layer: s.layer, label: s.label, description: s.description, objects: s.objects, essential: s.essential });
+      list.push({ id: s.id, layer: s.layer, label: s.label, description: s.description, objects: s.objects, essential: s.essential, holdWithCard: s.holdWithCard !== false });
     }
     const total = list.length;
     const missing = MOTION_LAYERS.filter((l) => !byLayer[l]);

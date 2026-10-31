@@ -316,6 +316,17 @@ export function buildFlag() {
   return g;
 }
 
+/** A round, soft-edged grain (dust points were drawn as squares). */
+function grainTexture() {
+  if (typeof document === 'undefined') return null;
+  const c = document.createElement('canvas'); c.width = c.height = 32;
+  const g = c.getContext('2d');
+  const r = g.createRadialGradient(16, 16, 0, 16, 16, 15);
+  r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(0.6, 'rgba(255,255,255,0.85)'); r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = r; g.fillRect(0, 0, 32, 32);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+
 /**
  * Ballistic dust (no atmosphere: grains arc and fall at lunar gravity, no drift).
  * One draw call. emit(worldPos, count) spawns grains; update(dt, groundY) moves them.
@@ -325,7 +336,7 @@ export function createDustBurst(max = 160) {
   const vel = new Float32Array(max * 3);
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  const mat = new THREE.PointsMaterial({ color: 0xb8b2a8, size: 0.09, transparent: true, opacity: 0.75, depthWrite: false });
+  const mat = new THREE.PointsMaterial({ color: 0xb8b2a8, size: 0.09, transparent: true, opacity: 0.75, depthWrite: false, map: grainTexture(), alphaTest: 0.2 });
   const points = new THREE.Points(geo, mat);
   points.name = 'v2-rover-dust';
   points.frustumCulled = false;

@@ -42,7 +42,9 @@ const app = await createSceneApp({
   limits: { minRadius: 1737400 * 1.25, maxRadius: 1737400 * 6, minPhi: 0.15, maxPhi: Math.PI - 0.15, minEye: 0, eyeHeight: 0 },
   buildScene: async (a) => {
     const orbit = new OrbitScene(a);
-    await orbit.load(12);
+    // The globe as during the Apollo 15 surface stay: Sun about 34 deg up at Hadley
+    // (the third EVA; it was 12 deg at landing), so all of Mare Imbrium is in daylight.
+    await orbit.load(34);
     a.engine.scene.add(orbit.group);
     const surface = new SurfaceScene(a, { stations: stations.stations, craters });
     await surface.load(lessons._terrainReady);
@@ -57,7 +59,7 @@ const app = await createSceneApp({
     // Stream the surface detail after the learner's first interaction (plan §7).
     const first = () => { surface.startStreaming(); for (const ev of ['pointerdown', 'keydown']) window.removeEventListener(ev, first, true); };
     for (const ev of ['pointerdown', 'keydown']) window.addEventListener(ev, first, true);
-    return { legend: lessons.legend(), update: (dt) => surface.update(dt) };
+    return { legend: lessons.legend(), update: (dt) => { orbit.update(a.engine.camera); surface.update(dt); } };
   },
 });
 

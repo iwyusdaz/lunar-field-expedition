@@ -242,8 +242,24 @@
 }
 .v3-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .v3-drawer-head h2 { font-size: var(--type-drawer-heading); margin: 0; }
-.v3-drawer-body { overflow-y: auto; min-height: 0; padding-top: 8px; }
-.v3-drawer-body p, .v3-drawer-body li { max-width: var(--measure); }
+.v3-drawer-body { overflow-y: auto; overflow-x: hidden; min-height: 0; padding: 8px 12px 0 0; scrollbar-gutter: stable; }
+.v3-drawer-body p, .v3-drawer-body li { max-width: var(--measure); overflow-wrap: anywhere; }
+/* Data tables in the narrow drawer stack: one block per row, each cell with its
+   column name (td[data-label], set by the table builder). Text mode keeps the grid. */
+.v3-drawer-body table { display: block; width: 100%; border-collapse: collapse; }
+.v3-drawer-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.v3-drawer-body tbody, .v3-drawer-body caption { display: block; }
+.v3-drawer-body tr { display: block; padding: 6px 0; border-bottom: 1px solid var(--v3-border); }
+.v3-drawer-body td { display: block; padding: 2px 0; border: 0; overflow-wrap: anywhere; }
+.v3-drawer-body td[data-label]::before { content: attr(data-label) ": "; font-weight: 600; color: var(--v3-muted); }
+/* Form controls in the drawer and text mode meet the target size (plan 10 §2.2). */
+.v3-drawer-body input[type="checkbox"], .v3-drawer-body input[type="radio"],
+.v3-tm input[type="checkbox"], .v3-tm input[type="radio"] { width: 32px; height: 32px; margin: 0; flex: none; accent-color: var(--v3-accent); }
+.v3-drawer-body summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+@media (pointer: coarse) {
+  .v3-drawer-body input[type="checkbox"], .v3-drawer-body input[type="radio"],
+  .v3-tm input[type="checkbox"], .v3-tm input[type="radio"] { width: 44px; height: 44px; }
+}
 .v3-objects-list, .v3-journal { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .v3-list-btn {
   font: inherit; font-size: var(--type-body); color: var(--v3-text); width: 100%; min-height: 44px;

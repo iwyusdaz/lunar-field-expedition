@@ -67,7 +67,7 @@ export class Lessons {
     this.surface.group.visible = !orbitOn;
     this.surface.active = !orbitOn;
     a.inspect.clear();
-    if (orbitOn) this.orbit.register(a.inspect);
+    if (orbitOn) { this.orbit.resetSpin(); this.orbit.register(a.inspect); }
     else this.surface.registerAll();
     const R = 1737400;
     a.rig.walkable = !orbitOn;
@@ -84,10 +84,13 @@ export class Lessons {
   }
 
   legend() {
-    if (this.sceneName === 'orbit') return [{ label: 'Landing site glint: Hadley, where Apollo 15 landed', text: 'A soft star on the Moon marks the landing site.' }];
+    if (this.sceneName === 'orbit') return [
+      { label: 'Landing site glint: Hadley, where Apollo 15 landed', text: 'A soft star on the Moon marks the landing site.' },
+      { label: 'Practice target outline', text: 'A thin gold line round Mare Imbrium while the practice asks you to click it.' },
+    ];
     return [
       { label: 'Lettered survey tag', text: 'A flag with a letter (A to D) on a landform you name in Module 2.' },
-      { label: 'Station survey flag', text: 'A numbered tag at a station you can add to your traverse in Module 4.' },
+      { label: 'Station survey flag', text: 'A tag with the Apollo 15 station number, at a station you can add to your traverse in Module 4 (it also shows while a station crater’s card is open).' },
       { label: 'Crater mark (your count)', text: 'A ring you placed on a crater in Module 3. Click it again to remove it.' },
       { label: 'Counting patch circle', text: 'Blue: the mare patch. Orange: the Front patch. The white ring is 80 m across.' },
       { label: 'Task glint', text: 'A soft star above the object the current step asks about.' },
@@ -242,8 +245,8 @@ export class Lessons {
         enter: () => { if (L.app.engine) L.useScene('orbit'); },
         now: () => ({
           goal: 'Find the landing site',
-          action: 'Turn the Moon and find the soft star. It marks Hadley, where Apollo 15 landed in 1971.',
-          hint: L.hint('Drag to turn the Moon. Click it, Mare Imbrium or the day-night line to learn more.', 'Drag to turn the Moon. Tap it, Mare Imbrium or the day-night line to learn more.'),
+          action: 'Find the soft star on the Moon. It marks Hadley, where Apollo 15 landed in 1971. Then press Land at Hadley.',
+          hint: L.hint('Optional: click the Moon, Mare Imbrium or the day-night line to read about them.', 'Optional: tap the Moon, Mare Imbrium or the day-night line to read about them.'),
           primary: { label: 'Land at Hadley', onClick: () => L.land(false) },
           secondary: L.app.engine ? { label: 'Watch the descent', play: true, onClick: () => L.land(true) } : undefined,
           readMore: { label: 'About this mission', title: 'Arrival', render: (b) => { para(b, L.stepText('m1-globe')); para(b, L.content.modules._meta.fictionFraming); } },
@@ -525,16 +528,29 @@ export class Lessons {
       },
       {
         id: 'm3-count', done: () => L.done('m3-count'), calm: true, sunHold: true, noInspect: true,
-        enter: () => { if (L.app.engine) { L.surface.setSunElevation(9); L._drawPatches(); L._flyPatch(L.cc.active); } },
-        leave: () => L._clearPatches(),
+        // A low Sun (6 deg): the shallow 90-190 m craters (2-4 m deep) show
+        // as shadowed bowls. The Now card says when the close-up ground is still loading.
+        enter: () => {
+          if (!L.app.engine) return;
+          L.surface.setSunElevation(6); L._drawPatches(); L._flyPatch(L.cc.active);
+          // The finest terrain tiles (5 m) under the patch while counting (calm step, small view),
+          // and no mid-distance scan texture: only the real relief casts the shadows you count.
+          if (L.surface.streamed.tiles) L.surface.streamed.tiles.errorTarget = 3;
+          L.surface.streamed.material.userData.uniforms.uMid.value = 0;
+          L._patchWasReady = false;
+          clearInterval(L._patchPoll);
+          L._patchPoll = setInterval(() => { const r = L._patchReady(); if (r !== L._patchWasReady) { L._patchWasReady = r; L.refresh(); } }, 400);
+        },
+        leave: () => { clearInterval(L._patchPoll); L._clearPatches(); if (L.surface?.streamed?.tiles) L.surface.streamed.tiles.errorTarget = 10; if (L.surface?.streamed) L.surface.streamed.material.userData.uniforms.uMid.value = 1; },
         now: () => {
           const c = L.cc;
+          const loading = !c.submitted && !L._patchReady();
           return {
             goal: c.submitted ? 'Counts saved' : 'Count the craters',
-            action: c.submitted ? 'Compare your counts with a computer count before you decide.' : L.hint('Click each crater at least 80 m wide inside the circle. The white ring is 80 m.', 'Tap each crater at least 80 m wide inside the circle. The white ring is 80 m.'),
+            action: c.submitted ? 'Compare your counts with a computer count before you decide.' : loading ? 'Loading the close-up ground for this patch. The craters show in a few seconds.' : L.hint('Click each crater at least 80 m wide inside the circle. The white ring is 80 m.', 'Tap each crater at least 80 m wide inside the circle. The white ring is 80 m.'),
             tool: (box) => {
               for (const p of patches) {
-                const b = btn(`${p.name}: ${c.marks[p.id].length}`, () => { c.active = p.id; L._flyPatch(p.id); L.refresh(); });
+                const b = btn(`${p.name}: ${c.marks[p.id].length}`, () => { c.active = p.id; L._patchWasReady = false; L._flyPatch(p.id); L.refresh(); });
                 b.setAttribute('aria-pressed', String(c.active === p.id));
                 box.append(b);
               }
@@ -573,12 +589,21 @@ export class Lessons {
       },
       {
         id: 'm3-debrief', done: () => L.done('m3-debrief'),
-        now: () => ({
-          goal: 'Which clock do you trust?',
-          action: 'Your counts may disagree with the rock ages. Steep slopes erase craters, so the Front’s age comes from rock samples.',
-          primary: { label: 'Next module', onClick: () => { L.complete('m3-debrief'); L.next(2); } },
-          readMore: { label: 'Read the method note', title: 'Method note', render: (b) => { para(b, L.stepText('m3-debrief')); para(b, METHOD_NOTE); } },
-        }),
+        now: () => {
+          const ans = L.state.state.decisions['m3-debrief'];
+          const o = ans && CLOCKS.options.find((x) => x.id === ans);
+          return {
+            goal: 'Which clock do you trust?',
+            action: o ? `${ans === CLOCKS.correct ? 'Correct.' : 'Not quite.'} ${short(o.why)}` : 'Your counts may disagree with the rock ages.',
+            question: ans ? undefined : {
+              prompt: CLOCKS.prompt,
+              choices: CLOCKS.options.map((x) => ({ id: x.id, text: x.text })),
+              onAnswer: (id) => { L._clocks(id); setTimeout(() => L.refresh(), 1600); const x = CLOCKS.options.find((y) => y.id === id); return { correct: id === CLOCKS.correct, feedback: `${id === CLOCKS.correct ? 'Correct.' : 'Not quite.'} ${short(x.why)}` }; },
+            },
+            primary: ans ? { label: 'Next module', onClick: () => L.next(2) } : undefined,
+            readMore: { label: 'Read the method note', title: 'Method note', render: (b) => { para(b, L.stepText('m3-debrief')); para(b, METHOD_NOTE); } },
+          };
+        },
       },
     ];
   }
@@ -590,9 +615,27 @@ export class Lessons {
     this.record.log('answered', { id: 'm3-superposition', name: 'Superposition puzzle' }, { response: id, success: correct });
   }
 
+  /** Module 3 debrief answer (scene and text mode write the same state). */
+  _clocks(id) {
+    this.state.completeStep('m3-debrief', id);
+    this.record.log('answered', { id: 'm3-debrief', name: 'Which clock do you trust' }, { response: id, success: id === CLOCKS.correct });
+  }
+
+  /** Is the close-up terrain under the counting patch loaded (and the camera there)? */
+  _patchReady() {
+    const t = this.surface?.streamed?.tiles;
+    if (!this.app?.engine || !t) return true;
+    // The camera must have arrived, and the tile queue stayed empty for a moment
+    // (right after a move it is briefly empty before the new tiles are requested).
+    const now = performance.now();
+    if (this.app.rig.anim || t.loadProgress < 1) { this._patchBusyAt = now; return false; }
+    return now - (this._patchBusyAt ?? 0) > 1200 && now - (this._patchFlownAt ?? 0) > 2500;
+  }
+
   _flyPatch(id) {
+    this._patchFlownAt = performance.now();
     const p = this.cc.patches.find((q) => q.id === id);
-    this.fly(this.viewWorld(p.center.xM, p.center.yM, 520, 0.4, 0.42, 0));
+    this.fly(this.viewWorld(p.center.xM, p.center.yM, 400, 1.3, 0.5, 0)); // closer and steeper than v2, so the finest tiles load and each shadowed bowl reads
   }
 
   _drawPatches() {
@@ -737,7 +780,7 @@ export class Lessons {
       if (st.id === 'lm') continue;
       if (!on) { s.removeMarker(`st-${st.id}`); continue; }
       const p = this.terrain.fromLonLat(st.lon, st.lat);
-      const m = s.addMarker(`st-${st.id}`, p.xM, p.yM, String(this.content.stations.stations.indexOf(st)), '#ffffff');
+      const m = s.addMarker(`st-${st.id}`, p.xM, p.yM, st.apolloStation || String(this.content.stations.stations.indexOf(st)), '#ffffff'); // Apollo 15 station numbers
       m.userData.marker = { label: 'Station survey flag' };
     }
   }
@@ -854,15 +897,28 @@ export class Lessons {
     para(el0, this.stepText('m5-cer'));
     const hypId = this.state.state.traverse?.hypothesis || this.state.state.decisions['m4-hypothesis'] || 'h-front';
     const required = rep.requiredEvidenceTags[hypId] || [];
-    const fs = el('fieldset', {}, el('legend', { textContent: 'Tick the evidence you cite' }));
-    const tags = this.board.tags();
+    // One checkbox per evidence type, in plain words, with the notebook cards it
+    // comes from. The types your question needs are listed first and marked.
+    const types = rep.evidenceTypes || [];
+    const typeOf = (tag) => types.find((t) => t.tags.includes(tag)) || { id: tag, tags: [tag], label: tag };
+    const neededTypes = [...new Set(required.map((t) => typeOf(t)))];
+    const onBoard = new Set(this.board.tags());
+    const shown = [...neededTypes, ...types.filter((t) => !neededTypes.includes(t) && t.tags.some((x) => onBoard.has(x)))];
     const checked = new Set(this.state.state.report?.citedTags || []);
-    for (const t of tags) {
-      const cb = el('input', { type: 'checkbox', value: t, checked: checked.has(t) });
-      cb.addEventListener('change', () => (cb.checked ? checked.add(t) : checked.delete(t)));
-      fs.append(el('label', { className: 'lfe-check' }, cb, ` ${t}`));
+    const intro = el('p', { className: 'lfe-needed' }, el('strong', { textContent: 'Your question needs: ' }), neededTypes.map((t) => t.label.split(':')[0]).join('; ') + '.');
+    el0.append(intro);
+    const fs = el('fieldset', {}, el('legend', { textContent: 'Tick the evidence you cite' }));
+    for (const t of shown) {
+      const need = neededTypes.includes(t);
+      const have = t.tags.some((x) => onBoard.has(x));
+      const from = this.board.items.filter((e) => e.evidenceTags.some((x) => t.tags.includes(x))).map((e) => e.title);
+      const cb = el('input', { type: 'checkbox', value: t.id, checked: t.tags.some((x) => checked.has(x)) });
+      cb.addEventListener('change', () => { for (const x of t.tags) { if (cb.checked) checked.add(x); else checked.delete(x); } });
+      const text = el('span', {}, el('span', { textContent: t.label }), el('span', { className: 'lfe-from', textContent: have ? ` (from: ${[...new Set(from)].join(', ')})` : ' (not collected yet: visit a station that gives it in Module 4)' }));
+      if (need) text.prepend(el('strong', { className: 'lfe-need', textContent: 'Needed · ' }));
+      fs.append(el('label', { className: 'lfe-check' }, cb, text));
     }
-    if (!tags.length) para(fs, 'Your evidence board is empty. Finish the earlier modules first.');
+    if (!this.board.items.length) para(fs, 'Your evidence board is empty. Finish the earlier modules first.');
     el0.append(fs);
     const draft = { ...(this.state.state.report?.draft || {}) };
     const fields = [];
@@ -882,7 +938,7 @@ export class Lessons {
       this.state.state.report = { ...(this.state.state.report || {}), draft: { ...draft }, citedTags: [...checked], hypothesis: hypId };
       this.state.save();
       this.record.log('completed', { id: 'm5-cer', name: 'Field report saved' }, { response: { cited: checked.size, missing } });
-      if (missing.length) { msg.textContent = `Evidence types not yet cited: ${missing.join(', ')}. Tick them (or collect them in the traverse) and save again.`; return; }
+      if (missing.length) { msg.textContent = `Still needed: ${[...new Set(missing.map((t) => typeOf(t).label.split(':')[0]))].join('; ')}. Tick them (or collect them in the traverse) and save again.`; return; }
       msg.textContent = shortF.length ? `Saved. These sections are shorter than the guide length: ${shortF.join(', ')}.` : 'Saved. All required evidence types are cited.';
       this.state.completeStep('m5-cer', { saved: true });
       setTimeout(() => onSaved?.(), 1200);
@@ -1020,17 +1076,28 @@ export class Lessons {
       body.append(dataTable(['Diameter (m)', 'Depth (m)', 'Patch density (craters/km²)'], rows.length ? rows : [['none detected at 80 m or more', '', p.densityPerKm2]], `${p.id === 'mare' ? 'Mare plain patch' : 'Apennine Front patch'} (0.071 km²)`));
     }
     para(body, 'Question: which patch shows more craters per area? Note it down, then answer the superposition item below and read the method note before concluding anything about age.');
+    const finish = () => { if (this.done('m3-superposition') && this.done('m3-debrief')) this._textComplete('m3', ['m3-intro', 'm3-count']); };
     const fs = choiceItem({
       prompt: SUPERPOSITION.prompt, options: SUPERPOSITION.options,
       onAnswer: (opt) => {
         fs.querySelectorAll('.feedback').forEach((x) => x.remove());
         fs.appendChild(el('p', { className: 'feedback', textContent: `${opt.id === SUPERPOSITION.correct ? 'Correct.' : 'Not quite.'} ${opt.why}` }));
         this._superposition(opt.id);
-        this._textComplete('m3', ['m3-intro', 'm3-count', 'm3-superposition', 'm3-debrief'], { 'm3-superposition': opt.id });
+        finish();
       },
     });
     body.append(fs);
     body.append(el('p', { className: 'feedback' }, el('strong', { textContent: 'Method note. ' }), METHOD_NOTE));
+    const fc = choiceItem({
+      prompt: CLOCKS.prompt, options: CLOCKS.options,
+      onAnswer: (opt) => {
+        fc.querySelectorAll('.feedback').forEach((x) => x.remove());
+        fc.appendChild(el('p', { className: 'feedback', textContent: `${opt.id === CLOCKS.correct ? 'Correct.' : 'Not quite.'} ${opt.why}` }));
+        this._clocks(opt.id);
+        finish();
+      },
+    });
+    body.append(fc);
   }
 
   _textM4(body) {
@@ -1092,6 +1159,17 @@ export const SUPERPOSITION = {
     { id: 'c', text: 'You cannot tell without samples', why: 'You can read the order in the field: superposition is direct evidence. Samples then give the ages in years.' },
   ],
   correct: 'a',
+};
+
+export const CLOCKS = {
+  id: 'clocks-1',
+  prompt: 'Which clock do you trust for each surface?',
+  options: [
+    { id: 'a', text: 'Crater counts for both surfaces', why: 'Steep slopes erase craters, so the Front’s low count does not make it young. Its rocks are older than the plain’s.' },
+    { id: 'b', text: 'Rock samples for the Front, crater counts for the plain', why: 'Crater counting works on flat, stable ground like the mare plain. On the steep Front, craters are erased, so its age comes from rock samples.' },
+    { id: 'c', text: 'Neither: crater counts never tell age', why: 'On flat, stable ground a crater count is a good relative clock: more craters, older surface.' },
+  ],
+  correct: 'b',
 };
 
 export const METHOD_NOTE = 'The Front patch shows fewer craters, yet the Front is the older material (about 3.9 billion years, against about 3.3 billion for the plain’s lavas). Steep slopes erode and bury craters, so crater counting works as a clock only on flat, stable ground. The Front’s age comes from rock samples. The plain’s count is the meaningful clock reading.';

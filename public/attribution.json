@@ -165,7 +165,7 @@
     "source": "https://polyhaven.com/a/moon_track_04",
     "license": "CC0 1.0 (Poly Haven, https://polyhaven.com/license)",
     "retrieved": "2026-10-30",
-    "changes": "2k maps resized to 512 px wide, packed and encoded as KTX2. Used as an illustrative rover-track strip (labelled)."
+    "changes": "2k maps resized to 512 px wide, packed and encoded as KTX2. Used as an illustrative rover-track strip (labelled) until S5 pass 2; since then the scene draws both wheel tracks with own-work procedural textures (`src/lunar/surface.js`) and this file is no longer loaded."
   },
   {
     "asset": "Poly Haven model \"Moon Rock 04\" (`public/assets/v3/models/moon-rock-04.glb`)",

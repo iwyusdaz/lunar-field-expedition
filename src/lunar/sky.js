@@ -190,6 +190,8 @@ export class LunarSky {
     const r = SKY_RADIUS.sun * Math.tan(Math.atan(SUN_DIAMETER_M / 2 / SUN_DISTANCE_M));
     this.sunDisc = new THREE.Mesh(new THREE.SphereGeometry(r, 64, 32), new THREE.ShaderMaterial({ vertexShader: SUN_VS, fragmentShader: SUN_FS }));
     this.sunDisc.renderOrder = -1;
+    // No outline hull: at 195 km the hull z-fights with the disc in a telephoto view (orange blotches).
+    this.sunDisc.userData.noOutline = true;
     g.add(this.sunDisc);
     // Glare around the disc (a camera and eye effect, not a sky glow: there is no air).
     this.sunGlare = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), transparent: true, depthWrite: false, opacity: 0.55 }));
@@ -233,6 +235,7 @@ export class LunarSky {
     glint.userData.noOutline = true;
     glint.raycast = () => {};
     g.add(glint);
+    this.orbiterGlint = glint;
     // Pick volume so a click on the point of light reaches the card (invisible).
     const pick = new THREE.Mesh(new THREE.SphereGeometry(1.9, 8, 6), new THREE.MeshBasicMaterial({ visible: false }));
     pick.userData.noOutline = true;
@@ -294,6 +297,8 @@ export class LunarSky {
     const od = this.orbiterDirection(this.orbiterPhase);
     this.orbiter.position.copy(od).multiplyScalar(SKY_RADIUS.orbiter);
     this.orbiter.visible = this._orbiterVisible;
+    // Through a long lens (an inspect zoom) the spacecraft itself shows; the glint is for normal views.
+    this.orbiterGlint.visible = camera.fov > 1;
     // Stars: exposure from how much of the view is sunlit ground or Sun.
     if (this.starMaterial) {
       const dir = camera.getWorldDirection(new THREE.Vector3());

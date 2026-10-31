@@ -59,3 +59,22 @@ describe('v2 Hadley hero props', () => {
     expect(d.live).toBe(0);
   });
 });
+describe('v3 LM and LRV (review F3)', async () => {
+  const { buildLunarModuleV3, buildRoverV3 } = await import('../../src/scenes/hadley-hardware.js');
+  const size = (o) => new THREE.Box3().setFromObject(o).getSize(new THREE.Vector3());
+  it('LM descent stage: ~9.4 m across the pads, ~3.2 m tall, merged to a few draw calls', () => {
+    const lm = buildLunarModuleV3();
+    const s = size(lm);
+    for (const span of [s.x, s.z]) { expect(span).toBeGreaterThan(9.4 * 0.85); expect(span).toBeLessThan(9.4 * 1.15); }
+    expect(s.y).toBeGreaterThan(3.23 * 0.85); expect(s.y).toBeLessThan(3.23 * 1.15);
+    expect(meshCount(lm)).toBeLessThanOrEqual(10);
+  });
+  it('LRV chassis keeps 2.06 x 1.14 x 3.1 m; four separate wheels', () => {
+    const { group, wheels, chassis } = buildRoverV3();
+    expect(wheels).toHaveLength(4);
+    for (const w of wheels) expect(w.parent).toBe(chassis);
+    const s = size(chassis);
+    [[s.x, 2.06], [s.y, 1.14], [s.z, 3.1]].forEach(([v, r]) => { expect(v).toBeGreaterThan(r * 0.85); expect(v).toBeLessThan(r * 1.15); });
+    expect(meshCount(group.getObjectByName('lrv-v3-body'))).toBeLessThanOrEqual(12);
+  });
+});

@@ -32,6 +32,7 @@ export function createRegolithMaterial(lm) {
   const uniforms = {
     uMacro: { value: null }, uMeso: { value: null }, uMacroN: { value: null }, uMesoN: { value: null },
     uAlbedo: { value: null }, uHasTex: { value: 0 }, uLm: { value: new THREE.Vector2(lm.x, lm.z) },
+    uMid: { value: 1 }, // scan detail beyond arm's reach (0 while counting craters: only the real relief shades)
   };
   mat.userData.uniforms = uniforms;
   mat.userData.surfaceDetail = true;
@@ -44,7 +45,7 @@ export function createRegolithMaterial(lm) {
       .replace('#include <common>', `#include <common>
 varying vec3 vRegWorld;
 uniform sampler2D uMacro; uniform sampler2D uMeso; uniform sampler2D uMacroN; uniform sampler2D uMesoN; uniform sampler2D uAlbedo;
-uniform float uHasTex; uniform vec2 uLm;`)
+uniform float uHasTex; uniform vec2 uLm; uniform float uMid;`)
       .replace('#include <map_fragment>', `
 float regDist = length(vRegWorld - cameraPosition);
 if (uHasTex > 0.5) {
@@ -52,9 +53,9 @@ if (uHasTex > 0.5) {
   vec2 rel = vec2(wxz.x - uLm.x, uLm.y - wxz.y); // east, north of the LM
   vec2 auv = vec2((rel.x + ${FAR_HALF}.0) / ${2 * FAR_HALF}.0, (${FAR_HALF}.0 - rel.y) / ${2 * FAR_HALF}.0);
   float reg = texture2D(uAlbedo, auv).r / 0.42; // Clementine relative albedo around the mare mean
-  float fMacro = 1.0 - smoothstep(350.0, 900.0, regDist);
+  float fMacro = (1.0 - smoothstep(350.0, 900.0, regDist)) * uMid;
   float fMeso = 1.0 - smoothstep(18.0, 60.0, regDist);
-  float fMid = smoothstep(60.0, 300.0, regDist) * (1.0 - smoothstep(2500.0, 6000.0, regDist));
+  float fMid = smoothstep(60.0, 300.0, regDist) * (1.0 - smoothstep(2500.0, 6000.0, regDist)) * uMid;
   // Detail as brightness only: the scans are warmer than Apollo-photo regolith.
   const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
   // Each layer is sampled only where it shows (most of a wide view is far ground).
@@ -68,9 +69,9 @@ if (uHasTex > 0.5) {
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 if (uHasTex > 0.5) {
   vec2 wxz = vRegWorld.xz;
-  float fMacro = 1.0 - smoothstep(250.0, 700.0, regDist);
+  float fMacro = (1.0 - smoothstep(250.0, 700.0, regDist)) * uMid;
   float fMeso = 1.0 - smoothstep(12.0, 45.0, regDist);
-  float fMid = smoothstep(40.0, 250.0, regDist) * (1.0 - smoothstep(2000.0, 5000.0, regDist));
+  float fMid = smoothstep(40.0, 250.0, regDist) * (1.0 - smoothstep(2000.0, 5000.0, regDist)) * uMid;
   vec3 d = vec3(0.0);
   if (fMacro > 0.0) { vec3 nA = texture2D(uMacroN, wxz / 3.1).xyz * 2.0 - 1.0; d += vec3(nA.x, 0.0, -nA.y) * 0.9 * fMacro; }
   if (fMeso > 0.0) { vec3 nB = texture2D(uMesoN, wxz / 0.4).xyz * 2.0 - 1.0; d += vec3(nB.x, 0.0, -nB.y) * 0.8 * fMeso; }

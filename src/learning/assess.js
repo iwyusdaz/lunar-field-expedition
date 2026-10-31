@@ -88,6 +88,7 @@ export function rubricSelfCheck({ criteria, container, onComplete }) {
   }
   const done = document.createElement('button');
   done.type = 'button';
+  done.className = 'v3-btn v3-primary btn';
   done.textContent = 'Finish self-check';
   done.addEventListener('click', () => {
     for (const c of criteria) {

@@ -18,6 +18,9 @@
  *   to); with fitFov it narrows the field of view like a telephoto lens so the
  *   object reads at its true angular size. The object is never scaled. The
  *   view (and field of view) returns when the card closes.
+ * - viewFrom(eye, center): an authored inspect view (the camera at a chosen
+ *   spot, the object beside the card), for landforms and other things a box
+ *   framing cannot show.
  * - Idle breathing (after 12 s without input) and the title-screen attract
  *   orbit; both off under reduced motion. The 12 s delay keeps breathing out
  *   of ui-audit's 5 s "alive" sample, which must come from the scene itself.
@@ -194,6 +197,32 @@ export class CameraRig {
     return this.flyTo({ target, radius: r, theta: Math.atan2(off.x, off.z), phi: Math.acos(clamp(off.y, -1, 1)), look: true, fov: fov < base - 0.01 ? fov : undefined }, duration);
   }
 
+  /**
+   * A rig view with the camera at `eye`, turned so `center` shows at NDC
+   * (offsetX, offsetY) (beside the info card). `fov` (degrees) narrows the view
+   * like a telephoto lens; it never widens past the learner's field of view.
+   * The orbit target sits on the line of sight at the object's distance (within
+   * the radius limits), so turning the view afterwards circles the object.
+   * @param {number[]} eye  @param {number[]} center
+   */
+  viewFrom(eye, center, { offsetX = 0, offsetY = 0, fov = null } = {}) {
+    const cam = this.camera;
+    const P = new THREE.Vector3(...eye), C = new THREE.Vector3(...center);
+    const d = C.clone().sub(P);
+    const dir = d.clone().normalize();
+    const r = clamp(d.length(), this.limits.minRadius, this.limits.maxRadius / 1.25); // headroom for the card offset
+    const base = this.baseFov ?? cam.fov;
+    const f = fov ? Math.min(fov, base) : base;
+    const back = dir.clone().negate();
+    const basis = this._basis(Math.atan2(back.x, back.z), Math.acos(clamp(back.y, -1, 1)));
+    const th = Math.tan((f * Math.PI) / 360);
+    const target = P.clone().addScaledVector(dir, r)
+      .addScaledVector(basis.right, -offsetX * r * th * cam.aspect)
+      .addScaledVector(basis.up, -offsetY * r * th);
+    const off = P.clone().sub(target).normalize();
+    return { target: target.toArray(), radius: target.distanceTo(P), theta: Math.atan2(off.x, off.z), phi: Math.acos(clamp(off.y, -1, 1)), look: true, fov: f < base - 0.01 ? f : undefined };
+  }
+
   _basis(theta, phi) {
     const back = new THREE.Vector3(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
     const right = new THREE.Vector3(0, 1, 0).cross(back).normalize();
@@ -275,7 +304,8 @@ export class CameraRig {
     s.radius = clamp(s.radius, this.limits.minRadius, this.limits.maxRadius);
     let theta = s.theta, phi = s.phi;
     if (this._breath > 0) {
-      const ramp = Math.min(1, this._breath / 4);
+      // Scaled by the zoom: through a telephoto inspect view the drift stays as small on screen.
+      const ramp = Math.min(1, this._breath / 4) * (this.baseFov ? this.camera.fov / this.baseFov : 1);
       theta += Math.sin(this._breath * 0.45) * 0.006 * ramp;
       phi += Math.sin(this._breath * 0.31 + 1.3) * 0.004 * ramp;
     }

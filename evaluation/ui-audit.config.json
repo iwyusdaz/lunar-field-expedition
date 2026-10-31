@@ -1,5 +1,5 @@
 {
-  "_note": "Extra exploration states for the plan 10 \u00a77 gates and catalog reach: views a learner reaches with the camera rig (walk, look up, the Go to Spur crater button). Module states m1-m5 come from the stepper. The orbit view (m1) is the secondary scene (3 catalog objects), so it is not a main scene.",
+  "_note": "Extra exploration states for the plan 10 §7 gates and catalog reach: views a learner reaches with the camera rig (walk, look up, the Go to Spur crater button). Module states m1-m5 come from the stepper. The orbit view (m1) is the secondary scene (3 catalog objects), so it is not a main scene. Drawer states (S5 review F12): the notebook, field report, rubric self-check, Apollo comparison, traverse planner and crater results drawers, opened from their Now-card buttons.",
   "notMainScene": "^(start|m1)$",
   "settleMs": 3500,
   "extraStates": [
@@ -81,6 +81,78 @@
         },
         {
           "wait": 9000
+        }
+      ]
+    },
+    {
+      "name": "drawer-board",
+      "label": "Module 5: Open the notebook (evidence board drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(4); window.__TEST__.lessons.step[4] = 0; window.__TEST__.lessons._enterStep(4); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "drawer-report",
+      "label": "Module 5: Write the report (field report drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(4); window.__TEST__.lessons.step[4] = 1; window.__TEST__.lessons._enterStep(4); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "drawer-selfcheck",
+      "label": "Module 5: Open the self-check (rubric drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(4); window.__TEST__.lessons.step[4] = 2; window.__TEST__.lessons._enterStep(4); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "drawer-comparison",
+      "label": "Module 5: Read the comparison (Apollo 15 drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(4); window.__TEST__.lessons.step[4] = 3; window.__TEST__.lessons._enterStep(4); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
+        },
+        {
+          "wait": 2500
+        }
+      ]
+    },
+    {
+      "name": "drawer-planner",
+      "label": "Module 4: Open the planner (traverse planner drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(3); window.__TEST__.lessons.step[3] = 1; window.__TEST__.lessons._enterStep(3); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
+        },
+        {
+          "wait": 3000
+        }
+      ]
+    },
+    {
+      "name": "drawer-results",
+      "label": "Module 3: See the results (crater counts drawer)",
+      "steps": [
+        {
+          "eval": "window.__TEST__.lessons.app.goModule(2); window.__TEST__.lessons.step[2] = 1; window.__TEST__.lessons._enterStep(2); window.__TEST__.lessons.refresh(); window.__TEST__.lessons._submitCounts(); [...document.querySelectorAll('[data-ui=now-card] button')].find((b) => /See the results/.test(b.innerText)).click()"
+        },
+        {
+          "wait": 3000
         }
       ]
     }
