@@ -25,6 +25,7 @@
 .v3 .feedback, .v3 .feedback-step { margin: 8px 0; padding: 8px 12px; border-left: 3px solid var(--v3-accent); background: rgba(240, 138, 60, 0.1); }
 .v3 .feedback-step { border-left-color: var(--v3-ok); background: rgba(111, 220, 155, 0.08); }
 .v3 .tool-hint, .v3 .tp-seg-cost, .v3 .evidence-source { color: var(--v3-muted); font-size: var(--type-small); }
+.v3-drawer-body .tool-hint { font-size: var(--type-body); } /* the planner's instructions are body text */
 .v3 .evidence-kind { font-weight: 600; font-size: var(--type-small); text-transform: uppercase; letter-spacing: 0.04em; color: var(--v3-accent); }
 .v3 .evidence-list { padding-left: 1.2rem; }
 .v3 label.choice, .v3 .lfe-check { display: flex; gap: 8px; align-items: center; min-height: 44px; }

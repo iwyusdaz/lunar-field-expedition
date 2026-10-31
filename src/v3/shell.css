@@ -255,6 +255,9 @@
 /* Form controls in the drawer and text mode meet the target size (plan 10 §2.2). */
 .v3-drawer-body input[type="checkbox"], .v3-drawer-body input[type="radio"],
 .v3-tm input[type="checkbox"], .v3-tm input[type="radio"] { width: 32px; height: 32px; margin: 0; flex: none; accent-color: var(--v3-accent); }
+/* Headings inside the drawer body use the body size (bold): with the drawer heading,
+   body and small text that keeps every drawer screen at three sizes (plan §3). */
+.v3-drawer-body h3, .v3-drawer-body h4, .v3-drawer-body h5 { font-size: var(--type-body); font-weight: 700; margin: 12px 0 4px; }
 .v3-drawer-body summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
 @media (pointer: coarse) {
   .v3-drawer-body input[type="checkbox"], .v3-drawer-body input[type="radio"],

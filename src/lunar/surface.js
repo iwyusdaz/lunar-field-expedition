@@ -130,11 +130,23 @@ export class SurfaceScene {
       this._flashSoon = id === 'micrometeoroid-flash' ? 0.9 : null;
       // Landform and ground cards: the time-lapse moves to the Sun angle that
       // shows the landform (CARD_SUN); the Sun's card says so.
-      this._lowSun = CARD_SUN[id] && !this.sunHold ? CARD_SUN[id] : 0;
+      const want = CARD_SUN[id] && !this.sunHold ? CARD_SUN[id] : 0;
+      if (want && !this._sunBefore) this._sunBefore = { base: this.sunBaseElevation, lapse: this.lapse };
+      if (!want) this._restoreSun();
+      this._lowSun = want;
       if (this._lowSun && this.app.motionPrefs?.reduced) this.setSunElevation(this._lowSun);
     });
-    this.app.inspect?.on('close', () => { this.removeMarker('card-station'); this._flashSoon = null; this._lowSun = 0; });
+    this.app.inspect?.on('close', () => { this.removeMarker('card-station'); this._flashSoon = null; this._lowSun = 0; this._restoreSun(); });
     return this;
+  }
+
+  /** After a landform card: the time-lapse carries on from where it was before the card. */
+  _restoreSun() {
+    const b = this._sunBefore;
+    if (!b) return;
+    this._sunBefore = null;
+    this.sunBaseElevation = b.base; this.lapse = b.lapse;
+    this._applySun();
   }
 
   /** Start streaming the terrain and the detail textures and models (first interaction). */
@@ -709,7 +721,7 @@ export class SurfaceScene {
         if (this._lowSun) {
           const e = this.sky.sunElevationDeg;
           const goal = this._lowSun;
-          if (Math.abs(e - goal) > 0.05) this.setSunElevation(e + (goal - e) * Math.min(1, dt * 2.5) + Math.sign(goal - e) * Math.min(Math.abs(goal - e), dt * 2));
+          if (Math.abs(e - goal) > 0.05) { const keep = this._sunBefore; this.setSunElevation(e + (goal - e) * Math.min(1, dt * 2.5) + Math.sign(goal - e) * Math.min(Math.abs(goal - e), dt * 2)); this._sunBefore = keep; }
           return;
         }
         this.lapse += dt * LAPSE_DEG_PER_S;

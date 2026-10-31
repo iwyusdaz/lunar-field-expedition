@@ -1,7 +1,7 @@
 {
  "tool": "sync-v3-core.mjs",
  "template": "_templates/immersive-core",
- "syncedAt": "2026-10-31T06:50:13.070Z",
+ "syncedAt": "2026-10-31T08:15:23.689Z",
  "files": {
   "src/v3/catalog-views.js": "09b538a3adaa8271b16a0553eb0a573628e1092d4bc82a0baa3d32b81db83669",
   "src/v3/catalog.js": "35216aab5fb0e97c2967793bc988645f71db089efa9d5d6541f45d546a4117a9",
@@ -20,7 +20,7 @@
   "src/v3/onboarding.js": "fa3b74704d95fcde016952b3f7494034fdd9e907083ef5565aec494490d30bdd",
   "src/v3/quality.js": "aeb8dd4bd5331f5d1562a3a92f9cd84ae3307b8c90b8875366155fca6f86328b",
   "src/v3/render-chain.js": "5d7f50daf375b12f3c8b1632de0356f05986c09958e5baa3fd23ba253d8ab650",
-  "src/v3/shell.css": "7d062b74872d89ff928f47bdd83324eb498873aaa6c2ae87a0f8d2c04d8bd491",
+  "src/v3/shell.css": "635ea126b8ac572268f5f9b8c83f52af31f9ee8211981bacd03b5e77c2f2562b",
   "src/v3/shell.js": "17fd7d92cd88dd87b76c6093c00b5464e07c2edbf7db5f0f7447bb70c178851c",
   "src/v3/type.css": "6f7a0de74e52f7aab564d4dbdc2465bc484f5ef54afd2fd1a65b9d5ee8b481f8",
   "src/v3/app.js": "bfce5f59ad933b5c4b749927195a4b6fec8f5800eef396f10cc8887340d7d32c",
