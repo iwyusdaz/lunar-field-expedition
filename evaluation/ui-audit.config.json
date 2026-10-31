@@ -47,8 +47,11 @@
     },
     {
       "name": "sky-overhead",
-      "label": "Watch the orbiter pass over the site, the rover driving below",
+      "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
       "steps": [
+        {
+          "eval": "window.__TEST__.scene.surface.setSunElevation(6)"
+        },
         {
           "eval": "window.__TEST__.scene.surface.sky.orbiterPhase = 0.01"
         },
