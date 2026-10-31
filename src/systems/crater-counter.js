@@ -13,10 +13,11 @@ import { announce } from '../a11y/announcer.js';
  * Points of a reference ring `diameterM` across, centred just outside a patch's
  * east rim. Pure (elevation passed in) so it can be unit-tested.
  */
-export function scaleRingPoints(patch, diameterM, elevationAt, segments = 64) {
+export function scaleRingPoints(patch, diameterM, elevationAt, segments = 64, side = { x: 1, z: 0 }) {
   const r = diameterM / 2;
-  const cx = patch.center.xM + patch.radiusM + r + 20;
-  const cy = patch.center.yM;
+  const off = patch.radiusM + r + 20; // beside the patch, along `side` (unit vector on the ground)
+  const cx = patch.center.xM + side.x * off;
+  const cy = patch.center.yM + side.z * off;
   const lift = (x, y) => { const e = elevationAt(x, y); return (Number.isNaN(e) ? -1900 : e) + 3; };
   const points = [];
   for (let i = 0; i <= segments; i++) {

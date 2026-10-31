@@ -270,6 +270,27 @@ test('Sun time-lapse runs on after every landform card (review pass 2 F1)', asyn
   expect(b.e).not.toBeCloseTo(a.e, 1);
 });
 
+test('planner names stations by flag number and lists what the report needs; the comparison step finishes on Esc (review pass 2 F16, F17, F19)', async ({ page }) => {
+  await ready(page);
+  await T(page, () => { const L = window.__TEST__.lessons; L.app.goModule(3); L.step[3] = 1; L._enterStep(3); L.refresh(); });
+  await page.waitForTimeout(1500);
+  await now(page, /Open the traverse planner/).click();
+  await expect(drawer(page).locator('.tp-add').filter({ hasText: 'Station 6: Apennine Front slope' })).toBeVisible();
+  await expect(drawer(page).locator('.tp-needs')).toContainText('Mare rock');
+  await drawer(page).locator('.tp-add').filter({ hasText: /Dune/ }).click();
+  await drawer(page).locator('.tp-route select').first().selectOption('sample');
+  await expect(drawer(page).locator('.tp-needs li[data-met="true"]').filter({ hasText: 'Mare rock' })).toBeVisible();
+  await expect(drawer(page).locator('.tp-route')).toContainText('from the LM');
+  await page.keyboard.press('Escape');
+  await T(page, () => { const L = window.__TEST__.lessons; L.app.goModule(4); L.step[4] = 3; L._enterStep(4); L.refresh(); });
+  await page.waitForTimeout(1500);
+  await now(page, /Read the comparison/).click();
+  await expect(drawer(page)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(now(page, /Next step/)).toBeVisible();
+  await expect(now(page, /Next step/)).toBeFocused();
+});
+
 test('motion report: at least eight systems on four layers, every label on a card', async ({ page }) => {
   await ready(page);
   const r = await T(page, () => ({ rep: window.__TEST__.motion.report(), problems: window.__TEST__.motion.checkLabels(window.__TEST__.catalog) }));

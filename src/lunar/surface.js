@@ -32,6 +32,7 @@ import { loadGLB, loadKTX2 } from './loaders.js';
 import { hourAngleForElevation, curvatureDrop, LUNAR_G, SITE } from './frame.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const REGOLITH_SPOT = [1.2, 5.9]; // bare soil just west of the bootprints (m east, south of the LM)
 const LAPSE_DEG_PER_S = 0.5; // sun time-lapse: about one lunar hour per second
 const LAPSE_SPAN_DEG = 22;   // then the time-lapse loops back (about 43 hours of lunar morning)
 // Landform and ground cards: the Sun angle (deg) that shows each one. Low for
@@ -118,7 +119,8 @@ export class SurfaceScene {
     // frame, the rover and the walking geologist stay beside their cards.
     // A station crater's card shows its Apollo 15 station flag; the impact
     // card shows a flash in its framed spot soon after it opens.
-    const STATION_OF = { 'spur-crater': 'spur', 'dune-crater': 'dune', 'elbow-crater': 'elbow', 'st-george-crater': 'stgeorge' };
+    // Hadley Delta's card shows the Station 2 flag at St. George crater on its flank (review pass 2 F7).
+    const STATION_OF = { 'spur-crater': 'spur', 'dune-crater': 'dune', 'elbow-crater': 'elbow', 'st-george-crater': 'stgeorge', 'hadley-delta': 'stgeorge' };
     this.app.inspect?.on('open', (id) => {
       this.removeMarker('card-station');
       const sid = STATION_OF[id];
@@ -282,7 +284,7 @@ export class SurfaceScene {
       this.grounded.push({ obj: grp, dx: C[0] + dx, dz: C[1] + dz, sink: 0 });
     }
     this.alsepCenter = C;
-    this._cableMat = new THREE.MeshStandardMaterial({ color: 0x6f6d69, metalness: 0.5, roughness: 0.6, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4 });
+    this._cableMat = new THREE.MeshStandardMaterial({ color: 0xcfcac0, metalness: 0.45, roughness: 0.45, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4 });
     this._cableMat.userData.surfaceDetail = true;
     const skirt = node('pse-skirt');
     if (skirt) { const s = skirt.clone(true); s.position.set(0, 0, 0); this.group.add(s); this.grounded.push({ obj: s, dx: C[0] - 4.2, dz: C[1] + 2.6, sink: -0.005 }); }
@@ -338,10 +340,10 @@ export class SurfaceScene {
     const pebbleGeo = (() => { const g = new THREE.IcosahedronGeometry(0.5, 1); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const k = 0.75 + 0.4 * prng(); p.setXYZ(i, p.getX(i) * k, p.getY(i) * k * 0.7, p.getZ(i) * k); } g.computeVertexNormals(); g.computeBoundingBox(); return g; })();
     const pebbles = [[]]; // one instanced mesh (one draw call) with the first scan's material
     for (let i = 0; i < 420; i++) {
-      const nearPatch = i < 25;
-      const a = prng() * Math.PI * 2, d = nearPatch ? Math.sqrt(prng()) * 4.5 : 3 + Math.sqrt(prng()) * 36;
-      const dx = nearPatch ? -14 + Math.cos(a) * d : Math.cos(a) * d, dz = nearPatch ? 20 + Math.sin(a) * d : Math.sin(a) * d;
-      if (Math.hypot(dx, dz) < 5.2 && !nearPatch) continue; // not under the LM
+      const a = prng() * Math.PI * 2, d = 3 + Math.sqrt(prng()) * 36;
+      const dx = Math.cos(a) * d, dz = Math.sin(a) * d;
+      if (Math.hypot(dx, dz) < 5.2) continue; // not under the LM
+      if (Math.hypot(dx - REGOLITH_SPOT[0], dz - REGOLITH_SPOT[1]) < 2.2) continue; // the regolith card shows bare soil
       const sz = 0.03 + prng() ** 2.2 * 0.12;
       pebbles[0].push({ sc: V(sz, sz, sz), dx, dz, ry: prng() * 6.28, sink: sz * 0.25, lift: sz * 0.35 });
     }
@@ -439,7 +441,7 @@ export class SurfaceScene {
       [[cx + 0.15, cz - 0.15], [cx + 2.35, cz - 4.2]], [[cx - 0.15, cz - 0.15], [hfe[0] + 0.1, hfe[1] + 0.12]],
       [[hfe[0] - 0.15, hfe[1]], probes[0]], [[hfe[0] + 0.1, hfe[1] - 0.1], probes[1]],
     ];
-    const pos = [], idx = [], w = 0.025;
+    const pos = [], idx = [], w = 0.03; // flat ribbon cables, silvery (AS15-92-12407); 6 cm wide here so they read at a few metres
     for (const [[x0, z0], [x1, z1]] of runs) {
       const n = 24, len = Math.hypot(x1 - x0, z1 - z0), tx = (x1 - x0) / len, tz = (z1 - z0) / len;
       const base = pos.length / 3;
@@ -457,11 +459,16 @@ export class SurfaceScene {
     const ribbon = new THREE.Mesh(g, this._cableMat); ribbon.receiveShadow = true; ribbon.raycast = () => {};
     grp.add(ribbon);
     const capMat = this._probeMat || (this._probeMat = Object.assign(new THREE.MeshStandardMaterial({ color: 0xe8e6e0, roughness: 0.6 }), { userData: { surfaceDetail: true } }));
+    // Each borehole: the white probe top in a low mound of darker drill
+    // cuttings (the crew drilled 1.6-m holes; the cuttings piled round them).
+    const cutMat = this._cutMat || (this._cutMat = Object.assign(new THREE.MeshStandardMaterial({ color: 0x4a4844, roughness: 1 }), { userData: { surfaceDetail: true } }));
     for (const [px, pz] of probes) {
-      const x = this.lm.x + px, z = this.lm.z + pz;
-      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.06, 12), capMat);
-      cap.position.set(x, this.groundY(x, z) + 0.02, z); cap.raycast = () => {};
-      grp.add(cap);
+      const x = this.lm.x + px, z = this.lm.z + pz, y = this.groundY(x, z);
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, 0.08, 12), capMat);
+      cap.position.set(x, y + 0.03, z); cap.raycast = () => {};
+      const pile = new THREE.Mesh(new THREE.SphereGeometry(0.35, 16, 6, 0, Math.PI * 2, 0, Math.PI / 2), cutMat);
+      pile.scale.y = 0.12; pile.position.set(x, y - 0.005, z); pile.raycast = () => {}; pile.receiveShadow = true;
+      grp.add(pile, cap);
     }
     this.cables = grp;
     this.group.add(grp);
@@ -521,10 +528,13 @@ export class SurfaceScene {
     const [elx, elz] = [this.bowls.elbow.x - lm.x, this.bowls.elbow.z - lm.z], [dux, duz] = [this.bowls.dune.x - lm.x, this.bowls.dune.z - lm.z];
     const mp = this.craterPatches?.mare ? [this.craterPatches.mare.xM - lm.x, this.craterPatches.mare.yM - lm.z] : [480, -350];
     return {
-      // Eye level, looking north over the flat mare: the horizon line about 2.4 km away, black sky above.
-      horizon: v(() => P(10, 9, 1.7), () => P(10, -2400, 45), 50),
-      // Low over the soil a few metres from the LM: grains, pebbles, small pits.
-      regolith: v(() => P(-13.2, 21.6, 0.9), () => P(-14, 20.2, 0), 40),
+      // Eye level just north-west of the site, looking north-west over open mare
+      // (no boulders that way; the ALSEP at the left): the curved skyline about
+      // 2.4 km away, black sky above (review pass 2 F8).
+      horizon: v(() => P(-5, -20, 1.7), () => P(-5 - 1540, -20 - 1840, 40), 50),
+      // Close over bare soil beside the bootprints: grains, tiny pits and the
+      // edge of a print at the right; no rock at the centre (review pass 2 F6).
+      regolith: v(() => P(REGOLITH_SPOT[0] - 0.3, REGOLITH_SPOT[1] + 1.3, 0.75), () => P(REGOLITH_SPOT[0] + 0.25, REGOLITH_SPOT[1], 0), 40),
       // Low along the line of prints, so the tread relief catches the Sun.
       footprints: v(() => P(3.4, 7.9, 1.25), () => P(3.2, 5.0, 0), 42),
       // Low along both wheel tracks.
@@ -533,8 +543,13 @@ export class SurfaceScene {
       craterlets: v(() => P(mp[0] - 190, mp[1] + 40, 210), () => P(mp[0], mp[1], 0), 52),
       // Wide view down over the dark plain, north-west of the site.
       'mare-plain': v(() => P(-200, -300, 140), () => P(-700, -1500, 0), 56),
-      // From above the rim: Dune crater's bowl and its far wall.
-      'dune-crater': v(() => H(dux - 330, duz - 260, dux, duz, 300), () => P(dux, duz, 0), 60),
+      // From just behind the Station 4 flag on the rim, looking across the
+      // 380 m bowl: the flag in front, the rim and far wall beyond (review pass 2 F11).
+      'dune-crater': (() => {
+        const [sx, sz] = st('dune'), l = Math.hypot(sx - dux, sz - duz) || 1, ux = (sx - dux) / l, uz = (sz - duz) / l;
+        const e = () => H(sx + ux * 140, sz + uz * 140, dux, duz, 110), c = () => P(dux, duz, 0);
+        return v(e, c, () => fit(380 * 1.4, e(), c()));
+      })(),
       // From the rille edge above Elbow crater.
       'elbow-crater': (() => { const [ex, ez] = st('elbow'); return v(() => H(ex + 380, ez + 40, ex, ez, 230), () => P(ex - 60, ez, 0), 50); })(), // from the east, the sunlit west wall and the rille beyond
       // Spur crater on the Front slope, its station flag and the Genesis Rock on its rim.
@@ -542,22 +557,25 @@ export class SurfaceScene {
       // St. George on the flank of Hadley Delta, seen from south-west of the site (the LM behind the camera).
       // (its centre lies up the Delta flank, south-west of the station on its rim)
       'st-george-crater': (() => { const e = () => P(-700, 700, 60), c = () => P(sgx - 650, sgz + 650, 0); return v(e, c, () => fit(2420 * 1.9, e(), c())); })(),
-      // Mount Hadley across the plain to the north-east, with the LM in front of it.
-      'mount-hadley': v(() => P(-26, 30, 3.2), () => A(13440 * 0.6, -14960 * 0.6, 1500), 58),
-      // Hadley Delta to the south, with the flag in front of it.
-      'hadley-delta': v(() => P(-10.5, -4, 1.9), () => A(3520 * 0.6, 17200 * 0.6, 1250), 58),
+      // Mount Hadley to the north-east, seen across Hadley Rille from above its
+      // west rim: the channel in front, the massif beyond (review pass 2 F7).
+      'mount-hadley': v(() => H(-3350, 300, -2700, 0, 90), () => A(13440 * 0.6, -14960 * 0.6, 1300), 56),
+      // Hadley Delta to the south, from just north of the LM: the LM in front,
+      // St. George crater (its Station 2 flag) on the Delta's north-west flank.
+      'hadley-delta': v(() => P(6, -24, 2.4), () => A((3520 * 0.6 + sgx - 650) / 2, (17200 * 0.6 + sgz + 650) / 2, 1000), 60),
       // The Apennine Front: the arc of mountains east and south of the plain, from above the plain.
       'apennine-front': v(() => P(-900, -900, 520), () => A(5200, 4200, 500), 76),
       // Hadley Rille from its east rim: the channel, about 1 km wide and 300 m deep.
       'hadley-rille': v(() => H(-2050, -700, -2700, 900, 260), () => P(-2720, 900, 0), 60),
       // The heat flow electronics box with its two cables running to the probes in their drill holes.
-      'alsep-heat-flow': (() => { const [cx, cz] = this.alsepCenter || [-104, -38]; return v(() => P(cx - 2.4 + 3.2, cz - 3.8 + 3.0, 2.4), () => P(cx - 2.4 - 1.6, cz - 3.8 - 2.6, 0), 52); })(),
+      'alsep-heat-flow': (() => { const [cx, cz] = this.alsepCenter || [-104, -38]; return v(() => P(cx - 2.4 + 1.5, cz - 3.8 + 1.6, 3.0), () => P(cx - 2.4 - 1.9, cz - 3.8 - 3.0, 0), 62); })(), // both probe cables and boreholes in view (review pass 2 F9)
       // Close on the impact area: the flash and its dust puff (frequency illustrative).
       'micrometeoroid-flash': v(() => P(this.flashArea.x - lm.x - 22, this.flashArea.z - lm.z + 26, 7), () => [this.flashArea.x, this.groundY(this.flashArea.x, this.flashArea.z) + 0.5, this.flashArea.z], 34),
     };
   }
 
   /** Landform pick volumes (invisible, draped on the CPU heightfield, real extents). */
+  // (REGOLITH_SPOT: module constant, metres east/south of the LM)
   _buildProxies() {
     const P = (id, mesh) => { mesh.name = `pick-${id}`; mesh.userData.noOutline = true; this.group.add(mesh); return mesh; };
     const st = this.stations;
@@ -580,7 +598,7 @@ export class SurfaceScene {
     const mp = this.craterPatches?.mare || { xM: this.lm.x + 480, yM: this.lm.z - 350, radiusM: 150 };
     this.proxyList.push(['craterlets', P('craterlets', this._drape(mp.xM, mp.yM, mp.radiusM, 0.6, 'disc')), look]);
     this.proxyList.push(['mare-plain', P('mare-plain', this._drape(this.lm.x + 1350, this.lm.z - 1700, 650, 1.0, 'disc')), look]);
-    this.proxyList.push(['regolith', P('regolith', this._drape(this.lm.x - 14, this.lm.z + 20, 3.5, 0.03, 'disc')), { heightFrac: 0.5 }]);
+    this.proxyList.push(['regolith', P('regolith', this._drape(this.lm.x + REGOLITH_SPOT[0], this.lm.z + REGOLITH_SPOT[1], 1.2, 0.03, 'disc')), { heightFrac: 0.5 }]);
     this.proxyList.push(['hadley-rille', P('hadley-rille', this._rilleRibbon()), look]);
     this.proxyList.push(['apennine-front', P('apennine-front', this._frontPatch()), look]);
     // Massifs beyond the v2 heightfield: cones at their gazetteer footprints (build-meta.json).

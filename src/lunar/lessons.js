@@ -86,7 +86,7 @@ export class Lessons {
   legend() {
     if (this.sceneName === 'orbit') return [
       { label: 'Landing site glint: Hadley, where Apollo 15 landed', text: 'A soft star on the Moon marks the landing site.' },
-      { label: 'Practice target outline', text: 'A thin gold line round Mare Imbrium while the practice asks you to click it.' },
+      { label: 'Mare Imbrium outline', text: 'A thin gold line round the rim of Mare Imbrium while the practice asks you to click it or its card is open.' },
     ];
     return [
       { label: 'Lettered survey tag', text: 'A flag with a letter (A to D) on a landform you name in Module 2.' },
@@ -636,7 +636,7 @@ export class Lessons {
   _flyPatch(id) {
     this._patchFlownAt = performance.now();
     const p = this.cc.patches.find((q) => q.id === id);
-    this.fly(this.viewWorld(p.center.xM, p.center.yM, 400, 1.3, 0.5, 0)); // closer and steeper than v2, so the finest tiles load and each shadowed bowl reads
+    this.fly(this.viewWorld(p.center.xM, p.center.yM, 400, PATCH_THETA, 0.5, 0)); // closer and steeper than v2, so the finest tiles load and each shadowed bowl reads
   }
 
   _drawPatches() {
@@ -647,7 +647,9 @@ export class Lessons {
       const pts = [];
       for (let i = 0; i <= 96; i++) { const a = (i / 96) * Math.PI * 2; const x = p.center.xM + p.radiusM * Math.cos(a), z = p.center.yM + p.radiusM * Math.sin(a); pts.push(new THREE.Vector3(x, s.groundY(x, z) + 3, z)); }
       g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: p.id === 'mare' ? 0x66d9e8 : 0xffb347, depthTest: false, transparent: true })));
-      const ref = scaleRingPoints(p, 80, (x, z) => s.groundY(x, z));
+      // The 80 m ring sits beside the patch on the screen's right, at the same
+      // distance from the camera (review F13: placed toward the camera it fell below the view).
+      const ref = scaleRingPoints(p, 80, (x, z) => s.groundY(x, z), 64, { x: Math.cos(PATCH_THETA), z: -Math.sin(PATCH_THETA) });
       g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ref.points.map((q) => new THREE.Vector3(q.x, q.y + 1, q.z))), new THREE.LineBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true })));
     }
     for (const c of g.children) c.renderOrder = 9;
@@ -669,7 +671,7 @@ export class Lessons {
     const g = new THREE.Group(); g.name = 'crater-marks';
     g.userData.marker = { label: 'Crater mark (your count)' };
     for (const [pid, list] of Object.entries(this.cc.marks)) for (const m of list) {
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(9, 1.8, 6, 24), new THREE.MeshBasicMaterial({ color: pid === 'mare' ? 0x66d9e8 : 0xffb347, depthTest: false }));
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(9, 1.8, 6, 24), new THREE.MeshBasicMaterial({ color: m.onCrater === false ? 0x9a9a9a : pid === 'mare' ? 0x66d9e8 : 0xffb347, depthTest: false }));
       ring.position.set(m.xM, s.groundY(m.xM, m.yM) + 2, m.yM); ring.rotation.x = Math.PI / 2; ring.renderOrder = 9;
       g.add(ring);
     }
@@ -688,8 +690,12 @@ export class Lessons {
       if (Math.hypot(hit.xM - p.center.xM, hit.yM - p.center.yM) > p.radiusM) { announce(`Outside the ${p.name}. Tap inside the circle.`); a.shell.toast(`Outside the ${p.name.toLowerCase()} circle.`); return; }
       const list = this.cc.marks[this.cc.active];
       const k = list.findIndex((m) => Math.hypot(m.xM - hit.xM, m.yM - hit.yM) < 14);
-      if (k >= 0) list.splice(k, 1); else list.push({ xM: hit.xM, yM: hit.yM });
-      announce(k >= 0 ? 'Mark removed.' : `Crater marked. ${list.length} in this patch.`);
+      // Review F12: every mark is kept (it is the learner's count), but a mark that is not on a
+      // crater of the computer count is flagged at once, so a click on bare ground does not pass silently.
+      const onCrater = k < 0 && this._onListedCrater(p, hit.xM, hit.yM);
+      if (k >= 0) list.splice(k, 1); else list.push({ xM: hit.xM, yM: hit.yM, onCrater });
+      if (k < 0 && !onCrater) a.shell.toast('Marked, but the computer count has no crater of 80 m or more there. Look for a round, shadowed bowl.', 4500);
+      announce(k >= 0 ? 'Mark removed.' : `Crater marked${onCrater ? '' : ', not on a computer-counted crater'}. ${list.length} in this patch.`);
       this._drawMarks();
       this.refresh();
     } else if (this._active?.id === 'm2-profile' && this.picking) {
@@ -699,6 +705,11 @@ export class Lessons {
       if (this._pickPts.length === 1) { this.surface.addMarker('prof-a', hit.xM, hit.yM, '1'); a.shell.toast('Start set. Now the end point.'); }
       else { const [A, B] = this._pickPts; this.picking = false; this._profileIdx = -1; this._measure(A.xM, A.yM, B.xM, B.yM); }
     }
+  }
+
+  /** Is (x, z) inside a crater of the patch's computer count (its rim plus 10 m)? */
+  _onListedCrater(patch, x, z) {
+    return patch.craters.some((c) => { const q = this.terrain.fromLonLat(c.lonLat.lon, c.lonLat.lat); return Math.hypot(q.xM - x, q.yM - z) <= c.diameterM / 2 + 10; });
   }
 
   _submitCounts() {
@@ -721,6 +732,7 @@ export class Lessons {
         const names = c.patches.map((p) => p.name);
         b.append(dataTable(['Patch', 'Your count', 'Area', 'Density (per km²)'], c.patches.map((p) => [p.name, c.result.counts[p.id], `${p.areaKm2} km²`, c.result.densities[p.id]]), 'Your counts. The patches have the same area.'));
         para(b, densityComparison(names, c.result.densities.mare, c.result.densities.front));
+        for (const p of c.patches) { const m = c.marks[p.id]; if (m.length) para(b, `${p.name}: ${m.filter((x) => x.onCrater).length} of your ${m.length} marks are on a crater of the computer count.`); }
         b.append(dataTable(['Patch', 'Computer count', 'Density (per km²)', 'Diameters (m)'], c.patches.map((p) => [p.name, p.craters.length, p.densityPerKm2, p.craters.map((q) => q.diameterM).join(', ') || 'none']), 'Computer count (approximate) from the NASA terrain model. Real counters disagree.'));
         para(b, METHOD_NOTE);
         this.record.log('experienced', { id: 'crater-reference', name: 'Reference count revealed' });
@@ -1217,6 +1229,9 @@ export const CLOCKS = {
   ],
   correct: 'b',
 };
+
+/** Camera azimuth over a counting patch (rig theta: the camera sits east of the patch, looking west). */
+const PATCH_THETA = 1.3;
 
 export const METHOD_NOTE = 'The Front patch shows fewer craters, yet the Front is the older material (about 3.9 billion years, against about 3.3 billion for the plain’s lavas). Steep slopes erode and bury craters, so crater counting works as a clock only on flat, stable ground. The Front’s age comes from rock samples. The plain’s count is the meaningful clock reading.';
 

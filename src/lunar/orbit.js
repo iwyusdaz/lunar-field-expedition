@@ -73,6 +73,13 @@ export class OrbitScene {
     this.sun.position.copy(this.sunDir).multiplyScalar(R * 4);
     this.group.add(this.sun, this.sun.target);
     this.group.add(new THREE.HemisphereLight(0x555a66, 0x111114, 0.06));
+    // Earthshine: sunlight reflected by Earth dimly lights the near side's
+    // night half. Earth stays over the near side (0 N, 0 E), so the light turns
+    // with the globe. Brightness illustrative (far brighter than real, so the eye can see it).
+    this.earthshine = new THREE.DirectionalLight(0xb8c6e0, 0.22);
+    this.earthshine.position.copy(globePoint(0, 0, R * 4));
+    this.earthshine.target.position.set(0, 0, 0);
+    this.globe.add(this.earthshine, this.earthshine.target);
     // Landing-site cue: a glint at Hadley (labelled in the legend).
     this.siteGlint = createGlint('Landing site glint: Hadley, where Apollo 15 landed', { size: 90000 });
     this.siteGlint.position.copy(globePoint(SITE.lat, SITE.lon, R + 30000));
@@ -81,8 +88,8 @@ export class OrbitScene {
     this.imbrium = capMesh(32.8, -15.6, 18.9, 2500);
     this.imbrium.name = 'mare-imbrium';
     this.globe.add(this.imbrium);
-    // Practice cue: a thin line round the basin rim, shown while Mare Imbrium is
-    // the practice target (legend: "Practice target outline").
+    // A thin line round the basin rim, shown while Mare Imbrium is the practice
+    // target or its card is open (legend: "Mare Imbrium outline").
     const rim = [];
     const c = globePoint(32.8, -15.6, 1).normalize();
     const e1 = new THREE.Vector3(0, 1, 0).cross(c).normalize(), e2 = c.clone().cross(e1);
@@ -92,13 +99,14 @@ export class OrbitScene {
       rim.push(c.clone().multiplyScalar(Math.cos(a)).addScaledVector(e1, Math.sin(a) * Math.cos(t)).addScaledVector(e2, Math.sin(a) * Math.sin(t)).multiplyScalar(R + 9000));
     }
     this.imbriumRim = new THREE.Line(new THREE.BufferGeometry().setFromPoints(rim), new THREE.LineBasicMaterial({ color: 0xffd27a, transparent: true, opacity: 0.9 }));
-    this.imbriumRim.userData.marker = { label: 'Practice target outline' };
+    this.imbriumRim.userData.marker = { label: 'Mare Imbrium outline' };
     this.imbriumRim.raycast = () => {};
     this.imbriumRim.visible = false;
     this.globe.add(this.imbriumRim);
     const band = new THREE.Mesh(new THREE.CylinderGeometry(R + 12000, R + 12000, 160000, 96, 1, true), pickMat()); // about 5 deg wide, above the highest relief
     band.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), this.sunDir);
     band.name = 'terminator';
+    band.userData.noOutline = true; // a pick band: its outline would draw bars at the poles
     this.terminator = band;
     this.group.add(band);
     await this._stars();
@@ -135,21 +143,31 @@ export class OrbitScene {
     for (const o of [this.globe, this.imbrium, this.terminator]) o.userData.scaleFrame = 'local';
     if (!inspect.items.has('moon-globe')) inspect.register('moon-globe', this.globe, { frame: { look: true, heightFrac: 0.6 } });
     const cam = inspect.camera;
-    // Imbrium: a telephoto view of the whole dark basin (about 1,150 km across).
+    // Imbrium: a telephoto view of the whole dark basin (about 1,150 km across)
+    // edge to edge with a margin, its rim outlined while the card is open (review pass 2 F5).
     const imbriumView = () => {
       const c = this.globe.localToWorld(globePoint(32.8, -15.6, R));
       const d = cam.position.distanceTo(c);
-      return { eye: cam.position.toArray(), center: c.toArray(), fov: THREE.MathUtils.radToDeg(2 * Math.atan(1146000 / 2 / d)) / 0.7 };
+      return { eye: cam.position.toArray(), center: c.toArray(), fov: THREE.MathUtils.radToDeg(2 * Math.atan(1146000 / 2 / d)) / 0.55 };
     };
     if (!inspect.items.has('mare-imbrium')) inspect.register('mare-imbrium', this.imbrium, { frame: { view: imbriumView } });
-    if (!this._cueBound) { this._cueBound = true; inspect.on('cue', (id) => { this.imbriumRim.visible = id === 'mare-imbrium'; }); }
-    // Terminator: a telephoto view along the day-night line where it crosses the
-    // side facing the camera, half lit and half dark, with long shadows.
+    if (!this._cueBound) {
+      this._cueBound = true;
+      const show = () => { this.imbriumRim.visible = inspect.cued === 'mare-imbrium' || inspect.selected === 'mare-imbrium'; };
+      inspect.on('cue', show); inspect.on('open', show); inspect.on('close', show);
+    }
+    // Terminator: the day-night line where it crosses the side facing the
+    // camera, framed wide enough to show it curving across the disc, the lit
+    // side and the earthshine-lit night side (review pass 2 F10).
+    // The camera moves round to where the Sun is side-on (half-moon phase), so
+    // the line runs across the middle of the disc instead of along its edge.
     const terminatorView = () => {
-      const eye = cam.position.clone();
-      const d = eye.clone().normalize();
-      const p = d.addScaledVector(this.sunDir, -d.dot(this.sunDir)).normalize().multiplyScalar(R);
-      return { eye: eye.toArray(), center: p.toArray(), fov: 16 };
+      const dist = cam.position.length();
+      const d = cam.position.clone().normalize();
+      const n = d.addScaledVector(this.sunDir, -d.dot(this.sunDir)).normalize();
+      const eye = n.clone().multiplyScalar(dist);
+      const p = n.clone().multiplyScalar(R);
+      return { eye: eye.toArray(), center: p.toArray(), fov: THREE.MathUtils.radToDeg(2 * Math.atan(0.8 * R / eye.distanceTo(p))) };
     };
     if (!inspect.items.has('terminator')) inspect.register('terminator', this.terminator, { frame: { view: terminatorView } });
   }
