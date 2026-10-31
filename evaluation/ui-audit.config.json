@@ -47,13 +47,13 @@
     },
     {
       "name": "sky-overhead",
-      "label": "Watch the orbiter climb from the eastern horizon",
+      "label": "Watch the orbiter pass over the site, the rover driving below",
       "steps": [
         {
           "eval": "window.__TEST__.scene.surface.sky.orbiterPhase = 0.01"
         },
         {
-          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.orbiterDirection(0.2); window.__TEST__.lessons.lookToward({ x: d.x, y: d.y - 0.3, z: d.z }, 14, 12, 0.05); })()"
+          "eval": "(() => { const d = window.__TEST__.scene.surface.sky.orbiterDirection(0.2); const h = Math.hypot(d.x, d.z) || 1; window.__TEST__.lessons.lookToward({ x: d.x, y: d.y - 0.3, z: d.z }, 22 - d.x / h * 30, 0 - d.z / h * 30, 0.05); })()"
         },
         {
           "wait": 1500
