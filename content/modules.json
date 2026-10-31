@@ -54,7 +54,7 @@
       "steps": [
         { "id": "m4-hypothesis", "kind": "hypothesis", "text": "Choose the question your traverse must answer. Your route, stations and tools should all serve it." },
         { "id": "m4-plan", "kind": "traverse-plan", "text": "Plan your route on the map: pick up to 4 stations and the tool to use at each. Time and consumables are limited — slopes cost more. This is a simplified model of EVA planning; the real crew worked under far tighter rules." },
-        { "id": "m4-run", "kind": "traverse-run", "text": "Drive the plan. At each station you use the tool you chose; the results go to your evidence board." },
+        { "id": "m4-run", "kind": "traverse-run", "text": "Drive the plan. At each station you use the tool you chose; the results go to your field notebook." },
         { "id": "m4-debrief", "kind": "traverse-debrief", "text": "Debrief: your traverse beside the real Apollo 15 routes, and what the crew actually found at each stop." }
       ]
     },
@@ -64,7 +64,7 @@
       "coreQuestion": "What do we conclude, and what is the evidence?",
       "objectiveFocus": [5],
       "steps": [
-        { "id": "m5-board", "kind": "evidence-board", "text": "Review your evidence board: every observation, measurement and sample your traverse collected." },
+        { "id": "m5-board", "kind": "evidence-board", "text": "Review your field notebook: every observation, measurement and sample your traverse collected." },
         { "id": "m5-cer", "kind": "cer-builder", "text": "Build your field report: claim, evidence, reasoning, uncertainty. The app checks that you CITED specific evidence types; it never grades your writing." },
         { "id": "m5-selfcheck", "kind": "rubric-selfcheck", "text": "Compare your draft with the exemplar and rate yourself against the rubric. This is a self-check, not a grade." },
         { "id": "m5-comparison", "kind": "apollo-comparison", "text": "Compare with history: what the Apollo 15 crew actually did here, and the Genesis Rock story." },

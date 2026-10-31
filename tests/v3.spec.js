@@ -140,7 +140,7 @@ test('keyboard-only completion of all five modules', async ({ page }) => {
   // Module 4: question, planner in the drawer (stations, drive, stops), debrief
   await kb(page, page.locator('[data-ui="now-card"] [data-choice="h-front"]'));
   await kb(page, now(page, /Next step/));
-  await kb(page, now(page, /Open the planner/));
+  await kb(page, now(page, /Open the traverse planner/));
   for (const name of [/Spur/, /Dune/]) await kb(page, drawer(page).locator('.tp-add').filter({ hasText: name }));
   await kb(page, drawer(page).locator('.tp-drive'));
   for (let i = 0; i < 4; i++) {
@@ -154,7 +154,7 @@ test('keyboard-only completion of all five modules', async ({ page }) => {
   await kb(page, now(page, /Next step/));
   await kb(page, now(page, /Next module/));
   // Module 5: notebook, report, self-check, comparison, post-check
-  await kb(page, now(page, /Open the notebook/));
+  await kb(page, now(page, /Open the field notebook/));
   await kb(page, drawer(page).getByRole('button', { name: /I have reviewed it/ }));
   await kb(page, now(page, /Next step/));
   await kb(page, now(page, /Write the report/));
@@ -248,6 +248,28 @@ test('card hold: the rover and the walking geologist stay in their inspect frame
   await page.waitForTimeout(1500);
   expect(await pos()).not.toEqual(a);
 });
+test('Sun time-lapse runs on after every landform card (review pass 2 F1)', async ({ page }) => {
+  await ready(page);
+  await T(page, () => window.__TEST__.app.goModule(4));
+  await page.waitForTimeout(3000);
+  const cards = ['craterlets', 'dune-crater', 'mare-plain', 'footprints', 'rover-tracks', 'regolith', 'spur-crater', 'elbow-crater', 'st-george-crater', 'mount-hadley', 'hadley-delta', 'apennine-front'];
+  // Each card on its own (open, close), then card to card without closing, then a card left open across a module change.
+  for (const id of cards) { await T(page, (x) => window.__TEST__.inspect.open(x), id); await page.waitForTimeout(250); await T(page, () => window.__TEST__.inspect.close()); }
+  for (const id of cards) await T(page, (x) => window.__TEST__.inspect.open(x), id);
+  await T(page, () => window.__TEST__.inspect.open('lm-descent-stage'));
+  await T(page, () => window.__TEST__.inspect.open('hadley-delta'));
+  await T(page, () => window.__TEST__.app.goModule(3));
+  await page.waitForTimeout(1500);
+  await T(page, () => { window.__TEST__.inspect.close(); window.__TEST__.app.goModule(4); });
+  await page.waitForTimeout(1500);
+  const sun = () => T(page, () => { const s = window.__TEST__.scene.surface; return { e: s.sky.sunElevationDeg, low: s._lowSun, before: s._sunBefore, hold: s.sunHold, held: [...window.__TEST__.motion.held] }; });
+  const a = await sun();
+  expect(a).toMatchObject({ low: 0, before: null, hold: false, held: [] });
+  await page.waitForTimeout(3000);
+  const b = await sun();
+  expect(b.e).not.toBeCloseTo(a.e, 1);
+});
+
 test('motion report: at least eight systems on four layers, every label on a card', async ({ page }) => {
   await ready(page);
   const r = await T(page, () => ({ rep: window.__TEST__.motion.report(), problems: window.__TEST__.motion.checkLabels(window.__TEST__.catalog) }));

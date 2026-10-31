@@ -1,5 +1,5 @@
 {
-  "_note": "Extra exploration states for the plan 10 §7 gates and catalog reach: views a learner reaches with the camera rig (walk, look up, the Go to Spur crater button). Module states m1-m5 come from the stepper. The orbit view (m1) is the secondary scene (3 catalog objects), so it is not a main scene. Drawer states (S5 review F12): the notebook, field report, rubric self-check, Apollo comparison, traverse planner and crater results drawers, opened from their Now-card buttons.",
+  "_note": "Extra exploration states for the plan 10 §7 gates and catalog reach: views a learner reaches with the camera rig (walk, look up, the Go to Spur crater button). Module states m1-m5 come from the stepper. The orbit view (m1) is the secondary scene (3 catalog objects), so it is not a main scene. Drawer states (S5 review F12): the field notebook, field report, rubric self-check, Apollo comparison, traverse planner and crater results drawers, opened from their Now-card buttons.",
   "notMainScene": "^(start|m1)$",
   "settleMs": 3500,
   "extraStates": [
@@ -89,7 +89,7 @@
     },
     {
       "name": "drawer-board",
-      "label": "Module 5: Open the notebook (evidence board drawer)",
+      "label": "Module 5: Open the field notebook (Field notebook drawer)",
       "steps": [
         {
           "eval": "window.__TEST__.lessons.app.goModule(4); window.__TEST__.lessons.step[4] = 0; window.__TEST__.lessons._enterStep(4); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"
@@ -137,7 +137,7 @@
     },
     {
       "name": "drawer-planner",
-      "label": "Module 4: Open the planner (traverse planner drawer)",
+      "label": "Module 4: Open the traverse planner (Traverse planner drawer)",
       "steps": [
         {
           "eval": "window.__TEST__.lessons.app.goModule(3); window.__TEST__.lessons.step[3] = 1; window.__TEST__.lessons._enterStep(3); window.__TEST__.lessons.refresh(); document.querySelector('[data-ui=now-card] [data-action=now-primary]').click()"

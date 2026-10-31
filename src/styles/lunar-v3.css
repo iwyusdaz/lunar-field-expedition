@@ -47,6 +47,10 @@
 .v3 .tp-plan-col { flex: 1 1 16rem; min-width: 14rem; }
 .v3 .tp-stations { display: flex; flex-direction: column; gap: 4px; }
 .v3 .tp-route { padding-left: 1.3rem; }
+.v3 .tp-needs { border-left: 3px solid var(--v3-accent); padding-left: 10px; margin: 8px 0; }
+.v3 .tp-needs h4 { font-size: var(--type-body); margin: 0 0 4px; }
+.v3 .tp-needs-list { list-style: none; padding-left: 0; margin: 0; }
+.v3 .tp-needs-list li[data-met="true"] > span { color: var(--v3-ok); }
 .v3 .tp-route select, .v3 select { font: inherit; min-height: 44px; color: var(--v3-text); background: var(--v3-surface-solid); border: 1px solid var(--v3-border); border-radius: 8px; }
 .v3 .meter label { display: block; }
 .v3 meter, .v3 progress { width: 100%; height: 14px; }

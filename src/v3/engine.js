@@ -13,6 +13,8 @@ import { QualityManagerV3, PresetAutoPick } from './quality.js';
 import { RenderChain } from './render-chain.js';
 import { GpuTimer } from './gpu-timer.js';
 
+export const READING_SCALE = 0.8;
+
 export class EngineV3 {
   /**
    * @param {HTMLCanvasElement} canvas
@@ -53,6 +55,7 @@ export class EngineV3 {
     this._fpsT = 0;
     this._fpsFrames = 0;
     this._t = 0;
+    this.readingScale = 1;
     this.clock = new THREE.Clock(false);
 
     this._onResize = () => this.resize();
@@ -64,7 +67,7 @@ export class EngineV3 {
   resize() {
     const w = this.canvas.clientWidth || window.innerWidth;
     const h = this.canvas.clientHeight || window.innerHeight;
-    this.renderer.setPixelRatio(this.quality.pixelRatio());
+    this.renderer.setPixelRatio(this.quality.pixelRatio() * this.readingScale);
     this.renderer.setSize(w, h, false);
     this.chain.setSize(w, h);
     this.camera.aspect = w / h;
@@ -108,6 +111,20 @@ export class EngineV3 {
     const q = this.quality;
     if (this.fps < 45 && q.resolutionScale > 0.6) { q.resolutionScale = Math.max(0.6, q.resolutionScale - 0.05); this.resize(); }
     else if (this.fps > 58 && q.resolutionScale < q.presetDef.resolutionScale) { q.resolutionScale = Math.min(q.presetDef.resolutionScale, q.resolutionScale + 0.05); this.resize(); }
+  }
+
+  /**
+   * Reading mode: while a drawer covers part of the view the learner is
+   * reading, so the scene renders at 80% of its pixel ratio (about 36% fewer
+   * pixels). The S5 pilot measured drawer states at the edge of the 12 ms GPU
+   * budget with spikes unrelated to streaming; this keeps them inside it.
+   * @param {boolean} on
+   */
+  setReading(on) {
+    const s = on ? READING_SCALE : 1;
+    if (s === this.readingScale) return;
+    this.readingScale = s;
+    this.resize();
   }
 
   pause() { this._paused = true; }

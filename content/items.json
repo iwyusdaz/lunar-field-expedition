@@ -119,7 +119,7 @@
     "post": [
       {
         "id": "post-1",
-        "prompt": "A winding rille and a 40 km impact basin lie side by side. Which clue tells them apart?",
+        "prompt": "A winding rille and a 40 km impact crater lie side by side. Which clue tells them apart?",
         "options": [
           {
             "id": "a",

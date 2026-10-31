@@ -9,7 +9,7 @@ import {
 } from '../../src/lunar/frame.js';
 import { SKY_RADIUS } from '../../src/lunar/sky.js';
 import { SurfaceScene } from '../../src/lunar/surface.js';
-import { Lessons, short } from '../../src/lunar/lessons.js';
+import { Lessons, short, SUPERPOSITION, CLOCKS } from '../../src/lunar/lessons.js';
 import { MotionLayerManager } from '../../src/v3/motion-layers.js';
 import { createCatalog, countWords } from '../../src/v3/catalog.js';
 import catalogRaw from '../../content/objects.json';
@@ -132,5 +132,23 @@ describe('orbit globe geography (review F1)', async () => {
     const spun = (lat, lon) => globePoint(lat, lon, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), START_SPIN);
     expect(spun(26.13, 3.63).dot(cam)).toBeGreaterThan(0.9);
     expect(spun(32.8, -15.6).dot(cam)).toBeGreaterThan(0.75);
+  });
+});
+
+describe('answer feedback in the Now card (review pass 2 F15)', () => {
+  const whys = [
+    ...Object.values(items.sets).flatMap((s) => s.flatMap((i) => i.options.map((o) => o.why))),
+    ...features.features.flatMap((f) => f.options.map((o) => o.why)),
+    ...SUPERPOSITION.options.map((o) => o.why), ...CLOCKS.options.map((o) => o.why),
+  ];
+  it('every explanation shortens to one whole sentence of 4 to 30 words', () => {
+    for (const w of whys) {
+      const s = short(w);
+      const n = s.split(/\s+/).length;
+      expect(s, w).toMatch(/^[A-Z].*[.!?]$/);
+      expect(n, s).toBeGreaterThanOrEqual(4);
+      expect(n, s).toBeLessThanOrEqual(30);
+      expect(w.replace(/^Correct\s*[.:,;—–-]*\s*/i, '').toLowerCase()).toContain(s.slice(1).toLowerCase());
+    }
   });
 });

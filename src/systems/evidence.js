@@ -61,7 +61,7 @@ export class EvidenceBoard {
   render(container) {
     container.innerHTML = '';
     const h = document.createElement('h3');
-    h.textContent = `Evidence board (${this.items.length})`;
+    h.textContent = `Entries (${this.items.length})`;
     container.appendChild(h);
     if (!this.items.length) {
       const p = document.createElement('p');

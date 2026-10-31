@@ -27,7 +27,7 @@
   ],
   "stations": [
     {
-      "id": "lm",
+      "id": "lm", "mapLabel": "LM",
       "name": "Landing site (your LM)",
       "lon": 3.6333, "lat": 26.13239,
       "positionQuality": "verified (research log, two sources)",
@@ -35,7 +35,7 @@
       "blurb": "Falcon, the lunar module descent stage, sits on the mare plain between the rille and the mountain front."
     },
     {
-      "id": "elbow",
+      "id": "elbow", "mapLabel": "Elbow",
       "name": "Elbow crater",
       "apolloStation": "1",
       "lon": 3.60079, "lat": 26.02822,
@@ -43,7 +43,7 @@
       "blurb": "Where the rille bends around the mountain's toe — a mare station on the rille's outer bank."
     },
     {
-      "id": "stgeorge",
+      "id": "stgeorge", "mapLabel": "St. George",
       "name": "St. George crater",
       "apolloStation": "2",
       "lon": 3.54022, "lat": 25.9694,
@@ -51,7 +51,7 @@
       "blurb": "A large crater at the base of the Apennine Front. Apollo 15's Station 2 sampled boulders here."
     },
     {
-      "id": "dune",
+      "id": "dune", "mapLabel": "Dune",
       "name": "Dune crater (South Cluster)",
       "apolloStation": "4",
       "lon": 3.6345, "lat": 26.056,
@@ -60,7 +60,7 @@
       "blurb": "A fresh crater south of the LM; Apollo 15's Station 4. Fresh ejecta exposes what lies beneath the plain."
     },
     {
-      "id": "front6",
+      "id": "front6", "mapLabel": "Front",
       "name": "Apennine Front slope",
       "apolloStation": "6",
       "lon": 3.643, "lat": 26.006,
@@ -69,7 +69,7 @@
       "blurb": "The lower slope of the Front. Apollo 15's Station 6, about 5 km from the LM, sampled Front material."
     },
     {
-      "id": "spur",
+      "id": "spur", "mapLabel": "Spur",
       "name": "Spur crater",
       "apolloStation": "7",
       "lon": 3.66691, "lat": 25.98035,
@@ -77,7 +77,7 @@
       "blurb": "On the Front's slope. Apollo 15's Station 7 — where Scott and Irwin found the 'Genesis Rock'."
     },
     {
-      "id": "rille9a",
+      "id": "rille9a", "mapLabel": "Rille rim",
       "name": "Hadley Rille rim",
       "apolloStation": "9a",
       "lon": 3.585, "lat": 26.176,

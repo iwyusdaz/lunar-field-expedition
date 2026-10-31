@@ -25,6 +25,18 @@ import { countWords } from './catalog.js';
 export const NOW_CARD_MAX_WORDS = 60;
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+/**
+ * One name per drawer: a button labelled "Open …" must contain every word of
+ * the drawer title it opens ("Open the field notebook" → "Field notebook").
+ * Other labels ("Why?", "Read more") are not checked.
+ */
+export function drawerNamed(label, title) {
+  if (!/^open\b/i.test(String(label).trim())) return true;
+  const words = (s) => String(s).toLowerCase().match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || [];
+  const have = new Set(words(label));
+  return words(title).filter((w) => !['the', 'a', 'an', 'my', 'your'].includes(w)).every((w) => have.has(w));
+}
+
 export class SceneShell {
   /**
    * @param {object} o
@@ -227,7 +239,10 @@ export class SceneShell {
    * @param {object} n
    * @param {number} [n.step]  @param {number} [n.total]
    * @param {string} n.goal    heading
-   * @param {string} [n.action] the one action to take
+   * @param {string} [n.action] the one action to take, action first ("Press Next step", "Click two
+   *   spots"); a card with no question always says what to do next
+   * @param {string} [n.result] a readout or outcome of what the learner just did (a measurement,
+   *   "Saved"), shown under the action, never in place of it
    * @param {string} [n.hint]   control hint for it
    * @param {{ label: string, onClick: Function, disabled?: boolean }} [n.primary]
    * @param {{ label: string, onClick: Function, play?: boolean }} [n.secondary]  e.g. Watch (sets data-ui="play-cinematic" when play)
@@ -250,6 +265,7 @@ export class SceneShell {
         ${kicker ? `<p class="v3-kicker">${esc(kicker)}</p>` : ''}
         <h2 class="v3-now-goal">${esc(n.goal)}</h2>
         ${n.action ? `<p class="v3-now-action">${esc(n.action)}</p>` : ''}
+        ${n.result ? `<p class="v3-now-result" role="status">${esc(n.result)}</p>` : ''}
         ${q ? `<fieldset class="v3-question"><legend>${esc(q.prompt)}</legend>${q.choices.map((c) => `<button type="button" class="v3-btn v3-choice" data-choice="${esc(c.id)}">${esc(c.text)}</button>`).join('')}</fieldset><p class="v3-feedback" role="status"></p>` : ''}
         ${n.tool ? '<div class="v3-now-tool" data-now-tool></div>' : ''}
         ${n.hint ? `<p class="v3-hint">${esc(n.hint)}</p>` : ''}
@@ -262,6 +278,7 @@ export class SceneShell {
     if (n.tool) n.tool(this.now.querySelector('[data-now-tool]'), this);
     const words = countWords(this.now.querySelector('.v3-now-body').innerText || this.now.querySelector('.v3-now-body').textContent);
     if (words > NOW_CARD_MAX_WORDS) console.warn(`Now card has ${words} words (max ${NOW_CARD_MAX_WORDS}); move text to readMore.`);
+    if (!n.action && !q) console.warn(`Now card "${n.goal}" has no action: say what to do next.`);
     this.now.querySelector('[data-action="now-primary"]')?.addEventListener('click', () => n.primary.onClick());
     this.now.querySelector('[data-action="now-secondary"]')?.addEventListener('click', () => n.secondary.onClick());
     this.now.querySelector('[data-action="now-more"]')?.addEventListener('click', (e) => this.openDrawer({ title: n.readMore.title, render: n.readMore.render, trigger: e.currentTarget }));
@@ -304,7 +321,21 @@ export class SceneShell {
   }
 
   // ---------- drawer ----------
-  openDrawer({ title, render, trigger = null, key = null }) {
+  /**
+   * @param {object} d
+   * @param {string} d.title   the drawer's one name: the buttons that open it use the same words
+   *   ("Open the field notebook" opens "Field notebook"); a dev warning names any mismatch
+   * @param {(el: HTMLElement) => void} d.render
+   * @param {HTMLElement} [d.trigger]  focus returns here on close
+   * @param {string} [d.key]
+   * @param {() => void} [d.onClose]  called once when this drawer closes (✕, Esc, closeDrawer or
+   *   another drawer replacing it), e.g. to finish a "read this" step without a button at the bottom
+   */
+  openDrawer({ title, render, trigger = null, key = null, onClose = null }) {
+    this._finishDrawer();
+    this._drawerOnClose = onClose;
+    const said = (trigger?.innerText || trigger?.textContent || '').trim();
+    if (said && !drawerNamed(said, title)) console.warn(`Drawer "${title}" is opened by "${said}": use one name for a drawer.`);
     this.drawerKey = key;
     this.drawer.querySelector('#v3-drawer-title').textContent = title;
     const body = this.drawer.querySelector('.v3-drawer-body');
@@ -319,6 +350,7 @@ export class SceneShell {
     if (trigger) this.drawer.querySelector('#v3-drawer-title').focus({ preventScroll: true });
     this._watchDrawer(body);
     announce(`${title} opened`);
+    this._emit('drawer', true, key);
   }
 
   /** Scroll the drawer back to the top whenever its top-level content is replaced. */
@@ -337,7 +369,24 @@ export class SceneShell {
     this.root.dataset.drawerOpen = 'false';
     this._drawerTrigger?.focus?.();
     this._drawerTrigger = null;
+    this._finishDrawer();
+    this._emit('drawer', false, null);
     return true;
+  }
+
+  _finishDrawer() { const f = this._drawerOnClose; this._drawerOnClose = null; f?.(); }
+
+  /**
+   * Show the learner a result that just appeared in the drawer (a debrief, a
+   * saved message): scroll it into view and move focus to it, so a press that
+   * adds content below the fold visibly does something.
+   * @param {HTMLElement} el
+   */
+  revealInDrawer(el) {
+    if (!el) return;
+    if (!el.hasAttribute('tabindex')) el.tabIndex = -1;
+    el.scrollIntoView?.({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    el.focus({ preventScroll: true });
   }
 
   // ---------- title, chapter, toast ----------

@@ -177,6 +177,8 @@ export async function createSceneApp(o) {
     const h = shell.textModeRoot.querySelector('#v3-tm-objects-h');
     if (h) { h.tabIndex = -1; h.focus(); }
   });
+  // Reading mode (engine.setReading): a lighter render while a drawer is open.
+  shell.on('drawer', (open) => engine?.setReading(open));
   shell.on('action:journal', () => shell.openDrawer({ title: 'Discovery journal', key: 'journal', trigger: shell.root.querySelector('[data-action="menu"]'), render: (b) => renderJournal(b, journal) }));
   inspect?.on('change', () => { if (shell.drawerKey === 'objects') openObjects(); });
 

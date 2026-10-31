@@ -38,7 +38,7 @@ export class Onboarding {
     if (this.shell.walkable) list.push({ id: 'move', goal: 'Move', action: touch ? 'Push the joystick to walk a few steps.' : 'Walk a few steps with W A S D or the arrow keys.', hint: 'Double-click the ground to fly there.' });
     else list.push({ id: 'move', goal: 'Zoom', action: touch ? 'Pinch to zoom in or out.' : 'Zoom in or out with the mouse wheel.', hint: 'Keys: + and -.' });
     list.push({ id: 'click', goal: 'Click an object', action: name ? `${touch ? 'Tap' : 'Click'} the ${name}. It has an outline and its name.` : `${touch ? 'Tap' : 'Point at'} any object${touch ? '' : ' and click it'}.`, hint: touch ? 'Tap the outlined object.' : 'Names show when the pointer is over an object.' });
-    list.push({ id: 'inspect', goal: 'Read and close the card', action: 'The card tells you what the object is. Close it with ✕ or Esc.', hint: 'Every object you open goes into your journal.' });
+    list.push({ id: 'inspect', goal: 'Read and close the card', action: 'The card tells you what the object is. Close it with ✕ or Esc.', hint: 'Every object you open is listed in the Discovery journal (Menu).' });
     return list;
   }
 

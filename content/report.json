@@ -16,7 +16,7 @@
       {
         "id": "evidence",
         "label": "Evidence",
-        "prompt": "Cite specific observations and measurements from your evidence board. Name the place and the number (e.g., 'the profile across the rille at Station 9a showing ~370 m depth').",
+        "prompt": "Cite specific observations and measurements from your field notebook. Name the place and the number (e.g., 'the profile across the rille at Station 9a showing ~370 m depth').",
         "minChars": 120
       },
       {

@@ -406,7 +406,8 @@ export class Lessons {
         leave: () => L._clearProfile(),
         now: () => ({
           goal: 'Measure the rille',
-          action: L.profile ? `Relief ${L.profile.reliefM} m along ${(L.profile.distanceM / 1000).toFixed(1)} km. The line is real NASA height data.` : 'Pick a line. The chart shows the real height along it.',
+          action: L.profile ? L.hint('Try another line, or press Pick two points and click two spots. Then press Next module.', 'Try another line, or press Pick two points and tap two spots. Then press Next module.') : 'Pick a line. The chart shows the real height along it.',
+          result: L.profile ? `Relief ${L.profile.reliefM} m along ${(L.profile.distanceM / 1000).toFixed(1)} km of real NASA height data.` : undefined,
           tool: (box) => L._profileTool(box),
           hint: L.picking ? L.hint('Click the ground twice: start, then end.', 'Tap the ground twice: start, then end.') : undefined,
           primary: { label: 'Next module', disabled: !L.done('m2-profile'), onClick: () => L.next(1) },
@@ -754,10 +755,11 @@ export class Lessons {
         id: 'm4-plan', done: () => L.done('m4-plan'), flags: true,
         now: () => ({
           goal: L.done('m4-plan') ? 'Traverse driven' : 'Plan your traverse',
-          action: L.done('m4-plan') ? 'Your results are on the evidence board.' : 'Open the planner. Pick up to four stations and one tool at each, then drive.',
-          hint: 'Slopes cost more time. It is a simple model of a moonwalk.',
-          primary: L.done('m4-plan') ? { label: 'Next step', onClick: () => L.next(3) } : { label: 'Open the planner', onClick: (e) => L._openPlanner() },
-          secondary: L.done('m4-plan') ? { label: 'Open the planner', onClick: () => L._openPlanner() } : undefined,
+          action: L.done('m4-plan') ? 'Press Next step. Your results are in the field notebook.' : 'Open the traverse planner. Pick up to four stations and one tool at each, then drive.',
+          hint: L.done('m4-plan') ? undefined : 'Slopes cost more time. It is a simple model of a moonwalk.',
+          primary: L.done('m4-plan') ? { label: 'Next step', onClick: () => L.next(3) } : { label: 'Open the traverse planner', onClick: () => L._openPlanner() },
+          secondary: L.done('m4-plan') ? { label: 'Open the traverse planner', onClick: () => L._openPlanner(L.app.shell.now.querySelector('[data-action="now-secondary"]')) } : undefined,
+          readMore: L.done('m4-plan') ? { label: 'Open the field notebook', title: 'Field notebook', render: (b) => { const d = el('div'); b.append(d); L.board.render(d); } } : undefined,
         }),
       },
       {
@@ -802,7 +804,11 @@ export class Lessons {
     const planner = new TraversePlanner({
       container, site: { terrain: this.terrain },
       stationsContent: this.content.stations, board: this.board,
-      resultFor: (id) => this._stationResults(id),
+      // The chosen tool decides what a stop records (null lists every tool's results, for the tool menu).
+      resultFor: (id, toolId) => this._stationResults(id, toolId),
+      needs: (hyp) => this._neededTypes(hyp),
+      haveTags: () => this.board.tags(),
+      reveal: (node) => (this.app.shell.drawer.contains(node) ? this.app.shell.revealInDrawer(node) : (node.tabIndex = -1, node.scrollIntoView?.({ block: 'start' }), node.focus({ preventScroll: true }))),
       onPlanned: (plan) => { this.plan = plan; },
       onDebrief: ({ score, plan }) => {
         this.plan = plan || this.plan;
@@ -816,10 +822,10 @@ export class Lessons {
     return planner;
   }
 
-  _stationResults(stationId) {
+  _stationResults(stationId, toolId = null) {
     const res = this.content.stations.results[stationId];
     if (!res) return [];
-    return Object.entries(res).map(([toolId, r]) => ({ toolId, ...r, kind: toolId === 'sample' ? 'sample' : toolId === 'profile' ? 'measurement' : 'photo' }));
+    return Object.entries(res).filter(([t]) => !toolId || t === toolId).map(([toolId, r]) => ({ toolId, ...r, kind: toolId === 'sample' ? 'sample' : toolId === 'profile' ? 'measurement' : 'photo' }));
   }
 
   _realRoutes(show) {
@@ -844,24 +850,34 @@ export class Lessons {
     b.append(dataTable(['EVA', 'Duration', 'Route', 'What they found'], real.evas.filter((e) => e.route).map((e) => [
       e.label.split('(')[0].trim(), e.label.match(/\(([^)]+)\)/)?.[1] || '',
       e.route.map((id) => this.content.stations.stations.find((s) => s.id === id)?.name || id).join(' → '), e.found,
-    ]), 'The real Apollo 15 surface operations (source: research/apollo15-facts.md)'));
+    ]), 'The real Apollo 15 surface operations (source: NASA, “50 Years Ago: Apollo 15 on the Moon at Hadley-Apennine”, 2021)'));
   }
 
   // ------------------------------------------------------------ Module 5
   _m5Steps() {
     const L = this;
-    const drawerStep = (id, goal, action, open, title, render, { after } = {}) => ({
-      id, done: () => L.done(id),
-      now: () => ({
-        goal: L.done(id) ? `${goal}: done` : goal,
-        action: L.done(id) ? 'Saved. Go on when you are ready.' : action,
-        primary: L.done(id) ? { label: 'Next step', onClick: () => L.next(4) } : { label: open, onClick: () => L.app.shell.openDrawer({ title, key: id, trigger: L.app.shell.now.querySelector('[data-action="now-primary"]'), render: (b) => render(b) }) },
-        secondary: L.done(id) ? { label: open, onClick: () => L.app.shell.openDrawer({ title, key: id, render: (b) => render(b) }) } : after?.(),
-      }),
-    });
+    // A drawer step: the button opens its drawer (one name for both). With
+    // `completeOnClose`, closing the drawer (✕, Esc or its own button) finishes
+    // the step, so the card always offers Next step afterwards (review F19).
+    const drawerStep = (id, goal, action, open, title, render, { after, completeOnClose } = {}) => {
+      const show = (trigger) => L.app.shell.openDrawer({
+        title, key: id, trigger, render: (b) => render(b),
+        onClose: completeOnClose ? () => { if (!L.done(id)) { L.complete(id); L.refresh(); L.app.shell.now.querySelector('[data-action="now-primary"]')?.focus(); } } : null,
+      });
+      return {
+        id, done: () => L.done(id),
+        now: () => ({
+          goal: L.done(id) ? `${goal}: done` : goal,
+          action: L.done(id) ? 'Press Next step to go on.' : action,
+          result: L.done(id) && !completeOnClose ? 'Saved.' : undefined,
+          primary: L.done(id) ? { label: 'Next step', onClick: () => L.next(4) } : { label: open, onClick: () => show(L.app.shell.now.querySelector('[data-action="now-primary"]')) },
+          secondary: L.done(id) ? { label: open, onClick: () => show(L.app.shell.now.querySelector('[data-action="now-secondary"]')) } : after?.(),
+        }),
+      };
+    };
     return [
       {
-        ...drawerStep('m5-board', 'Review your evidence', 'Open the notebook. Each card is an observation, a measurement or a sample you collected.', 'Open the notebook', 'Evidence board', (b) => {
+        ...drawerStep('m5-board', 'Review your evidence', 'Open the field notebook. Each card is an observation, a measurement or a sample you collected.', 'Open the field notebook', 'Field notebook', (b) => {
           para(b, L.stepText('m5-board'));
           const d = el('div'); b.append(d); L.board.render(d);
           b.append(btn('I have reviewed it', () => { L.complete('m5-board'); L.app.shell.closeDrawer(); L.refresh(); }, 'v3-btn v3-primary'));
@@ -869,12 +885,12 @@ export class Lessons {
         enter: () => { if (L.app.engine) L.fly(L.viewRel(2, 2, 26, 2.45, 1.32, 1.2)); },
       },
       drawerStep('m5-cer', 'Write your field report', 'Write a claim, your evidence, your reasoning and what is still uncertain.', 'Write the report', 'Field report', (b) => L._cer(b, () => { L.app.shell.closeDrawer(); L.refresh(); })),
-      drawerStep('m5-selfcheck', 'Check your report', 'Compare it with an example report. Then rate yourself. This is a mirror, not a grade.', 'Open the self-check', 'Rubric self-check', (b) => L._selfCheck(b, () => { L.app.shell.closeDrawer(); L.refresh(); })),
+      drawerStep('m5-selfcheck', 'Check your report', 'Compare it with an example report. Then rate yourself. This is a mirror, not a grade.', 'Open the self-check', 'Self-check', (b) => L._selfCheck(b, () => { L.app.shell.closeDrawer(); L.refresh(); })),
       {
-        ...drawerStep('m5-comparison', 'Compare with history', 'See what the Apollo 15 crew did here, and the story of the Genesis Rock.', 'Read the comparison', 'Apollo 15 at Hadley', (b) => {
+        ...drawerStep('m5-comparison', 'Compare with history', 'See what the Apollo 15 crew did here, and the story of the Genesis Rock.', 'Read the comparison', 'The comparison: Apollo 15 at Hadley', (b) => {
           L._comparison(b);
-          b.append(btn('Done reading', () => { L.complete('m5-comparison'); L.app.shell.closeDrawer(); L.refresh(); }, 'v3-btn v3-primary'));
-        }, { after: () => (L.app.engine ? { label: 'Go to Spur crater', onClick: () => L.goSpur() } : undefined) }),
+          b.append(btn('Done reading', () => L.app.shell.closeDrawer(), 'v3-btn v3-primary'));
+        }, { completeOnClose: true, after: () => (L.app.engine ? { label: 'Go to Spur crater', onClick: () => L.goSpur() } : undefined) }),
       },
       L._checkStep('post', 'm5-postcheck', 4),
     ];
@@ -890,6 +906,24 @@ export class Lessons {
     // view (and the rock) on it once the tiles are there.
     clearTimeout(this._spurT);
     this._spurT = setTimeout(() => { s.groundAll(); this.fly(this.viewWorld(x, z, 0.9, 2.6, 1.05, 0.05), 0.5); }, 3500);
+  }
+
+  /** The evidence types the field report requires for a question (report.json), in plain words. */
+  _neededTypes(hypId) {
+    const rep = this.content.report.report;
+    const types = rep.evidenceTypes || [];
+    const typeOf = (tag) => types.find((t) => t.tags.includes(tag)) || { id: tag, tags: [tag], label: tag };
+    return [...new Set((rep.requiredEvidenceTags[hypId] || []).map(typeOf))];
+  }
+
+  /** From the field report back to the traverse planner (Module 4), to collect what is missing. */
+  backToTraverse() {
+    this.app.shell.closeDrawer();
+    this.app.goModule(3);
+    this.step[3] = 1;
+    this._enterStep(3);
+    this.refresh();
+    if (this.app.engine) this._openPlanner(); else this.app.shell.toast('The traverse planner is in the text for Module 4.');
   }
 
   _cer(el0, onSaved) {
@@ -918,7 +952,7 @@ export class Lessons {
       if (need) text.prepend(el('strong', { className: 'lfe-need', textContent: 'Needed · ' }));
       fs.append(el('label', { className: 'lfe-check' }, cb, text));
     }
-    if (!this.board.items.length) para(fs, 'Your evidence board is empty. Finish the earlier modules first.');
+    if (!this.board.items.length) para(fs, 'Your field notebook is empty. Finish the earlier modules first.');
     el0.append(fs);
     const draft = { ...(this.state.state.report?.draft || {}) };
     const fields = [];
@@ -932,13 +966,16 @@ export class Lessons {
     for (const c of rep.rubric) { det.append(el('h4', { textContent: c.name })); const ol = el('ol'); for (const l of c.levels) ol.append(el('li', { textContent: l })); det.append(ol); }
     el0.append(det);
     const msg = el('p', { role: 'status' });
-    el0.append(msg, btn('Save report', () => {
+    const back = btn('Go back to the traverse', () => this.backToTraverse());
+    back.hidden = true;
+    el0.append(msg, back, btn('Save report', () => {
       const missing = required.filter((t) => !checked.has(t));
       const shortF = fields.filter((f) => f.ta.value.trim().length < f.min).map((f) => f.id);
       this.state.state.report = { ...(this.state.state.report || {}), draft: { ...draft }, citedTags: [...checked], hypothesis: hypId };
       this.state.save();
       this.record.log('completed', { id: 'm5-cer', name: 'Field report saved' }, { response: { cited: checked.size, missing } });
-      if (missing.length) { msg.textContent = `Still needed: ${[...new Set(missing.map((t) => typeOf(t).label.split(':')[0]))].join('; ')}. Tick them (or collect them in the traverse) and save again.`; return; }
+      back.hidden = !missing.length;
+      if (missing.length) { msg.textContent = `Still needed: ${[...new Set(missing.map((t) => typeOf(t).label.split(':')[0]))].join('; ')}. Tick them, or go back to the traverse to collect them, then save again.`; return; }
       msg.textContent = shortF.length ? `Saved. These sections are shorter than the guide length: ${shortF.join(', ')}.` : 'Saved. All required evidence types are cited.';
       this.state.completeStep('m5-cer', { saved: true });
       setTimeout(() => onSaved?.(), 1200);
@@ -969,7 +1006,7 @@ export class Lessons {
     b.append(el('img', { src: `${BASE}assets/photos/as15-89-12100.jpg`, className: 'lfe-photo', alt: 'NASA Apollo 15 photograph AS15-89-12100: telephoto view looking across Hadley Rille during the third EVA. The blocky outcrop at the top of the debris-covered west wall is about 1.9 km from the camera.' }));
     para(b, 'NASA photo AS15-89-12100, "Telephoto view across Hadley Rille photographed during Apollo 15 EVA" (2 Aug. 1971, EVA 3; public domain). The layered outcrops in the rille wall are the ones the crew photographed from Stations 9a and 10.');
     b.append(el('h3', { textContent: 'The Genesis Rock (sample 15415)' }));
-    para(b, 'At Spur crater (Station 7) on EVA 2, Scott and Irwin found a white crystalline rock later called the Genesis Rock: a 270-gram anorthosite, almost pure plagioclase feldspar from the Moon’s early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 billion. It was not the very first crust, but it is exceptionally ancient: the kind of deep-crust material a traverse to the Front looks for. (Sources: research/apollo15-facts.md.)');
+    para(b, 'At Spur crater (Station 7) on EVA 2, Scott and Irwin found a white crystalline rock later called the Genesis Rock: a 270-gram anorthosite, almost pure plagioclase feldspar from the Moon’s early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 billion. It was not the very first crust, but it is exceptionally ancient: the kind of deep-crust material a traverse to the Front looks for. (Sources: NASA Apollo 15 history article; NASA lunar sample compendium, sample 15415.)');
     para(b, 'In the scene, a reconstructed model of it lies on the rim of Spur crater. Use “Go to Spur crater” to see it.');
   }
 
@@ -1114,13 +1151,13 @@ export class Lessons {
   }
 
   _textM5(body) {
-    body.append(el('h3', { textContent: 'Evidence board' }));
+    body.append(el('h3', { textContent: 'Field notebook' }));
     para(body, this.stepText('m5-board'));
     const d = el('div'); body.append(d); this.board.render(d);
     body.append(el('h3', { textContent: 'Field report' }));
     const cer = el('div'); body.append(cer);
     this._cer(cer, () => { this.state.completeStep('m5-board'); this._textComplete('m5', ['m5-cer']); announce('Report saved.'); });
-    body.append(el('h3', { textContent: 'Rubric self-check' }));
+    body.append(el('h3', { textContent: 'Self-check' }));
     const sc = el('div'); body.append(sc);
     this._selfCheck(sc, () => this._textComplete('m5', ['m5-selfcheck']));
     body.append(el('h3', { textContent: 'Your traverse beside the real Apollo 15 one' }));
@@ -1131,12 +1168,21 @@ export class Lessons {
   }
 }
 
-/** First sentence only (the Now card keeps feedback short; "Why?" opens the rest). */
+/**
+ * The first whole sentence of an answer's explanation (the Now card keeps
+ * feedback short; "Why?" opens the rest). A leading "Correct" with its
+ * punctuation is dropped (the card adds its own "Correct." or "Not quite.").
+ * A fragment shorter than four words takes the next sentence too. Never cut
+ * mid-sentence: content tests keep every result a whole sentence of at most
+ * 30 words.
+ */
 export function short(text) {
-  const t = String(text || '').replace(/^Correct[.:]?\s*/i, '');
-  const m = t.match(/^.*?[.!?](\s|$)/);
-  const s = (m ? m[0] : t).trim();
-  return s.split(/\s+/).length > 26 ? `${s.split(/\s+/).slice(0, 24).join(' ')}…` : s;
+  let t = String(text || '').trim().replace(/^Correct\s*[.:,;—–-]*\s*/i, '');
+  t = t.charAt(0).toUpperCase() + t.slice(1);
+  const sentences = t.split(/(?<=[.!?])\s+(?=[A-Z“"'‘(])/);
+  let s = sentences[0].trim();
+  if (s.split(/\s+/).length < 4 && sentences[1]) s = `${s} ${sentences[1].trim()}`;
+  return s;
 }
 
 /** Tiny SVG chart of an elevation profile (decorative; the numbers are in the card). */
@@ -1154,7 +1200,7 @@ export const SUPERPOSITION = {
   id: 'superposition-1',
   prompt: 'The flat lavas run up to the mountains and thin out on their slopes. Which is younger?',
   options: [
-    { id: 'a', text: 'The mare lavas: they lie against the Front', why: 'Correct: superposition. The lavas lap against the Front, so they arrived after the Front was there. The younger material lies on or against the older.' },
+    { id: 'a', text: 'The mare lavas: they lie against the Front', why: 'The lavas lap against the Front, so they arrived after the Front was there and are younger. This is superposition: the younger material lies on or against the older.' },
     { id: 'b', text: 'The Apennine Front: it is taller', why: 'Height tells you nothing about age here. The way the layers touch does.' },
     { id: 'c', text: 'You cannot tell without samples', why: 'You can read the order in the field: superposition is direct evidence. Samples then give the ages in years.' },
   ],
