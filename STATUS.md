@@ -9,13 +9,13 @@ Agent work. No human review or learner testing has happened; owner visual approv
 | S0 owner direction (font pair, layout, reference board, object list) | done 2026-10-30 — `design/art-bible.md` |
 | S4 assets (terrain tiles, textures, models, sky data, LUT, catalog) | done 2026-10-31 — `npm run check:v3-assets` |
 | Scene-first shell, type tokens, Now card, drawer, journal, camera rig, onboarding (template v3 synced) | done — `src/v3/` (sync record `src/v3/.sync-record.json`), repo code in `src/lunar/` |
-| All §7 gates at 1440×900, 1280×720, 390×844, 844×390 in every module state (headed GPU, Apple M1) | done — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.0; see the commit record for the numbers) |
+| All §7 gates at 1440×900, 1280×720, 390×844, 844×390 in every module state (headed GPU, Apple M1) | done 2026-10-31 at `ad8e575` — `evaluation/results/ui-audit-2026-10-31.json` (ui-audit 1.1.0): PASS, 52 states; max GPU p95 11.25 ms (1440×900), 60 fps, max 261 draw calls, max 1.31 M triangles, 2.95 MB before first interaction at every viewport (12.6–15.7 MB streamed after) |
 | ≥ 20 inspectable objects per main scene; catalog complete; journal by mouse, keyboard list and text mode | done — 32 surface objects + 3 orbit objects (35 catalog entries); reach gate passes |
 | ≥ 8 motion systems, every motion accurate or labelled; calm mode and reduced motion | done — 13 systems over four layers (12 surface + the orbit day); `motion.checkLabels` passes; reduced-motion test passes |
 | No abstract markers without a label and legend; no bare primitives | done — gates pass; legend in the controls sheet |
 | Camera rig and onboarding on desktop and touch emulation | done — browser tests (touch tap, keyboard, practice); ui-audit phone viewports |
-| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done — see the commit record |
-| Agent reviews (scene, learner) | pending (S5 review step) |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path | done 2026-10-31 — vitest 120/120; Playwright 10/10 (incl. keyboard-only completion of all five modules, text-mode parity, reduced motion, touch, no-WebGL2, axe 0 critical/serious on 12 states) + sub-path 1/1 |
+| Agent reviews (scene, learner) | pending (S5 review step); evidence in `.agents/tasks/immersive-v3/evidence/lunar-field-expedition/` |
 | Owner visual approval, release, posters, trailer, showcase pin | pending (G1, S7) |
 
 ### v2 carry-overs
