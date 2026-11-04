@@ -1,8 +1,8 @@
 # Status — lunar-field-expedition
 
-Last updated: 2026-11-01
+Last updated: 2026-11-05
 
-## v3.0.0 (plan 10) — S5 pass 3 (review fixes) done, reviews pending
+## v3.0.0 (plan 10) — G1 prepare done (pass-3 findings F1, F3-F9 worked), owner G1 review pending
 Agent work. No human review or learner testing has happened; owner visual approval is still to come (plan §8).
 | Item (plan §11) | Status |
 |---|---|
@@ -10,6 +10,9 @@ Agent work. No human review or learner testing has happened; owner visual approv
 | S4 assets (terrain tiles, textures, models, sky data, LUT, catalog) | done 2026-10-31 — `npm run check:v3-assets` |
 | Scene-first shell, type tokens, Now card, drawer, journal, camera rig, onboarding (template v3 synced) | done — `src/v3/` (sync record `src/v3/.sync-record.json`), repo code in `src/lunar/` |
 | S5 review pass 1 findings F1-F27 (`.agents/tasks/immersive-v3/s5-lunar-field-expedition/review.md`) | fixed in `37a29a2` and follow-ups (DECISIONS #46-#53): orbit globe geography, card hold, LM and LRV rebuilt, authored inspect views, practice cue, Module 1 action, crater-count visibility and loading state, clocks question, report evidence labels, drawers |
+| G1 prepare: pass-3 findings (`review.md`, 2026-11-01) | F1 crater count: **owner-approved content change** (DECISIONS #60): mare patch moved to 684 m E / 381 m N of the LM; the computer count lists craters ≥ 80 m with relief ≥ 5 m and ≥ 10 × patch noise: mare 2 (130 m, 110 m), 28 per km²; Front 0 (median slope 25 %). A heightmap registration error (grids ~207 m north of their labelled AOI) was found and fixed (`src/scenes/grid-registration.js`). F3-F6 framings (DECISIONS #61; Dune moved to the gazetteer crater, ~2.7 km from the v2 reading). F7 debrief scored like the planner checklist; method criterion shown before the drive. F8 "Go to Spur crater" stays after the comparison drawer. F9 Module 2 step 2 action and words; new every-step Now-card test (template T-23). Commits `bda6c54`, `76ccee9`, `57753a3`, `1281676`. Recognition not re-measured (no fresh reviewer at G1) |
+| All §7 gates, G1 prepare | 2026-11-05 at `1281676` (clean tree) — `evaluation/results/ui-audit-g1.json` (ui-audit 1.1.4, headed, Apple M1): every gate passes on all 76 cells **except alive in `sky-overhead` at 1440×900: 2 of 3 regions** (fractions 0.032 and 0.021 in the middle row, ~0 elsewhere). The same marginal cell failed in pass 2 (2 regions) and passed at exactly 3 in pass 3; the low-Sun ground row barely changes and the rover was further away on its loop this run. Not tuned; open. Performance passes at every cell |
+| Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path, G1 | 2026-11-05: vitest 164/164; `npm run build && npm run test:e2e` 14/14 on the `57753a3` tree (`1281676` adds only `scripts/pack-preview.mjs`). A first e2e run timed out in the keyboard-only test while Spotlight re-indexed after a restart (actions 10-18 min apart); the test alone then passed (7.8 min) and the full run passed |
 | S5 review pass 2 findings F1-F20 (`review.md`), pass 3 | worked in `8bf0d4c`, `118f382` (DECISIONS #54-#59): F1 no Sun-state leak found (headed probe; new browser test), F2 reading mode while a drawer is open (per-frame trace: no tile loads in the sample), F5-F11 recognition framings, F13 80 m ring placement, F14-F20 instructions (template T-17..T-21). **F12 partly open:** marks off the computer-counted craters are now flagged, but the mare patch's six listed craters stay invisible: a hillshade of the 5 m DTM shows the patch is dominated by DTM noise. Fixing that means re-choosing the patch and re-deriving its reference count with `scripts/analyze-craters.mjs`, a learning-content change left for the owner at G1. Out-of-scope items from the pass 2 review, fixed: tool choice now decides a stop's results, post-check 1 says "impact crater", no `research/` paths shown to learners |
 | All §7 gates, pass 3 | 2026-11-01 at `9804663` (clean tree) — `evaluation/results/ui-audit-s5-pass3.json` (ui-audit 1.1.4, headed Chromium, ANGLE Metal, Apple M1): **PASS**, 4 viewports × 19 states (76). Max GPU p95 11.32 ms (`m5`, 1440×900); `drawer-board` 9.83 ms at 1440×900 (14.08 in pass 2); ≥ 59.7 fps; max 291 draw calls; max 1.39 M triangles; 2.96 MB before first interaction. Alive in `sky-overhead` at 1440×900 is 3 of 3 required regions, exactly at the limit (6-8 at the other viewports) |
 | Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path, pass 3 | 2026-11-01 on the `9804663` tree: vitest 125/125; `npm run build && npm run test:e2e` 14/14 (axe, sub-path, keyboard-only completion of all five modules, text mode, reduced motion, card hold, Sun after landform cards, planner and comparison, motion report, touch, no-WebGL2) |
@@ -23,7 +26,7 @@ Agent work. No human review or learner testing has happened; owner visual approv
 | Unit, browser, axe, keyboard-only completion, text-mode parity, reduced motion, sub-path, pass 1 | done 2026-10-31 at `3772f9e` — vitest 120/120; Playwright 11/11 with `npm run build && npm run test:e2e` (keyboard-only completion of all five modules, text-mode parity, reduced motion, touch tap, no-WebGL2, axe 0 critical/serious on 12 states, sub-path `/play/<slug>/` incl. the streamed surface) |
 | LM descent stage and LRV detail (DECISIONS #25 handed to S5) | done — own work, `src/scenes/hadley-hardware.js` (DECISIONS #47) |
 | Agent reviews (scene, learner) | pass 1 CHANGES_REQUESTED (27 findings); pass 2 CHANGES_REQUESTED (20 findings); pass 3 pending; evidence in `.agents/tasks/immersive-v3/evidence/lunar-field-expedition/` |
-| Owner visual approval, release, posters, trailer, showcase pin | pending (G1, S7) |
+| Owner visual approval, release, posters, trailer, showcase pin | pending (G1 question sent with the contact sheet and a showcase preview PR; S7) |
 
 ### v2 carry-overs
 | v2 item | v3 status |
