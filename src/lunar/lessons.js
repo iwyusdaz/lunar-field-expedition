@@ -529,7 +529,7 @@ export class Lessons {
       },
       {
         id: 'm3-count', done: () => L.done('m3-count'), calm: true, sunHold: true, noInspect: true,
-        // A low Sun (6 deg): the shallow 90-190 m craters (2-4 m deep) show
+        // A low Sun (6 deg): the listed 110-130 m craters (9-12 m relief) show
         // as shadowed bowls. The Now card says when the close-up ground is still loading.
         enter: () => {
           if (!L.app.engine) return;

@@ -54,8 +54,8 @@
       "id": "dune", "mapLabel": "Dune",
       "name": "Dune crater (South Cluster)",
       "apolloStation": "4",
-      "lon": 3.6345, "lat": 26.056,
-      "positionQuality": "approximate (read from the NASA traverse map layout)",
+      "lon": 3.6637, "lat": 26.0304,
+      "positionQuality": "approximate: the south rim of the 380 m bowl at the IAU gazetteer position (26.04 N, 3.66 E), located in the NAC terrain model at 26.0370 N, 3.6637 E (G1, DECISIONS #61; the earlier reading of the traverse map was about 2.7 km off)",
       "approximate": true,
       "blurb": "A fresh crater south of the LM; Apollo 15's Station 4. Fresh ejecta exposes what lies beneath the plain."
     },

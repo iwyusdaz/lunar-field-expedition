@@ -120,7 +120,8 @@ export class SurfaceScene {
     // A station crater's card shows its Apollo 15 station flag; the impact
     // card shows a flash in its framed spot soon after it opens.
     // Hadley Delta's card shows the Station 2 flag at St. George crater on its flank (review pass 2 F7).
-    const STATION_OF = { 'spur-crater': 'spur', 'dune-crater': 'dune', 'elbow-crater': 'elbow', 'st-george-crater': 'stgeorge', 'hadley-delta': 'stgeorge' };
+    // The Genesis Rock's card shows the Station 7 flag beside it (review F6).
+    const STATION_OF = { 'spur-crater': 'spur', 'genesis-rock': 'spur', 'dune-crater': 'dune', 'elbow-crater': 'elbow', 'st-george-crater': 'stgeorge', 'hadley-delta': 'stgeorge' };
     this.app.inspect?.on('open', (id) => {
       this.removeMarker('card-station');
       const sid = STATION_OF[id];
@@ -361,8 +362,12 @@ export class SurfaceScene {
     gr.traverse((m) => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } });
     this.group.add(gr);
     this.genesis = gr;
+    // On the rim at Station 7 (where the crew stopped): 0.5 m from the station point
+    // toward the bowl, so the station flag stands just behind it (review F6).
     const sp = this.terrain.fromLonLat(this.stations.spur.lon, this.stations.spur.lat);
-    this.genesisAt = { x: sp.xM + 44, z: sp.yM - 6 };
+    const sb = this._findBowl(this.stations.spur, 80), sl = Math.hypot(sb.x - sp.xM, sb.z - sp.yM) || 1;
+    const su = [(sb.x - sp.xM) / sl, (sb.z - sp.yM) / sl];
+    this.genesisAt = { x: sp.xM + su[0] * 0.5 - su[1] * 0.18, z: sp.yM + su[1] * 0.5 + su[0] * 0.18, toBowl: su };
     this.grounded.push({ obj: gr, x: this.genesisAt.x, z: this.genesisAt.z, sink: 0.012 });
     this._registerModels();
   }
@@ -502,7 +507,7 @@ export class SurfaceScene {
     for (const [id, o] of Object.entries(this.alsep || {})) reg(id, o, id === 'alsep-heat-flow' ? { frame: { view: views['alsep-heat-flow'] } } : id === 'alsep-central-station' ? { frame: { heightFrac: 0.22 } } : undefined);
     reg('sample-bag', this.sampleBag);
     reg('boulders', this.boulders);
-    reg('genesis-rock', this.genesis, { frame: { heightFrac: 0.4 } });
+    reg('genesis-rock', this.genesis, { frame: { view: views['genesis-rock'] } });
     reg('footprints', this.footprints, { frame: { view: views.footprints } });
     reg('rover-tracks', this.tracks, { frame: { view: views['rover-tracks'] } });
   }
@@ -528,10 +533,10 @@ export class SurfaceScene {
     const [elx, elz] = [this.bowls.elbow.x - lm.x, this.bowls.elbow.z - lm.z], [dux, duz] = [this.bowls.dune.x - lm.x, this.bowls.dune.z - lm.z];
     const mp = this.craterPatches?.mare ? [this.craterPatches.mare.xM - lm.x, this.craterPatches.mare.yM - lm.z] : [480, -350];
     return {
-      // Eye level just north-west of the site, looking north-west over open mare
-      // (no boulders that way; the ALSEP at the left): the curved skyline about
-      // 2.4 km away, black sky above (review pass 2 F8).
-      horizon: v(() => P(-5, -20, 1.7), () => P(-5 - 1540, -20 - 1840, 40), 50),
+      // Eye level 30 m south-east of the LM, looking north-west past it over open
+      // mare: the LM (7 m tall) at the left for scale, the curved skyline about
+      // 2.4 km away, black sky above (review pass 2 F8, G1 F4).
+      horizon: v(() => P(24, 19, 1.7), () => P(24 - 1540, 19 - 1840, 40), 50),
       // Close over bare soil beside the bootprints: grains, tiny pits and the
       // edge of a print at the right; no rock at the centre (review pass 2 F6).
       regolith: v(() => P(REGOLITH_SPOT[0] - 0.3, REGOLITH_SPOT[1] + 1.3, 0.75), () => P(REGOLITH_SPOT[0] + 0.25, REGOLITH_SPOT[1], 0), 40),
@@ -541,8 +546,10 @@ export class SurfaceScene {
       'rover-tracks': v(() => P(24, -12.5, 1.3), () => P(24, -18.5, 0), 46), // looking north, the rover's loop behind the camera
       // Looking down at a cluster of small craters on the mare (no mountains in view).
       craterlets: v(() => P(mp[0] - 190, mp[1] + 40, 210), () => P(mp[0], mp[1], 0), 52),
-      // Wide view down over the dark plain, north-west of the site.
-      'mare-plain': v(() => P(-200, -300, 140), () => P(-700, -1500, 0), 56),
+      // From above the plain north of the site, looking south over it: the open,
+      // dark plain runs past the LM to the foot of the Apennine Front, Hadley
+      // Delta rising beyond; no crater at the centre (G1 F3).
+      'mare-plain': v(() => P(-350, -1500, 90), () => P(250, 1500, 0), 60),
       // From just behind the Station 4 flag on the rim, looking across the
       // 380 m bowl: the flag in front, the rim and far wall beyond (review pass 2 F11).
       'dune-crater': (() => {
@@ -552,6 +559,15 @@ export class SurfaceScene {
       })(),
       // From the rille edge above Elbow crater.
       'elbow-crater': (() => { const [ex, ez] = st('elbow'); return v(() => H(ex + 380, ez + 40, ex, ez, 230), () => P(ex - 60, ez, 0), 50); })(), // from the east, the sunlit west wall and the rille beyond
+      // The Genesis Rock on the rim of Spur, through a long lens from 8 m inside
+      // the rim, looking out: the white rock large in front, the foot of the
+      // Station 7 flag pole just behind it (G1 F6). A 7.5 cm rock and a 2 m flag
+      // cannot both fill the view, so the lens shows the rock and the pole's foot.
+      'genesis-rock': (() => {
+        const e = () => { const g = this.genesisAt, u = g.toBowl, x = g.x + u[0] * 8, z = g.z + u[1] * 8; return [x, Math.max(this.groundY(x, z), this.groundY(g.x, g.z)) + 1.3, z]; };
+        const ctr = () => { const g = this.genesisAt, u = g.toBowl; return [g.x - u[0] * 0.2, this.groundY(g.x, g.z) + 0.06, g.z - u[1] * 0.2]; };
+        return v(e, ctr, 2.2);
+      })(),
       // Spur crater on the Front slope, its station flag and the Genesis Rock on its rim.
       'spur-crater': v(() => H(spx + 95, spz + 10, spx, spz, 70), () => P(spx, spz, 0), 44), // from the east: the sunlit far (west) wall of the bowl
       // St. George on the flank of Hadley Delta, seen from south-west of the site (the LM behind the camera).
