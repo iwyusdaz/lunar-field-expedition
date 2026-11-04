@@ -115,10 +115,13 @@ export class TraversePlanner {
     const img = ctx.createImageData(W, H);
     let min = Infinity, max = -Infinity;
     for (const v of g.data) { if (!Number.isNaN(v)) { if (v < min) min = v; if (v > max) max = v; } }
+    const wM = (g.width - 1) * g.mPerPx, hM = (g.height - 1) * g.mPerPx;
     for (let py = 0; py < H; py++) {
       for (let px = 0; px < W; px++) {
-        const gx = Math.floor((px / W) * (g.width - 1));
-        const gy = Math.floor((py / H) * (g.height - 1));
+        // The grid sample under this map point's true position (grid registration, DECISIONS #60).
+        const q = this.site.terrain.gridPixel((px / W) * wM, (py / H) * hM, g);
+        const gx = Math.min(g.width - 1, Math.max(0, Math.round(q.x)));
+        const gy = Math.min(g.height - 1, Math.max(0, Math.round(q.y)));
         const v = g.data[gy * g.width + gx];
         const shade = Number.isNaN(v) ? 8 : Math.round(30 + 200 * (v - min) / (max - min));
         const o = (py * W + px) * 4;

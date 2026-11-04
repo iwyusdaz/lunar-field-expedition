@@ -38,7 +38,7 @@ Arguing from evidence is a core science practice, but students rarely get to do 
 |---|---|---|
 | Real LROC terrain (NAC_DTM_APOLLO15, 2 m/px) | Hand-modeled terrain | The landforms are the evidence. Relief was validated against published values ([evaluation/results/terrain-validation.json](evaluation/results/terrain-validation.json)). |
 | No vertical exaggeration | Exaggerate for drama | Accuracy first |
-| Let the crater counts "disagree" with the sample ages | Pick patches that give the expected answer | The Front patch has far fewer craters than the mare (about 14 vs 85 per km² in the computer count) because steep slopes erase craters. Module 3 makes that disagreement the lesson: crater counting only works on flat, stable surfaces. |
+| Let the crater counts "disagree" with the sample ages | Pick patches that give the expected answer | The Front patch has far fewer craters than the mare (none of 80 m or more against about 28 per km² in the computer count) because steep slopes erase craters. Module 3 makes that disagreement the lesson: crater counting only works on flat, stable surfaces. |
 | Rubric self-check, no auto-grading of writing | Keyword scoring | Keyword scoring is unreliable and gives misleading feedback. The app checks that the required evidence *types* are cited and shows the rubric and an exemplar. |
 | Compare with the real Apollo 15 traverse | Fictional ending | Connects the learner's reasoning to what working scientists did |
 | First-person view; two suited crew figures in the scene (v2.0.0) | Third-person avatar | The learner stays first-person. The crew are the fictional future-mission team, labelled as such, and calm down during tasks |

@@ -305,7 +305,7 @@
       "scene": "hadley-surface",
       "name": "Small craters (craterlets)",
       "short": "Small bowl-shaped pits made by meteoroid impacts. Counting them per area tells you how old a surface is.",
-      "more": "A surface collects impact craters the longer it is exposed, so older surfaces have more craters per square kilometre. In Module 3 you count craters on the plain and on the Front to compare their ages. The craters here come from the real elevation model; none are added for looks. The app's counts are a computer count of craters 20 m and wider, and they are approximate.",
+      "more": "A surface collects impact craters the longer it is exposed, so older surfaces have more craters per square kilometre. In Module 3 you count craters on the plain and on the Front to compare their ages. The craters here come from the real elevation model; none are added for looks. The app's reference is a computer count of craters 80 m and wider that stand out clearly in the elevation model, and it is approximate.",
       "whyItMatters": "Module 3: crater counting is the main dating method in the case.",
       "realSize": null,
       "honesty": "real",

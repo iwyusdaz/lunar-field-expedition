@@ -89,6 +89,40 @@ describe('crater patches (Module 3)', () => {
       expect(lat).toBeLessThan(meta.aoi.latNorth);
     }
   });
+  it('every listed crater stands out from the patch noise, is 80 m or wider and lies inside its patch (G1, review F1)', () => {
+    const l1 = meta.lods[1];
+    const W = (l1.width - 1) * l1.mPerPx, H = (l1.height - 1) * l1.mPerPx, a = meta.aoi;
+    const scene = (q) => ({ x: ((q.lon - a.lonWest) / (a.lonEast - a.lonWest)) * W, y: ((a.latNorth - q.lat) / (a.latNorth - a.latSouth)) * H });
+    for (const p of craters.patches) {
+      expect(p.noiseM).toBeGreaterThan(0);
+      for (const c of p.craters) {
+        expect(c.diameterM).toBeGreaterThanOrEqual(80);
+        expect(c.reliefM).toBeGreaterThanOrEqual(p.reliefK * p.noiseM);
+        expect(c.reliefM).toBeGreaterThanOrEqual(p.minReliefM);
+        const q = scene(c.lonLat);
+        expect(Math.hypot(q.x - p.center.xM, q.y - p.center.yM)).toBeLessThanOrEqual(p.radiusM + 2);
+      }
+    }
+    expect(craters.patches[0].reliefK).toBeGreaterThanOrEqual(10);
+    // The lesson's comparison: the flat mare patch carries more craters than the steep Front patch.
+    expect(craters.patches[0].craters.length).toBeGreaterThan(craters.patches[1].craters.length);
+  });
+});
+
+describe('heightmap registration (G1, DECISIONS #60)', () => {
+  it('the committed grids sit ~207 m north and ~21 m east of their labelled AOI, and the mapping round-trips', async () => {
+    const { gridPixelOfLonLat, lonLatOfGridPixel } = await import('../../src/scenes/grid-registration.js');
+    const l2 = { width: 1022, height: 2366 }, a = meta.aoi, lon = 3.6333, lat = 26.13239;
+    const p = gridPixelOfLonLat(a, l2.width, l2.height, lon, lat);
+    const labelled = { x: ((lon - a.lonWest) / (a.lonEast - a.lonWest)) * (l2.width - 1), y: ((a.latNorth - lat) / (a.latNorth - a.latSouth)) * (l2.height - 1) };
+    // The row holding the LM's true ground is ~207 m further south than the row labelled with its latitude.
+    expect((p.y - labelled.y) * 5).toBeGreaterThan(195);
+    expect((p.y - labelled.y) * 5).toBeLessThan(220);
+    expect(Math.abs((p.x - labelled.x) * 5)).toBeLessThan(30);
+    const q = lonLatOfGridPixel(a, l2.width, l2.height, p.x, p.y);
+    expect(q.lon).toBeCloseTo(lon, 9);
+    expect(q.lat).toBeCloseTo(lat, 9);
+  });
 });
 
 describe('stations', () => {

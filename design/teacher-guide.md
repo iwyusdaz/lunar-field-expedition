@@ -11,7 +11,7 @@
 
 ## Common misconceptions
 - **"Craters are volcanoes."** Impact craters have raised rims and bowl shapes from impacts; Module 2 contrasts them with the rille, which is volcanic.
-- **"More craters always means older."** True only on comparable, stable surfaces. At Hadley the steep Front shows *fewer* craters than the mare (about 14 vs 85 per km² in the computer count) even though Front samples are older (~3.9 vs ~3.3 billion years). Slopes erase craters.
+- **"More craters always means older."** True only on comparable, stable surfaces. At Hadley the steep Front shows *fewer* craters than the mare (none of 80 m or more against about 28 per km² in the computer count, 2026-11-01) even though Front samples are older (~3.9 vs ~3.3 billion years). Slopes erase craters.
 - **"Hadley Rille was carved by water."** It is volcanic. The two main hypotheses (lava erosion; collapsed lava tube) are both presented as open.
 - **"Shadows are just lighting."** Low sun is a measurement tool: it reveals relief that high sun hides.
 

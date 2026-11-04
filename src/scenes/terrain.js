@@ -6,6 +6,8 @@
  * (5 m/px) plus the WAC albedo crop as GPU textures. 1 unit = 1 metre, no
  * vertical exaggeration. World axes: +x = metres east from the AOI west edge,
  * +z = metres south from the AOI north edge, y = elevation in metres (LROC datum).
+ * Grid queries go through ./grid-registration.js: the committed grids sit about
+ * 207 m north of their labelled AOI (DECISIONS #60).
  *
  * The DTM has nodata at the west/east edges of its footprint (0 in the PNG).
  * Rendering edge-fills those columns with the nearest valid row value; tool
@@ -15,8 +17,10 @@
 import * as THREE from 'three';
 import { decodeHeightmap } from '../core/png.js';
 import { loadJSON } from '../core/assets.js';
+import { gridPixelOfLonLat } from './grid-registration.js';
 
 const BASE = import.meta.env.BASE_URL || './';
+
 
 export class TerrainField {
   constructor() {
@@ -171,7 +175,7 @@ export class TerrainField {
   /** Bilinear elevation (metres) at metric x east / y south from the AOI NW corner. */
   elevationAt(xM, yM) {
     const g = this.rawGrid;
-    const fx = xM / g.mPerPx, fy = yM / g.mPerPx;
+    const { x: fx, y: fy } = this.gridPixel(xM, yM, g);
     const x0 = Math.floor(fx), y0 = Math.floor(fy);
     if (x0 < 0 || y0 < 0 || x0 >= g.width - 1 || y0 >= g.height - 1) return NaN;
     const tx = fx - x0, ty = fy - y0;
@@ -179,6 +183,12 @@ export class TerrainField {
     const g01 = g.data[(y0 + 1) * g.width + x0], g11 = g.data[(y0 + 1) * g.width + x0 + 1];
     if ([g00, g10, g01, g11].some(Number.isNaN)) return NaN;
     return (g00 * (1 - tx) + g10 * tx) * (1 - ty) + (g01 * (1 - tx) + g11 * tx) * ty;
+  }
+
+  /** Fractional grid pixel holding the true ground at scene point (xM, yM) (see GRID_CROP). */
+  gridPixel(xM, yM, g = this.rawGrid) {
+    const { lon, lat } = this.toLonLat(xM, yM);
+    return gridPixelOfLonLat(this.meta.aoi, g.width, g.height, lon, lat);
   }
 
   /** Terrain world position (THREE.Vector3, y = elevation). */
