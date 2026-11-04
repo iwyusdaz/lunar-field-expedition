@@ -23,6 +23,21 @@ import { announce } from '../a11y/announcer.js';
 import { countWords } from './catalog.js';
 
 export const NOW_CARD_MAX_WORDS = 60;
+
+/**
+ * The Now-card rules (plan 10 §2.1, T-17): at most NOW_CARD_MAX_WORDS visible
+ * words, and an action (or a question) that says what to do next. `text` is
+ * the card's rendered text (tool controls included). Pure, so repo unit tests
+ * can render every step and check it (S5 G1 F9); setNow warns with it in dev.
+ * @param {string} text  @param {{ action?: string, question?: object }} spec
+ */
+export function nowCardIssues(text, spec) {
+  const words = countWords(text);
+  const issues = [];
+  if (words > NOW_CARD_MAX_WORDS) issues.push(`${words} words (max ${NOW_CARD_MAX_WORDS}); move text to readMore`);
+  if (!spec.action && !spec.question) issues.push('no action: say what to do next');
+  return { words, issues };
+}
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 /**
@@ -276,9 +291,8 @@ export class SceneShell {
         </div>
       </div>`;
     if (n.tool) n.tool(this.now.querySelector('[data-now-tool]'), this);
-    const words = countWords(this.now.querySelector('.v3-now-body').innerText || this.now.querySelector('.v3-now-body').textContent);
-    if (words > NOW_CARD_MAX_WORDS) console.warn(`Now card has ${words} words (max ${NOW_CARD_MAX_WORDS}); move text to readMore.`);
-    if (!n.action && !q) console.warn(`Now card "${n.goal}" has no action: say what to do next.`);
+    const body = this.now.querySelector('.v3-now-body');
+    for (const issue of nowCardIssues(body.innerText || body.textContent, n).issues) console.warn(`Now card "${n.goal}": ${issue}.`);
     this.now.querySelector('[data-action="now-primary"]')?.addEventListener('click', () => n.primary.onClick());
     this.now.querySelector('[data-action="now-secondary"]')?.addEventListener('click', () => n.secondary.onClick());
     this.now.querySelector('[data-action="now-more"]')?.addEventListener('click', (e) => this.openDrawer({ title: n.readMore.title, render: n.readMore.render, trigger: e.currentTarget }));

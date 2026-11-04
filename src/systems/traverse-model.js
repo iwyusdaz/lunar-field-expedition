@@ -57,13 +57,20 @@ export function planAccounting(route, segments, model) {
  * Traverse quality scored against criteria (used in the debrief; informational —
  * this IS structured scoring of choices, not of free text).
  * @param {{hypothesis:string, route:Array<{id,toolId}>, accounting:{withinBudget:boolean, totalMinutes:number}, evidenceTags:string[]}} plan
- * @param {{neededEvidence:string[], maxStations:number}} hypothesisDef
+ * @param {{neededEvidence:string[], needs?:Array<{label:string,tags:string[]}>, maxStations:number}} hypothesisDef
+ * @param {string[]} [haveTags] evidence tags already in the field notebook (earlier modules)
  * @returns {{criteria:Array<{id:string,met:boolean,detail:string}>, metCount:number}}
  */
-export function scoreTraverse(plan, hypothesisDef) {
+export function scoreTraverse(plan, hypothesisDef, haveTags = []) {
   const criteria = [];
-  const needed = hypothesisDef.neededEvidence;
-  const missing = needed.filter(t => !plan.evidenceTags.includes(t));
+  // Coverage counts what the plan collects AND what is already in the field
+  // notebook, against the same evidence groups the planner's checklist shows
+  // (hypothesisDef.needs: [{ label, tags }], any tag of a group meets it), so
+  // the checklist and this debrief never disagree (G1 F7). Without `needs`,
+  // each tag of neededEvidence is its own group.
+  const have = new Set([...plan.evidenceTags, ...haveTags]);
+  const groups = hypothesisDef.needs || hypothesisDef.neededEvidence.map(t => ({ label: t, tags: [t] }));
+  const missing = groups.filter(g => !g.tags.some(t => have.has(t))).map(g => g.label.split(':')[0]);
   criteria.push({
     id: 'evidence-coverage',
     met: missing.length === 0,

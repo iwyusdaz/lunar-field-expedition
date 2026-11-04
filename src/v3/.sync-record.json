@@ -1,7 +1,7 @@
 {
  "tool": "sync-v3-core.mjs",
  "template": "_templates/immersive-core",
- "syncedAt": "2026-10-31T16:32:23.539Z",
+ "syncedAt": "2026-11-04T16:12:34.470Z",
  "files": {
   "src/v3/catalog-views.js": "09b538a3adaa8271b16a0553eb0a573628e1092d4bc82a0baa3d32b81db83669",
   "src/v3/catalog.js": "35216aab5fb0e97c2967793bc988645f71db089efa9d5d6541f45d546a4117a9",
@@ -21,7 +21,7 @@
   "src/v3/quality.js": "aeb8dd4bd5331f5d1562a3a92f9cd84ae3307b8c90b8875366155fca6f86328b",
   "src/v3/render-chain.js": "5d7f50daf375b12f3c8b1632de0356f05986c09958e5baa3fd23ba253d8ab650",
   "src/v3/shell.css": "635ea126b8ac572268f5f9b8c83f52af31f9ee8211981bacd03b5e77c2f2562b",
-  "src/v3/shell.js": "4e1601e785ef9b61ea6e6f8f9baa53d9158cdfd479045938ba26d82d75602a8c",
+  "src/v3/shell.js": "6b7eba08a68fe91a12b449ca8cc07e1ccbe9c7109092f8961f0469382c5d50fc",
   "src/v3/type.css": "6f7a0de74e52f7aab564d4dbdc2465bc484f5ef54afd2fd1a65b9d5ee8b481f8",
   "src/v3/app.js": "6d3106232f59931916b18fefc8773d4bb888ee6e66d03fdad1bb87be96a637f2",
   "src/v3/camera-rig.js": "7737fbf8ab8b5e3c90e562433a32eaeeebe808ca86653fa76b2d96047abc02a9"

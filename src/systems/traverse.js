@@ -329,6 +329,9 @@ export class TraversePlanner {
       const where = done ? 'already in your field notebook' : from.length ? `from ${from.map((r) => `${this.stationLabel(r.id).replace(/:.*$/, '')} (${this.content.tools.find((t) => t.id === r.toolId)?.label})`).join(', ')}` : 'not in this plan yet';
       return `<li data-met="${ok}"><span aria-hidden="true">${ok ? '✓' : '○'}</span> <strong>${n.label.split(':')[0]}</strong>: ${where}</li>`;
     });
+    // The debrief's method criterion, shown before the drive (G1 F7).
+    const methods = new Set(this.route.slice(1).map((r) => r.toolId)).size;
+    items.push(`<li data-met="${methods >= 2}"><span aria-hidden="true">${methods >= 2 ? '✓' : '○'}</span> <strong>More than one method</strong>: ${methods === 1 ? '1 tool' : `${methods} tools`} in this plan (use at least 2)</li>`);
     box.innerHTML = `<h4>Your report will need</h4><ul class="tp-needs-list">${items.join('')}</ul>`;
   }
 
@@ -400,7 +403,7 @@ export class TraversePlanner {
     const el = this.root.querySelector('.tp-debrief');
     el.hidden = false;
     const hypDef = this.content.hypotheses.find(h => h.id === this.hypothesis);
-    const score = scoreTraverse({ ...this.plan(), accounting: this.accounting }, { neededEvidence: hypDef.neededEvidence, maxStations: this.model.maxStations });
+    const score = scoreTraverse({ ...this.plan(), accounting: this.accounting }, { neededEvidence: hypDef.neededEvidence, needs: this.needs?.(this.hypothesis), maxStations: this.model.maxStations }, this.haveTags());
     const cards = this.content.apollo15Real.evas.map(e => `
       <div class="found-card"><h5>${e.label}</h5><p>${e.found}</p></div>`).join('');
     el.innerHTML = `

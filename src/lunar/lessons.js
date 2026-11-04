@@ -373,6 +373,7 @@ export class Lessons {
           const all = feats.every((x) => L.done(`m2-tag-${x.id}`));
           return {
             goal: all ? 'All four landforms named' : `What is landform ${f.label}?`,
+            action: all ? 'Press Next step to measure the rille.' : undefined,
             tool: (box) => {
               for (const [j, x] of feats.entries()) {
                 const b = btn(`${x.label}${L.done(`m2-tag-${x.id}`) ? ' ✓' : ''}`, () => { cur = j; L._flyFeature(x); L.refresh(); }, 'v3-btn lfe-letter');
@@ -395,8 +396,9 @@ export class Lessons {
                 return { correct: !!opt.correct, feedback: `${opt.correct ? 'Correct.' : 'Not quite. Try again.'} ${short(opt.why)}` };
               },
             },
-            hint: all ? undefined : 'Pick a letter to fly there. Tap the land to learn its name later.',
+            hint: all ? undefined : 'Pick a letter to fly there.',
             primary: { label: 'Next step', disabled: !all, onClick: () => L.next(1) },
+            readMore: { label: 'Read more', title: 'Naming landforms', render: (b) => { para(b, L.stepText('m2-tag')); para(b, L.hint('After this step you can click any landform to read its name and story.', 'After this step you can tap any landform to read its name and story.')); } },
           };
         },
       },
@@ -883,7 +885,9 @@ export class Lessons {
           action: L.done(id) ? 'Press Next step to go on.' : action,
           result: L.done(id) && !completeOnClose ? 'Saved.' : undefined,
           primary: L.done(id) ? { label: 'Next step', onClick: () => L.next(4) } : { label: open, onClick: () => show(L.app.shell.now.querySelector('[data-action="now-primary"]')) },
-          secondary: L.done(id) ? { label: open, onClick: () => show(L.app.shell.now.querySelector('[data-action="now-secondary"]')) } : after?.(),
+          // A step's extra action (Go to Spur crater) stays on the card after the
+          // drawer closes, so a drawer that points to it never points to nothing (G1 F8).
+          secondary: after?.() || (L.done(id) ? { label: open, onClick: () => show(L.app.shell.now.querySelector('[data-action="now-secondary"]')) } : undefined),
         }),
       };
     };
@@ -901,6 +905,7 @@ export class Lessons {
       {
         ...drawerStep('m5-comparison', 'Compare with history', 'See what the Apollo 15 crew did here, and the story of the Genesis Rock.', 'Read the comparison', 'The comparison: Apollo 15 at Hadley', (b) => {
           L._comparison(b);
+          if (L.app.engine) b.append(btn('Go to Spur crater', () => { L.app.shell.closeDrawer(); L.goSpur(); }));
           b.append(btn('Done reading', () => L.app.shell.closeDrawer(), 'v3-btn v3-primary'));
         }, { completeOnClose: true, after: () => (L.app.engine ? { label: 'Go to Spur crater', onClick: () => L.goSpur() } : undefined) }),
       },
@@ -1019,7 +1024,7 @@ export class Lessons {
     para(b, 'NASA photo AS15-89-12100, "Telephoto view across Hadley Rille photographed during Apollo 15 EVA" (2 Aug. 1971, EVA 3; public domain). The layered outcrops in the rille wall are the ones the crew photographed from Stations 9a and 10.');
     b.append(el('h3', { textContent: 'The Genesis Rock (sample 15415)' }));
     para(b, 'At Spur crater (Station 7) on EVA 2, Scott and Irwin found a white crystalline rock later called the Genesis Rock: a 270-gram anorthosite, almost pure plagioclase feldspar from the Moon’s early crust. Early analyses dated it to about 4.1 billion years; later work on related anorthosites suggests about 4.46 billion. It was not the very first crust, but it is exceptionally ancient: the kind of deep-crust material a traverse to the Front looks for. (Sources: NASA Apollo 15 history article; NASA lunar sample compendium, sample 15415.)');
-    para(b, 'In the scene, a reconstructed model of it lies on the rim of Spur crater. Use “Go to Spur crater” to see it.');
+    if (this.app?.engine) para(b, 'In the scene, a reconstructed model of it lies on the rim of Spur crater. Use “Go to Spur crater” to see it.');
   }
 
   // ------------------------------------------------------------ text mode (v2 parity renderers)

@@ -99,6 +99,28 @@ describe('traverse cost model', () => {
     expect(bad.criteria.find(c => c.id === 'method-variety').met).toBe(false);
   });
 
+  it('the debrief scores coverage from the same evidence as the planner checklist, notebook included (G1 F7)', () => {
+    const st = JSON.parse(readFileSync('content/stations.json', 'utf8'));
+    const rep = JSON.parse(readFileSync('content/report.json', 'utf8')).report;
+    const typeOf = (tag) => rep.evidenceTypes.find((t) => t.tags.includes(tag));
+    const needs = [...new Set(rep.requiredEvidenceTags['h-front'].map(typeOf))];
+    // The review's plan: Stations 6 and 9a, both "Collect sample"; superposition is already in the notebook (Module 3).
+    const route = [{ id: 'lm' }, { id: 'front6', toolId: 'sample' }, { id: 'rille9a', toolId: 'sample' }];
+    const evidenceTags = [...new Set(route.slice(1).flatMap((r) => st.results[r.id][r.toolId].evidenceTags))];
+    const notebook = ['superposition', 'superposition-or-count'];
+    const hyp = { neededEvidence: st.hypotheses[0].neededEvidence, needs, maxStations: 4 };
+    const plan = { hypothesis: 'h-front', route, accounting: { withinBudget: true, totalMinutes: 150 }, evidenceTags };
+    const s = scoreTraverse(plan, hyp, notebook);
+    // The checklist's rule: a need is met when any of its tags is in the plan or the notebook.
+    const have = new Set([...evidenceTags, ...notebook]);
+    expect(needs.every((n) => n.tags.some((t) => have.has(t)))).toBe(true);
+    expect(s.criteria.find((c) => c.id === 'evidence-coverage').met).toBe(true);
+    // One tool only: the method criterion (shown in the planner checklist before the drive) is not met.
+    expect(s.criteria.find((c) => c.id === 'method-variety').met).toBe(false);
+    // Without the notebook, superposition is missing and the debrief names it in the report's words.
+    const none = scoreTraverse(plan, hyp, []);
+    expect(none.criteria.find((c) => c.id === 'evidence-coverage').detail).toContain('Superposition');
+  });
   it('buildSegmentTable produces both directions with slope data', () => {
     const segs = buildSegmentTable(
       [{ id: 'a', xM: 0, yM: 0 }, { id: 'b', xM: 100, yM: 0 }],
