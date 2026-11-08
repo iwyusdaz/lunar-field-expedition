@@ -60,3 +60,10 @@
 .lfe-ortho { position: relative; margin: 8px 0; max-width: 32rem; }
 .lfe-ortho img { display: block; width: 100%; border: 1px solid var(--v3-border); }
 .lfe-ortho-marker { position: absolute; transform: translate(-50%, -50%); color: var(--v3-focus); font-weight: 600; text-shadow: 0 0 3px #000; }
+
+/* G2 fix round: Back now sits in the bar, so on a portrait phone the five module
+   steps, the count and Menu are packed tighter (each target stays 44 px) and
+   step 5 no longer scrolls out of view. */
+[data-layout="phone-portrait"] .v3-topbar { gap: 4px; padding: 0 4px; }
+[data-layout="phone-portrait"] .v3-stepper ol { gap: 0; }
+[data-layout="phone-portrait"] .v3-menu-btn { padding-left: 8px; padding-right: 8px; }
