@@ -113,6 +113,7 @@ export class StreamedTerrain {
     this._down = new THREE.Vector3(0, -1, 0);
     this._o = new THREE.Vector3();
     this._cache = new Map();
+    this._grid = new Map(); // exact heights at 0.5 m grid nodes (heightSmooth)
     this.onSettle = null;
   }
 
@@ -138,10 +139,10 @@ export class StreamedTerrain {
         m.userData.noOutline = true;
         if (!tile.children?.length || tile.geometricError === 0) { m.userData.leaf = true; this.leaves.add(m); }
       });
-      this._cache.clear();
+      this._cache.clear(); this._grid.clear();
     });
-    tiles.addEventListener('dispose-model', ({ scene }) => { scene.traverse((m) => { if (m.isMesh) this.leaves.delete(m); }); this._cache.clear(); });
-    tiles.addEventListener('tiles-load-end', () => { this._cache.clear(); this.onSettle?.(); });
+    tiles.addEventListener('dispose-model', ({ scene }) => { scene.traverse((m) => { if (m.isMesh) this.leaves.delete(m); }); this._cache.clear(); this._grid.clear(); });
+    tiles.addEventListener('tiles-load-end', () => { this._cache.clear(); this._grid.clear(); this.onSettle?.(); });
     this.tiles = tiles;
     this.group.add(tiles.group);
   }
@@ -174,6 +175,29 @@ export class StreamedTerrain {
     if (this._cache.size > 20000) this._cache.clear();
     this._cache.set(key, y);
     return y;
+  }
+
+  /**
+   * Ground height under (x, z), bilinear between exact heights at the 0.5 m
+   * grid nodes around it. heightAt() returns one cached sample per 0.5 m cell,
+   * which on a 15 degree slope is up to 7 cm off; feet and contact shadows use
+   * this (G2 fix, astronaut ground contact).
+   */
+  heightSmooth(x, z) {
+    const gx = x * 2, gz = z * 2, ix = Math.floor(gx), iz = Math.floor(gz), fx = gx - ix, fz = gz - iz;
+    const node = (i, k) => {
+      const key = `${i},${k}`;
+      let y = this._grid.get(key);
+      if (y === undefined) {
+        y = this._raycastLeaves(i / 2, k / 2);
+        if (!Number.isFinite(y)) y = this.heightAt(i / 2, k / 2);
+        if (this._grid.size > 20000) this._grid.clear();
+        this._grid.set(key, y);
+      }
+      return y;
+    };
+    const a = node(ix, iz), b = node(ix + 1, iz), c = node(ix, iz + 1), d = node(ix + 1, iz + 1);
+    return (a * (1 - fx) + b * fx) * (1 - fz) + (c * (1 - fx) + d * fx) * fz;
   }
 
   _raycastLeaves(x, z) {

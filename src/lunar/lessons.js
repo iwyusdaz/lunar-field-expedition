@@ -96,6 +96,8 @@ export class Lessons {
       { label: 'Task glint', text: 'A soft star above the object the current step asks about.' },
       { label: 'Profile line', text: 'The line you measure in Module 2, with a flag at each end.' },
       { label: 'Apollo 15 routes', text: 'White lines: the real crew’s drives, shown in the Module 4 debrief.' },
+      // Background motion has no card since the G2 roles (DECISIONS #63), so its labels live here.
+      { label: 'Background motion', text: 'Earth’s spin and the orbiter pass are time-lapse. The tiny impact flashes are illustrative: real ones are much rarer. The two astronauts are a fictional field team; their lope follows lunar gravity, with approximate timing.' },
     ];
   }
 

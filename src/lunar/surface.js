@@ -38,8 +38,8 @@ const LAPSE_SPAN_DEG = 22;   // then the time-lapse loops back (about 43 hours o
 // Landform and ground cards: the Sun angle (deg) that shows each one. Low for
 // small relief (craters, prints, soil); higher for big slopes, whose
 // sun-facing sides would otherwise sit in shadow in the early morning.
-const CARD_SUN = { 'craterlets': 9, 'dune-crater': 9, 'mare-plain': 9, 'footprints': 9, 'rover-tracks': 9, 'regolith': 9, 'spur-crater': 22,
-  'elbow-crater': 22, 'st-george-crater': 35, 'mount-hadley': 35, 'hadley-delta': 35, 'apennine-front': 35 };
+const CARD_SUN = { 'craterlets': 9, 'dune-crater': 9, 'mare-plain': 9, 'footprints': 9, 'rover-tracks': 9, 'regolith': 9, 'spur-crater': 12,
+  'elbow-crater': 12, 'st-george-crater': 15, 'mount-hadley': 35, 'hadley-delta': 35, 'apennine-front': 35 };
 
 /** Invisible pick volume (raycast still works; nothing is drawn). */
 function pickMaterial() { const m = new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide }); m.userData.pickVolume = true; return m; }
@@ -84,6 +84,11 @@ export class SurfaceScene {
     return Number.isFinite(f) ? f - curvatureDrop(Math.hypot(x - this.lm.x, z - this.lm.z)) : this.lm.y;
   }
 
+  /** Ground under (x, z), bilinear on exact 0.5 m samples: what feet stand on (G2 fix). */
+  groundFine(x, z) {
+    const y = this.streamed ? this.streamed.heightSmooth(x, z) : NaN;
+    return Number.isFinite(y) ? y : this.groundY(x, z);
+  }
   /** World position from lon/lat at ground height (+ lift). */
   at(lon, lat, lift = 0) { const p = this.terrain.fromLonLat(lon, lat); return V(p.xM, this.groundY(p.xM, p.yM) + lift, p.yM); }
   /** World position from metres east/south of the LM. */
@@ -216,8 +221,11 @@ export class SurfaceScene {
     rover.lcru.add(this.tvCam);
     g.add(this.rover);
     // Field crew (fictional field team): A samples a boulder, B lopes between the LM, flag and ALSEP.
-    this.crewA = createAstronaut({ name: 'crew-a', commander: true, phase: 0 });
-    this.crewB = createAstronaut({ name: 'crew-b', phase: 3 });
+    // Each figure stands on the streamed ground under its feet every frame (G2 fix: crew A
+    // was placed once at build time on the v2 heightfield, 0.37 m below the tiles).
+    const ground = (x, z) => this.groundFine(x, z);
+    this.crewA = createAstronaut({ name: 'crew-a', commander: true, phase: 0, tongs: true, ground });
+    this.crewB = createAstronaut({ name: 'crew-b', phase: 3, ground });
     this.crew = new THREE.Group(); this.crew.name = 'field-crew';
     this.crew.add(this.crewA.root, this.crewB.root);
     g.add(this.crew);
@@ -561,7 +569,11 @@ export class SurfaceScene {
         return v(e, c, () => fit(380 * 1.4, e(), c()));
       })(),
       // From the rille edge above Elbow crater.
-      'elbow-crater': (() => { const [ex, ez] = st('elbow'); return v(() => H(ex + 380, ez + 40, ex, ez, 230), () => P(ex - 60, ez, 0), 50); })(), // from the east, the sunlit west wall and the rille beyond
+      // G2 recognition fix: crater views were lit from behind the camera (eye east,
+      // morning Sun east), so the bowls showed no shadow and read as grey smudges.
+      // Each crater is now seen from the south across the Sun's direction, with a
+      // low card Sun (CARD_SUN): the east inner wall in shadow, the west wall lit.
+      'elbow-crater': (() => { const e = () => H(elx + 40, elz + 470, elx, elz, 210), c = () => P(elx, elz, 0); return v(e, c, () => fit(340 * 1.7, e(), c())); })(), // the bowl on the rille's edge, the rille beyond
       // The Genesis Rock on the rim of Spur, through a long lens from 8 m inside
       // the rim, looking out: the white rock large in front, the foot of the
       // Station 7 flag pole just behind it (G1 F6). A 7.5 cm rock and a 2 m flag
@@ -572,10 +584,10 @@ export class SurfaceScene {
         return v(e, ctr, 2.2);
       })(),
       // Spur crater on the Front slope, its station flag and the Genesis Rock on its rim.
-      'spur-crater': v(() => H(spx + 95, spz + 10, spx, spz, 70), () => P(spx, spz, 0), 44), // from the east: the sunlit far (west) wall of the bowl
+      'spur-crater': (() => { const e = () => H(spx + 15, spz + 125, spx, spz, 55), c = () => P(spx, spz, 0); return v(e, c, () => fit(80 * 2.2, e(), c())); })(), // from the south on the Front slope
       // St. George on the flank of Hadley Delta, seen from south-west of the site (the LM behind the camera).
       // (its centre lies up the Delta flank, south-west of the station on its rim)
-      'st-george-crater': (() => { const e = () => P(-700, 700, 60), c = () => P(sgx - 650, sgz + 650, 0); return v(e, c, () => fit(2420 * 1.9, e(), c())); })(),
+      'st-george-crater': (() => { const e = () => H(sgx - 650, sgz + 650 - 2900, sgx - 650, sgz + 650, 650), c = () => P(sgx - 650, sgz + 650, 0); return v(e, c, () => fit(2420 * 1.5, e(), c())); })(), // from the north, above the plain: the bowl on the Delta's flank
       // Mount Hadley to the north-east, seen across Hadley Rille from above its
       // west rim: the channel in front, the massif beyond (review pass 2 F7).
       'mount-hadley': v(() => H(-3350, 300, -2700, 0, 90), () => A(13440 * 0.6, -14960 * 0.6, 1300), 56),
@@ -817,11 +829,11 @@ export class SurfaceScene {
     let wu = 0.05, hold = 0;
     this.crewB.onFootfall = () => {
       const p = this.crewB.root.position;
-      this.bootDust.emit(V(p.x, this.groundY(p.x, p.z), p.z), 6, rng);
+      for (const L of this.crewB.legs) this.bootDust.emit(V(L.world.x, this.groundFine(L.world.x, L.world.z), L.world.z), 3, rng);
     };
     motion.add({
       id: 'crew-lope', layer: 'agents', label: 'accurate', objects: ['field-crew'], holdWithCard: false,
-      description: 'A geologist lopes between the LM and the ALSEP in bounding skips with a short flight phase, the gait Apollo crews used at one-sixth gravity; the route is the field team\'s.',
+      description: 'A geologist lopes between the LM and the ALSEP in skips: a short stance with both feet planted, then a ballistic flight at lunar gravity (push-off and stance timing approximate), the gait Apollo crews used at one-sixth gravity; the route is the field team\'s.',
       update: (dt) => {
         const c = this.crewB;
         // Card hold: while the crew's card is open the geologist stops and stands
@@ -829,7 +841,6 @@ export class SurfaceScene {
         if (this.app.motion?.held.has('field-crew')) {
           if (c.action !== 'idle') c.setAction('idle');
           c.update(dt);
-          c.root.position.y = this.groundY(c.root.position.x, c.root.position.z);
           return;
         }
         if (c.action === 'idle') c.setAction(hold > 0 ? 'point' : 'lope');
@@ -837,14 +848,15 @@ export class SurfaceScene {
         wu = (wu + (1.3 * dt) / wlen) % 1;
         if (Math.abs(wu - 0.55) < 0.0015) { hold = 5; c.setAction('point'); }
         walk.getPointAt(wu, pt); walk.getTangentAt(wu, tan);
-        c.root.position.set(pt.x, this.groundY(pt.x, pt.z) + c.lift, pt.z);
+        // The figure poses its own height from the ground under each foot (astronaut.js).
+        c.root.position.set(pt.x, c.root.position.y, pt.z);
         c.root.rotation.y = Math.atan2(tan.x, tan.z);
         c.update(dt);
       },
     });
     motion.add({
       id: 'crew-sampling', layer: 'agents', label: 'accurate', objects: ['field-crew'], holdWithCard: false,
-      description: 'A geologist bends at the knees to pick up samples with tongs and stands again.',
+      description: 'A geologist leans and bends the knees a little to reach the ground with the sample tongs, then stands again (the pressurised suit allowed little more).',
       update: (dt) => { this.crewA.update(dt); },
     });
     motion.add({
