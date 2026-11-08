@@ -321,3 +321,21 @@ test('without WebGL2 the app runs in text mode with every objective', async ({ p
   await expect(page.locator('#textmode')).toContainText('Pre-check');
   expect(errors).toEqual([]);
 });
+
+test('Back steps back inside a module, then to the module before; Back to start shows the title (owner, 2026-11-07)', async ({ page }) => {
+  await ready(page);
+  await T(page, () => { const L = window.__TEST__.lessons; L.app.goModule(1); L.app.goModule(2); L.step[2] = 2; L._enterStep(2); L.refresh(); });
+  await page.waitForTimeout(800);
+  await expect(page.locator('[data-ui="now-card"]')).toContainText('Step 3 of');
+  await page.locator('[data-ui="back"]').click();
+  await expect(page.locator('[data-ui="now-card"]')).toContainText('Step 2 of');
+  expect(await T(page, () => window.__TEST__.app.module)).toBe(2);
+  await T(page, () => { window.__TEST__.lessons.step[2] = 0; window.__TEST__.lessons._enterStep(2); window.__TEST__.lessons.refresh(); });
+  await page.locator('[data-ui="back"]').click();
+  await page.waitForTimeout(800);
+  expect(await T(page, () => window.__TEST__.app.module)).toBe(1);
+  await page.locator('[data-action="menu"]').click();
+  await page.locator('[data-ui="back-to-start"]').click();
+  await expect(page.locator('[data-ui="title-screen"]')).toBeVisible();
+  await expect(page.getByRole('link', { name: /all projects/i })).toHaveCount(0);
+});
