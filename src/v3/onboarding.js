@@ -84,6 +84,24 @@ export class Onboarding {
     this._show();
   }
 
+  /** Back one practice step (the Back button); false on the first step. */
+  back() {
+    if (!this.active || this.i <= 0) return false;
+    this.i--;
+    this._looked = 0; this._moved = 0;
+    this._show();
+    return true;
+  }
+
+  /** Stop the practice without finishing it (Back to start): not saved as done, no hand-over. */
+  cancel() {
+    if (!this.active) return;
+    this.active = false;
+    this.inspect.setCue(null);
+    for (const off of this._offs) off();
+    this._offs = [];
+  }
+
   /** End the practice (also called when the learner jumps to a module). */
   finish(skipped = false) {
     if (!this.active) return;

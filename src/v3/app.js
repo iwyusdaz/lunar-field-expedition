@@ -12,6 +12,12 @@
  *
  * A repo supplies its scene (buildScene registers objects and motion systems)
  * and its modules (camera view, Now card, text-mode content). See README.md.
+ *
+ * Navigation (owner, 2026-11-07): app.back() returns to the previous screen or
+ * step (closes an open card or drawer first, then the module's own back(), then
+ * the previous practice step or the module visited before); with nothing left
+ * it goes back to the start. app.backToStart() shows the title screen again.
+ * The shell's Back button and the menu's Back to start call them.
  * @module v3/app
  */
 import { EngineV3 } from './engine.js';
@@ -40,6 +46,8 @@ import { hasWebGL2 } from '../core/assets.js';
  * @property {(el: HTMLElement, app: object) => void} text  text-mode content with the same decisions
  * @property {boolean} [calm]                        calm mode during this module's task
  * @property {(app: object) => void} [enter]
+ * @property {(app: object) => boolean} [back]       a module with several steps of its own goes back
+ *   one of them and returns true; false (or none) lets Back go to the previous module
  */
 
 /**
@@ -183,12 +191,14 @@ export async function createSceneApp(o) {
   inspect?.on('change', () => { if (shell.drawerKey === 'objects') openObjects(); });
 
   // Modules
-  const goModule = (i, { fly = true } = {}) => {
+  const history = []; // modules visited before the current one (Back)
+  const goModule = (i, { fly = true, back = false } = {}) => {
     const m = o.modules[i];
     if (!m) return;
     if (onboarding?.active) onboarding.finish(true);
     shell.hideTitle();
     shell.closeDrawer();
+    if (!back && app.module >= 0 && app.module !== i) history.push(app.module);
     app.module = i;
     shell.setModule(i);
     if (sceneless) {
@@ -214,6 +224,44 @@ export async function createSceneApp(o) {
   };
   shell.on('module', (i) => goModule(i));
 
+  // Back and Back to start (owner, 2026-11-07).
+  const startTitle = () => shell.showTitle({
+    title: o.title,
+    kicker: o.titleScreen.kicker,
+    oneLiner: o.titleScreen.oneLiner,
+    onStart: (opt) => {
+      rig.attract = false;
+      if (opt?.text) { goModule(0, { fly: false }); return; }
+      if (!onboarding.done) onboarding.start(); else goModule(0);
+    },
+  });
+  app.backToStart = () => {
+    history.length = 0;
+    if (sceneless) { goModule(0); shell.textModeRoot.focus(); return 'start'; }
+    onboarding?.cancel();
+    inspect.close({ restore: false });
+    shell.closeDrawer();
+    if (!shell.textModeRoot.hidden) shell.toggleTextMode(false);
+    app.module = -1;
+    shell.setModule(-1);
+    rig.flyTo(o.home, 1.2);
+    startTitle();
+    rig.attract = true;
+    shell.titleScreen.querySelector('[data-action="title-start"]')?.focus();
+    return 'start';
+  };
+  /** Back one screen or step. Returns what it did: card | drawer | step | practice | module | start. */
+  app.back = () => {
+    if (inspect?.selected) { inspect.close(); return 'card'; }
+    if (shell.closeDrawer()) return 'drawer';
+    if (onboarding?.active) return onboarding.back() ? 'practice' : app.backToStart();
+    if (app.module >= 0 && o.modules[app.module].back?.(app)) return 'step';
+    if (history.length) { goModule(history.pop(), { back: true }); return 'module'; }
+    return app.backToStart();
+  };
+  shell.on('action:back', () => app.back());
+  shell.on('action:back-to-start', () => app.backToStart());
+
   // Onboarding (first run) and title screen
   const onboarding = sceneless ? null : new Onboarding({ shell, rig, inspect, practiceObject: o.practiceObject, onFinish: () => goModule(0, { fly: true }) });
   app.onboarding = onboarding;
@@ -227,7 +275,8 @@ export async function createSceneApp(o) {
     const h = document.createElement('h2');
     h.textContent = `${o.title}: text mode`;
     const nav = document.createElement('p');
-    nav.innerHTML = '<a href="/">All projects</a>';
+    nav.className = 'v3-tm-nav';
+    nav.innerHTML = '<button type="button" class="v3-btn" data-action="back">Back</button> <button type="button" class="v3-btn" data-action="back-to-start">Back to start</button>';
     wrap.append(h, nav);
     const sec = document.createElement('section');
     sec.setAttribute('aria-label', m.label);
@@ -250,16 +299,7 @@ export async function createSceneApp(o) {
     return app;
   }
 
-  shell.showTitle({
-    title: o.title,
-    kicker: o.titleScreen.kicker,
-    oneLiner: o.titleScreen.oneLiner,
-    onStart: (opt) => {
-      rig.attract = false;
-      if (opt?.text) { goModule(0, { fly: false }); return; }
-      if (!onboarding.done) onboarding.start(); else goModule(0);
-    },
-  });
+  startTitle();
   rig.attract = true;
 
   if (__TEST_HOOKS__) {

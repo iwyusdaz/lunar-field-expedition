@@ -488,8 +488,11 @@ export class SurfaceScene {
     if (!ins) return;
     // Every catalog root is measured in its own axes (headings, billboards and the
     // turning sky must not inflate the scale check); the crew use their rest pose.
+    // Registered once each: decorative entries (DECISIONS #63) only tag their roots as
+    // occluders and never appear in ins.items (inspect.clear() empties both).
+    const has = (id) => ins.items.has(id) || (ins.occluders || []).some((r) => r.userData.objectId === id);
     const reg = (id, roots, opts) => {
-      if (!roots || (Array.isArray(roots) && !roots.length) || ins.items.has(id)) return;
+      if (!roots || (Array.isArray(roots) && !roots.length) || has(id)) return;
       for (const r of [roots].flat()) r.userData.scaleFrame = 'local';
       ins.register(id, roots, opts);
     };

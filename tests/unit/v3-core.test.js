@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import * as THREE from 'three';
-import { validateCatalog, createCatalog, scaleError, checkSceneScale, countWords, angularScaleError, measureObject } from '../../src/v3/catalog.js';
+import { validateCatalog, createCatalog, isInspectable, scaleError, checkSceneScale, countWords, angularScaleError, measureObject } from '../../src/v3/catalog.js';
 import { findAdHocZIndex, LAYERS } from '../../src/v3/layers.js';
 import { DiscoveryJournal } from '../../src/v3/journal.js';
 import { MotionLayerManager } from '../../src/v3/motion-layers.js';
@@ -17,7 +17,7 @@ import { declutter, placeCard, frameDistance, heightFraction, overlap, rect } fr
 const ROOT = join(import.meta.dirname, '..', '..');
 const catalogRaw = JSON.parse(readFileSync(join(ROOT, 'content', 'objects.json'), 'utf8'));
 
-const entry = (o = {}) => ({ id: 'thing', name: 'Thing', short: 'A short line.', more: 'More text.', whyItMatters: '', realSize: 1, honesty: 'real', source: 'https://example.org/x', role: 'explore', ...o });
+const entry = (o = {}) => ({ id: 'thing', name: 'Thing', short: 'A short line.', more: 'More text.', whyItMatters: '', realSize: 1, honesty: 'real', source: 'https://example.org/x', role: 'learn', whyItMatters: 'It shows the thing.', objective: 'm1', ...o });
 const memStorage = () => { const m = new Map(); return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k) }; };
 
 describe('catalog (plan 10 §4.1)', () => {
@@ -48,6 +48,26 @@ describe('catalog (plan 10 §4.1)', () => {
     expect(validateCatalog([entry({ honesty: 'fictional', source: '' })]).errors).toEqual([]);
   });
 
+  it('roles: task and learn need whyItMatters and objective; decorative is not inspectable; explore is rejected', () => {
+    const { errors } = validateCatalog([
+      entry({ id: 'a', role: 'task', whyItMatters: '' }),
+      entry({ id: 'b', role: 'learn', objective: undefined }),
+      entry({ id: 'c', role: 'explore' }),
+      entry({ id: 'd', role: 'decorative', short: '', more: '', whyItMatters: undefined, objective: undefined }),
+      entry({ id: 'e', role: 'task' }),
+    ]);
+    expect(errors.some((e) => e.includes('(a)') && e.includes('whyItMatters'))).toBe(true);
+    expect(errors.some((e) => e.includes('(b)') && e.includes('objective'))).toBe(true);
+    expect(errors.some((e) => e.includes('(c)') && e.includes('explore'))).toBe(true);
+    expect(errors.some((e) => e.includes('(d)') || e.includes('(e)'))).toBe(false);
+    expect(validateCatalog([entry({ role: 'decorative' })]).errors.join()).toMatch(/no task or learn/);
+    const c = createCatalog(catalogRaw);
+    expect(c.inspectable.every(isInspectable)).toBe(true);
+    // Lunar classification (DECISIONS #63): set dressing and sky are decorative.
+    for (const id of ['flag', 'field-crew', 'earth', 'alsep-heat-flow']) expect(c.isInspectable(id)).toBe(false);
+    for (const id of ['craterlets', 'mare-plain', 'lrv', 'moon-globe']) expect(c.isInspectable(id)).toBe(true);
+    for (const o of c.inspectable) expect(o.whyItMatters.trim() && o.objective.trim()).toBeTruthy();
+  });
   it('throws in strict mode and serves lookups', () => {
     expect(() => createCatalog([entry({ honesty: 'x' })])).toThrow(/problem/);
     const c = createCatalog(catalogRaw);
@@ -146,7 +166,10 @@ describe('discovery journal (plan 10 §4.2)', () => {
     expect(j.discover('lrv')).toBe(true);
     expect(j.discover('lrv')).toBe(false);
     expect(j.discover('not-in-catalog')).toBe(false);
-    expect(j.label()).toBe(`Discovered 1 of ${catalog.size}`);
+    // Decorative objects are not inspectable, so they never count (owner decision 2026-11-07).
+    expect(j.discover('flag')).toBe(false);
+    expect(j.total).toBe(catalog.inspectable.length);
+    expect(j.label()).toBe(`Discovered 1 of ${catalog.inspectable.length}`);
     expect(seen).toEqual([1]);
     const again = new DiscoveryJournal({ slug: 't', catalog, storage });
     expect(again.has('lrv')).toBe(true);

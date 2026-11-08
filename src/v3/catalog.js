@@ -4,8 +4,22 @@
  * Each repo keeps one entry per inspectable thing in content/objects.json, so an
  * instructional designer can edit names and text without touching code:
  *   { "objects": [ { id, name, short, more, whyItMatters, realSize, honesty,
- *                    source, role, scene?, priority?, realSizeNote?, realDistance? } ] }
+ *                    source, role, objective?, scene?, priority?, realSizeNote?, realDistance? } ] }
  * (a bare array is accepted too).
+ *
+ * Roles (owner decision 2026-11-07, G2 feedback §1): only course-relevant
+ * objects are inspectable.
+ *  - "task": the learner acts on it in a step (a question choice, a reading, a
+ *    hazard). Needs whyItMatters and objective.
+ *  - "learn": it teaches something an objective needs. Needs whyItMatters and
+ *    objective.
+ *  - "decorative": set dressing, ambient life, sky, background props. No hover
+ *    label, outline, info card, Objects-list entry, journal entry or text-mode
+ *    card. The entry stays in the catalog for the scale check and the honesty
+ *    record; short, more and whyItMatters are optional.
+ * `objective` names the module or learning objective the object serves (free
+ * text, e.g. "m2: read the wind speed"), so whyItMatters is tied to it.
+ * The old role "explore" is rejected: re-classify it as learn or decorative.
  *
  * Scale (plan 10 §4.3) has two exceptions, both recorded in the catalog:
  *  - `realSize: null` with a `realSizeNote` saying why no bounding box can be
@@ -24,7 +38,13 @@
  */
 
 export const HONESTY = Object.freeze(['real', 'reconstructed', 'fictional', 'illustrative', 'time-lapse']);
-export const ROLES = Object.freeze(['task', 'explore']);
+export const ROLES = Object.freeze(['task', 'learn', 'decorative']);
+/** Roles that are inspectable (course-relevant). */
+export const COURSE_ROLES = Object.freeze(['task', 'learn']);
+/** True for a course-relevant (inspectable) catalog entry. */
+export const isInspectable = (o) => COURSE_ROLES.includes(o?.role);
+/** Tag text on cards, lists and text mode for each inspectable role. */
+export const ROLE_LABELS = Object.freeze({ task: 'Task object', learn: 'Learn' });
 export const LIMITS = Object.freeze({ shortWords: 25, moreWords: 120, scaleTolerance: 0.15 });
 
 /** Human label shown on cards and in text mode for each honesty value. */
@@ -62,27 +82,32 @@ export function validateCatalog(raw) {
     if (!o.id || typeof o.id !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(o.id)) errors.push(`${at}: id must be lower-case kebab-case`);
     if (seen.has(o.id)) errors.push(`${at}: duplicate id`);
     seen.add(o.id);
-    for (const k of ['name', 'short', 'more']) {
+    const course = isInspectable(o);
+    if (o.role === 'explore') errors.push(`${at}: role "explore" was replaced (owner decision 2026-11-07): use "learn" with whyItMatters and objective, or "decorative" (not inspectable)`);
+    else if (!ROLES.includes(o.role)) errors.push(`${at}: role must be task, learn or decorative`);
+    for (const k of course ? ['name', 'short', 'more'] : ['name']) {
       if (typeof o[k] !== 'string' || !o[k].trim()) errors.push(`${at}: ${k} is required`);
     }
     if (countWords(o.short) > LIMITS.shortWords) errors.push(`${at}: short has ${countWords(o.short)} words (max ${LIMITS.shortWords})`);
     if (countWords(o.more) > LIMITS.moreWords) errors.push(`${at}: more has ${countWords(o.more)} words (max ${LIMITS.moreWords})`);
-    if (typeof o.whyItMatters !== 'string') errors.push(`${at}: whyItMatters must be a string (empty for pure exploration)`);
+    if (course) {
+      if (typeof o.whyItMatters !== 'string' || !o.whyItMatters.trim()) errors.push(`${at}: a ${o.role} object needs whyItMatters (what it teaches for its objective)`);
+      if (typeof o.objective !== 'string' || !o.objective.trim()) errors.push(`${at}: a ${o.role} object needs objective (the module or objective it serves)`);
+    } else if (o.whyItMatters !== undefined && typeof o.whyItMatters !== 'string') errors.push(`${at}: whyItMatters must be a string`);
     if (o.realSize === null) {
       if (typeof o.realSizeNote !== 'string' || !o.realSizeNote.trim()) errors.push(`${at}: realSize null needs a realSizeNote (why no size can be compared)`);
     } else if (!isSize(o.realSize)) errors.push(`${at}: realSize must be metres (a number, or [x, y, z]), or null with a realSizeNote`);
     if (o.realDistance !== undefined && !(typeof o.realDistance === 'number' && o.realDistance > 0)) errors.push(`${at}: realDistance must be metres (> 0)`);
     if (o.realDistance !== undefined && typeof o.realSize !== 'number') errors.push(`${at}: realDistance needs a single-number realSize (the diameter)`);
     if (!HONESTY.includes(o.honesty)) errors.push(`${at}: honesty must be one of ${HONESTY.join(', ')}`);
-    if (!ROLES.includes(o.role)) errors.push(`${at}: role must be task or explore`);
     if (typeof o.source !== 'string') errors.push(`${at}: source is required (URL from the research notes)`);
     else if (!o.source.trim()) {
       if (o.honesty !== 'fictional') errors.push(`${at}: source may be empty only for fictional objects`);
     } else if (!/^https?:\/\/\S+$/.test(o.source) && !/^research\/\S+/.test(o.source)) {
       errors.push(`${at}: source must be an http(s) URL or a research/ path`);
     }
-    if (o.role === 'task' && !String(o.whyItMatters || '').trim()) warnings.push(`${at}: task object without whyItMatters`);
   });
+  if (list.length && !list.some(isInspectable)) errors.push('catalog has no task or learn object');
   return { objects: list, errors, warnings };
 }
 
@@ -99,8 +124,12 @@ export function createCatalog(raw, { strict = true } = {}) {
   }
   for (const w of warnings) console.warn(`content/objects.json: ${w}`);
   const byId = new Map(objects.map((o) => [o.id, o]));
+  const inspectable = objects.filter(isInspectable);
   return {
     objects,
+    /** Course-relevant entries (task, learn): the journal, Objects list and text mode use these. */
+    inspectable,
+    isInspectable: (id) => isInspectable(byId.get(id)),
     byId,
     get: (id) => byId.get(id) || null,
     has: (id) => byId.has(id),

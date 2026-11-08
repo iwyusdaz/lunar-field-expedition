@@ -2,7 +2,7 @@
  * Sub-path test (build contract, 08-vercel-deployment.md section 5.6):
  * copy dist/ to tmp/play/<slug>/, serve tmp/, load /play/<slug>/ and check:
  * no failed network requests, no console errors, canvas or WebGL fallback present,
- * text mode opens, "All projects" link points to '/'.
+ * text mode opens, Back to start is there and no "All projects" link (owner, 2026-11-07).
  * Run with: npm run build && npx playwright test tests/sub-path.spec.js
  */
 import { test, expect } from '@playwright/test';
@@ -89,9 +89,9 @@ test('sub-path /play/<slug>/ loads with no failed requests or console errors', a
   await expect(page.locator('#textmode')).toBeVisible();
   await expect(page.locator('#textmode')).not.toBeEmpty();
 
-  // "All projects" link points to '/'.
-  const link = page.getByRole('link', { name: /all projects/i }).first();
-  await expect(link).toHaveAttribute('href', '/');
+  // No link to the showcase from a project page; Back to start instead (owner, 2026-11-07).
+  await expect(page.getByRole('link', { name: /all projects/i })).toHaveCount(0);
+  await expect(page.locator('#textmode').getByRole('button', { name: 'Back to start' })).toBeVisible();
 
   // v3: the streamed surface (3D Tiles, KTX2 textures, meshopt models, the
   // self-hosted Basis transcoder) also loads from the sub-path. A fresh start:

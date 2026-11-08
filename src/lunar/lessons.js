@@ -132,6 +132,8 @@ export class Lessons {
       enter: (app) => { use(app); L.enterModule(i); },
       now: (app) => { use(app); return L.nowFor(i); },
       text: (body, app) => { use(app); L.textFor(i, body); },
+      // Back (owner, 2026-11-07): the previous step of this module, if there is one.
+      back: (app) => { use(app); return L.back(i); },
     });
     this.steps = [
       this._m1Steps(), this._m2Steps(), this._m3Steps(), this._m4Steps(), this._m5Steps(),
@@ -184,6 +186,18 @@ export class Lessons {
     if (this.step[i] >= this.steps[i].length) { this._finishModule(i); return; }
     this._enterStep(i);
     this.refresh();
+  }
+
+  /** Back one step inside module i (the shell's Back button). False on the first step. */
+  back(i = this.app.module) {
+    const k = Math.min(this.step[i] ?? 0, this.steps[i].length);
+    if (k <= 0) return false;
+    this.step[i] = k - 1;
+    // Module 1's first step is the globe: show the orbit view again.
+    if (i === 0 && this.step[i] === 0 && this.app.engine) { this.useScene('orbit'); this.fly(this.orbit?.view(), 1.2); }
+    this._enterStep(i);
+    this.refresh();
+    return true;
   }
 
   _finishModule(i) {

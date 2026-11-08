@@ -116,6 +116,9 @@
 .v3-discovered { margin: 0; font-size: var(--type-small); white-space: nowrap; color: var(--v3-text); flex: none; }
 .v3-disc-short { display: none; }
 .v3-menu-btn { flex: none; }
+/* Back (owner, 2026-11-07): quiet, at the start of the bar. */
+.v3-back-btn { flex: none; min-width: 44px; padding: 0 10px; background: transparent; border-color: transparent; }
+.v3-back-btn:hover { border-color: var(--v3-border); }
 
 /* ---------- in-world labels (hidden at rest) ---------- */
 .v3-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: var(--z-world-label); }
@@ -394,6 +397,7 @@
 [data-layout^="phone"] .v3-step-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 [data-layout^="phone"] .v3-step { padding: 0; justify-content: center; }
 [data-layout^="phone"] .v3-disc-long { display: none; }
+[data-layout^="phone"] .v3-back-label { display: none; }
 [data-layout^="phone"] .v3-disc-short { display: inline; }
 /* Very narrow screens: the count alone, so five or more module steps still fit. */
 @media (max-width: 419px) { .v3-disc-word { display: none; } }

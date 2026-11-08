@@ -7,8 +7,14 @@
  *   under reduced motion. "Show all labels" (menu, saved) and holding Alt or L
  *   show every label in view; a declutter pass keeps labels from stacking and
  *   hides lower-priority ones when crowded.
+ * - Only course-relevant objects are inspectable (owner decision 2026-11-07):
+ *   catalog role "task" or "learn". register() on a "decorative" entry only
+ *   tags its roots (userData.objectId for the scale check, userData.decorative)
+ *   and returns null: no label, outline, card or Objects-list entry. A
+ *   decorative object still blocks the pick ray, so a click on it never opens
+ *   an object hidden behind it.
  * - Hover/focus: an outline (inverted hull, drawn only while shown). Task
- *   objects get the case's strong highlight; explore objects a subtle one.
+ *   objects get the case's strong highlight; learn objects a subtle one.
  * - Click / Enter: the camera eases to frame the object (>= 35% of the viewport
  *   height) and the info card opens beside it, never over it. Esc, the close
  *   button or a click on empty scene closes it and eases back to the view the
@@ -26,7 +32,7 @@
 import * as THREE from 'three';
 import { announce } from '../a11y/announcer.js';
 import { declutter, placeCard, rect } from './layout-math.js';
-import { HONESTY_LABELS } from './catalog.js';
+import { HONESTY_LABELS, ROLE_LABELS } from './catalog.js';
 
 const HULL_VS = /* glsl */`
 uniform float uThickness;
@@ -71,6 +77,7 @@ export class InspectSystem {
     this.reducedMotion = o.reducedMotion || (() => false);
     this.items = new Map(); // id -> { id, entry, roots, label, hulls, priority }
     this.roots = [];
+    this.occluders = []; // decorative roots: they stop the pick ray but open nothing
     this.hovered = null;
     this.focused = null;
     this.selected = null;
@@ -89,7 +96,7 @@ export class InspectSystem {
     const accent = new THREE.Color(cssVar('--v3-accent', '#ffb347'));
     this.hullStyles = {
       task: { color: accent.clone().multiplyScalar(1.6), thickness: 3.2, opacity: 1 },
-      explore: { color: new THREE.Color(1.4, 1.4, 1.4), thickness: 1.6, opacity: 0.75 },
+      learn: { color: new THREE.Color(1.4, 1.4, 1.4), thickness: 1.6, opacity: 0.75 },
     };
     this._buildCard();
     this._bind();
@@ -101,7 +108,8 @@ export class InspectSystem {
   _emit(ev, ...a) { for (const fn of this._listeners[ev] || []) fn(...a); }
 
   /**
-   * Make a catalog object inspectable.
+   * Make a catalog object inspectable (role task or learn). For a decorative
+   * entry the roots are only tagged (scale check) and the call returns null.
    * @param {string} id               catalog id
    * @param {THREE.Object3D|THREE.Object3D[]} roots  one root, or several copies sharing a card (a row of trees)
    * @param {{ priority?: number, frame?: object }} [opts] priority for label declutter; frame options for rig.frame()
@@ -110,6 +118,10 @@ export class InspectSystem {
     const entry = this.catalog.get(id);
     if (!entry) throw new Error(`inspect: "${id}" is not in content/objects.json`);
     const list = [roots].flat();
+    if (entry.role === 'decorative') {
+      for (const r of list) { r.userData.objectId = id; r.userData.decorative = true; this.occluders.push(r); }
+      return null;
+    }
     for (const r of list) { r.userData.objectId = id; this.roots.push(r); }
     const label = document.createElement('div');
     label.className = `v3-label is-${entry.role}`;
@@ -126,7 +138,7 @@ export class InspectSystem {
 
   unregister(id) {
     const it = this.items.get(id);
-    if (!it) return;
+    if (!it) { this.occluders = this.occluders.filter((r) => r.userData.objectId !== id); return; }
     it.label.remove();
     this._setHulls(it, false);
     this.roots = this.roots.filter((r) => !it.roots.includes(r));
@@ -136,7 +148,7 @@ export class InspectSystem {
     this._emit('change');
   }
 
-  clear() { for (const id of [...this.items.keys()]) this.unregister(id); }
+  clear() { for (const id of [...this.items.keys()]) this.unregister(id); this.occluders = []; }
 
   /** Ids registered in the current scene, sorted by name. */
   ids() { return [...this.items.values()].sort((a, b) => a.entry.name.localeCompare(b.entry.name)).map((i) => i.id); }
@@ -240,10 +252,14 @@ export class InspectSystem {
     const r = this.canvas.getBoundingClientRect();
     this._ndc.set(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
     this.raycaster.setFromCamera(this._ndc, this.camera);
-    const hits = this.raycaster.intersectObjects(this.roots, true);
+    const hits = this.raycaster.intersectObjects(this.occluders.length ? [...this.roots, ...this.occluders] : this.roots, true);
     for (const h of hits) {
       if (!this._visibleChain(h.object)) continue;
-      for (let p = h.object; p; p = p.parent) if (p.userData?.objectId && this.items.has(p.userData.objectId)) return { id: p.userData.objectId, root: this.items.get(p.userData.objectId).roots.includes(p) ? p : null };
+      for (let p = h.object; p; p = p.parent) {
+        if (p.userData?.objectId && this.items.has(p.userData.objectId)) return { id: p.userData.objectId, root: this.items.get(p.userData.objectId).roots.includes(p) ? p : null };
+        // A decorative object in front: nothing opens (no click through it).
+        if (p.userData?.decorative) return null;
+      }
     }
     // Thin or small objects (poles, tools) are hard to hit exactly: accept a
     // click inside their on-screen box when nothing registered was hit.
@@ -298,7 +314,7 @@ export class InspectSystem {
   _setHulls(it, on) {
     if (!it) return;
     if (on && !it.hulls) {
-      const st = this.hullStyles[it.entry.role] || this.hullStyles.explore;
+      const st = this.hullStyles[it.entry.role] || this.hullStyles.learn;
       const mat = new THREE.ShaderMaterial({
         vertexShader: HULL_VS, fragmentShader: HULL_FS, side: THREE.BackSide, transparent: st.opacity < 1, depthWrite: false,
         uniforms: { uThickness: { value: st.thickness }, uResolution: { value: new THREE.Vector2(innerWidth, innerHeight) }, uColor: { value: st.color }, uOpacity: { value: st.opacity } },
@@ -385,7 +401,7 @@ export class InspectSystem {
     const c = this.card;
     c.dataset.objectId = e.id;
     c.dataset.role = e.role;
-    c.querySelector('[data-card="tag"]').textContent = `${HONESTY_LABELS[e.honesty] || e.honesty} · ${e.role === 'task' ? 'Task object' : 'To explore'}`;
+    c.querySelector('[data-card="tag"]').textContent = `${HONESTY_LABELS[e.honesty] || e.honesty} · ${ROLE_LABELS[e.role] || e.role}`;
     c.querySelector('[data-card="name"]').textContent = e.name;
     c.querySelector('[data-card="short"]').textContent = e.short;
     const more = c.querySelector('[data-card="more"]');
@@ -472,7 +488,7 @@ export function renderObjectsList(container, inspect, journal, onOpen = (id, via
     const found = journal.has(id);
     b.innerHTML = `<span class="v3-list-name"></span><span class="v3-list-meta"></span>`;
     b.querySelector('.v3-list-name').textContent = e.name;
-    b.querySelector('.v3-list-meta').textContent = `${e.role === 'task' ? 'Task' : 'Explore'}${found ? ' · found ✓' : ''}`;
+    b.querySelector('.v3-list-meta').textContent = `${e.role === 'task' ? 'Task' : 'Learn'}${found ? ' · found ✓' : ''}`;
     b.addEventListener('focus', () => inspect.focus(id));
     b.addEventListener('blur', () => inspect.focus(null));
     b.addEventListener('click', (ev) => onOpen(id, ev.detail === 0 ? 'keyboard' : 'pointer', b));

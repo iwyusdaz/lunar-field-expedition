@@ -2,7 +2,8 @@
  * journal.js — discovery journal (plan 10 §4.2).
  *
  * Records which catalog objects the learner has opened (by mouse, keyboard
- * list or text mode). Finding things is optional and never blocks progress.
+ * list or text mode). Only course-relevant objects (role task or learn) count;
+ * decorative ones are never inspectable (owner decision 2026-11-07). Finding things is optional and never blocks progress.
  * Saved under a slug-prefixed localStorage key (shared origin with the other
  * projects), cleared by the template's "Clear my data".
  * @module v3/journal
@@ -12,7 +13,7 @@ export class DiscoveryJournal {
   /**
    * @param {object} opts
    * @param {string} opts.slug
-   * @param {{ objects: object[], has: (id: string) => boolean }} opts.catalog
+   * @param {{ objects: object[], inspectable?: object[], has: (id: string) => boolean }} opts.catalog
    * @param {Storage} [opts.storage]  defaults to window.localStorage when present
    */
   constructor({ slug, catalog, storage }) {
@@ -28,7 +29,7 @@ export class DiscoveryJournal {
   _load() {
     try {
       const raw = JSON.parse(this.storage?.getItem(this.key) || '{}');
-      for (const [id, at] of Object.entries(raw)) if (this.catalog.has(id)) this.found.set(id, at);
+      for (const [id, at] of Object.entries(raw)) if (this._counts(id)) this.found.set(id, at);
     } catch { /* private mode or bad JSON: start empty */ }
   }
 
@@ -38,7 +39,7 @@ export class DiscoveryJournal {
 
   /** Mark an object found. Returns true the first time. */
   discover(id) {
-    if (!this.catalog.has(id) || this.found.has(id)) return false;
+    if (!this._counts(id) || this.found.has(id)) return false;
     this.found.set(id, new Date().toISOString());
     this._save();
     for (const fn of this._listeners) fn(this.count, this.total, id);
@@ -47,7 +48,9 @@ export class DiscoveryJournal {
 
   has(id) { return this.found.has(id); }
   get count() { return this.found.size; }
-  get total() { return this.catalog.objects.length; }
+  get total() { return this._list().length; }
+  _list() { return this.catalog.inspectable || this.catalog.objects; }
+  _counts(id) { return this.catalog.has(id) && (!this.catalog.isInspectable || this.catalog.isInspectable(id)); }
   /** Found catalog entries in the order they were found. */
   entries() {
     return [...this.found.keys()].map((id) => this.catalog.objects.find((o) => o.id === id)).filter(Boolean);

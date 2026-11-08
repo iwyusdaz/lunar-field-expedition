@@ -2,10 +2,18 @@
  * shell.js — the scene-first shell (plan 10 §2).
  *
  * The 3D view fills the window. On top of it, in layer order (layers.css):
- * - one top bar (<= 56 px): project name, module stepper with checkmarks,
- *   "Discovered x of y", one Menu button. Plain font, Settings, Text mode,
- *   Hide panel, Show all labels, camera controls, Journal, Objects,
- *   Controls (?), My progress and All projects live in the menu;
+ * - one top bar (<= 56 px): Back, project name, module stepper with
+ *   checkmarks, "Discovered x of y", one Menu button. Plain font, Settings,
+ *   Text mode, Hide panel, Show all labels, camera controls, Journal, Objects,
+ *   Controls (?), My progress and Back to start live in the menu. There is no
+ *   link to the showcase from a project page (owner, 2026-11-07).
+ * - Back (shell.backButton, data-ui="back") emits 'action:back': the app
+ *   returns to the previous screen or step. Back to start
+ *   (shell.backToStartButton, data-ui="back-to-start", in the menu) emits
+ *   'action:back-to-start': the app shows the title screen again. Repo layouts
+ *   with their own bar (a rail, a bottom bar) move these two elements where
+ *   they want them; the handlers are bound on the shell root, so they keep
+ *   working wherever the elements sit inside it;
  * - the Now card (bottom-left; phone: a one-line peek that expands into a
  *   bottom sheet, landscape phone: a side sheet <= 35% wide): step x of y, the
  *   goal, the one action, its control hint and one primary button, <= 60 words.
@@ -75,6 +83,7 @@ export class SceneShell {
     this.root.classList.add('v3-shell');
     this.root.innerHTML = `
       <header class="v3-topbar" data-ui="top-bar">
+        <button type="button" class="v3-btn v3-back-btn" data-action="back" data-ui="back" aria-label="Back: previous step"><span aria-hidden="true">←</span><span class="v3-back-label"> Back</span></button>
         <p class="v3-brand"><span class="v3-brand-full">${esc(o.title)}</span><span class="v3-brand-short" aria-hidden="true">${esc(o.shortTitle || o.title)}</span></p>
         <nav class="v3-stepper" aria-label="Modules"><ol></ol></nav>
         <p class="v3-discovered" data-ui="discovered" aria-live="polite"></p>
@@ -120,7 +129,7 @@ export class SceneShell {
           <li><button type="button" class="v3-btn" data-action="textmode" data-ui="textmode-toggle" aria-pressed="false">Text mode</button></li>
           <li><button type="button" class="v3-btn" data-action="settings">Settings</button></li>
           <li><button type="button" class="v3-btn" data-action="progress">My progress</button></li>
-          <li><a class="v3-btn" href="/">All projects</a></li>
+          <li><button type="button" class="v3-btn" data-action="back-to-start" data-ui="back-to-start">Back to start</button></li>
         </ul>
       </dialog>
       <dialog class="v3-controls" id="controls-dialog" aria-labelledby="v3-controls-h">
@@ -133,6 +142,8 @@ export class SceneShell {
       <dialog id="progress-dialog" aria-labelledby="progress-h"></dialog>`;
     const $ = (s) => this.root.querySelector(s);
     this.topBar = $('.v3-topbar');
+    this.backButton = $('[data-ui="back"]');
+    this.backToStartButton = $('[data-ui="back-to-start"]');
     this.stepper = $('.v3-stepper ol');
     this.discovered = $('[data-ui="discovered"]');
     this.canvas = $('#app');
@@ -413,7 +424,6 @@ export class SceneShell {
         <div class="v3-title-actions">
           <button type="button" class="v3-btn v3-primary" data-action="title-start">${esc(startLabel)}</button>
           <button type="button" class="v3-btn" data-action="title-text">Use text mode</button>
-          <a class="v3-btn" href="/">All projects</a>
         </div>
       </div>`;
     this.titleScreen.hidden = false;
@@ -546,7 +556,7 @@ export class SceneShell {
         if (this.menu.open) closeDialog(this.menu);
         this.setPanelHidden(!this.panelHidden);
         announce(this.panelHidden ? 'Panel hidden. Open it again from the Menu or its one-line bar.' : 'Panel shown');
-      } else if (['objects', 'journal', 'practice', 'show-labels', 'settings', 'progress'].includes(a)) {
+      } else if (['objects', 'journal', 'practice', 'show-labels', 'settings', 'progress', 'back-to-start'].includes(a)) {
         if (this.menu.open && a !== 'show-labels') closeDialog(this.menu);
       }
       this._emit(`action:${a}`, b);

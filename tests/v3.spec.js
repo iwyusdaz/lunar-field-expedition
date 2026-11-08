@@ -61,7 +61,7 @@ test('labels are hidden at rest; hover shows one; a click opens the card beside 
   expect(await visibleLabels(page)).toContain('moon-globe');
   await page.mouse.click(p.x, p.y);
   await expect(page.locator('[data-ui="info-card"][data-object-id="moon-globe"]')).toBeVisible();
-  await expect(page.locator('[data-ui="discovered"]')).toContainText('1 of 35');
+  await expect(page.locator('[data-ui="discovered"]')).toContainText('1 of 20');
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-ui="info-card"]')).toBeHidden();
 });
@@ -71,13 +71,13 @@ test('landing streams the surface; every surface object is in the keyboard list 
   await T(page, () => window.__TEST__.app.goModule(0));
   await page.waitForTimeout(1500);
   await now(page, /Land at Hadley/).click();
-  await page.waitForFunction(() => window.__TEST__.scene.surface.streamed.leaves.size > 0 && window.__TEST__.inspect.ids().length === 32, null, { timeout: 120_000 });
+  await page.waitForFunction(() => window.__TEST__.scene.surface.streamed.leaves.size > 0 && window.__TEST__.inspect.ids().length === 17, null, { timeout: 120_000 });
   const ids = await T(page, () => window.__TEST__.inspect.ids());
-  expect(ids.length).toBe(32);
+  expect(ids.length).toBe(17); // course objects only (DECISIONS #63)
   await page.locator('[data-action="menu"]').click();
   await page.locator('[data-ui="objects-list-toggle"]').click();
   const list = page.locator('[data-ui="objects-list"] [data-object-id]');
-  await expect(list).toHaveCount(32);
+  await expect(list).toHaveCount(17);
   await list.filter({ hasText: 'Lunar Module descent stage' }).focus();
   await page.waitForTimeout(400);
   expect(await visibleLabels(page)).toContain('lm-descent-stage');
@@ -85,7 +85,7 @@ test('landing streams the surface; every surface object is in the keyboard list 
   await expect(page.locator('[data-ui="info-card"][data-object-id="lm-descent-stage"]')).toBeVisible();
   // Sky bodies frame by turning the camera (and narrowing the view), never by flying into space.
   await page.keyboard.press('Escape');
-  await T(page, () => window.__TEST__.inspect.open('earth'));
+  await T(page, () => window.__TEST__.inspect.open('sun'));
   await page.waitForTimeout(1500);
   const fov = await T(page, () => window.__TEST__.engine.camera.fov);
   expect(fov).toBeLessThan(10);
@@ -196,9 +196,12 @@ test('text mode: every module renders, every catalog object is listed, decisions
   await T(page, () => window.__TEST__.ui.toggleTextMode());
   const tm = page.locator('#textmode');
   await expect(tm).toContainText('Crater size-frequency tables');
-  const names = await T(page, () => window.__TEST__.catalog.objects.map((o) => o.name));
+  // Course objects have a text-mode card; decorative ones have none (owner decision 2026-11-07).
+  const names = await T(page, () => window.__TEST__.catalog.inspectable.map((o) => o.name));
   const text = await tm.innerText();
   for (const n of names) expect(text).toContain(n);
+  const decor = await T(page, () => window.__TEST__.catalog.objects.filter((o) => o.role === 'decorative').map((o) => o.id));
+  for (const id of decor) await expect(tm.locator(`details[data-object-id="${id}"]`)).toHaveCount(0);
   const fs = tm.locator('fieldset', { hasText: /Which is younger/ });
   await fs.getByRole('radio', { name: /mare lavas: they lie against/i }).check();
   await fs.getByRole('button', { name: /Submit answer/ }).click();
@@ -229,7 +232,7 @@ test('reduced motion stops the sun time-lapse, the rover and the crew', async ({
   expect(await T(page, () => window.__TEST__.motion.factor)).toBe(0);
 });
 
-test('card hold: the rover and the walking geologist stay in their inspect frame (review F2)', async ({ page }) => {
+test('card hold: the rover stays in its inspect frame (review F2); the decorative crew open no card', async ({ page }) => {
   await ready(page);
   await T(page, () => window.__TEST__.app.goModule(4));
   await page.waitForTimeout(3000);
@@ -238,12 +241,10 @@ test('card hold: the rover and the walking geologist stay in their inspect frame
   const a = await pos();
   await page.waitForTimeout(1500);
   expect(await pos()).toEqual(a);
-  await T(page, () => { const T2 = window.__TEST__; T2.inspect.close({ restore: false }); T2.inspect.open('field-crew', { root: T2.scene.surface.crewB.root }); });
-  const it = await T(page, () => window.__TEST__.inspect.items.get('field-crew').active.name);
-  expect(it).toBe('crew-b');
-  const b = await T(page, () => window.__TEST__.scene.surface.crewB.root.position.toArray());
-  await page.waitForTimeout(1500);
-  expect(await T(page, () => window.__TEST__.scene.surface.crewB.root.position.toArray())).toEqual(b);
+  // The crew are decorative (DECISIONS #63): no card opens for them, and they keep walking.
+  await T(page, () => { const T2 = window.__TEST__; T2.inspect.close({ restore: false }); T2.inspect.open('field-crew'); });
+  await expect(page.locator('[data-ui="info-card"][data-object-id="field-crew"]')).toHaveCount(0);
+  expect(await T(page, () => window.__TEST__.inspect.items.has('field-crew'))).toBe(false);
   await T(page, () => window.__TEST__.inspect.close());
   await page.waitForTimeout(1500);
   expect(await pos()).not.toEqual(a);
@@ -252,7 +253,7 @@ test('Sun time-lapse runs on after every landform card (review pass 2 F1)', asyn
   await ready(page);
   await T(page, () => window.__TEST__.app.goModule(4));
   await page.waitForTimeout(3000);
-  const cards = ['craterlets', 'dune-crater', 'mare-plain', 'footprints', 'rover-tracks', 'regolith', 'spur-crater', 'elbow-crater', 'st-george-crater', 'mount-hadley', 'hadley-delta', 'apennine-front'];
+  const cards = ['craterlets', 'dune-crater', 'mare-plain', 'boulders', 'horizon', 'hadley-rille', 'spur-crater', 'elbow-crater', 'st-george-crater', 'mount-hadley', 'hadley-delta', 'apennine-front'];
   // Each card on its own (open, close), then card to card without closing, then a card left open across a module change.
   for (const id of cards) { await T(page, (x) => window.__TEST__.inspect.open(x), id); await page.waitForTimeout(250); await T(page, () => window.__TEST__.inspect.close()); }
   for (const id of cards) await T(page, (x) => window.__TEST__.inspect.open(x), id);
