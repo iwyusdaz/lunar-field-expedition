@@ -109,7 +109,7 @@
     "source": "—",
     "license": "MIT (code) / CC BY 4.0 (content)",
     "retrieved": "—",
-    "changes": "Built procedurally in three.js from public-domain NASA Apollo 15 surface photographs (Apollo Lunar Surface Journal image library, https://www.hq.nasa.gov/alsj/a15/images15.html); no third-party model files are used. Simplified, approximate geometry."
+    "changes": "Built procedurally in three.js from public-domain NASA Apollo 15 surface photographs (Apollo Lunar Surface Journal image library, https://www.hq.nasa.gov/alsj/a15/images15.html); no third-party model files are used. Simplified, approximate geometry. The crew figures were rebuilt in the G2 fix round (2026-11-07, `src/lunar/astronaut.js`): A7L-B suit details, procedural fabric textures, foot IK on the terrain; still own procedural work, not a scan."
   },
   {
     "asset": "LROC NAC DTM \"NAC_DTM_APOLLO15\", v3 streamed near terrain (`public/assets/terrain-v3/near/`)",

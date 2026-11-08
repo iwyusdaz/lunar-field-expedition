@@ -1,0 +1,4122 @@
+{
+  "tool": "ui-audit",
+  "toolVersion": "1.2.0",
+  "plan": "implementation-plans/immersive/10-visual-richness.md §7",
+  "label": "G2 fix round subset at 044bc39 (provisional; other fix step may share the machine)",
+  "repo": "lunar-field-expedition",
+  "version": "2.0.0",
+  "git": {
+    "branch": "v3",
+    "commit": "044bc39",
+    "dirty": false
+  },
+  "measuredAt": "2026-11-08T12:19:50.505Z",
+  "mode": "headed Chromium on the local GPU",
+  "machine": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "browser": "Chromium 143.0.7499.4 (Playwright 1.57.0)"
+  },
+  "method": "VITE_TEST_HOOKS=1 build served on 127.0.0.1:5201 (gzip for text types, no cache). Fresh browser context per viewport (desktop DSF 2; phone DSF 3, isMobile, hasTouch). Download = bytes the server sent from navigation until 2 s of network silence. States: first load, then each module tab (and its cinematic sub-state while a shot plays). Medium preset forced after the download measurement. Alive: two canvas-only screenshots 5 s apart, 3x3 grid, a region counts when >= 0.25% of its pixels change by > 12/255. Performance: 4 s sample per state; GPU time from EXT_disjoint_timer_query_webgl2 around each requestAnimationFrame dispatch; draw calls and triangles counted at the WebGL call level (all passes), max over the sample.",
+  "thresholds": {
+    "panelMaxPctDesktop": 25,
+    "panelMaxPctPhone": 40,
+    "topBarMaxPx": 56,
+    "chromeRowsMax": 1,
+    "targetMinTouchPx": 44,
+    "targetMinMousePx": 32,
+    "textMinPx": 14,
+    "bodyMinPx": 16,
+    "maxTextSizes": 3,
+    "nowCardMaxWords": 60,
+    "fkMaxGrade": 8,
+    "scaleTolerance": 0.15,
+    "aliveMinRegions": 3,
+    "aliveGapMs": 5000,
+    "alivePixelDelta": 12,
+    "aliveRegionFraction": 0.0025,
+    "gpuMsP95Max": 12,
+    "fpsMin": 55,
+    "drawCallsMax": 300,
+    "trianglesMax": 1500000,
+    "downloadDesktopMaxMB": 15,
+    "downloadPhoneMaxMB": 8,
+    "fileMaxMB": 20,
+    "primitiveMinScreenFraction": 0.001,
+    "markerMaxScreenFraction": 0.02
+  },
+  "config": {
+    "readability": {
+      "mode": "fk",
+      "maxGrade": 8
+    },
+    "states": "auto (module tabs)",
+    "configFile": "evaluation/ui-audit.config.json"
+  },
+  "pass": false,
+  "summary": {
+    "sceneCoverage": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 20,
+      "skipped": 0,
+      "where": []
+    },
+    "topChrome": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "blockedControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "overlappingControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "targetSize": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "textSize": {
+      "status": "fail",
+      "failing": 6,
+      "judged": 22,
+      "skipped": 0,
+      "where": [
+        {
+          "viewport": "390x844",
+          "state": "m5",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        },
+        {
+          "viewport": "390x844",
+          "state": "site-alsep",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        },
+        {
+          "viewport": "390x844",
+          "state": "sky-earth",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        },
+        {
+          "viewport": "390x844",
+          "state": "sky-east",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        },
+        {
+          "viewport": "390x844",
+          "state": "sky-overhead",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        },
+        {
+          "viewport": "390x844",
+          "state": "site-spur",
+          "value": {
+            "minPx": 14.88,
+            "bodyPx": 15,
+            "distinctSizes": 2
+          }
+        }
+      ]
+    },
+    "typeface": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "instructionLength": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 20,
+      "skipped": 0,
+      "where": []
+    },
+    "readability": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 20,
+      "skipped": 0,
+      "where": []
+    },
+    "inspectableObjects": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 18,
+      "skipped": 0,
+      "where": []
+    },
+    "barePrimitives": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "abstractMarkers": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "alive": {
+      "status": "fail",
+      "failing": 1,
+      "judged": 22,
+      "skipped": 0,
+      "where": [
+        {
+          "viewport": "390x844",
+          "state": "m3",
+          "value": 2
+        }
+      ]
+    },
+    "performance": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 22,
+      "skipped": 0,
+      "where": []
+    },
+    "download": {
+      "status": "pass",
+      "byViewport": {
+        "1440x900": {
+          "status": "pass",
+          "mb": 2.96,
+          "limitMB": 15
+        },
+        "390x844": {
+          "status": "pass",
+          "mb": 2.96,
+          "limitMB": 8
+        }
+      }
+    },
+    "inspectableObjectsReach": {
+      "status": "fail"
+    },
+    "scale": {
+      "status": "pass"
+    }
+  },
+  "repoGates": {
+    "inspectableObjectsReach": {
+      "status": "fail",
+      "catalogEntries": 35,
+      "courseRelevant": 20,
+      "decorative": 15,
+      "unclassified": [],
+      "notReachedByMouse": [],
+      "notReachedByTouch": [
+        "hadley-delta",
+        "spur-crater",
+        "dune-crater"
+      ],
+      "notInKeyboardList": [],
+      "notInTextMode": [],
+      "decorativeOpenedCard": [],
+      "decorativeInKeyboardList": [],
+      "decorativeInTextMode": [],
+      "note": "Mouse, keyboard list and text mode checked at 1440x900, touch at 390x844, in every exploration state"
+    },
+    "scale": {
+      "status": "pass",
+      "checked": 35,
+      "failing": 0,
+      "items": [],
+      "exempt": [
+        {
+          "id": "hadley-rille",
+          "status": "exempt",
+          "reason": "Terrain feature larger than the modelled terrain (IAU length 116 km); its scale is the LROC/SLDEM elevation data itself, so no bounding-box scale test applies."
+        },
+        {
+          "id": "apennine-front",
+          "status": "exempt",
+          "reason": "Mountain range far larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "mare-plain",
+          "status": "exempt",
+          "reason": "Plain larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "craterlets",
+          "status": "exempt",
+          "reason": "Many craters of different sizes in the elevation data; no single size to test."
+        },
+        {
+          "id": "regolith",
+          "status": "exempt",
+          "reason": "A surface layer, not an object with a size."
+        },
+        {
+          "id": "starfield",
+          "status": "exempt",
+          "reason": "Stars are effectively at infinite distance; no size to test."
+        },
+        {
+          "id": "micrometeoroid-flash",
+          "status": "exempt",
+          "reason": "A brief flash; no object size to test."
+        },
+        {
+          "id": "horizon",
+          "status": "exempt",
+          "reason": "A line of sight, not an object."
+        },
+        {
+          "id": "terminator",
+          "status": "exempt",
+          "reason": "A line of shadow, not an object."
+        },
+        {
+          "id": "mare-imbrium",
+          "status": "exempt",
+          "reason": "Basin is part of the globe texture; no separate object."
+        }
+      ],
+      "angular": [
+        {
+          "id": "earth",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            5967,
+            5967,
+            5967
+          ],
+          "distance": 180000,
+          "seenRad": 0.03315,
+          "realRad": 0.03315,
+          "error": 0
+        },
+        {
+          "id": "sun",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            1814,
+            1814,
+            1814
+          ],
+          "distance": 195000,
+          "seenRad": 0.009303,
+          "realRad": 0.009301,
+          "error": 0
+        }
+      ],
+      "notWorldFrame": [
+        {
+          "id": "lm-descent-stage",
+          "frame": "local"
+        },
+        {
+          "id": "lrv",
+          "frame": "local"
+        },
+        {
+          "id": "flag",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-central-station",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-seismometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-retroreflector",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-magnetometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-heat-flow",
+          "frame": "local"
+        },
+        {
+          "id": "rtg",
+          "frame": "local"
+        },
+        {
+          "id": "mount-hadley",
+          "frame": "local"
+        },
+        {
+          "id": "hadley-delta",
+          "frame": "local"
+        },
+        {
+          "id": "st-george-crater",
+          "frame": "local"
+        },
+        {
+          "id": "spur-crater",
+          "frame": "local"
+        },
+        {
+          "id": "elbow-crater",
+          "frame": "local"
+        },
+        {
+          "id": "dune-crater",
+          "frame": "local"
+        },
+        {
+          "id": "boulders",
+          "frame": "local"
+        },
+        {
+          "id": "footprints",
+          "frame": "local"
+        },
+        {
+          "id": "rover-tracks",
+          "frame": "local"
+        },
+        {
+          "id": "sample-bag",
+          "frame": "local"
+        },
+        {
+          "id": "earth",
+          "frame": "local"
+        },
+        {
+          "id": "sun",
+          "frame": "local"
+        },
+        {
+          "id": "endeavour",
+          "frame": "local"
+        },
+        {
+          "id": "field-crew",
+          "frame": "rest pose"
+        },
+        {
+          "id": "genesis-rock",
+          "frame": "local"
+        },
+        {
+          "id": "moon-globe",
+          "frame": "local"
+        }
+      ]
+    }
+  },
+  "textBeforeFirstAction": {
+    "1440x900": {},
+    "390x844": {}
+  },
+  "statesRun": 22,
+  "errorStates": [],
+  "systemSuspended": [],
+  "runs": [
+    {
+      "viewport": "1440x900",
+      "class": "desktop",
+      "dsf": 2,
+      "states": [
+        {
+          "name": "start",
+          "label": "First load, no input",
+          "phase": "title",
+          "gates": {
+            "sceneCoverage": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 0,
+                "topHeightPx": 0
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": []
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 2,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "Apollo 15 landing site · real NASA terra",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 42
+                },
+                {
+                  "px": 16,
+                  "chars": 120
+                },
+                {
+                  "px": 40,
+                  "chars": 22
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "Jost": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0026,
+                0.107,
+                0.0023,
+                0.0266,
+                0.562,
+                0.0152,
+                0.004,
+                0.1019,
+                0.0057
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.92,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m1",
+          "label": "1Module 1 of 5: Arrival",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 10.5,
+              "limit": 25,
+              "unionPct": 10.3,
+              "sceneVisiblePct": 83.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 10.5,
+                  "chars": 278
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 10,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 267
+                },
+                {
+                  "px": 20,
+                  "chars": 21
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 52,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 400,
+              "uiTextChars": 497
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 1.7,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase explore"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0028,
+                0.0424,
+                0.0027,
+                0.0038,
+                0.3038,
+                0.0106,
+                0.0029,
+                0.0609,
+                0.0072
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 2.91,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m2",
+          "label": "2Module 2 of 5: Read the land",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 10.8,
+              "limit": 25,
+              "unionPct": 10.6,
+              "sceneVisiblePct": 83.2,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 10.8,
+                  "chars": 248
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 11,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 224
+                },
+                {
+                  "px": 20,
+                  "chars": 31
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 50,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 367,
+              "uiTextChars": 594
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.3,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 3,
+              "limit": 3,
+              "fractions": [
+                0.0021,
+                0.0008,
+                0.0111,
+                0.056,
+                0.0111,
+                0.0009,
+                0.0006,
+                0,
+                0.0006
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.9,
+                "gpuMsP95": 7.92,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 184,
+                "trianglesMax": 750485,
+                "threeInfoLastFrame": {
+                  "calls": 184,
+                  "triangles": 750485
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m3",
+          "label": "3Module 3 of 5: Which is older?",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 8.1,
+              "limit": 25,
+              "unionPct": 8,
+              "sceneVisiblePct": 85.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 8.1,
+                  "chars": 262
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 107
+                },
+                {
+                  "px": 16,
+                  "chars": 247
+                },
+                {
+                  "px": 20,
+                  "chars": 26
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 48,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 397,
+              "uiTextChars": 607
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2.3,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0099,
+                0.0091,
+                0.0483,
+                0.0279,
+                0.0001,
+                0.0001,
+                0.0051,
+                0.0027,
+                0.0021
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 7.27,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 173,
+                "trianglesMax": 646267,
+                "threeInfoLastFrame": {
+                  "calls": 173,
+                  "triangles": 646267
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m4",
+          "label": "4Module 4 of 5: Field traverse",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 9.8,
+              "limit": 25,
+              "unionPct": 9.5,
+              "sceneVisiblePct": 84.2,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 9.8,
+                  "chars": 249
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 236
+                },
+                {
+                  "px": 20,
+                  "chars": 26
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 45,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 375,
+              "uiTextChars": 597
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2.7,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 5,
+              "limit": 3,
+              "fractions": [
+                0.007,
+                0.0157,
+                0.0997,
+                0.0106,
+                0.0231,
+                0.0005,
+                0,
+                0,
+                0.0005
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 56.5,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 8.97,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 187,
+                "trianglesMax": 692889,
+                "threeInfoLastFrame": {
+                  "calls": 187,
+                  "triangles": 692889
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m5",
+          "label": "5Module 5 of 5: Field report",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 495
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0171,
+                0.0066,
+                0.002,
+                0.0296,
+                0.0262,
+                0.0352,
+                0.0244,
+                0.0003,
+                0.0003
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 10.17,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 224,
+                "trianglesMax": 1182103,
+                "threeInfoLastFrame": {
+                  "calls": 224,
+                  "triangles": 1182103
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "site-alsep",
+          "label": "Walk to the ALSEP instruments",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 389
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0273,
+                0.0288,
+                0.0293,
+                0.0082,
+                0.026,
+                0.0252,
+                0.0047,
+                0.0076,
+                0.0056
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 7.74,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 203,
+                "trianglesMax": 727747,
+                "threeInfoLastFrame": {
+                  "calls": 203,
+                  "triangles": 727747
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-earth",
+          "label": "Look up at Earth from the LM",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 389
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0028,
+                0.0039,
+                0.002,
+                0.0041,
+                0.0071,
+                0.0019,
+                0.0043,
+                0.0031,
+                0.0016
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 3.2,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 90,
+                "trianglesMax": 473207,
+                "threeInfoLastFrame": {
+                  "calls": 90,
+                  "triangles": 473207
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-east",
+          "label": "Look east toward the Sun",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 389
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0002,
+                0.008,
+                0.0003,
+                0.0711,
+                0.0969,
+                0.0485,
+                0.0549,
+                0.0408,
+                0.0341
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 6.99,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 102,
+                "trianglesMax": 938987,
+                "threeInfoLastFrame": {
+                  "calls": 102,
+                  "triangles": 938987
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-overhead",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 108
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 293,
+              "uiTextChars": 515
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0005,
+                0.0015,
+                0.0004,
+                0.1929,
+                0.1064,
+                0.0103,
+                0.5416,
+                0.6034,
+                0.1744
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 243,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 8.91,
+                "gpuSamples": 243,
+                "gpuTimer": true,
+                "drawCallsMax": 280,
+                "trianglesMax": 1257761,
+                "threeInfoLastFrame": {
+                  "calls": 280,
+                  "triangles": 1257761
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "site-spur",
+          "label": "Go to Spur crater (Module 5 button)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 389
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.1427,
+                0.1144,
+                0.0425,
+                0.1492,
+                0.0618,
+                0.0694,
+                0.1544,
+                0.1562,
+                0.1541
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 6.71,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 41,
+                "trianglesMax": 276301,
+                "threeInfoLastFrame": {
+                  "calls": 41,
+                  "triangles": 276301
+                }
+              },
+              "failures": []
+            }
+          }
+        }
+      ],
+      "errors": [],
+      "download": {
+        "status": "pass",
+        "mb": 2.96,
+        "limitMB": 15,
+        "requests": 19,
+        "networkIdle": true,
+        "largestFile": {
+          "file": "assets/terrain/normal-l2.png",
+          "bytes": 3596366,
+          "mb": 3.43
+        },
+        "filesOver20MB": [],
+        "streamedAfterFirstInteractionMB": 16
+      },
+      "preset": "medium"
+    },
+    {
+      "viewport": "390x844",
+      "class": "phone",
+      "dsf": 3,
+      "states": [
+        {
+          "name": "start",
+          "label": "First load, no input",
+          "phase": "title",
+          "gates": {
+            "sceneCoverage": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 0,
+                "topHeightPx": 0
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": []
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 2,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 3
+              },
+              "minSample": "Apollo 15 landing site · real NASA terra",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 42
+                },
+                {
+                  "px": 17,
+                  "chars": 120
+                },
+                {
+                  "px": 42.5,
+                  "chars": 22
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "Jost": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase title"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.202,
+                0.1169,
+                0.0524,
+                0.6727,
+                0.529,
+                0.4824,
+                0.144,
+                0.1251,
+                0.0804
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 1.36,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m1",
+          "label": "1Module 1 of 5: Arrival",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 36.2,
+              "limit": 40,
+              "unionPct": 47.3,
+              "sceneVisiblePct": 46.9,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 36.2,
+                  "chars": 277
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 17,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 24
+                },
+                {
+                  "px": 17,
+                  "chars": 267
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 52,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 308,
+              "uiTextChars": 473
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase explore"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0326,
+                0.0738,
+                0.0362,
+                0.2447,
+                0.3636,
+                0.3397,
+                0.0724,
+                0.0843,
+                0.0478
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 1.42,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m2",
+          "label": "2Module 2 of 5: Read the land",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 38,
+              "limit": 40,
+              "unionPct": 49.3,
+              "sceneVisiblePct": 45,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 38,
+                  "chars": 249
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 18,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 24
+                },
+                {
+                  "px": 17,
+                  "chars": 236
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 50,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 277,
+              "uiTextChars": 572
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 0.5,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 3,
+              "limit": 3,
+              "fractions": [
+                0,
+                0,
+                0,
+                0.0171,
+                0.006,
+                0.0056,
+                0,
+                0,
+                0
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 2.78,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 44,
+                "trianglesMax": 319489,
+                "threeInfoLastFrame": {
+                  "calls": 44,
+                  "triangles": 319489
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m3",
+          "label": "3Module 3 of 5: Which is older?",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 30.1,
+              "limit": 40,
+              "unionPct": 40.7,
+              "sceneVisiblePct": 53.5,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 30.1,
+                  "chars": 261
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 16,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 24
+                },
+                {
+                  "px": 17,
+                  "chars": 252
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 48,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 293,
+              "uiTextChars": 570
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2.6,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "fail",
+              "value": 2,
+              "limit": 3,
+              "fractions": [
+                0.0103,
+                0.0001,
+                0.0012,
+                0,
+                0.0001,
+                0.0001,
+                0,
+                0.0039,
+                0
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 3.18,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 152,
+                "trianglesMax": 477427,
+                "threeInfoLastFrame": {
+                  "calls": 152,
+                  "triangles": 477427
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m4",
+          "label": "4Module 4 of 5: Field traverse",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 37.2,
+              "limit": 40,
+              "unionPct": 48.3,
+              "sceneVisiblePct": 45.9,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 37.2,
+                  "chars": 250
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 16,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 243
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 45,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 285,
+              "uiTextChars": 554
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 3.1,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.9828,
+                1,
+                0.9999,
+                0.9542,
+                0.9842,
+                1,
+                1,
+                1,
+                1
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 2.77,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 165,
+                "trianglesMax": 547751,
+                "threeInfoLastFrame": {
+                  "calls": 165,
+                  "triangles": 547751
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m5",
+          "label": "5Module 5 of 5: Field report",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 346
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 5,
+              "limit": 3,
+              "fractions": [
+                0.0076,
+                0.0069,
+                0.0003,
+                0.0227,
+                0.033,
+                0.0861,
+                0.0004,
+                0.0001,
+                0.0007
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.5,
+                "gpuMsP95": 4.14,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 185,
+                "trianglesMax": 994397,
+                "threeInfoLastFrame": {
+                  "calls": 185,
+                  "triangles": 994397
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "site-alsep",
+          "label": "Walk to the ALSEP instruments",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 346
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0286,
+                0.0339,
+                0.0338,
+                0.064,
+                0.0411,
+                0.0471,
+                0.003,
+                0.0018,
+                0.0083
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 2.8,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 164,
+                "trianglesMax": 463509,
+                "threeInfoLastFrame": {
+                  "calls": 164,
+                  "triangles": 463509
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-earth",
+          "label": "Look up at Earth from the LM",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 346
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 14
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.0049,
+                0.0052,
+                0.0037,
+                0.0096,
+                0.0115,
+                0.0048,
+                0.0037,
+                0.0037,
+                0.0033
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17,
+                "gpuMsP95": 1.66,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 78,
+                "trianglesMax": 469235,
+                "threeInfoLastFrame": {
+                  "calls": 33,
+                  "triangles": 411289
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-east",
+          "label": "Look east toward the Sun",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 346
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0004,
+                0.03,
+                0.0006,
+                0.0298,
+                0.1117,
+                0.0482,
+                0.0158,
+                0.0285,
+                0.095
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 2.6,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 76,
+                "trianglesMax": 615969,
+                "threeInfoLastFrame": {
+                  "calls": 76,
+                  "triangles": 615969
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-overhead",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 339
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 4,
+              "limit": 3,
+              "fractions": [
+                0.0008,
+                0.0037,
+                0.0008,
+                0.0117,
+                0.0464,
+                0.037,
+                0,
+                0,
+                0
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 3.7,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 188,
+                "trianglesMax": 851421,
+                "threeInfoLastFrame": {
+                  "calls": 170,
+                  "triangles": 848899
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "site-spur",
+          "label": "Go to Spur crater (Module 5 button)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7.8,
+              "limit": 40,
+              "unionPct": 18.8,
+              "sceneVisiblePct": 75.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7.8,
+                  "chars": 34
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 6
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 14,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "fail",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 15,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 25
+                },
+                {
+                  "px": 17,
+                  "chars": 32
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 7,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 74,
+              "uiTextChars": 339
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 5.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 9,
+              "limit": 3,
+              "fractions": [
+                0.119,
+                0.0988,
+                0.0784,
+                0.0552,
+                0.0503,
+                0.0441,
+                0.1624,
+                0.1768,
+                0.1982
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "585x1266",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17,
+                "gpuMsP95": 2.4,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 23,
+                "trianglesMax": 128365,
+                "threeInfoLastFrame": {
+                  "calls": 23,
+                  "triangles": 128365
+                }
+              },
+              "failures": []
+            }
+          }
+        }
+      ],
+      "errors": [],
+      "download": {
+        "status": "pass",
+        "mb": 2.96,
+        "limitMB": 8,
+        "requests": 19,
+        "networkIdle": true,
+        "largestFile": {
+          "file": "assets/terrain/normal-l2.png",
+          "bytes": 3596366,
+          "mb": 3.43
+        },
+        "filesOver20MB": [],
+        "streamedAfterFirstInteractionMB": 13.41
+      },
+      "preset": "medium"
+    }
+  ]
+}
