@@ -933,12 +933,23 @@ export class Lessons {
   goSpur() {
     const s = this.surface;
     if (!s?.genesisAt) return;
-    const { x, z } = s.genesisAt;
-    this.fly(this.viewWorld(x, z, 0.9, 2.6, 1.05, 0.05), 1.6);
+    // Stand on the rim behind the Genesis Rock and look across it into the
+    // bowl, so the button shows Spur crater itself with the rock in front (G2:
+    // the old 0.9 m view showed only the rock on bare soil, and on a phone the
+    // crater could not be tapped). The rock's own card keeps the close-up.
+    const view = () => {
+      const { x, z } = s.genesisAt;
+      const b = s.bowls?.spur || { x, z };
+      let ux = b.x - x, uz = b.z - z;
+      const n = Math.hypot(ux, uz);
+      if (n < 1) { ux = 0; uz = -1; } else { ux /= n; uz /= n; }
+      return this.viewWorld(x + ux * 8, z + uz * 8, 16, Math.atan2(-ux, -uz), 1.22, 0.5);
+    };
+    this.fly(view(), 1.6);
     // The fine terrain under Spur streams in as the camera arrives: settle the
     // view (and the rock) on it once the tiles are there.
     clearTimeout(this._spurT);
-    this._spurT = setTimeout(() => { s.groundAll(); this.fly(this.viewWorld(x, z, 0.9, 2.6, 1.05, 0.05), 0.5); }, 3500);
+    this._spurT = setTimeout(() => { s.groundAll(); this.fly(view(), 0.5); }, 3500);
   }
 
   /** The evidence types the field report requires for a question (report.json), in plain words. */
