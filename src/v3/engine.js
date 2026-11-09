@@ -18,6 +18,21 @@ export function portraitZoom(aspect) { return aspect > 0 && aspect < 1 ? Math.sq
 
 export const READING_SCALE = 0.8;
 
+/**
+ * Software WebGL (no GPU: SwiftShader, llvmpipe, Microsoft Basic Render...).
+ * Returns the renderer string, or null on a real GPU.
+ * @param {WebGLRenderingContext|WebGL2RenderingContext} gl
+ */
+export function detectSoftwareGL(gl) {
+  try {
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    const name = String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name) ? name : null;
+  } catch { return null; }
+}
+/** Without a GPU: loop interval while the scene is covered (updates run, nothing is drawn). */
+export const SOFTWARE_MIN_FRAME_MS = 200;
+
 export class EngineV3 {
   /**
    * @param {HTMLCanvasElement} canvas
@@ -35,6 +50,10 @@ export class EngineV3 {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.info.autoReset = false;
+    // Without a GPU one frame can take seconds and block every click, including
+    // the title screen's "Use text mode". Detect it once so the loop can skip
+    // drawing (but not updating) while the title screen or text mode covers the scene.
+    this.softwareGL = detectSoftwareGL(this.renderer.getContext());
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(opts.fov ?? 60, 1, 0.1, 2000);
@@ -90,13 +109,19 @@ export class EngineV3 {
     if (this._running) return;
     this._running = true;
     this.clock.start();
+    // Frames are scheduled with requestAnimationFrame. Only without a GPU, and
+    // only while nothing of the scene can be seen, the loop runs every
+    // SOFTWARE_MIN_FRAME_MS and updates the scene without drawing it.
+    const next = (ms) => { if (ms > 0) setTimeout(() => requestAnimationFrame(tick), ms); else requestAnimationFrame(tick); };
     const tick = () => {
       if (!this._running) return;
-      requestAnimationFrame(tick);
-      if (this._paused || !this._visible) { this.clock.getDelta(); return; }
+      if (this._paused || !this._visible) { this.clock.getDelta(); next(0); return; }
+      const covered = this.softwareGL && this.sceneCovered();
+      next(covered ? SOFTWARE_MIN_FRAME_MS : 0); // scheduled first, as before, so an error in one frame never stops the loop
       const dt = Math.min(this.clock.getDelta(), 0.1);
       this._t += dt;
       for (const fn of this._updateFns) fn(dt, this._t);
+      if (covered) { this.scene.updateMatrixWorld(); this.camera.updateMatrixWorld(); return; } // logic runs, drawing waits
       this.renderer.info.reset();
       // The benchmark owns the only TIME_ELAPSED query while it runs; ui-audit
       // brackets frames with its own query, so never time while it samples.
@@ -108,6 +133,23 @@ export class EngineV3 {
       this._dynamicResolution(dt);
     };
     requestAnimationFrame(tick);
+  }
+
+  /**
+   * True while nothing of the 3D view can be seen: the title screen (a
+   * full-screen page) is up, or text mode / a fallback has hidden the canvas.
+   * Used only without a GPU, where skipping those frames keeps the page usable.
+   */
+  sceneCovered() {
+    if (this.canvas.checkVisibility && !this.canvas.checkVisibility({ visibilityProperty: true })) return true;
+    // A page counts only if it is really shown and fills the viewport; a
+    // partial card over the scene leaves the scene visible, so keep drawing.
+    const fills = (el) => {
+      if (!el || el.hidden || (el.checkVisibility && !el.checkVisibility({ visibilityProperty: true, opacityProperty: true }))) return false;
+      const r = el.getBoundingClientRect();
+      return r.width * r.height >= 0.9 * innerWidth * innerHeight && getComputedStyle(el).backgroundColor !== 'rgba(0, 0, 0, 0)';
+    };
+    return fills(document.querySelector('[data-ui="title-screen"]')) || fills(document.getElementById('textmode'));
   }
 
   _dynamicResolution(dt) {
