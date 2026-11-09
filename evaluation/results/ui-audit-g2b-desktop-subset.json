@@ -1,0 +1,4530 @@
+{
+  "tool": "ui-audit",
+  "toolVersion": "1.2.1",
+  "plan": "implementation-plans/immersive/10-visual-richness.md §7",
+  "label": "G2 fix round b: 1440x900 m3, m5, site-spur, headed, tool 1.2.1, at 4c51ffb",
+  "repo": "lunar-field-expedition",
+  "version": "2.0.0",
+  "git": {
+    "branch": "v3",
+    "commit": "4c51ffb",
+    "dirty": true
+  },
+  "measuredAt": "2026-11-09T04:56:36.741Z",
+  "mode": "headed Chromium on the local GPU",
+  "machine": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "browser": "Chromium 143.0.7499.4 (Playwright 1.57.0)"
+  },
+  "method": "VITE_TEST_HOOKS=1 build served on 127.0.0.1:5201 (gzip for text types, no cache). Fresh browser context per viewport (desktop DSF 2; phone DSF 3, isMobile, hasTouch). Download = bytes the server sent from navigation until 2 s of network silence. States: first load, then each module tab (and its cinematic sub-state while a shot plays). Medium preset forced after the download measurement. Alive: two canvas-only screenshots 5 s apart, 3x3 grid, a region counts when >= 0.25% of its pixels change by > 12/255. Performance: 4 s sample per state; GPU time from EXT_disjoint_timer_query_webgl2 around each requestAnimationFrame dispatch; draw calls and triangles counted at the WebGL call level (all passes), max over the sample.",
+  "thresholds": {
+    "panelMaxPctDesktop": 25,
+    "panelMaxPctPhone": 40,
+    "topBarMaxPx": 56,
+    "chromeRowsMax": 1,
+    "targetMinTouchPx": 44,
+    "targetMinMousePx": 32,
+    "textMinPx": 14,
+    "bodyMinPx": 16,
+    "maxTextSizes": 3,
+    "nowCardMaxWords": 60,
+    "fkMaxGrade": 8,
+    "scaleTolerance": 0.15,
+    "aliveMinRegions": 3,
+    "aliveGapMs": 5000,
+    "alivePixelDelta": 12,
+    "aliveRegionFraction": 0.0025,
+    "gpuMsP95Max": 12,
+    "fpsMin": 55,
+    "drawCallsMax": 300,
+    "trianglesMax": 1500000,
+    "downloadDesktopMaxMB": 15,
+    "downloadPhoneMaxMB": 8,
+    "fileMaxMB": 20,
+    "primitiveMinScreenFraction": 0.001,
+    "markerMaxScreenFraction": 0.02
+  },
+  "config": {
+    "readability": {
+      "mode": "fk",
+      "maxGrade": 8
+    },
+    "states": "auto (module tabs)",
+    "configFile": "evaluation/ui-audit.config.json"
+  },
+  "pass": false,
+  "summary": {
+    "sceneCoverage": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "topChrome": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "blockedControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "overlappingControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "targetSize": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "textSize": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "typeface": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "instructionLength": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "readability": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "inspectableObjects": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "barePrimitives": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "abstractMarkers": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "alive": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "performance": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 3,
+      "skipped": 0,
+      "where": []
+    },
+    "download": {
+      "status": "pass",
+      "byViewport": {
+        "1440x900": {
+          "status": "pass",
+          "mb": 2.96,
+          "limitMB": 15
+        }
+      }
+    },
+    "inspectableObjectsReach": {
+      "status": "fail"
+    },
+    "scale": {
+      "status": "pass"
+    }
+  },
+  "repoGates": {
+    "inspectableObjectsReach": {
+      "status": "fail",
+      "catalogEntries": 35,
+      "courseRelevant": 20,
+      "decorative": 15,
+      "unclassified": [],
+      "notReachedByMouse": [
+        "sun",
+        "moon-globe",
+        "terminator",
+        "mare-imbrium"
+      ],
+      "notReachedByTouch": "not measured (no touch viewport in this run)",
+      "notInKeyboardList": [
+        "moon-globe",
+        "terminator",
+        "mare-imbrium"
+      ],
+      "notInTextMode": [],
+      "decorativeOpenedCard": [],
+      "decorativeInKeyboardList": [],
+      "decorativeInTextMode": [],
+      "note": "Mouse, keyboard list and text mode checked at 1440x900, touch at no touch viewport, in every exploration state"
+    },
+    "scale": {
+      "status": "pass",
+      "checked": 35,
+      "failing": 0,
+      "items": [],
+      "exempt": [
+        {
+          "id": "hadley-rille",
+          "status": "exempt",
+          "reason": "Terrain feature larger than the modelled terrain (IAU length 116 km); its scale is the LROC/SLDEM elevation data itself, so no bounding-box scale test applies."
+        },
+        {
+          "id": "apennine-front",
+          "status": "exempt",
+          "reason": "Mountain range far larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "mare-plain",
+          "status": "exempt",
+          "reason": "Plain larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "craterlets",
+          "status": "exempt",
+          "reason": "Many craters of different sizes in the elevation data; no single size to test."
+        },
+        {
+          "id": "regolith",
+          "status": "exempt",
+          "reason": "A surface layer, not an object with a size."
+        },
+        {
+          "id": "starfield",
+          "status": "exempt",
+          "reason": "Stars are effectively at infinite distance; no size to test."
+        },
+        {
+          "id": "micrometeoroid-flash",
+          "status": "exempt",
+          "reason": "A brief flash; no object size to test."
+        },
+        {
+          "id": "horizon",
+          "status": "exempt",
+          "reason": "A line of sight, not an object."
+        },
+        {
+          "id": "terminator",
+          "status": "exempt",
+          "reason": "A line of shadow, not an object."
+        },
+        {
+          "id": "mare-imbrium",
+          "status": "exempt",
+          "reason": "Basin is part of the globe texture; no separate object."
+        }
+      ],
+      "angular": [
+        {
+          "id": "earth",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            5967,
+            5967,
+            5967
+          ],
+          "distance": 180000,
+          "seenRad": 0.03315,
+          "realRad": 0.03315,
+          "error": 0
+        },
+        {
+          "id": "sun",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            1814,
+            1814,
+            1814
+          ],
+          "distance": 195000,
+          "seenRad": 0.009303,
+          "realRad": 0.009301,
+          "error": 0
+        }
+      ],
+      "notWorldFrame": [
+        {
+          "id": "lm-descent-stage",
+          "frame": "local"
+        },
+        {
+          "id": "lrv",
+          "frame": "local"
+        },
+        {
+          "id": "flag",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-central-station",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-seismometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-retroreflector",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-magnetometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-heat-flow",
+          "frame": "local"
+        },
+        {
+          "id": "rtg",
+          "frame": "local"
+        },
+        {
+          "id": "mount-hadley",
+          "frame": "local"
+        },
+        {
+          "id": "hadley-delta",
+          "frame": "local"
+        },
+        {
+          "id": "st-george-crater",
+          "frame": "local"
+        },
+        {
+          "id": "spur-crater",
+          "frame": "local"
+        },
+        {
+          "id": "elbow-crater",
+          "frame": "local"
+        },
+        {
+          "id": "dune-crater",
+          "frame": "local"
+        },
+        {
+          "id": "boulders",
+          "frame": "local"
+        },
+        {
+          "id": "footprints",
+          "frame": "local"
+        },
+        {
+          "id": "rover-tracks",
+          "frame": "local"
+        },
+        {
+          "id": "sample-bag",
+          "frame": "local"
+        },
+        {
+          "id": "earth",
+          "frame": "local"
+        },
+        {
+          "id": "sun",
+          "frame": "local"
+        },
+        {
+          "id": "endeavour",
+          "frame": "local"
+        },
+        {
+          "id": "field-crew",
+          "frame": "rest pose"
+        },
+        {
+          "id": "genesis-rock",
+          "frame": "local"
+        },
+        {
+          "id": "moon-globe",
+          "frame": "local"
+        }
+      ]
+    }
+  },
+  "textBeforeFirstAction": {
+    "1440x900": null
+  },
+  "statesRun": 3,
+  "errorStates": [],
+  "systemSuspended": [],
+  "runs": [
+    {
+      "viewport": "1440x900",
+      "class": "desktop",
+      "dsf": 2,
+      "states": [
+        {
+          "name": "m3",
+          "label": "3Module 3 of 5: Which is older?",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 8.1,
+              "limit": 25,
+              "unionPct": 8,
+              "sceneVisiblePct": 85.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 8.1,
+                  "chars": 262
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 9,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 247
+                },
+                {
+                  "px": 20,
+                  "chars": 26
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 48,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 385,
+              "uiTextChars": 481
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2.3,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0623,
+                0.0635,
+                0.0823,
+                0.0366,
+                0.0015,
+                0.0002,
+                0.0092,
+                0.0046,
+                0.0024
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 7.1,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 173,
+                "trianglesMax": 646267,
+                "threeInfoLastFrame": {
+                  "calls": 173,
+                  "triangles": 646267
+                },
+                "trace": [
+                  [
+                    21470,
+                    7.08,
+                    173
+                  ],
+                  [
+                    21486.7,
+                    6.85,
+                    173
+                  ],
+                  [
+                    21503.4,
+                    5.59,
+                    173
+                  ],
+                  [
+                    21520,
+                    6.28,
+                    173
+                  ],
+                  [
+                    21536.7,
+                    6.56,
+                    173
+                  ],
+                  [
+                    21553.4,
+                    6.73,
+                    173
+                  ],
+                  [
+                    21570.1,
+                    6.69,
+                    173
+                  ],
+                  [
+                    21586.7,
+                    6.68,
+                    173
+                  ],
+                  [
+                    21603.3,
+                    6.72,
+                    173
+                  ],
+                  [
+                    21620,
+                    6.76,
+                    173
+                  ],
+                  [
+                    21636.7,
+                    6.71,
+                    173
+                  ],
+                  [
+                    21653.3,
+                    6.72,
+                    173
+                  ],
+                  [
+                    21670.1,
+                    7.04,
+                    173
+                  ],
+                  [
+                    21686.7,
+                    6.73,
+                    173
+                  ],
+                  [
+                    21703.4,
+                    6.77,
+                    173
+                  ],
+                  [
+                    21720,
+                    6.7,
+                    173
+                  ],
+                  [
+                    21736.7,
+                    5.85,
+                    173
+                  ],
+                  [
+                    21753.4,
+                    6.24,
+                    173
+                  ],
+                  [
+                    21770,
+                    6.71,
+                    173
+                  ],
+                  [
+                    21786.7,
+                    6.77,
+                    173
+                  ],
+                  [
+                    21803.4,
+                    6.72,
+                    173
+                  ],
+                  [
+                    21820.1,
+                    6.74,
+                    173
+                  ],
+                  [
+                    21836.7,
+                    6.81,
+                    173
+                  ],
+                  [
+                    21853.4,
+                    6.82,
+                    173
+                  ],
+                  [
+                    21870.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    21886.7,
+                    6.73,
+                    173
+                  ],
+                  [
+                    21903.3,
+                    5.62,
+                    173
+                  ],
+                  [
+                    21920.1,
+                    6.36,
+                    173
+                  ],
+                  [
+                    21936.7,
+                    6.45,
+                    173
+                  ],
+                  [
+                    21953.4,
+                    6.74,
+                    173
+                  ],
+                  [
+                    21970,
+                    6.71,
+                    173
+                  ],
+                  [
+                    21986.7,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22003.4,
+                    6.76,
+                    173
+                  ],
+                  [
+                    22020.1,
+                    6.73,
+                    173
+                  ],
+                  [
+                    22036.7,
+                    5.46,
+                    173
+                  ],
+                  [
+                    22053.4,
+                    5.77,
+                    173
+                  ],
+                  [
+                    22070,
+                    6.52,
+                    173
+                  ],
+                  [
+                    22086.7,
+                    6.75,
+                    173
+                  ],
+                  [
+                    22103.4,
+                    6.78,
+                    173
+                  ],
+                  [
+                    22120,
+                    5.61,
+                    173
+                  ],
+                  [
+                    22136.8,
+                    6.17,
+                    173
+                  ],
+                  [
+                    22153.4,
+                    6.29,
+                    173
+                  ],
+                  [
+                    22170,
+                    6.59,
+                    173
+                  ],
+                  [
+                    22186.7,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22203.4,
+                    6.75,
+                    173
+                  ],
+                  [
+                    22220.1,
+                    7.13,
+                    173
+                  ],
+                  [
+                    22236.8,
+                    6.79,
+                    173
+                  ],
+                  [
+                    22253.4,
+                    6.73,
+                    173
+                  ],
+                  [
+                    22270.1,
+                    6.75,
+                    173
+                  ],
+                  [
+                    22286.8,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22303.4,
+                    6,
+                    173
+                  ],
+                  [
+                    22320,
+                    6.57,
+                    173
+                  ],
+                  [
+                    22336.7,
+                    6.68,
+                    173
+                  ],
+                  [
+                    22353.4,
+                    6.73,
+                    173
+                  ],
+                  [
+                    22370.1,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22386.8,
+                    7.07,
+                    173
+                  ],
+                  [
+                    22403.4,
+                    6.71,
+                    173
+                  ],
+                  [
+                    22420.1,
+                    6.74,
+                    173
+                  ],
+                  [
+                    22436.7,
+                    6.83,
+                    173
+                  ],
+                  [
+                    22453.4,
+                    6.69,
+                    173
+                  ],
+                  [
+                    22470,
+                    6.85,
+                    173
+                  ],
+                  [
+                    22486.7,
+                    7.32,
+                    173
+                  ],
+                  [
+                    22503.4,
+                    5.84,
+                    173
+                  ],
+                  [
+                    22520.1,
+                    5.97,
+                    173
+                  ],
+                  [
+                    22536.7,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22553.4,
+                    6.79,
+                    173
+                  ],
+                  [
+                    22570,
+                    6.55,
+                    173
+                  ],
+                  [
+                    22586.7,
+                    6.64,
+                    173
+                  ],
+                  [
+                    22603.4,
+                    7.28,
+                    173
+                  ],
+                  [
+                    22620.1,
+                    7.32,
+                    173
+                  ],
+                  [
+                    22636.7,
+                    7.45,
+                    173
+                  ],
+                  [
+                    22653.4,
+                    7.02,
+                    173
+                  ],
+                  [
+                    22669.5,
+                    7.03,
+                    173
+                  ],
+                  [
+                    22686.7,
+                    6.74,
+                    173
+                  ],
+                  [
+                    22703.4,
+                    6.78,
+                    173
+                  ],
+                  [
+                    22720.1,
+                    6.76,
+                    173
+                  ],
+                  [
+                    22736.7,
+                    6.76,
+                    173
+                  ],
+                  [
+                    22753.5,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22770,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22786.7,
+                    6.79,
+                    173
+                  ],
+                  [
+                    22803.4,
+                    6.71,
+                    173
+                  ],
+                  [
+                    22820,
+                    6.74,
+                    173
+                  ],
+                  [
+                    22836.7,
+                    6.7,
+                    173
+                  ],
+                  [
+                    22853.4,
+                    6.74,
+                    173
+                  ],
+                  [
+                    22870.1,
+                    6.7,
+                    173
+                  ],
+                  [
+                    22886.6,
+                    6.22,
+                    173
+                  ],
+                  [
+                    22903.5,
+                    6.73,
+                    173
+                  ],
+                  [
+                    22920,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22936.8,
+                    6.76,
+                    173
+                  ],
+                  [
+                    22953.4,
+                    6.72,
+                    173
+                  ],
+                  [
+                    22970.1,
+                    5.76,
+                    173
+                  ],
+                  [
+                    22986.7,
+                    5.85,
+                    173
+                  ],
+                  [
+                    23003.4,
+                    6.48,
+                    173
+                  ],
+                  [
+                    23020.1,
+                    6.86,
+                    173
+                  ],
+                  [
+                    23036.7,
+                    6.88,
+                    173
+                  ],
+                  [
+                    23053.4,
+                    7.11,
+                    173
+                  ],
+                  [
+                    23070,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23086.7,
+                    7.03,
+                    173
+                  ],
+                  [
+                    23103.4,
+                    6.75,
+                    173
+                  ],
+                  [
+                    23120,
+                    6.7,
+                    173
+                  ],
+                  [
+                    23136.7,
+                    6.7,
+                    173
+                  ],
+                  [
+                    23153.4,
+                    5.86,
+                    173
+                  ],
+                  [
+                    23170.1,
+                    6.01,
+                    173
+                  ],
+                  [
+                    23186.8,
+                    6.82,
+                    173
+                  ],
+                  [
+                    23203.4,
+                    6.78,
+                    173
+                  ],
+                  [
+                    23220.1,
+                    7.1,
+                    173
+                  ],
+                  [
+                    23236.8,
+                    7.05,
+                    173
+                  ],
+                  [
+                    23253.4,
+                    7.2,
+                    173
+                  ],
+                  [
+                    23270.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    23286.7,
+                    6.76,
+                    173
+                  ],
+                  [
+                    23303.4,
+                    5.51,
+                    173
+                  ],
+                  [
+                    23320.1,
+                    5.86,
+                    173
+                  ],
+                  [
+                    23336.8,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23353.4,
+                    6.76,
+                    173
+                  ],
+                  [
+                    23370,
+                    7.58,
+                    173
+                  ],
+                  [
+                    23386.8,
+                    6.19,
+                    173
+                  ],
+                  [
+                    23403.5,
+                    6.59,
+                    173
+                  ],
+                  [
+                    23420.1,
+                    6.83,
+                    173
+                  ],
+                  [
+                    23436.7,
+                    6.7,
+                    173
+                  ],
+                  [
+                    23453.4,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23470,
+                    5.68,
+                    173
+                  ],
+                  [
+                    23486.7,
+                    6.42,
+                    173
+                  ],
+                  [
+                    23503.4,
+                    6.73,
+                    173
+                  ],
+                  [
+                    23520.1,
+                    6.8,
+                    173
+                  ],
+                  [
+                    23536.7,
+                    6.47,
+                    173
+                  ],
+                  [
+                    23553.4,
+                    6.71,
+                    173
+                  ],
+                  [
+                    23570.1,
+                    5.69,
+                    173
+                  ],
+                  [
+                    23586.8,
+                    5.96,
+                    173
+                  ],
+                  [
+                    23603.4,
+                    6.1,
+                    173
+                  ],
+                  [
+                    23620.1,
+                    6.75,
+                    173
+                  ],
+                  [
+                    23636.8,
+                    6.79,
+                    173
+                  ],
+                  [
+                    23653.4,
+                    6.69,
+                    173
+                  ],
+                  [
+                    23670.1,
+                    6.93,
+                    173
+                  ],
+                  [
+                    23686.7,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23703.5,
+                    6.7,
+                    173
+                  ],
+                  [
+                    23720,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23736.8,
+                    6.82,
+                    173
+                  ],
+                  [
+                    23753.5,
+                    6.7,
+                    173
+                  ],
+                  [
+                    23770.1,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23786.8,
+                    6.74,
+                    173
+                  ],
+                  [
+                    23803.4,
+                    6.69,
+                    173
+                  ],
+                  [
+                    23820.1,
+                    6.61,
+                    173
+                  ],
+                  [
+                    23836.8,
+                    6.71,
+                    173
+                  ],
+                  [
+                    23853.4,
+                    7.1,
+                    173
+                  ],
+                  [
+                    23870.1,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23886.8,
+                    6.71,
+                    173
+                  ],
+                  [
+                    23903.4,
+                    6.8,
+                    173
+                  ],
+                  [
+                    23920.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    23936.5,
+                    6.44,
+                    173
+                  ],
+                  [
+                    23953.4,
+                    6.72,
+                    173
+                  ],
+                  [
+                    23970.1,
+                    7.02,
+                    173
+                  ],
+                  [
+                    23986.8,
+                    6.92,
+                    173
+                  ],
+                  [
+                    24003.4,
+                    6.64,
+                    173
+                  ],
+                  [
+                    24020.1,
+                    6.69,
+                    173
+                  ],
+                  [
+                    24036.7,
+                    6.24,
+                    173
+                  ],
+                  [
+                    24053.4,
+                    6.68,
+                    173
+                  ],
+                  [
+                    24070.1,
+                    6.81,
+                    173
+                  ],
+                  [
+                    24086.8,
+                    6.7,
+                    173
+                  ],
+                  [
+                    24103.5,
+                    6.86,
+                    173
+                  ],
+                  [
+                    24120.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    24136.8,
+                    6.71,
+                    173
+                  ],
+                  [
+                    24153.4,
+                    6.74,
+                    173
+                  ],
+                  [
+                    24170.1,
+                    6.87,
+                    173
+                  ],
+                  [
+                    24186.7,
+                    6.69,
+                    173
+                  ],
+                  [
+                    24203.4,
+                    6.04,
+                    173
+                  ],
+                  [
+                    24220.1,
+                    7.46,
+                    173
+                  ],
+                  [
+                    24236.8,
+                    5.7,
+                    173
+                  ],
+                  [
+                    24253.4,
+                    6.24,
+                    173
+                  ],
+                  [
+                    24270.1,
+                    6.25,
+                    173
+                  ],
+                  [
+                    24286.7,
+                    7.08,
+                    173
+                  ],
+                  [
+                    24303.5,
+                    6.85,
+                    173
+                  ],
+                  [
+                    24320.1,
+                    6.86,
+                    173
+                  ],
+                  [
+                    24336.8,
+                    6.7,
+                    173
+                  ],
+                  [
+                    24353.4,
+                    6.74,
+                    173
+                  ],
+                  [
+                    24370.1,
+                    6.53,
+                    173
+                  ],
+                  [
+                    24386.8,
+                    6.75,
+                    173
+                  ],
+                  [
+                    24403.4,
+                    6.74,
+                    173
+                  ],
+                  [
+                    24420.1,
+                    5.66,
+                    173
+                  ],
+                  [
+                    24436.7,
+                    5.7,
+                    173
+                  ],
+                  [
+                    24453.4,
+                    6.6,
+                    173
+                  ],
+                  [
+                    24470.1,
+                    6.76,
+                    173
+                  ],
+                  [
+                    24486.8,
+                    6.83,
+                    173
+                  ],
+                  [
+                    24503.5,
+                    6.71,
+                    173
+                  ],
+                  [
+                    24520.1,
+                    6.76,
+                    173
+                  ],
+                  [
+                    24536.7,
+                    7.41,
+                    173
+                  ],
+                  [
+                    24553.5,
+                    6.92,
+                    173
+                  ],
+                  [
+                    24570.1,
+                    6.81,
+                    173
+                  ],
+                  [
+                    24586.8,
+                    5.65,
+                    173
+                  ],
+                  [
+                    24603.4,
+                    5.65,
+                    173
+                  ],
+                  [
+                    24620.1,
+                    5.72,
+                    173
+                  ],
+                  [
+                    24636.8,
+                    7.78,
+                    173
+                  ],
+                  [
+                    24653.5,
+                    6.4,
+                    173
+                  ],
+                  [
+                    24670.1,
+                    6.55,
+                    173
+                  ],
+                  [
+                    24686.7,
+                    6.85,
+                    173
+                  ],
+                  [
+                    24703.4,
+                    6.72,
+                    173
+                  ],
+                  [
+                    24720.1,
+                    5.72,
+                    173
+                  ],
+                  [
+                    24736.8,
+                    6.17,
+                    173
+                  ],
+                  [
+                    24753.4,
+                    6.73,
+                    173
+                  ],
+                  [
+                    24770.1,
+                    5.43,
+                    173
+                  ],
+                  [
+                    24786.8,
+                    6.42,
+                    173
+                  ],
+                  [
+                    24803.4,
+                    6.71,
+                    173
+                  ],
+                  [
+                    24820.1,
+                    6.73,
+                    173
+                  ],
+                  [
+                    24836.7,
+                    6.75,
+                    173
+                  ],
+                  [
+                    24853.5,
+                    6.83,
+                    173
+                  ],
+                  [
+                    24870.1,
+                    6.45,
+                    173
+                  ],
+                  [
+                    24886.8,
+                    6.74,
+                    173
+                  ],
+                  [
+                    24903.4,
+                    6.81,
+                    173
+                  ],
+                  [
+                    24920.1,
+                    6.7,
+                    173
+                  ],
+                  [
+                    24936.8,
+                    6.73,
+                    173
+                  ],
+                  [
+                    24953.4,
+                    6.79,
+                    173
+                  ],
+                  [
+                    24970.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    24986.8,
+                    6.72,
+                    173
+                  ],
+                  [
+                    25003.5,
+                    5.84,
+                    173
+                  ],
+                  [
+                    25020.2,
+                    5.59,
+                    173
+                  ],
+                  [
+                    25036.8,
+                    5.59,
+                    173
+                  ],
+                  [
+                    25053.4,
+                    5.61,
+                    173
+                  ],
+                  [
+                    25070.1,
+                    5.84,
+                    173
+                  ],
+                  [
+                    25086.7,
+                    6.64,
+                    173
+                  ],
+                  [
+                    25103.4,
+                    6.69,
+                    173
+                  ],
+                  [
+                    25120.1,
+                    6.75,
+                    173
+                  ],
+                  [
+                    25136.7,
+                    6.7,
+                    173
+                  ],
+                  [
+                    25152.4,
+                    6.75,
+                    173
+                  ],
+                  [
+                    25170.2,
+                    6.8,
+                    173
+                  ],
+                  [
+                    25186.8,
+                    5.64,
+                    173
+                  ],
+                  [
+                    25203.5,
+                    5.38,
+                    173
+                  ],
+                  [
+                    25220.1,
+                    5.62,
+                    173
+                  ],
+                  [
+                    25236.8,
+                    5.75,
+                    173
+                  ],
+                  [
+                    25253.4,
+                    6.16,
+                    173
+                  ],
+                  [
+                    25270.1,
+                    6.7,
+                    173
+                  ],
+                  [
+                    25286.7,
+                    6.71,
+                    173
+                  ],
+                  [
+                    25303.5,
+                    6.72,
+                    173
+                  ],
+                  [
+                    25320.1,
+                    6.7,
+                    173
+                  ],
+                  [
+                    25336.8,
+                    6.71,
+                    173
+                  ],
+                  [
+                    25353.5,
+                    6.87,
+                    173
+                  ],
+                  [
+                    25370.1,
+                    6.71,
+                    173
+                  ],
+                  [
+                    25386.7,
+                    6.38,
+                    173
+                  ],
+                  [
+                    25403.5,
+                    6.77,
+                    173
+                  ],
+                  [
+                    25420.1,
+                    5.69,
+                    173
+                  ],
+                  [
+                    25436.8,
+                    6.36,
+                    173
+                  ],
+                  [
+                    25453.5,
+                    6.78,
+                    173
+                  ]
+                ]
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m5",
+          "label": "5Module 5 of 5: Field report",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 480
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0231,
+                0.0113,
+                0.0095,
+                0.0187,
+                0.0419,
+                0.0126,
+                0.0289,
+                0.0041,
+                0.0005
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 17.6,
+                "gpuMsP95": 9.62,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 207,
+                "trianglesMax": 1179725,
+                "threeInfoLastFrame": {
+                  "calls": 206,
+                  "triangles": 1179581
+                },
+                "trace": [
+                  [
+                    72169.9,
+                    6.94,
+                    207
+                  ],
+                  [
+                    72186.5,
+                    7.56,
+                    207
+                  ],
+                  [
+                    72204.1,
+                    8.18,
+                    207
+                  ],
+                  [
+                    72220.3,
+                    7.52,
+                    207
+                  ],
+                  [
+                    72237.5,
+                    7.52,
+                    206
+                  ],
+                  [
+                    72253.2,
+                    8.09,
+                    206
+                  ],
+                  [
+                    72270.6,
+                    8.23,
+                    206
+                  ],
+                  [
+                    72286.6,
+                    7.39,
+                    206
+                  ],
+                  [
+                    72303.2,
+                    7.33,
+                    206
+                  ],
+                  [
+                    72319.9,
+                    7.64,
+                    206
+                  ],
+                  [
+                    72336.5,
+                    7.99,
+                    206
+                  ],
+                  [
+                    72353.3,
+                    9.59,
+                    206
+                  ],
+                  [
+                    72369.9,
+                    8.73,
+                    206
+                  ],
+                  [
+                    72387.4,
+                    9.66,
+                    206
+                  ],
+                  [
+                    72403.4,
+                    7.69,
+                    206
+                  ],
+                  [
+                    72419.9,
+                    8.32,
+                    206
+                  ],
+                  [
+                    72437.5,
+                    8.11,
+                    206
+                  ],
+                  [
+                    72453.2,
+                    8.65,
+                    206
+                  ],
+                  [
+                    72469.9,
+                    7.83,
+                    206
+                  ],
+                  [
+                    72487.4,
+                    8.74,
+                    206
+                  ],
+                  [
+                    72504.2,
+                    7.08,
+                    206
+                  ],
+                  [
+                    72520.8,
+                    7.09,
+                    206
+                  ],
+                  [
+                    72537.5,
+                    7.17,
+                    206
+                  ],
+                  [
+                    72554.1,
+                    7.4,
+                    206
+                  ],
+                  [
+                    72570.8,
+                    7.41,
+                    206
+                  ],
+                  [
+                    72587.5,
+                    8.36,
+                    206
+                  ],
+                  [
+                    72604.1,
+                    9.35,
+                    206
+                  ],
+                  [
+                    72620.8,
+                    9.04,
+                    206
+                  ],
+                  [
+                    72637.5,
+                    10.18,
+                    206
+                  ],
+                  [
+                    72654.1,
+                    8.03,
+                    206
+                  ],
+                  [
+                    72670.8,
+                    8.06,
+                    206
+                  ],
+                  [
+                    72687.5,
+                    7.68,
+                    206
+                  ],
+                  [
+                    72704.1,
+                    7.67,
+                    206
+                  ],
+                  [
+                    72720.8,
+                    8.17,
+                    206
+                  ],
+                  [
+                    72737.5,
+                    8.38,
+                    206
+                  ],
+                  [
+                    72754.1,
+                    8.27,
+                    206
+                  ],
+                  [
+                    72770.8,
+                    8.89,
+                    206
+                  ],
+                  [
+                    72786.5,
+                    9.22,
+                    206
+                  ],
+                  [
+                    72804.1,
+                    8.07,
+                    206
+                  ],
+                  [
+                    72820.8,
+                    8,
+                    206
+                  ],
+                  [
+                    72837.5,
+                    8.12,
+                    206
+                  ],
+                  [
+                    72854.2,
+                    9.69,
+                    206
+                  ],
+                  [
+                    72870.8,
+                    9.91,
+                    206
+                  ],
+                  [
+                    72887.5,
+                    8.32,
+                    206
+                  ],
+                  [
+                    72904.2,
+                    7.12,
+                    206
+                  ],
+                  [
+                    72920.8,
+                    7.21,
+                    206
+                  ],
+                  [
+                    72937.5,
+                    7.49,
+                    206
+                  ],
+                  [
+                    72954.1,
+                    6.82,
+                    206
+                  ],
+                  [
+                    72970.8,
+                    7.39,
+                    206
+                  ],
+                  [
+                    72986.7,
+                    7.04,
+                    206
+                  ],
+                  [
+                    73004.1,
+                    7.75,
+                    206
+                  ],
+                  [
+                    73020.8,
+                    8.37,
+                    206
+                  ],
+                  [
+                    73037.5,
+                    9.03,
+                    206
+                  ],
+                  [
+                    73054.1,
+                    9.1,
+                    206
+                  ],
+                  [
+                    73070.8,
+                    8.43,
+                    206
+                  ],
+                  [
+                    73087.5,
+                    8.96,
+                    206
+                  ],
+                  [
+                    73104.1,
+                    9.2,
+                    206
+                  ],
+                  [
+                    73120.8,
+                    8.31,
+                    206
+                  ],
+                  [
+                    73137.5,
+                    8.98,
+                    206
+                  ],
+                  [
+                    73154.2,
+                    8.21,
+                    206
+                  ],
+                  [
+                    73169.9,
+                    7.5,
+                    206
+                  ],
+                  [
+                    73186.5,
+                    7.14,
+                    206
+                  ],
+                  [
+                    73203.3,
+                    7.25,
+                    206
+                  ],
+                  [
+                    73219.9,
+                    7.08,
+                    206
+                  ],
+                  [
+                    73237.3,
+                    6.7,
+                    206
+                  ],
+                  [
+                    73253.2,
+                    6.84,
+                    206
+                  ],
+                  [
+                    73269.9,
+                    7.17,
+                    206
+                  ],
+                  [
+                    73286.6,
+                    7.17,
+                    206
+                  ],
+                  [
+                    73303.2,
+                    7.16,
+                    206
+                  ],
+                  [
+                    73319.9,
+                    7.18,
+                    206
+                  ],
+                  [
+                    73336.5,
+                    7.24,
+                    206
+                  ],
+                  [
+                    73353.3,
+                    7.44,
+                    206
+                  ],
+                  [
+                    73370.8,
+                    8.96,
+                    206
+                  ],
+                  [
+                    73387.5,
+                    8.53,
+                    206
+                  ],
+                  [
+                    73403.3,
+                    9.86,
+                    206
+                  ],
+                  [
+                    73420.8,
+                    7.06,
+                    206
+                  ],
+                  [
+                    73437.5,
+                    7.19,
+                    206
+                  ],
+                  [
+                    73454.1,
+                    7.04,
+                    206
+                  ],
+                  [
+                    73470.8,
+                    7.46,
+                    206
+                  ],
+                  [
+                    73487.5,
+                    7.18,
+                    206
+                  ],
+                  [
+                    73504.2,
+                    6.8,
+                    206
+                  ],
+                  [
+                    73520.8,
+                    6.69,
+                    206
+                  ],
+                  [
+                    73536.6,
+                    6.97,
+                    206
+                  ],
+                  [
+                    73554.1,
+                    7.03,
+                    206
+                  ],
+                  [
+                    73570.8,
+                    7.25,
+                    206
+                  ],
+                  [
+                    73586.6,
+                    7.31,
+                    206
+                  ],
+                  [
+                    73604.2,
+                    7.55,
+                    206
+                  ],
+                  [
+                    73620.8,
+                    7.52,
+                    206
+                  ],
+                  [
+                    73637.5,
+                    8.84,
+                    206
+                  ],
+                  [
+                    73654.2,
+                    11.45,
+                    206
+                  ],
+                  [
+                    73670.8,
+                    7.49,
+                    206
+                  ],
+                  [
+                    73687.5,
+                    9.42,
+                    206
+                  ],
+                  [
+                    73703.2,
+                    8.07,
+                    206
+                  ],
+                  [
+                    73720.8,
+                    7.14,
+                    206
+                  ],
+                  [
+                    73737.2,
+                    6.9,
+                    206
+                  ],
+                  [
+                    73753.3,
+                    7.53,
+                    206
+                  ],
+                  [
+                    73770.8,
+                    6.81,
+                    206
+                  ],
+                  [
+                    73787.5,
+                    6.58,
+                    206
+                  ],
+                  [
+                    73803.2,
+                    6.76,
+                    206
+                  ],
+                  [
+                    73819.9,
+                    7.23,
+                    206
+                  ],
+                  [
+                    73837.5,
+                    6.84,
+                    206
+                  ],
+                  [
+                    73853.3,
+                    7.39,
+                    206
+                  ],
+                  [
+                    73869.9,
+                    7.15,
+                    206
+                  ],
+                  [
+                    73886.5,
+                    7.15,
+                    206
+                  ],
+                  [
+                    73903.3,
+                    7.17,
+                    206
+                  ],
+                  [
+                    73920.8,
+                    7.58,
+                    206
+                  ],
+                  [
+                    73937.5,
+                    8.13,
+                    206
+                  ],
+                  [
+                    73953.3,
+                    10.04,
+                    206
+                  ],
+                  [
+                    73970.8,
+                    8.03,
+                    206
+                  ],
+                  [
+                    73987,
+                    8.46,
+                    206
+                  ],
+                  [
+                    74004.1,
+                    8.3,
+                    206
+                  ],
+                  [
+                    74019.9,
+                    8.36,
+                    206
+                  ],
+                  [
+                    74037.5,
+                    8.15,
+                    206
+                  ],
+                  [
+                    74054.2,
+                    8.51,
+                    206
+                  ],
+                  [
+                    74070.9,
+                    9.1,
+                    206
+                  ],
+                  [
+                    74086.5,
+                    9.46,
+                    206
+                  ],
+                  [
+                    74104.1,
+                    8.64,
+                    206
+                  ],
+                  [
+                    74119.9,
+                    7.68,
+                    206
+                  ],
+                  [
+                    74136.5,
+                    7.22,
+                    206
+                  ],
+                  [
+                    74153.3,
+                    7.11,
+                    206
+                  ],
+                  [
+                    74169.9,
+                    6.66,
+                    206
+                  ],
+                  [
+                    74186.6,
+                    6.89,
+                    206
+                  ],
+                  [
+                    74203.3,
+                    6.69,
+                    206
+                  ],
+                  [
+                    74220.8,
+                    7.1,
+                    206
+                  ],
+                  [
+                    74236.6,
+                    7.68,
+                    206
+                  ],
+                  [
+                    74253.2,
+                    8.63,
+                    206
+                  ],
+                  [
+                    74270.3,
+                    8.37,
+                    206
+                  ],
+                  [
+                    74287.5,
+                    8.89,
+                    206
+                  ],
+                  [
+                    74303.3,
+                    8.01,
+                    206
+                  ],
+                  [
+                    74320.8,
+                    7.19,
+                    206
+                  ],
+                  [
+                    74337.5,
+                    7.75,
+                    206
+                  ],
+                  [
+                    74354.2,
+                    8.14,
+                    206
+                  ],
+                  [
+                    74370.8,
+                    7.24,
+                    206
+                  ],
+                  [
+                    74387.5,
+                    7.47,
+                    206
+                  ],
+                  [
+                    74404.1,
+                    7.41,
+                    206
+                  ],
+                  [
+                    74419.9,
+                    7.81,
+                    206
+                  ],
+                  [
+                    74437.5,
+                    7.48,
+                    206
+                  ],
+                  [
+                    74453.2,
+                    8.12,
+                    206
+                  ],
+                  [
+                    74470.9,
+                    8.73,
+                    206
+                  ],
+                  [
+                    74486.6,
+                    8.94,
+                    206
+                  ],
+                  [
+                    74504.1,
+                    10.22,
+                    206
+                  ],
+                  [
+                    74520.9,
+                    8.01,
+                    206
+                  ],
+                  [
+                    74536.6,
+                    8.59,
+                    206
+                  ],
+                  [
+                    74554.2,
+                    8.25,
+                    206
+                  ],
+                  [
+                    74570,
+                    8.29,
+                    206
+                  ],
+                  [
+                    74586.6,
+                    8.85,
+                    206
+                  ],
+                  [
+                    74604,
+                    8.74,
+                    206
+                  ],
+                  [
+                    74619.9,
+                    8.67,
+                    206
+                  ],
+                  [
+                    74636.7,
+                    7.7,
+                    206
+                  ],
+                  [
+                    74654.1,
+                    7.61,
+                    206
+                  ],
+                  [
+                    74670.8,
+                    8.44,
+                    206
+                  ],
+                  [
+                    74686.7,
+                    7.27,
+                    206
+                  ],
+                  [
+                    74704.2,
+                    7.37,
+                    206
+                  ],
+                  [
+                    74720.9,
+                    7.75,
+                    206
+                  ],
+                  [
+                    74737.5,
+                    8.5,
+                    206
+                  ],
+                  [
+                    74754.2,
+                    8.09,
+                    206
+                  ],
+                  [
+                    74770.9,
+                    7.69,
+                    206
+                  ],
+                  [
+                    74787.5,
+                    8.01,
+                    206
+                  ],
+                  [
+                    74804,
+                    8.71,
+                    206
+                  ],
+                  [
+                    74820,
+                    8.57,
+                    206
+                  ],
+                  [
+                    74836.6,
+                    8.33,
+                    206
+                  ],
+                  [
+                    74854.2,
+                    9.15,
+                    206
+                  ],
+                  [
+                    74870.6,
+                    8.02,
+                    206
+                  ],
+                  [
+                    74887.5,
+                    8.46,
+                    206
+                  ],
+                  [
+                    74904.2,
+                    8.19,
+                    206
+                  ],
+                  [
+                    74920.8,
+                    8.01,
+                    206
+                  ],
+                  [
+                    74937.5,
+                    8.05,
+                    206
+                  ],
+                  [
+                    74953.3,
+                    8.07,
+                    206
+                  ],
+                  [
+                    74970.9,
+                    8.3,
+                    206
+                  ],
+                  [
+                    74987.5,
+                    8.62,
+                    206
+                  ],
+                  [
+                    75004,
+                    7.46,
+                    206
+                  ],
+                  [
+                    75020.8,
+                    7.2,
+                    206
+                  ],
+                  [
+                    75036.7,
+                    7.46,
+                    206
+                  ],
+                  [
+                    75053.2,
+                    8.36,
+                    206
+                  ],
+                  [
+                    75070,
+                    8.07,
+                    206
+                  ],
+                  [
+                    75087.5,
+                    7.09,
+                    206
+                  ],
+                  [
+                    75103.3,
+                    7.6,
+                    206
+                  ],
+                  [
+                    75119.9,
+                    8.07,
+                    206
+                  ],
+                  [
+                    75137.1,
+                    8.72,
+                    206
+                  ],
+                  [
+                    75154.2,
+                    10.13,
+                    206
+                  ],
+                  [
+                    75170.2,
+                    10.08,
+                    206
+                  ],
+                  [
+                    75187.5,
+                    10.14,
+                    206
+                  ],
+                  [
+                    75204.1,
+                    8.98,
+                    206
+                  ],
+                  [
+                    75220.9,
+                    7.96,
+                    206
+                  ],
+                  [
+                    75237.5,
+                    8.55,
+                    206
+                  ],
+                  [
+                    75254.1,
+                    7.43,
+                    206
+                  ],
+                  [
+                    75270.8,
+                    8.36,
+                    206
+                  ],
+                  [
+                    75287.5,
+                    9.24,
+                    206
+                  ],
+                  [
+                    75304.2,
+                    11.79,
+                    206
+                  ],
+                  [
+                    75320.9,
+                    9.62,
+                    206
+                  ],
+                  [
+                    75337.5,
+                    8.01,
+                    206
+                  ],
+                  [
+                    75354.2,
+                    8.24,
+                    206
+                  ],
+                  [
+                    75370.8,
+                    8.91,
+                    206
+                  ],
+                  [
+                    75387.5,
+                    8.72,
+                    206
+                  ],
+                  [
+                    75404.2,
+                    7.47,
+                    206
+                  ],
+                  [
+                    75420.8,
+                    7.16,
+                    206
+                  ],
+                  [
+                    75437.5,
+                    6.98,
+                    206
+                  ],
+                  [
+                    75454.2,
+                    6.96,
+                    206
+                  ],
+                  [
+                    75470.8,
+                    7.35,
+                    206
+                  ],
+                  [
+                    75486.6,
+                    8.23,
+                    206
+                  ],
+                  [
+                    75504.1,
+                    8.74,
+                    206
+                  ],
+                  [
+                    75520.9,
+                    8.87,
+                    206
+                  ],
+                  [
+                    75537.5,
+                    9.26,
+                    206
+                  ],
+                  [
+                    75554.2,
+                    9.55,
+                    206
+                  ],
+                  [
+                    75570.9,
+                    9.27,
+                    206
+                  ],
+                  [
+                    75587.6,
+                    9.19,
+                    206
+                  ],
+                  [
+                    75604.2,
+                    7.35,
+                    206
+                  ],
+                  [
+                    75619.9,
+                    7.54,
+                    206
+                  ],
+                  [
+                    75636.5,
+                    8.1,
+                    206
+                  ],
+                  [
+                    75653.9,
+                    8.32,
+                    206
+                  ],
+                  [
+                    75670.9,
+                    8.02,
+                    206
+                  ],
+                  [
+                    75686.6,
+                    8.22,
+                    206
+                  ],
+                  [
+                    75704.1,
+                    8.7,
+                    206
+                  ],
+                  [
+                    75720.8,
+                    9.21,
+                    206
+                  ],
+                  [
+                    75737.5,
+                    8.27,
+                    206
+                  ],
+                  [
+                    75754.2,
+                    7.7,
+                    206
+                  ],
+                  [
+                    75770.9,
+                    6.63,
+                    206
+                  ],
+                  [
+                    75787.5,
+                    6.73,
+                    206
+                  ],
+                  [
+                    75804.2,
+                    6.99,
+                    206
+                  ],
+                  [
+                    75820.8,
+                    7.16,
+                    206
+                  ],
+                  [
+                    75837.6,
+                    7.32,
+                    206
+                  ],
+                  [
+                    75854.2,
+                    8.21,
+                    206
+                  ],
+                  [
+                    75870.8,
+                    7.83,
+                    206
+                  ],
+                  [
+                    75887.5,
+                    8.56,
+                    206
+                  ],
+                  [
+                    75904.2,
+                    8.68,
+                    206
+                  ],
+                  [
+                    75920.8,
+                    8.01,
+                    206
+                  ],
+                  [
+                    75936.6,
+                    7.78,
+                    206
+                  ],
+                  [
+                    75953.3,
+                    8.24,
+                    206
+                  ],
+                  [
+                    75969.9,
+                    8.89,
+                    206
+                  ],
+                  [
+                    75986.7,
+                    8.2,
+                    206
+                  ],
+                  [
+                    76003.3,
+                    8.5,
+                    206
+                  ],
+                  [
+                    76019.9,
+                    8.64,
+                    206
+                  ],
+                  [
+                    76037.5,
+                    9.08,
+                    206
+                  ],
+                  [
+                    76054.2,
+                    8,
+                    206
+                  ],
+                  [
+                    76070,
+                    7.27,
+                    206
+                  ],
+                  [
+                    76087.5,
+                    6.88,
+                    206
+                  ],
+                  [
+                    76104.1,
+                    7.09,
+                    206
+                  ],
+                  [
+                    76120.9,
+                    7.72,
+                    206
+                  ],
+                  [
+                    76137.5,
+                    7.66,
+                    206
+                  ],
+                  [
+                    76154.2,
+                    8.4,
+                    206
+                  ],
+                  [
+                    76169.9,
+                    8.4,
+                    206
+                  ]
+                ]
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "site-spur",
+          "label": "Go to Spur crater (Module 5 button)",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 96
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 281,
+              "uiTextChars": 502
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0275,
+                0.0202,
+                0.0478,
+                0.0001,
+                0.0235,
+                0.0003,
+                0.0414,
+                0.0542,
+                0.0273
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.1,
+                "gpuMsP95": 10.99,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 206,
+                "trianglesMax": 943207,
+                "threeInfoLastFrame": {
+                  "calls": 203,
+                  "triangles": 915559
+                },
+                "trace": [
+                  [
+                    137488.3,
+                    6.81,
+                    206
+                  ],
+                  [
+                    137505,
+                    6.71,
+                    206
+                  ],
+                  [
+                    137521.7,
+                    7.13,
+                    206
+                  ],
+                  [
+                    137538.3,
+                    7.11,
+                    206
+                  ],
+                  [
+                    137555,
+                    7.04,
+                    206
+                  ],
+                  [
+                    137571.7,
+                    7.37,
+                    206
+                  ],
+                  [
+                    137588.4,
+                    8.01,
+                    206
+                  ],
+                  [
+                    137605,
+                    7.37,
+                    206
+                  ],
+                  [
+                    137621.7,
+                    7.14,
+                    206
+                  ],
+                  [
+                    137638.3,
+                    7.25,
+                    206
+                  ],
+                  [
+                    137655,
+                    7.04,
+                    206
+                  ],
+                  [
+                    137671.3,
+                    7.05,
+                    206
+                  ],
+                  [
+                    137688.3,
+                    7.27,
+                    206
+                  ],
+                  [
+                    137705.1,
+                    7.71,
+                    206
+                  ],
+                  [
+                    137721.7,
+                    8.58,
+                    206
+                  ],
+                  [
+                    137738.4,
+                    8.42,
+                    206
+                  ],
+                  [
+                    137755,
+                    7.13,
+                    206
+                  ],
+                  [
+                    137771.7,
+                    7.86,
+                    206
+                  ],
+                  [
+                    137788.3,
+                    8.26,
+                    206
+                  ],
+                  [
+                    137805,
+                    7.42,
+                    203
+                  ],
+                  [
+                    137821.7,
+                    8.13,
+                    203
+                  ],
+                  [
+                    137838.3,
+                    8.02,
+                    203
+                  ],
+                  [
+                    137855,
+                    8.53,
+                    203
+                  ],
+                  [
+                    137871.5,
+                    10.09,
+                    203
+                  ],
+                  [
+                    137888.3,
+                    9.52,
+                    203
+                  ],
+                  [
+                    137904.3,
+                    7.76,
+                    203
+                  ],
+                  [
+                    137921.6,
+                    8.46,
+                    203
+                  ],
+                  [
+                    137938.4,
+                    8.87,
+                    203
+                  ],
+                  [
+                    137955.1,
+                    9.36,
+                    203
+                  ],
+                  [
+                    137971,
+                    7.99,
+                    203
+                  ],
+                  [
+                    137987.7,
+                    7.13,
+                    203
+                  ],
+                  [
+                    138005,
+                    6.56,
+                    203
+                  ],
+                  [
+                    138021.6,
+                    6.61,
+                    203
+                  ],
+                  [
+                    138038.4,
+                    6.6,
+                    203
+                  ],
+                  [
+                    138055,
+                    6.62,
+                    203
+                  ],
+                  [
+                    138071.7,
+                    7.07,
+                    203
+                  ],
+                  [
+                    138088.3,
+                    6.83,
+                    203
+                  ],
+                  [
+                    138105,
+                    7.34,
+                    203
+                  ],
+                  [
+                    138121.7,
+                    7.43,
+                    203
+                  ],
+                  [
+                    138138.4,
+                    7.82,
+                    203
+                  ],
+                  [
+                    138155,
+                    8.29,
+                    203
+                  ],
+                  [
+                    138171.7,
+                    8.32,
+                    203
+                  ],
+                  [
+                    138188.3,
+                    8.73,
+                    203
+                  ],
+                  [
+                    138205,
+                    10.1,
+                    203
+                  ],
+                  [
+                    138221.7,
+                    8.08,
+                    203
+                  ],
+                  [
+                    138238.4,
+                    6.94,
+                    203
+                  ],
+                  [
+                    138254.9,
+                    7.14,
+                    203
+                  ],
+                  [
+                    138271.6,
+                    7.57,
+                    203
+                  ],
+                  [
+                    138288.3,
+                    7.97,
+                    203
+                  ],
+                  [
+                    138305,
+                    7.58,
+                    203
+                  ],
+                  [
+                    138321.7,
+                    8.79,
+                    203
+                  ],
+                  [
+                    138338.3,
+                    8.55,
+                    203
+                  ],
+                  [
+                    138355,
+                    8.61,
+                    203
+                  ],
+                  [
+                    138371.6,
+                    7.67,
+                    203
+                  ],
+                  [
+                    138388.4,
+                    8.02,
+                    203
+                  ],
+                  [
+                    138405.1,
+                    8.65,
+                    203
+                  ],
+                  [
+                    138421.7,
+                    8.77,
+                    203
+                  ],
+                  [
+                    138438.3,
+                    7.99,
+                    203
+                  ],
+                  [
+                    138455.1,
+                    7.52,
+                    203
+                  ],
+                  [
+                    138471.6,
+                    7.46,
+                    203
+                  ],
+                  [
+                    138488.3,
+                    7.6,
+                    203
+                  ],
+                  [
+                    138505,
+                    7.36,
+                    203
+                  ],
+                  [
+                    138521.7,
+                    7.69,
+                    203
+                  ],
+                  [
+                    138538.3,
+                    7.99,
+                    203
+                  ],
+                  [
+                    138555,
+                    8.53,
+                    203
+                  ],
+                  [
+                    138571.7,
+                    9.59,
+                    203
+                  ],
+                  [
+                    138588.4,
+                    16.11,
+                    203
+                  ],
+                  [
+                    138605,
+                    10.26,
+                    203
+                  ],
+                  [
+                    138621.7,
+                    8.93,
+                    203
+                  ],
+                  [
+                    138638.4,
+                    8.37,
+                    203
+                  ],
+                  [
+                    138655.1,
+                    9.36,
+                    203
+                  ],
+                  [
+                    138671.7,
+                    8.34,
+                    203
+                  ],
+                  [
+                    138688.4,
+                    7.12,
+                    203
+                  ],
+                  [
+                    138705.1,
+                    6.8,
+                    203
+                  ],
+                  [
+                    138721.7,
+                    7.13,
+                    203
+                  ],
+                  [
+                    138738.4,
+                    7.49,
+                    203
+                  ],
+                  [
+                    138754.3,
+                    7.53,
+                    203
+                  ],
+                  [
+                    138771.7,
+                    8,
+                    203
+                  ],
+                  [
+                    138788.3,
+                    10.31,
+                    203
+                  ],
+                  [
+                    138804.9,
+                    10.73,
+                    203
+                  ],
+                  [
+                    138820.8,
+                    10.95,
+                    203
+                  ],
+                  [
+                    138838.3,
+                    11.77,
+                    203
+                  ],
+                  [
+                    138854.2,
+                    7.33,
+                    203
+                  ],
+                  [
+                    138871.7,
+                    8.02,
+                    203
+                  ],
+                  [
+                    138888.4,
+                    8.12,
+                    203
+                  ],
+                  [
+                    138905,
+                    8.31,
+                    203
+                  ],
+                  [
+                    138921.7,
+                    8.8,
+                    203
+                  ],
+                  [
+                    138938.3,
+                    7.39,
+                    203
+                  ],
+                  [
+                    138955,
+                    9.59,
+                    203
+                  ],
+                  [
+                    138971.7,
+                    7.41,
+                    203
+                  ],
+                  [
+                    138988.4,
+                    7.84,
+                    203
+                  ],
+                  [
+                    139005,
+                    9.22,
+                    203
+                  ],
+                  [
+                    139021.7,
+                    9.49,
+                    203
+                  ],
+                  [
+                    139038.4,
+                    8.59,
+                    203
+                  ],
+                  [
+                    139055,
+                    7.68,
+                    203
+                  ],
+                  [
+                    139071.7,
+                    8.31,
+                    203
+                  ],
+                  [
+                    139088.3,
+                    7.14,
+                    203
+                  ],
+                  [
+                    139105,
+                    7.63,
+                    203
+                  ],
+                  [
+                    139121.7,
+                    7.42,
+                    203
+                  ],
+                  [
+                    139138.3,
+                    6.6,
+                    203
+                  ],
+                  [
+                    139155,
+                    7.36,
+                    203
+                  ],
+                  [
+                    139171.6,
+                    7.52,
+                    203
+                  ],
+                  [
+                    139188.4,
+                    7.72,
+                    203
+                  ],
+                  [
+                    139205,
+                    9.37,
+                    203
+                  ],
+                  [
+                    139221.7,
+                    10.13,
+                    203
+                  ],
+                  [
+                    139238.4,
+                    10.07,
+                    203
+                  ],
+                  [
+                    139254.8,
+                    11.79,
+                    203
+                  ],
+                  [
+                    139271.7,
+                    8.18,
+                    203
+                  ],
+                  [
+                    139288.4,
+                    7.28,
+                    203
+                  ],
+                  [
+                    139305,
+                    7.49,
+                    203
+                  ],
+                  [
+                    139321.7,
+                    8.78,
+                    203
+                  ],
+                  [
+                    139338.3,
+                    7.28,
+                    203
+                  ],
+                  [
+                    139355.1,
+                    8.08,
+                    203
+                  ],
+                  [
+                    139371.7,
+                    8.51,
+                    203
+                  ],
+                  [
+                    139388.4,
+                    10.21,
+                    203
+                  ],
+                  [
+                    139405,
+                    11.26,
+                    203
+                  ],
+                  [
+                    139421.7,
+                    10.95,
+                    203
+                  ],
+                  [
+                    139438.4,
+                    9.71,
+                    203
+                  ],
+                  [
+                    139455,
+                    8.55,
+                    203
+                  ],
+                  [
+                    139471.7,
+                    8.92,
+                    203
+                  ],
+                  [
+                    139488.3,
+                    9.31,
+                    203
+                  ],
+                  [
+                    139504.5,
+                    8.35,
+                    203
+                  ],
+                  [
+                    139521.8,
+                    8.88,
+                    203
+                  ],
+                  [
+                    139538,
+                    7.46,
+                    203
+                  ],
+                  [
+                    139555,
+                    9.15,
+                    203
+                  ],
+                  [
+                    139570.9,
+                    10.01,
+                    203
+                  ],
+                  [
+                    139588,
+                    9.62,
+                    203
+                  ],
+                  [
+                    139605.1,
+                    9.42,
+                    203
+                  ],
+                  [
+                    139621.7,
+                    8.07,
+                    203
+                  ],
+                  [
+                    139638.4,
+                    7.95,
+                    203
+                  ],
+                  [
+                    139655.1,
+                    9.79,
+                    203
+                  ],
+                  [
+                    139671.6,
+                    8.29,
+                    203
+                  ],
+                  [
+                    139688.4,
+                    8.5,
+                    203
+                  ],
+                  [
+                    139705,
+                    8.29,
+                    203
+                  ],
+                  [
+                    139721.7,
+                    7.36,
+                    203
+                  ],
+                  [
+                    139738.4,
+                    7.2,
+                    203
+                  ],
+                  [
+                    139755.1,
+                    6.93,
+                    203
+                  ],
+                  [
+                    139771.7,
+                    7.43,
+                    203
+                  ],
+                  [
+                    139788.3,
+                    7.57,
+                    203
+                  ],
+                  [
+                    139805,
+                    7.84,
+                    203
+                  ],
+                  [
+                    139821.7,
+                    10.28,
+                    203
+                  ],
+                  [
+                    139838.3,
+                    11.49,
+                    203
+                  ],
+                  [
+                    139855.1,
+                    9.25,
+                    203
+                  ],
+                  [
+                    139871.7,
+                    7.49,
+                    203
+                  ],
+                  [
+                    139888.4,
+                    7.01,
+                    203
+                  ],
+                  [
+                    139905.1,
+                    8.53,
+                    203
+                  ],
+                  [
+                    139921.7,
+                    8.98,
+                    203
+                  ],
+                  [
+                    139938.3,
+                    10.05,
+                    203
+                  ],
+                  [
+                    139955,
+                    9.04,
+                    203
+                  ],
+                  [
+                    139971.7,
+                    7.33,
+                    203
+                  ],
+                  [
+                    139988.4,
+                    9.4,
+                    203
+                  ],
+                  [
+                    140005.1,
+                    6.78,
+                    203
+                  ],
+                  [
+                    140021.7,
+                    7.47,
+                    203
+                  ],
+                  [
+                    140038.4,
+                    7.78,
+                    203
+                  ],
+                  [
+                    140055.1,
+                    8.02,
+                    203
+                  ],
+                  [
+                    140071.7,
+                    9.8,
+                    203
+                  ],
+                  [
+                    140088.4,
+                    7.86,
+                    203
+                  ],
+                  [
+                    140105.1,
+                    8.38,
+                    203
+                  ],
+                  [
+                    140121.7,
+                    7.14,
+                    203
+                  ],
+                  [
+                    140138.4,
+                    7.11,
+                    203
+                  ],
+                  [
+                    140155,
+                    8.69,
+                    203
+                  ],
+                  [
+                    140171.7,
+                    7.15,
+                    203
+                  ],
+                  [
+                    140188.4,
+                    7.62,
+                    203
+                  ],
+                  [
+                    140205,
+                    7.64,
+                    203
+                  ],
+                  [
+                    140221.7,
+                    9.11,
+                    203
+                  ],
+                  [
+                    140238.4,
+                    9.88,
+                    203
+                  ],
+                  [
+                    140254.8,
+                    11.29,
+                    203
+                  ],
+                  [
+                    140271.7,
+                    9.54,
+                    203
+                  ],
+                  [
+                    140288.4,
+                    7.52,
+                    203
+                  ],
+                  [
+                    140305.1,
+                    9.24,
+                    203
+                  ],
+                  [
+                    140321.7,
+                    7.36,
+                    203
+                  ],
+                  [
+                    140338.3,
+                    11.35,
+                    203
+                  ],
+                  [
+                    140355,
+                    6.67,
+                    203
+                  ],
+                  [
+                    140371.7,
+                    6.52,
+                    203
+                  ],
+                  [
+                    140388.4,
+                    7.96,
+                    203
+                  ],
+                  [
+                    140405.1,
+                    7.01,
+                    203
+                  ],
+                  [
+                    140421.7,
+                    8.4,
+                    203
+                  ],
+                  [
+                    140438.4,
+                    6.84,
+                    203
+                  ],
+                  [
+                    140455,
+                    6.91,
+                    203
+                  ],
+                  [
+                    140471.7,
+                    7.4,
+                    203
+                  ],
+                  [
+                    140488.4,
+                    8.99,
+                    203
+                  ],
+                  [
+                    140505,
+                    8.15,
+                    203
+                  ],
+                  [
+                    140521.8,
+                    7.68,
+                    203
+                  ],
+                  [
+                    140538.4,
+                    7.16,
+                    203
+                  ],
+                  [
+                    140555,
+                    7.19,
+                    203
+                  ],
+                  [
+                    140571.7,
+                    8.1,
+                    203
+                  ],
+                  [
+                    140588.3,
+                    13.68,
+                    203
+                  ],
+                  [
+                    140605.1,
+                    8.12,
+                    203
+                  ],
+                  [
+                    140621.7,
+                    6.53,
+                    203
+                  ],
+                  [
+                    140638.4,
+                    6.6,
+                    203
+                  ],
+                  [
+                    140655.1,
+                    8.04,
+                    203
+                  ],
+                  [
+                    140671.7,
+                    8.91,
+                    203
+                  ],
+                  [
+                    140687.6,
+                    8.28,
+                    203
+                  ],
+                  [
+                    140705.1,
+                    9.9,
+                    203
+                  ],
+                  [
+                    140721,
+                    8.59,
+                    203
+                  ],
+                  [
+                    140738.4,
+                    11.76,
+                    203
+                  ],
+                  [
+                    140754.2,
+                    7.16,
+                    203
+                  ],
+                  [
+                    140771.7,
+                    9.68,
+                    203
+                  ],
+                  [
+                    140788.4,
+                    7.36,
+                    203
+                  ],
+                  [
+                    140805.1,
+                    8.06,
+                    203
+                  ],
+                  [
+                    140821.7,
+                    9.82,
+                    203
+                  ],
+                  [
+                    140838.3,
+                    10.22,
+                    203
+                  ],
+                  [
+                    140855.1,
+                    11.31,
+                    203
+                  ],
+                  [
+                    140871.7,
+                    11.71,
+                    203
+                  ],
+                  [
+                    140888.4,
+                    7.5,
+                    203
+                  ],
+                  [
+                    140905.1,
+                    9.53,
+                    203
+                  ],
+                  [
+                    140921.7,
+                    7.92,
+                    203
+                  ],
+                  [
+                    140938.4,
+                    7.76,
+                    203
+                  ],
+                  [
+                    140955,
+                    6.74,
+                    203
+                  ],
+                  [
+                    140971.7,
+                    6.92,
+                    203
+                  ],
+                  [
+                    140987.5,
+                    8.08,
+                    203
+                  ],
+                  [
+                    141005.1,
+                    7.19,
+                    203
+                  ],
+                  [
+                    141021.7,
+                    9.07,
+                    203
+                  ],
+                  [
+                    141038.4,
+                    8.89,
+                    203
+                  ],
+                  [
+                    141055.1,
+                    6.77,
+                    203
+                  ],
+                  [
+                    141071.8,
+                    7.15,
+                    203
+                  ],
+                  [
+                    141088.4,
+                    7.62,
+                    203
+                  ],
+                  [
+                    141105.1,
+                    9.32,
+                    203
+                  ],
+                  [
+                    141121.7,
+                    8.2,
+                    203
+                  ],
+                  [
+                    141138.4,
+                    10.59,
+                    203
+                  ],
+                  [
+                    141155,
+                    10.38,
+                    203
+                  ],
+                  [
+                    141171.7,
+                    8.87,
+                    203
+                  ],
+                  [
+                    141188.4,
+                    7.72,
+                    203
+                  ],
+                  [
+                    141205.1,
+                    8.39,
+                    203
+                  ],
+                  [
+                    141221.7,
+                    6.54,
+                    203
+                  ],
+                  [
+                    141238.4,
+                    7.74,
+                    203
+                  ],
+                  [
+                    141255,
+                    6.75,
+                    203
+                  ],
+                  [
+                    141271.7,
+                    6.78,
+                    203
+                  ],
+                  [
+                    141288.4,
+                    8.42,
+                    203
+                  ],
+                  [
+                    141305.1,
+                    7.33,
+                    203
+                  ],
+                  [
+                    141321.7,
+                    7.76,
+                    203
+                  ],
+                  [
+                    141338.4,
+                    10.42,
+                    203
+                  ],
+                  [
+                    141354.4,
+                    10.99,
+                    203
+                  ],
+                  [
+                    141371.7,
+                    9.49,
+                    203
+                  ],
+                  [
+                    141388.4,
+                    8.18,
+                    203
+                  ],
+                  [
+                    141405.1,
+                    8.69,
+                    203
+                  ],
+                  [
+                    141421.7,
+                    8.7,
+                    203
+                  ],
+                  [
+                    141438.4,
+                    7.37,
+                    203
+                  ],
+                  [
+                    141455.1,
+                    7.55,
+                    203
+                  ],
+                  [
+                    141471.7,
+                    9.6,
+                    203
+                  ]
+                ]
+              },
+              "failures": []
+            }
+          }
+        }
+      ],
+      "errors": [],
+      "download": {
+        "status": "pass",
+        "mb": 2.96,
+        "limitMB": 15,
+        "requests": 19,
+        "networkIdle": true,
+        "largestFile": {
+          "file": "assets/terrain/normal-l2.png",
+          "bytes": 3596366,
+          "mb": 3.43
+        },
+        "filesOver20MB": [],
+        "streamedAfterFirstInteractionMB": 14.06
+      },
+      "preset": "medium"
+    }
+  ]
+}
