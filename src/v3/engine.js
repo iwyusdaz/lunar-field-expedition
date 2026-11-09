@@ -13,6 +13,9 @@ import { QualityManagerV3, PresetAutoPick } from './quality.js';
 import { RenderChain } from './render-chain.js';
 import { GpuTimer } from './gpu-timer.js';
 
+/** Camera zoom for a viewport aspect: 1 on landscape, sqrt(aspect) on portrait. */
+export function portraitZoom(aspect) { return aspect > 0 && aspect < 1 ? Math.sqrt(aspect) : 1; }
+
 export const READING_SCALE = 0.8;
 
 export class EngineV3 {
@@ -71,6 +74,12 @@ export class EngineV3 {
     this.renderer.setSize(w, h, false);
     this.chain.setSize(w, h);
     this.camera.aspect = w / h;
+    // The field of view is vertical, so a portrait phone (aspect about 0.46)
+    // would see only a 30 deg wide slice of a view composed for a landscape
+    // screen: landmarks a step asks for fall out of frame. On portrait screens
+    // widen the view half-way (in log terms) toward the same horizontal field:
+    // zoom = sqrt(aspect), so at 390x844 about 43 deg wide and 81 deg tall.
+    this.camera.zoom = portraitZoom(w / h);
     this.camera.updateProjectionMatrix();
   }
 

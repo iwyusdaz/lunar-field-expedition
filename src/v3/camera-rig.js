@@ -36,6 +36,11 @@ const isTyping = () => {
   return !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
 };
 
+/** Vertical field (deg) actually seen with a camera fov and zoom (three.js divides the frustum by zoom). */
+export function zoomedFov(fovDeg, zoom = 1) { return (360 / Math.PI) * Math.atan(Math.tan((fovDeg * Math.PI) / 360) / (zoom || 1)); }
+/** Camera fov (deg) that shows a field of seenDeg at a zoom. */
+export function unzoomedFov(seenDeg, zoom = 1) { return (360 / Math.PI) * Math.atan(Math.tan((seenDeg * Math.PI) / 360) * (zoom || 1)); }
+
 export class CameraRig {
   /**
    * @param {object} o
@@ -153,13 +158,14 @@ export class CameraRig {
     const center = box.getCenter(new THREE.Vector3());
     const cam = this.camera;
     if (look) return this._frameLook(center, size, { offsetX, offsetY, heightFrac, duration, fitFov, minFov });
-    let radius = frameDistance(size, cam.fov, cam.aspect, { heightFrac, maxWidthFrac, minDistance: this.limits.minRadius });
+    // The fit uses the field actually seen (a portrait screen widens it with camera.zoom, engine.js).
+    let radius = frameDistance(size, zoomedFov(cam.fov, cam.zoom), cam.aspect, { heightFrac, maxWidthFrac, minDistance: this.limits.minRadius });
     radius = Math.max(radius, size.length() * 0.5 + 0.4);
     // Keep the current heading; look slightly down onto the object.
     const theta = Math.atan2(cam.position.x - center.x, cam.position.z - center.z);
     const phi = clamp(1.32 - Math.min(0.35, size.y / 40), this.limits.minPhi, this.limits.maxPhi);
     const basis = this._basis(theta, phi);
-    const th = Math.tan((cam.fov * Math.PI) / 360);
+    const th = Math.tan((cam.fov * Math.PI) / 360) / (cam.zoom || 1);
     const target = center.clone()
       .addScaledVector(basis.right, -offsetX * radius * th * cam.aspect)
       .addScaledVector(basis.up, -offsetY * radius * th);
@@ -182,14 +188,15 @@ export class CameraRig {
     let fov = base;
     if (fitFov) {
       const ang = THREE.MathUtils.radToDeg(2 * Math.atan(Math.max(size.x, size.y, size.z) / 2 / dist));
-      fov = clamp(ang / heightFrac, minFov, base);
+      // ang / heightFrac is the field to be seen; with camera.zoom < 1 the camera fov is narrower.
+      fov = clamp(unzoomedFov(ang / heightFrac, cam.zoom), minFov, base);
     }
     const back = dir.clone().negate();
     const theta = Math.atan2(back.x, back.z);
     const phi = Math.acos(clamp(back.y, -1, 1));
     const r = this.state.radius;
     const basis = this._basis(theta, phi);
-    const th = Math.tan((fov * Math.PI) / 360);
+    const th = Math.tan((fov * Math.PI) / 360) / (cam.zoom || 1);
     const target = P.clone().addScaledVector(dir, r)
       .addScaledVector(basis.right, -offsetX * r * th * cam.aspect)
       .addScaledVector(basis.up, -offsetY * r * th);
@@ -212,10 +219,10 @@ export class CameraRig {
     const dir = d.clone().normalize();
     const r = clamp(d.length(), this.limits.minRadius, this.limits.maxRadius / 1.25); // headroom for the card offset
     const base = this.baseFov ?? cam.fov;
-    const f = fov ? Math.min(fov, base) : base;
+    const f = fov ? Math.min(unzoomedFov(fov, cam.zoom), base) : base; // fov: the authored field seen
     const back = dir.clone().negate();
     const basis = this._basis(Math.atan2(back.x, back.z), Math.acos(clamp(back.y, -1, 1)));
-    const th = Math.tan((f * Math.PI) / 360);
+    const th = Math.tan((f * Math.PI) / 360) / (cam.zoom || 1);
     const target = P.clone().addScaledVector(dir, r)
       .addScaledVector(basis.right, -offsetX * r * th * cam.aspect)
       .addScaledVector(basis.up, -offsetY * r * th);

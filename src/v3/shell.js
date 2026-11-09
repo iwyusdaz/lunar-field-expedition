@@ -508,6 +508,11 @@ export class SceneShell {
     this.rig = rig;
     const act = { left: () => rig.orbitBy(0.25, 0), right: () => rig.orbitBy(-0.25, 0), up: () => rig.orbitBy(0, -0.15), down: () => rig.orbitBy(0, 0.15), in: () => rig.zoomBy(0.8), out: () => rig.zoomBy(1.25), reset: () => rig.resetView() };
     this.cluster.addEventListener('click', (e) => { const b = e.target.closest('[data-cam]'); if (b) act[b.dataset.cam](); });
+    // A drag on the scene (the rig turns or pans the view) collapses the phone
+    // Now card so the view is free. A tap (selecting an object) leaves it as it
+    // is: the info card replaces it while open, and the step text comes back
+    // when the card closes (G2: a tap used to collapse it on pointerdown).
+    rig.on('drag', () => { if (this.layout === 'phone-portrait' && this.phase === 'explore' && this.nowExpanded) this.setNowExpanded(false); });
   }
 
   _applyCluster() {
@@ -580,7 +585,5 @@ export class SceneShell {
     });
     this.chapter.addEventListener('click', () => this._chapterDone?.());
     addEventListener('resize', () => this._layout());
-    // Drag on the scene collapses the phone Now card so the view is free.
-    this.canvas.addEventListener('pointerdown', () => { if (this.layout === 'phone-portrait' && this.phase === 'explore') this.setNowExpanded(false); });
   }
 }
