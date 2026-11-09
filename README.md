@@ -1,4 +1,4 @@
-> **Evaluation status:** Automated functional, accessibility and performance testing plus agent-based design reviews are complete. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). See `evaluation/METHODS.md`. v2.0.0 (the living-site revamp) has its own four agent reviews (revisions R-11 to R-19 in DECISIONS.md) and a headed GPU measurement: 60 fps on Medium, 186 draw calls, 6.7 MB before the first interaction (`evaluation/results/perf-2026-10-29.json`).
+> **Evaluation status (v3.0.0, 2026-11-09):** Automated functional, accessibility and performance testing is complete, plus agent-based design reviews (three v3 passes, labelled Agent review). The owner reviewed the v3 scenes and approved them on 2026-11-09; that is owner visual approval, not user testing. No real learners have tested this yet. No physical phone testing has been done (mobile was checked with device emulation). Known open issues at v3.0.0 are listed in [STATUS.md](STATUS.md). See `evaluation/METHODS.md`.
 
 # Lunar Field Expedition
 
@@ -6,7 +6,7 @@ A 50-minute hybrid course and field game for grade 9–12 earth and space scienc
 
 **[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** · **[Design documents](design/)** · Role: Sole designer
 
-![Two suited crew members beside a simplified Lunar Module descent stage in black and amber foil on the real NASA terrain of the Apollo 15 Hadley site, with a flag, a boulder and a lunar rover with orange fenders](public/poster-2.0.0.webp)
+![The full Moon seen from orbit against a dark starfield, the opening view of Lunar Field Expedition.](public/poster-3.0.0.webp)
 
 The mission framing (you're part of a future field team revisiting Hadley) is **fictional**. All geology and Apollo 15 history are real and cited in [research/apollo15-facts.md](research/apollo15-facts.md). The EVA cost model and the sample cards are **simplified for teaching** and labeled that way in the app.
 
@@ -41,7 +41,7 @@ Arguing from evidence is a core science practice, but students rarely get to do 
 | Let the crater counts "disagree" with the sample ages | Pick patches that give the expected answer | The Front patch has far fewer craters than the mare (none of 80 m or more against about 28 per km² in the computer count) because steep slopes erase craters. Module 3 makes that disagreement the lesson: crater counting only works on flat, stable surfaces. |
 | Rubric self-check, no auto-grading of writing | Keyword scoring | Keyword scoring is unreliable and gives misleading feedback. The app checks that the required evidence *types* are cited and shows the rubric and an exemplar. |
 | Compare with the real Apollo 15 traverse | Fictional ending | Connects the learner's reasoning to what working scientists did |
-| First-person view; two suited crew figures in the scene (v2.0.0) | Third-person avatar | The learner stays first-person. The crew are the fictional future-mission team, labelled as such, and calm down during tasks |
+| First-person view; two suited crew figures in the scene (since v2.0.0, rebuilt in v3 with foot contact on the terrain) | Third-person avatar | The learner stays first-person. The crew are the fictional future-mission team, labelled as such, and calm down during tasks |
 | v2 living layer on top of the real terrain (boulders, LM, rover, flag, crew) | Re-sculpt the terrain | The DTM is the evidence and stays untouched; close-range detail is separate geometry grounded on it |
 
 Full list with dates: [DECISIONS.md](DECISIONS.md).
@@ -56,12 +56,11 @@ Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-
 
 **What was measured** (details in [evaluation/METHODS.md](evaluation/METHODS.md)):
 - **Terrain accuracy:** rille depth at the site measured at 284 m from the DTM. Published values are about 370 m near the site and 180–270 m typical elsewhere, so that passes within the ±25% tolerance. Relief inside the play area is 932 m.
-- **72 unit tests** (v2.0.0): the browser PNG heightmap decoder against the real terrain assets; sun and traverse cost models; learning record, evidence board and state; content integrity, including the cinematic budget.
-- **Browser tests:** a scripted playthrough of all five modules to the post-check; text-mode parity across all five modules; reduced-motion stills; header controls; an axe scan with zero critical or serious issues; the sub-path test at `/play/lunar-field-expedition/`.
+- **168 unit tests** (v3.0.0): the browser PNG heightmap decoder against the real terrain assets; sun and traverse cost models; crater relief against patch noise; every Now-card step has an action and fits the word limit; astronaut foot contact; learning record, evidence board and state; content integrity, including the cinematic budget.
+- **15 browser tests** (v3.0.0): keyboard-only completion of all five modules; text-mode parity; reduced motion; card hold; touch tap; no-WebGL2 fallback; Back and Back to start; an axe scan with zero critical or serious issues; the sub-path test at `/play/lunar-field-expedition/`.
 - **Fact check:** every Apollo 15 claim is traced in the research log, with a verification status (VERIFIED, VERIFIED-SNIPPET or DERIVED).
-- **Performance (headed, Apple M1, v1.0.0):** 60 fps on every preset; 305k triangles and 2 draw calls on Medium; menu interactive in 0.2 s; 5.6 MB downloaded before the first interaction.
-- **Performance (v2.0.0, headless software WebGL only):** 196 draw calls and about 570k triangles in the Module 2 site view on Medium (budget: ≤ 300 calls, ≤ 1.5 M triangles). Headed GPU frame rate not yet re-measured.
-- Agent-based design reviews are complete (see `evaluation/reviews/`); the revisions they produced are in `DECISIONS.md`.
+- **Performance (v3.0.0, headed Chromium on an Apple M1 GPU, Medium, ui-audit at 1440×900, 1280×720, 390×844 and 844×390 in every module state):** GPU time at most 10.47 ms at p95 (budget 12 ms), at most 302 draw calls and 1.44 M triangles, 2.96 MB downloaded before the first interaction; the rest of the terrain streams after the first click. Two cells sat at their limits in the full run (Module 1 cinematic 46 fps at 1440×900; the sky view 302 draw calls at 844×390) and passed on a re-run. Report: `evaluation/results/ui-audit-g2-verify.json`.
+- Agent-based design reviews are complete (see `evaluation/reviews/` and the v3 review passes); the revisions they produced are in `DECISIONS.md`.
 
 **What it can show:** the course works end to end in 3D and in text mode, by keyboard; the terrain's relief matches published values; the facts trace to sources.
 
@@ -71,7 +70,8 @@ Cinematic budget: three shots totaling 60 seconds (25 + 15 + 20), inside the 90-
 
 - **Text mode:** every module, with annotated orthoimages under high and low sun, elevation profiles as data tables, crater counts as a data task, the traverse as a station-choice list with costs, and the same CER builder.
 - **Keyboard:** all five modules can be finished with the keyboard alone (a browser test does it): the Now card, the Sun slider, the landform letters, the profile presets, the crater counter, the planner, the report and the checks are native buttons, sliders, selects and fields. The menu's "Objects in view" list reaches every object; Enter opens its card. Marking individual craters in 3D needs a pointer; the text-mode crater data task is the keyboard equivalent.
-- **Explore (v3):** drag to look, W A S D or the arrow keys to walk, the wheel to zoom, double-click the ground to fly there; on touch, the joystick and the camera buttons. Click or tap anything (the lander, the instruments, the rille, Earth, the stars) to learn what it is; every find goes into the discovery journal. Hold Alt or L to show every label; `?` shows the controls and the legend.
+- **Navigation (v3):** one top bar with the module steps, **Back** (the previous screen) and **Back to start** (the intro). Project pages don't link to other projects.
+- **Explore (v3):** drag to look, W A S D or the arrow keys to walk, the wheel to zoom, double-click the ground to fly there; on touch, the joystick and the camera buttons. Click or tap a course object (for example the rille, the craters, the landforms or the Genesis Rock) to learn what it is; every find goes into the discovery journal. Decorative objects such as the flag, the ALSEP instruments, Earth and the stars don't open cards. Hold Alt or L to show every label; `?` shows the controls and the legend.
 - **Reduced motion:** follows your system setting, with an in-app toggle; camera flights become still frames.
 - **Quality presets:** Low, Medium, High and Ultra, chosen automatically and overridable in Settings.
 
@@ -101,4 +101,4 @@ Code: MIT ([LICENSE](LICENSE)). Learning content: CC BY 4.0 ([LICENSE-CONTENT](L
 
 ## Trailer
 
-**Trailer:** [docs/trailer.webm](docs/trailer.webm) (57 s, recorded from v2.0.0 including the living site, captioned; WebVTT sidecar at [docs/trailer.vtt](docs/trailer.vtt)). Recorded from the real app on the Mac GPU; the caption text is also in the sidecar file.
+**Trailer:** [docs/trailer.webm](docs/trailer.webm) (57 s, recorded from v2.0.0 including the living site, so it doesn't show the v3 scene; captioned; WebVTT sidecar at [docs/trailer.vtt](docs/trailer.vtt)). Recorded from the real app on the Mac GPU; the caption text is also in the sidecar file.

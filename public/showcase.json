@@ -1,6 +1,6 @@
 {
   "slug": "lunar-field-expedition",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "title": "Lunar Field Expedition",
   "format": "Hybrid",
   "niche": "Earth and space science, research skills",
@@ -17,9 +17,9 @@
   "contentNotes": [],
   "permissions": [],
   "poster": {
-    "webp": "poster-2.0.0.webp",
-    "jpg": "poster-2.0.0.jpg",
-    "alt": "Two suited crew members beside a simplified Lunar Module descent stage in black and amber foil on the real NASA terrain of the Apollo 15 Hadley site, with a flag, a boulder, a lunar rover with orange fenders and a black, star-dotted sky."
+    "webp": "poster-3.0.0.webp",
+    "jpg": "poster-3.0.0.jpg",
+    "alt": "The full Moon seen from orbit against a dark starfield, the opening view of Lunar Field Expedition."
   },
   "repoUrl": "https://github.com/iwyusdaz/lunar-field-expedition",
   "license": {

@@ -1,0 +1,1344 @@
+{
+  "tool": "ui-audit",
+  "toolVersion": "1.2.1",
+  "plan": "implementation-plans/immersive/10-visual-richness.md §7",
+  "label": "G2 verify-all subset noprobe",
+  "repo": "lunar-field-expedition",
+  "version": "2.0.0",
+  "git": {
+    "branch": "v3",
+    "commit": "a04daea",
+    "dirty": true
+  },
+  "measuredAt": "2026-11-09T08:19:46.473Z",
+  "mode": "headed Chromium on the local GPU",
+  "machine": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "browser": "Chromium 143.0.7499.4 (Playwright 1.57.0)"
+  },
+  "method": "VITE_TEST_HOOKS=1 build served on 127.0.0.1:5201 (gzip for text types, no cache). Fresh browser context per viewport (desktop DSF 2; phone DSF 3, isMobile, hasTouch). Download = bytes the server sent from navigation until 2 s of network silence. States: first load, then each module tab (and its cinematic sub-state while a shot plays). Medium preset forced after the download measurement. Alive: two canvas-only screenshots 5 s apart, 3x3 grid, a region counts when >= 0.25% of its pixels change by > 12/255. Performance: 4 s sample per state; GPU time from EXT_disjoint_timer_query_webgl2 around each requestAnimationFrame dispatch; draw calls and triangles counted at the WebGL call level (all passes), max over the sample.",
+  "thresholds": {
+    "panelMaxPctDesktop": 25,
+    "panelMaxPctPhone": 40,
+    "topBarMaxPx": 56,
+    "chromeRowsMax": 1,
+    "targetMinTouchPx": 44,
+    "targetMinMousePx": 32,
+    "textMinPx": 14,
+    "bodyMinPx": 16,
+    "maxTextSizes": 3,
+    "nowCardMaxWords": 60,
+    "fkMaxGrade": 8,
+    "scaleTolerance": 0.15,
+    "aliveMinRegions": 3,
+    "aliveGapMs": 5000,
+    "alivePixelDelta": 12,
+    "aliveRegionFraction": 0.0025,
+    "gpuMsP95Max": 12,
+    "fpsMin": 55,
+    "drawCallsMax": 300,
+    "trianglesMax": 1500000,
+    "downloadDesktopMaxMB": 15,
+    "downloadPhoneMaxMB": 8,
+    "fileMaxMB": 20,
+    "primitiveMinScreenFraction": 0.001,
+    "markerMaxScreenFraction": 0.02
+  },
+  "config": {
+    "readability": {
+      "mode": "fk",
+      "maxGrade": 8
+    },
+    "states": "auto (module tabs)",
+    "configFile": "evaluation/ui-audit.config.json"
+  },
+  "pass": false,
+  "summary": {
+    "sceneCoverage": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 4,
+      "skipped": 0,
+      "where": []
+    },
+    "topChrome": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 4,
+      "skipped": 0,
+      "where": []
+    },
+    "blockedControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "overlappingControls": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "targetSize": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "textSize": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "typeface": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "instructionLength": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 4,
+      "skipped": 0,
+      "where": []
+    },
+    "readability": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 4,
+      "skipped": 0,
+      "where": []
+    },
+    "inspectableObjects": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 2,
+      "skipped": 0,
+      "where": []
+    },
+    "barePrimitives": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "abstractMarkers": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "alive": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 4,
+      "skipped": 0,
+      "where": []
+    },
+    "performance": {
+      "status": "pass",
+      "failing": 0,
+      "judged": 6,
+      "skipped": 0,
+      "where": []
+    },
+    "download": {
+      "status": "pass",
+      "byViewport": {
+        "1440x900": {
+          "status": "pass",
+          "mb": 2.96,
+          "limitMB": 15
+        },
+        "844x390": {
+          "status": "pass",
+          "mb": 2.96,
+          "limitMB": 8
+        }
+      }
+    },
+    "inspectableObjectsReach": {
+      "status": "fail"
+    },
+    "scale": {
+      "status": "pass"
+    }
+  },
+  "repoGates": {
+    "inspectableObjectsReach": {
+      "status": "fail",
+      "catalogEntries": 35,
+      "courseRelevant": 20,
+      "decorative": 15,
+      "unclassified": [],
+      "notReachedByMouse": [
+        "lrv",
+        "apennine-front",
+        "mare-plain",
+        "mount-hadley",
+        "hadley-delta",
+        "spur-crater",
+        "elbow-crater",
+        "dune-crater",
+        "craterlets",
+        "boulders",
+        "sample-bag",
+        "sun",
+        "horizon",
+        "genesis-rock"
+      ],
+      "notReachedByTouch": [
+        "apennine-front",
+        "mare-plain",
+        "mount-hadley",
+        "hadley-delta",
+        "st-george-crater",
+        "spur-crater",
+        "elbow-crater",
+        "dune-crater",
+        "craterlets",
+        "boulders",
+        "sun",
+        "horizon",
+        "genesis-rock"
+      ],
+      "notInKeyboardList": [],
+      "notInTextMode": [],
+      "decorativeOpenedCard": [],
+      "decorativeInKeyboardList": [],
+      "decorativeInTextMode": [],
+      "note": "Mouse, keyboard list and text mode checked at 1440x900, touch at 844x390, in every exploration state"
+    },
+    "scale": {
+      "status": "pass",
+      "checked": 35,
+      "failing": 0,
+      "items": [],
+      "exempt": [
+        {
+          "id": "hadley-rille",
+          "status": "exempt",
+          "reason": "Terrain feature larger than the modelled terrain (IAU length 116 km); its scale is the LROC/SLDEM elevation data itself, so no bounding-box scale test applies."
+        },
+        {
+          "id": "apennine-front",
+          "status": "exempt",
+          "reason": "Mountain range far larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "mare-plain",
+          "status": "exempt",
+          "reason": "Plain larger than the modelled terrain; scale comes from the elevation data."
+        },
+        {
+          "id": "craterlets",
+          "status": "exempt",
+          "reason": "Many craters of different sizes in the elevation data; no single size to test."
+        },
+        {
+          "id": "regolith",
+          "status": "exempt",
+          "reason": "A surface layer, not an object with a size."
+        },
+        {
+          "id": "starfield",
+          "status": "exempt",
+          "reason": "Stars are effectively at infinite distance; no size to test."
+        },
+        {
+          "id": "micrometeoroid-flash",
+          "status": "exempt",
+          "reason": "A brief flash; no object size to test."
+        },
+        {
+          "id": "horizon",
+          "status": "exempt",
+          "reason": "A line of sight, not an object."
+        },
+        {
+          "id": "terminator",
+          "status": "exempt",
+          "reason": "A line of shadow, not an object."
+        },
+        {
+          "id": "mare-imbrium",
+          "status": "exempt",
+          "reason": "Basin is part of the globe texture; no separate object."
+        }
+      ],
+      "angular": [
+        {
+          "id": "earth",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            5967,
+            5967,
+            5967
+          ],
+          "distance": 180000,
+          "seenRad": 0.03315,
+          "realRad": 0.03315,
+          "error": 0
+        },
+        {
+          "id": "sun",
+          "status": "pass",
+          "angular": true,
+          "frame": "local",
+          "measured": [
+            1814,
+            1814,
+            1814
+          ],
+          "distance": 195000,
+          "seenRad": 0.009303,
+          "realRad": 0.009301,
+          "error": 0
+        }
+      ],
+      "notWorldFrame": [
+        {
+          "id": "lm-descent-stage",
+          "frame": "local"
+        },
+        {
+          "id": "lrv",
+          "frame": "local"
+        },
+        {
+          "id": "flag",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-central-station",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-seismometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-retroreflector",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-magnetometer",
+          "frame": "local"
+        },
+        {
+          "id": "alsep-heat-flow",
+          "frame": "local"
+        },
+        {
+          "id": "rtg",
+          "frame": "local"
+        },
+        {
+          "id": "mount-hadley",
+          "frame": "local"
+        },
+        {
+          "id": "hadley-delta",
+          "frame": "local"
+        },
+        {
+          "id": "st-george-crater",
+          "frame": "local"
+        },
+        {
+          "id": "spur-crater",
+          "frame": "local"
+        },
+        {
+          "id": "elbow-crater",
+          "frame": "local"
+        },
+        {
+          "id": "dune-crater",
+          "frame": "local"
+        },
+        {
+          "id": "boulders",
+          "frame": "local"
+        },
+        {
+          "id": "footprints",
+          "frame": "local"
+        },
+        {
+          "id": "rover-tracks",
+          "frame": "local"
+        },
+        {
+          "id": "sample-bag",
+          "frame": "local"
+        },
+        {
+          "id": "earth",
+          "frame": "local"
+        },
+        {
+          "id": "sun",
+          "frame": "local"
+        },
+        {
+          "id": "endeavour",
+          "frame": "local"
+        },
+        {
+          "id": "field-crew",
+          "frame": "rest pose"
+        },
+        {
+          "id": "genesis-rock",
+          "frame": "local"
+        },
+        {
+          "id": "moon-globe",
+          "frame": "local"
+        }
+      ]
+    }
+  },
+  "textBeforeFirstAction": {
+    "1440x900": null,
+    "844x390": null
+  },
+  "statesRun": 6,
+  "errorStates": [],
+  "systemSuspended": [],
+  "runs": [
+    {
+      "viewport": "1440x900",
+      "class": "desktop",
+      "dsf": 2,
+      "states": [
+        {
+          "name": "m1",
+          "label": "1Module 1 of 5: Arrival",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 10.5,
+              "limit": 25,
+              "unionPct": 10.3,
+              "sceneVisiblePct": 83.4,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 10.5,
+                  "chars": 278
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 10,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 267
+                },
+                {
+                  "px": 20,
+                  "chars": 21
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 52,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 400,
+              "uiTextChars": 497
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 1.7,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase explore"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 5,
+              "limit": 3,
+              "fractions": [
+                0.0019,
+                0.037,
+                0.0018,
+                0.002,
+                0.2841,
+                0.0087,
+                0.0015,
+                0.0517,
+                0.005
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 18.6,
+                "gpuMsP95": 2.95,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m1:cinematic",
+          "label": "1Module 1 of 5: Arrival (cinematic from \"Watch the descent\")",
+          "phase": "cinematic",
+          "gates": {
+            "sceneCoverage": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "topChrome": {
+              "status": "n/a",
+              "reason": "cinematic"
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 1,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 16,
+                "bodyPx": 20,
+                "distinctSizes": 2
+              },
+              "minSample": "Skip (Esc)",
+              "sizes": [
+                {
+                  "px": 16,
+                  "chars": 10
+                },
+                {
+                  "px": 20,
+                  "chars": 118
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "cinematic (camera moving)"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 16.8,
+                "gpuMsP95": 6.22,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 173,
+                "trianglesMax": 670963,
+                "threeInfoLastFrame": {
+                  "calls": 170,
+                  "triangles": 643315
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-overhead",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 7,
+              "limit": 25,
+              "unionPct": 6.7,
+              "sceneVisiblePct": 86.8,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 7,
+                  "chars": 154
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 8,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 32,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14,
+                "bodyPx": 16,
+                "distinctSizes": 3
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 14,
+                  "chars": 95
+                },
+                {
+                  "px": 16,
+                  "chars": 148
+                },
+                {
+                  "px": 20,
+                  "chars": 20
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {
+                "IBM Plex Sans": 1
+              },
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 280,
+              "uiTextChars": 502
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 6,
+              "limit": 3,
+              "fractions": [
+                0.0004,
+                0.0014,
+                0.0004,
+                0.017,
+                0.1925,
+                0.0666,
+                0.1782,
+                0.6602,
+                0.6242
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "2160x1350",
+                "frames": 241,
+                "fps": 60,
+                "frameMsP95": 16.9,
+                "gpuMsP95": 8.07,
+                "gpuSamples": 241,
+                "gpuTimer": true,
+                "drawCallsMax": 280,
+                "trianglesMax": 1257761,
+                "threeInfoLastFrame": {
+                  "calls": 280,
+                  "triangles": 1257761
+                }
+              },
+              "failures": []
+            }
+          }
+        }
+      ],
+      "errors": [],
+      "download": {
+        "status": "pass",
+        "mb": 2.96,
+        "limitMB": 15,
+        "requests": 19,
+        "networkIdle": true,
+        "largestFile": {
+          "file": "assets/terrain/normal-l2.png",
+          "bytes": 3596366,
+          "mb": 3.43
+        },
+        "filesOver20MB": [],
+        "streamedAfterFirstInteractionMB": 14.11
+      },
+      "preset": "medium"
+    },
+    {
+      "viewport": "844x390",
+      "class": "phone",
+      "dsf": 3,
+      "states": [
+        {
+          "name": "m1",
+          "label": "1Module 1 of 5: Arrival",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 29.1,
+              "limit": 40,
+              "unionPct": 40.3,
+              "sceneVisiblePct": 46.2,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 29.1,
+                  "chars": 277
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 17,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 30
+                },
+                {
+                  "px": 17,
+                  "chars": 260
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 52,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 307,
+              "uiTextChars": 491
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 2,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase explore"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 8,
+              "limit": 3,
+              "fractions": [
+                0.0026,
+                0.0206,
+                0.0027,
+                0.0025,
+                0.1886,
+                0.0058,
+                0.0024,
+                0.0332,
+                0.0086
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.3,
+                "gpuMsP95": 1.17,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 4,
+                "trianglesMax": 146691,
+                "threeInfoLastFrame": {
+                  "calls": 4,
+                  "triangles": 146691
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "m1:cinematic",
+          "label": "1Module 1 of 5: Arrival (cinematic from \"Watch the descent\")",
+          "phase": "cinematic",
+          "gates": {
+            "sceneCoverage": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "topChrome": {
+              "status": "n/a",
+              "reason": "cinematic"
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 1,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 17,
+                "bodyPx": 21.5,
+                "distinctSizes": 2
+              },
+              "minSample": "Skip (Esc)",
+              "sizes": [
+                {
+                  "px": 17,
+                  "chars": 10
+                },
+                {
+                  "px": 21.5,
+                  "chars": 118
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "readability": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "inspectableObjects": {
+              "status": "n/a",
+              "reason": "phase cinematic"
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "n/a",
+              "reason": "cinematic (camera moving)"
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.7,
+                "gpuMsP95": 2.96,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 140,
+                "trianglesMax": 387055,
+                "threeInfoLastFrame": {
+                  "calls": 140,
+                  "triangles": 387055
+                }
+              },
+              "failures": []
+            }
+          }
+        },
+        {
+          "name": "sky-overhead",
+          "label": "Watch the orbiter pass over the site soon after sunrise, the rover driving below",
+          "phase": "explore",
+          "gates": {
+            "sceneCoverage": {
+              "status": "pass",
+              "value": 18.9,
+              "limit": 40,
+              "unionPct": 29.8,
+              "sceneVisiblePct": 56.7,
+              "panels": [
+                {
+                  "el": "section#v3-now.v3-now",
+                  "pct": 18.9,
+                  "chars": 155
+                },
+                {
+                  "el": "div.v3-cluster",
+                  "pct": 7.2,
+                  "chars": 17
+                },
+                {
+                  "el": "div.v3-joystick",
+                  "pct": 3.8,
+                  "chars": 0
+                }
+              ]
+            },
+            "topChrome": {
+              "status": "pass",
+              "position": "top",
+              "value": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "limit": {
+                "rows": 1,
+                "topHeightPx": 56
+              },
+              "bars": [
+                {
+                  "el": "header.v3-topbar",
+                  "edge": "top",
+                  "heightPx": 56,
+                  "rows": 1,
+                  "controls": 7
+                }
+              ]
+            },
+            "blockedControls": {
+              "status": "pass",
+              "value": 0,
+              "of": 16,
+              "items": [],
+              "blockers": {},
+              "inertUnderOverlay": 0
+            },
+            "overlappingControls": {
+              "status": "pass",
+              "value": 0,
+              "items": []
+            },
+            "targetSize": {
+              "status": "pass",
+              "value": 0,
+              "minPx": 44,
+              "items": []
+            },
+            "textSize": {
+              "status": "pass",
+              "value": {
+                "minPx": 14.88,
+                "bodyPx": 17,
+                "distinctSizes": 2
+              },
+              "minSample": "1",
+              "sizes": [
+                {
+                  "px": 15,
+                  "chars": 30
+                },
+                {
+                  "px": 17,
+                  "chars": 160
+                }
+              ]
+            },
+            "typeface": {
+              "status": "pass",
+              "value": [],
+              "headings": {},
+              "offListChars": {}
+            },
+            "instructionLength": {
+              "status": "pass",
+              "value": 27,
+              "limit": 60,
+              "source": "now-card",
+              "renderedTextChars": 207,
+              "uiTextChars": 498
+            },
+            "readability": {
+              "status": "pass",
+              "mode": "fk",
+              "value": 6.7,
+              "limit": 8
+            },
+            "inspectableObjects": {
+              "status": "pass",
+              "value": {
+                "inspectable": 17,
+                "decorativeShown": 15
+              },
+              "decorativeInspectable": [],
+              "courseNotInspectable": [],
+              "notInCatalog": [],
+              "catalogEntries": 35
+            },
+            "barePrimitives": {
+              "status": "pass",
+              "value": 0,
+              "instances": 0,
+              "items": []
+            },
+            "abstractMarkers": {
+              "status": "pass",
+              "value": 0,
+              "groups": 0,
+              "items": []
+            },
+            "alive": {
+              "status": "pass",
+              "value": 7,
+              "limit": 3,
+              "fractions": [
+                0.0014,
+                0.0042,
+                0.0023,
+                0.1879,
+                0.0151,
+                0.2126,
+                0.6614,
+                0.2294,
+                0.0571
+              ]
+            },
+            "performance": {
+              "status": "pass",
+              "value": {
+                "preset": "medium",
+                "resolutionScale": 1,
+                "canvas": "1266x585",
+                "frames": 240,
+                "fps": 60,
+                "frameMsP95": 17.2,
+                "gpuMsP95": 4.38,
+                "gpuSamples": 240,
+                "gpuTimer": true,
+                "drawCallsMax": 300,
+                "trianglesMax": 1435191,
+                "threeInfoLastFrame": {
+                  "calls": 300,
+                  "triangles": 1435191
+                }
+              },
+              "failures": []
+            }
+          }
+        }
+      ],
+      "errors": [],
+      "download": {
+        "status": "pass",
+        "mb": 2.96,
+        "limitMB": 8,
+        "requests": 19,
+        "networkIdle": true,
+        "largestFile": {
+          "file": "assets/terrain/normal-l2.png",
+          "bytes": 3596366,
+          "mb": 3.43
+        },
+        "filesOver20MB": [],
+        "streamedAfterFirstInteractionMB": 12.46
+      },
+      "preset": "medium"
+    }
+  ]
+}

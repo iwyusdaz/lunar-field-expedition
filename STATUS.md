@@ -1,5 +1,21 @@
 # Status — lunar-field-expedition
 
+## v3.0.0 release (2026-11-09)
+Released as v3.0.0 (plan 10 "scene-first revamp"). The code is the verified head `a04daea` plus docs: the owner visual approval record (`78f9c32`, DECISIONS.md) and the release commit (version 3.0.0, v3 posters, these notes). The owner approved the v3 scene on 2026-11-09 ("approve all for now") with the issues below accepted as known limitations. That is owner visual approval, not user testing; no learners have used v3.
+
+Checks on the verified head (Apple M1, headed Chromium 143 on the GPU for ui-audit 1.2.1, headless for the test suites): vitest 168/168; e2e 15/15 (on `4c51ffb`, same code as the release). Full results: `.agents/tasks/immersive-v3/g2/fix-round-report.md` in the portfolio workspace and `evaluation/results/ui-audit-g2-verify*.json` here.
+
+### Known open issues at v3.0.0
+- **Recognition:** a fresh agent named 7 of 20 course-object crops (35 %) against the 90 % target. The four craters read only as "crater", and the three landforms as generic grey hills. This needs scene work, such as station signs or more distinguishing context.
+- **Alive gate in `sky-overhead`** flips between runs (2 of 3 regions in the full run with the probe variables set, 3 or more on the re-run). The cause is not found.
+- **Close to limits:** Module 1 cinematic measured 46.2 fps at 1440×900 in the full run (GPU 6.63 ms) and the sky view 302 draw calls at 844×390; both passed on the re-run (60 fps, 300 draw calls).
+- **Astronauts** are an own procedural model, not an artist-made or scanned suit.
+- **Spur crater's bowl** is soft on the 5 m terrain tiles.
+- **Trailer** (`docs/trailer.webm`) still shows v2.
+- **Touch reach at 390×844:** 19 of 20 course objects; `hadley-delta` is missed, because no phone state looks south. Mouse, the keyboard "Objects in view" list and text mode reach every course object.
+- **Portrait zoom (template T-31 camera part)** is only in lunar-field-expedition. Syncing it here might improve phone framing and touch reach, but every phone view would need re-checking.
+
+
 Last updated: 2026-11-05
 
 ## v3.0.0 (plan 10) — G1 prepare done (pass-3 findings F1, F3-F9 worked), owner G1 review pending

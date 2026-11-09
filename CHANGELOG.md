@@ -1,5 +1,9 @@
 # Changelog — lunar-field-expedition
-## 3.0.0 — unreleased (plan 10 "scene-first revamp"; awaiting reviews and owner approval)
+## 3.0.0 — 2026-11-09 (plan 10 "scene-first revamp")
+- G2 fix round: astronauts rebuilt with foot contact on the terrain (two-bone IK, sole clamp); cross-lit crater inspect views; object roles 10 task, 10 learn, 15 decorative; Go to Spur crater looks into the crater; wider portrait phone view.
+- Owner visual approval (G2), 2026-11-09, with the known open issues in STATUS.md accepted. Not user testing.
+- Navigation: Back and Back to start; no "All projects" link on project pages. Only course objects open cards; decorative objects open nothing.
+- Posters re-taken from the v3 scene (`poster-3.0.0.webp/.jpg`, headed-GPU screenshots); the v2 posters are removed.
 - Scene-first shell from the v3 template: one 56 px top bar with a module stepper, a short Now card (at most 60 words) with one action, a drawer for the planner, notebook, report, rubric and readings, a discovery journal, a controls sheet with a legend.
 - Orbit view (true-size Moon, real stars, time-lapse lunar day) for the title and Module 1; the Hadley surface streams after the first click: the whole Apennine Front, Mons Hadley and Hadley Delta from 3D Tiles (NAC 5 m near, SLDEM2015 80 m far, curvature applied), regolith detail at three scales, SunLight cascades, the Ektachrome LUT.
 - Airless sky at true scale: BSC5P stars that never twinkle and show only when the view is not dazzled; the Sun disc; Earth at 1.9° with its correct phase, a time-lapse spin and clouds; the field team's orbiter passing (time-compressed).

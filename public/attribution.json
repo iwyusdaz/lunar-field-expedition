@@ -254,5 +254,13 @@
     "license": "SIL OFL 1.1 (`src/v3/fonts/LICENSE-Inter.txt`)",
     "retrieved": "2026-10-31",
     "changes": "Unmodified; shipped by the shared v3 template as its fallback face. The lunar case sets IBM Plex Sans as the body face, so Inter downloads only if Plex fails."
+  },
+  {
+    "asset": "Posters (`public/poster-3.0.0.webp`, `.jpg`)",
+    "author": "This project (original work)",
+    "source": "—",
+    "license": "CC BY 4.0 (with the rest of the content)",
+    "retrieved": "—",
+    "changes": "Headed-GPU screenshot of the v3 orbit view (overlay hidden), 1200 × 630; the Moon imagery in it is the NASA public-domain data credited above. Replaces the v2 posters."
   }
 ]
