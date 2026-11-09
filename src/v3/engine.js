@@ -32,6 +32,8 @@ export function detectSoftwareGL(gl) {
 }
 /** Without a GPU: loop interval while the scene is covered (updates run, nothing is drawn). */
 export const SOFTWARE_MIN_FRAME_MS = 200;
+/** Without a GPU: after a frame slower than this, wait as long as it took before the next one. */
+export const VERY_SLOW_FRAME_MS = 500;
 
 export class EngineV3 {
   /**
@@ -111,13 +113,16 @@ export class EngineV3 {
     this.clock.start();
     // Frames are scheduled with requestAnimationFrame. Only without a GPU, and
     // only while nothing of the scene can be seen, the loop runs every
-    // SOFTWARE_MIN_FRAME_MS and updates the scene without drawing it.
+    // SOFTWARE_MIN_FRAME_MS and updates the scene without drawing it; and after
+    // a frame slower than VERY_SLOW_FRAME_MS it waits as long as that frame took,
+    // so clicks and focus still get through between very slow frames.
     const next = (ms) => { if (ms > 0) setTimeout(() => requestAnimationFrame(tick), ms); else requestAnimationFrame(tick); };
     const tick = () => {
       if (!this._running) return;
       if (this._paused || !this._visible) { this.clock.getDelta(); next(0); return; }
       const covered = this.softwareGL && this.sceneCovered();
-      next(covered ? SOFTWARE_MIN_FRAME_MS : 0); // scheduled first, as before, so an error in one frame never stops the loop
+      next(covered ? SOFTWARE_MIN_FRAME_MS : (this.softwareGL && this._lastCost > VERY_SLOW_FRAME_MS ? this._lastCost : 0)); // scheduled first, as before, so an error in one frame never stops the loop
+      const frameStart = performance.now();
       const dt = Math.min(this.clock.getDelta(), 0.1);
       this._t += dt;
       for (const fn of this._updateFns) fn(dt, this._t);
@@ -131,7 +136,9 @@ export class EngineV3 {
       if (timing) { this.timer.end(); this.timer.poll(); }
       if (this.autoPick && this.autoPick.phase !== 'done') this.autoPick.frame(dt);
       this._dynamicResolution(dt);
+      this._lastCost = performance.now() - frameStart;
     };
+    this._lastCost = 0;
     requestAnimationFrame(tick);
   }
 
