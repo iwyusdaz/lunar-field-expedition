@@ -1,6 +1,6 @@
 {
   "slug": "lunar-field-expedition",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "title": "Lunar Field Expedition",
   "format": "Hybrid",
   "niche": "Earth and space science, research skills",
@@ -17,8 +17,8 @@
   "contentNotes": [],
   "permissions": [],
   "poster": {
-    "webp": "poster-3.0.0.webp",
-    "jpg": "poster-3.0.0.jpg",
+    "webp": "poster-3.0.1.webp",
+    "jpg": "poster-3.0.1.jpg",
     "alt": "The full Moon seen from orbit against a dark starfield, the opening view of Lunar Field Expedition."
   },
   "repoUrl": "https://github.com/iwyusdaz/lunar-field-expedition",

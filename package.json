@@ -1,7 +1,7 @@
 {
   "name": "lunar-field-expedition",
   "private": true,
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "module",
   "description": "Land at the real Apollo 15 Hadley-Apennine site, rebuilt from NASA lunar terrain data. Read the landscape under changing sunlight, compare the ages of surfaces, plan a sampling traverse, and defend your findings in a field report.",
   "engines": {

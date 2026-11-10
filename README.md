@@ -6,7 +6,7 @@ A 50-minute hybrid course and field game for grade 9–12 earth and space scienc
 
 **[Play now](https://immersive-learning-showcase.vercel.app/play/lunar-field-expedition/)** · **[Design documents](design/)** · Role: Sole designer
 
-![The full Moon seen from orbit against a dark starfield, the opening view of Lunar Field Expedition.](public/poster-3.0.0.webp)
+![The full Moon seen from orbit against a dark starfield, the opening view of Lunar Field Expedition.](public/poster-3.0.1.webp)
 
 The mission framing (you're part of a future field team revisiting Hadley) is **fictional**. All geology and Apollo 15 history are real and cited in [research/apollo15-facts.md](research/apollo15-facts.md). The EVA cost model and the sample cards are **simplified for teaching** and labeled that way in the app.
 

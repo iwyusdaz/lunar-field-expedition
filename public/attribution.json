@@ -256,7 +256,7 @@
     "changes": "Unmodified; shipped by the shared v3 template as its fallback face. The lunar case sets IBM Plex Sans as the body face, so Inter downloads only if Plex fails."
   },
   {
-    "asset": "Posters (`public/poster-3.0.0.webp`, `.jpg`)",
+    "asset": "Posters (`public/poster-3.0.1.webp`, `.jpg`)",
     "author": "This project (original work)",
     "source": "—",
     "license": "CC BY 4.0 (with the rest of the content)",
